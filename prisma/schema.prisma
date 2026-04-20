@@ -5,12 +5,7 @@ generator client {
 
 datasource db {
   provider = "postgresql"
-<<<<<<< Updated upstream
- 
-  
-=======
   url      = env("DATABASE_URL")
->>>>>>> Stashed changes
 }
 
 enum Role {
