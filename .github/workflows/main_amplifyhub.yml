@@ -39,6 +39,7 @@ jobs:
         with:
           name: node-app
           path: |
+            .next
             .next-build
             public
             package.json
