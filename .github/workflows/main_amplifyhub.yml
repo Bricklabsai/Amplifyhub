@@ -93,11 +93,19 @@ jobs:
             rm -f "${STANDALONE_DIR}/node_modules.tar.gz"
           fi
 
-          # Build a deployment directory with symlinks resolved to real files.
-          # This avoids pnpm symlink stubs being misinterpreted on App Service startup.
+          # Build deployment directory from standalone output.
           rm -rf "${DEPLOY_DIR}"
           mkdir -p "${DEPLOY_DIR}"
-          cp -R -L "${STANDALONE_DIR}/." "${DEPLOY_DIR}/"
+          cp -R "${STANDALONE_DIR}/." "${DEPLOY_DIR}/"
+
+          # Rebuild runtime deps in a classic hoisted node_modules layout so
+          # Azure tar/extract startup behavior does not rely on pnpm symlink graphs.
+          rm -rf "${DEPLOY_DIR}/node_modules"
+          cp pnpm-lock.yaml "${DEPLOY_DIR}/pnpm-lock.yaml"
+          (
+            cd "${DEPLOY_DIR}"
+            pnpm install --prod --frozen-lockfile --node-linker=hoisted
+          )
 
           # Defensive cleanup in case any tarball or stale Oryx files are present.
           find "${DEPLOY_DIR}" -name "node_modules.tar.gz" -type f -delete || true
@@ -113,6 +121,7 @@ jobs:
           test -f "${DEPLOY_DIR}/server.js"
           test -f "${DEPLOY_DIR}/package.json"
           test -d "${DEPLOY_DIR}/node_modules/next"
+          test -f "${DEPLOY_DIR}/node_modules/styled-jsx/package.json"
 
       - name: Login to Azure
         uses: azure/login@v2
