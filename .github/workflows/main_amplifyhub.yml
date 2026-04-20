@@ -1,4 +1,4 @@
-name: Build and deploy Next.js (pnpm + Prisma) to Azure Web App - Amplifyhub
+name: Build and deploy Next.js app to Azure Web App - Amplifyhub
 
 on:
   push:
@@ -6,111 +6,67 @@ on:
       - main
   workflow_dispatch:
 
-env:
-  NODE_VERSION: '20.x'
-
 jobs:
   build:
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
 
     steps:
-      # ✅ Checkout repo
-      - name: Checkout repository
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
 
-      # ✅ Setup Node with pnpm cache
-      - name: Setup Node.js
+      - name: Set up Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: ${{ env.NODE_VERSION }}
-          cache: 'pnpm'
+          node-version: '22.x'
+          cache: 'npm' # Speeds up subsequent runs
 
-      # ✅ Enable pnpm (fixes your error)
-      - name: Setup pnpm
-        uses: pnpm/action-setup@v4
-        with:
-          version: 9
-
-      # (Optional safety fallback)
-      - name: Verify pnpm version
-        run: pnpm -v
-
-      # ✅ Install dependencies (strict lockfile)
       - name: Install dependencies
-        run: pnpm install --frozen-lockfile
+        run: npm ci # Faster and more reliable than 'npm install' for CI
 
-      # ✅ Generate Prisma client
-      - name: Generate Prisma client
-        run: pnpm prisma generate
+      - name: Generate Prisma Client
+        run: npx prisma generate # Critical for Next.js + Prisma
 
-      # ⚠️ Build Next.js app
-      - name: Build application
-        run: pnpm build
+      - name: Build Next.js
+        run: npm run build
+        env:
+          # If your build needs the DB URL (e.g. for static generation)
+          DATABASE_URL: ${{ secrets.DATABASE_URL }} 
 
-      # ✅ Prepare deployment package (clean output)
-      - name: Prepare deployment package
-        run: |
-          mkdir output
-          cp -r .next output/.next
-          cp -r public output/public
-          cp -r prisma output/prisma
-          cp package.json output/package.json
-          cp pnpm-lock.yaml output/pnpm-lock.yaml
-
-      # ✅ Upload artifact
       - name: Upload artifact
         uses: actions/upload-artifact@v4
         with:
-          name: app-build
-          path: output
+          name: node-app
+          # Only upload what's needed for production to save time/space
+          path: |
+            .next
+            public
+            package.json
+            package-lock.json
+            prisma
+            next.config.js
 
   deploy:
     runs-on: ubuntu-latest
     needs: build
-
     permissions:
       id-token: write
       contents: read
 
     steps:
-      # ✅ Download build
       - name: Download artifact
         uses: actions/download-artifact@v4
         with:
-          name: app-build
+          name: node-app
 
-      # ✅ Setup Node again for Prisma migration
-      - name: Setup Node.js
-        uses: actions/setup-node@v3
-        with:
-          node-version: ${{ env.NODE_VERSION }}
-
-      # ✅ Enable pnpm again in deploy stage
-      - name: Setup pnpm
-        uses: pnpm/action-setup@v4
-        with:
-          version: 9
-
-      # ✅ Install production dependencies only
-      - name: Install production dependencies
-        run: pnpm install --prod --frozen-lockfile
-
-      # ✅ Azure login
-      - name: Azure Login
+      - name: Login to Azure
         uses: azure/login@v2
         with:
           client-id: ${{ secrets.AZUREAPPSERVICE_CLIENTID_2E32F78D60C445C88A49502E8BB3499E }}
           tenant-id: ${{ secrets.AZUREAPPSERVICE_TENANTID_8D389E073F494A96ADDEE90DE67F9AF9 }}
           subscription-id: ${{ secrets.AZUREAPPSERVICE_SUBSCRIPTIONID_4AC0BEEBFB3C4AECA6392329FB44874F }}
 
-      # ✅ Run Prisma migrations in production DB
-      - name: Run Prisma migrations
-        run: pnpm prisma migrate deploy
-        env:
-          DATABASE_URL: ${{ secrets.DATABASE_URL }}
-
-      # ✅ Deploy to Azure Web App
-      - name: Deploy to Azure Web App
+      - name: 'Deploy to Azure Web App'
         uses: azure/webapps-deploy@v3
         with:
           app-name: 'Amplifyhub'
