@@ -8,7 +8,7 @@ export const prisma =
   globalForPrisma.prisma ??
   new PrismaClient({
     // Explicitly pass the database URL for Prisma 7
-    datasources: {
+    datasource: {
       db: {
         url: process.env.DATABASE_URL,
       },
