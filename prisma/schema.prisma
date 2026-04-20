@@ -1,13 +1,16 @@
 generator client {
   provider = "prisma-client-js"
   output   = "../src/generated/client"
-  engineType = "library"
 }
 
 datasource db {
   provider = "postgresql"
+<<<<<<< Updated upstream
  
   
+=======
+  url      = env("DATABASE_URL")
+>>>>>>> Stashed changes
 }
 
 enum Role {
