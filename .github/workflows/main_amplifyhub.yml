@@ -13,37 +13,42 @@ jobs:
       - name: Checkout Code
         uses: actions/checkout@v4
 
+      - name: Install pnpm
+        uses: pnpm/action-setup@v3
+        with:
+          version: 9 # Matches your local pnpm version
+
       - name: Set up Node.js
-        uses: actions/setup-node@v4 # Upgraded to v4
+        uses: actions/setup-node@v4
         with:
           node-version: '22'
-          cache: 'npm'
+          cache: 'pnpm' # Correctly caches pnpm modules
 
       - name: Install dependencies
-        run: npm ci # Use ci for predictable builds
+        run: pnpm install --frozen-lockfile
 
       - name: Generate Prisma Client
-        run: npx prisma generate 
+        run: pnpx prisma generate 
 
       - name: Build Next.js
-        run: npm run build
+        run: pnpm run build
         env:
           DATABASE_URL: ${{ secrets.DATABASE_URL }}
 
-      - name: Copy Prisma Engine to Standalone
+      - name: Prepare Standalone Artifact
         run: |
-          cp -R ./prisma ./.next/standalone/prisma
-          # If using Prisma, the engine needs to be accessible to the standalone server
-          cp -R ./node_modules/.prisma ./.next/standalone/node_modules/.prisma
+          # Copy static files into standalone folder so Azure can serve them
+          cp -R .next/static .next/standalone/.next/static
+          cp -R public .next/standalone/public
+          # Ensure Prisma engine is available for the standalone server
+          mkdir -p .next/standalone/node_modules/.prisma
+          cp -R node_modules/.prisma .next/standalone/node_modules/.prisma
 
       - name: Upload artifact for deployment
         uses: actions/upload-artifact@v4
         with:
           name: node-app
-          path: |
-            .next/standalone
-            .next/static
-            public
+          path: .next/standalone # Only upload the minimal server files
 
   deploy:
     runs-on: ubuntu-latest
@@ -53,7 +58,7 @@ jobs:
       contents: read
 
     steps:
-      - name: Download artifact from build job
+      - name: Download artifact
         uses: actions/download-artifact@v4
         with:
           name: node-app
