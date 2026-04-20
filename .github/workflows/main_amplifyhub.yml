@@ -9,22 +9,18 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-    permissions:
-      contents: read
-
     steps:
       - name: Checkout Code
         uses: actions/checkout@v4
 
-
       - name: Set up Node.js
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v4 # Upgraded to v4
         with:
-          node-version: '22.x'
-         
+          node-version: '22'
+          cache: 'npm'
 
       - name: Install dependencies
-        run: npm install --frozen-lockfile
+        run: npm ci # Use ci for predictable builds
 
       - name: Generate Prisma Client
         run: npx prisma generate 
@@ -34,19 +30,20 @@ jobs:
         env:
           DATABASE_URL: ${{ secrets.DATABASE_URL }}
 
+      - name: Copy Prisma Engine to Standalone
+        run: |
+          cp -R ./prisma ./.next/standalone/prisma
+          # If using Prisma, the engine needs to be accessible to the standalone server
+          cp -R ./node_modules/.prisma ./.next/standalone/node_modules/.prisma
+
       - name: Upload artifact for deployment
         uses: actions/upload-artifact@v4
         with:
           name: node-app
           path: |
-            .next
-            .next-build
+            .next/standalone
+            .next/static
             public
-            package.json
-            pnpm-lock.yaml
-            prisma
-            prisma.config.ts
-            next.config.js
 
   deploy:
     runs-on: ubuntu-latest
@@ -60,6 +57,7 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           name: node-app
+          path: .
 
       - name: Login to Azure
         uses: azure/login@v2
