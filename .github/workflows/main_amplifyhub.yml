@@ -51,6 +51,7 @@ jobs:
           set -euo pipefail
           DIST_DIR="${NEXT_DIST_DIR}"
           STANDALONE_DIR="${DIST_DIR}/standalone"
+          DEPLOY_DIR="${DIST_DIR}/deploy"
 
           echo "Using distDir: ${DIST_DIR}"
           ls -la "${DIST_DIR}" || true
@@ -92,12 +93,26 @@ jobs:
             rm -f "${STANDALONE_DIR}/node_modules.tar.gz"
           fi
 
+          # Build a deployment directory with symlinks resolved to real files.
+          # This avoids pnpm symlink stubs being misinterpreted on App Service startup.
+          rm -rf "${DEPLOY_DIR}"
+          mkdir -p "${DEPLOY_DIR}"
+          cp -R -L "${STANDALONE_DIR}/." "${DEPLOY_DIR}/"
+
+          # Defensive cleanup in case any tarball or stale Oryx files are present.
+          find "${DEPLOY_DIR}" -name "node_modules.tar.gz" -type f -delete || true
+          rm -f "${DEPLOY_DIR}/oryx-manifest.toml" || true
+
           echo "Standalone package contents:"
           ls -la "${STANDALONE_DIR}" || true
 
+          echo "Deploy package contents:"
+          ls -la "${DEPLOY_DIR}" || true
+
           echo "Verifying required runtime files exist..."
-          test -f "${STANDALONE_DIR}/server.js"
-          test -f "${STANDALONE_DIR}/package.json"
+          test -f "${DEPLOY_DIR}/server.js"
+          test -f "${DEPLOY_DIR}/package.json"
+          test -d "${DEPLOY_DIR}/node_modules/next"
 
       - name: Login to Azure
         uses: azure/login@v2
@@ -111,4 +126,5 @@ jobs:
         with:
           app-name: Amplifyhub
           slot-name: Production
-          package: ${{ env.NEXT_DIST_DIR }}/standalone
+          clean: true
+          package: ${{ env.NEXT_DIST_DIR }}/deploy
