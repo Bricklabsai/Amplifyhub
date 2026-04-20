@@ -121,6 +121,32 @@ jobs:
           tenant-id: ${{ secrets.AZUREAPPSERVICE_TENANTID_8D389E073F494A96ADDEE90DE67F9AF9 }}
           subscription-id: ${{ secrets.AZUREAPPSERVICE_SUBSCRIPTIONID_4AC0BEEBFB3C4AECA6392329FB44874F }}
 
+      - name: Configure Web App Startup (disable Oryx)
+        uses: azure/cli@v2
+        with:
+          inlineScript: |
+            set -euo pipefail
+            APP_NAME="Amplifyhub"
+            RG_NAME="$(az webapp list --query "[?name=='${APP_NAME}'].resourceGroup | [0]" -o tsv)"
+
+            if [ -z "${RG_NAME}" ]; then
+              echo "ERROR: Could not resolve resource group for app ${APP_NAME}."
+              exit 1
+            fi
+
+            echo "Configuring app ${APP_NAME} in resource group ${RG_NAME}"
+
+            # Disable server-side build behavior and force standalone entrypoint.
+            az webapp config appsettings set \
+              --name "${APP_NAME}" \
+              --resource-group "${RG_NAME}" \
+              --settings SCM_DO_BUILD_DURING_DEPLOYMENT=false ENABLE_ORYX_BUILD=false
+
+            az webapp config set \
+              --name "${APP_NAME}" \
+              --resource-group "${RG_NAME}" \
+              --startup-file "node server.js"
+
       - name: Deploy to Azure Web App
         uses: azure/webapps-deploy@v3
         with:
