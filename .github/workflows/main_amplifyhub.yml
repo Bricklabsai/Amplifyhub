@@ -29,8 +29,8 @@ jobs:
       - name: Set up Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '22'
-          cache: 'pnpm'
+          node-version: "22"
+          cache: "pnpm"
 
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
@@ -45,39 +45,59 @@ jobs:
         env:
           DATABASE_URL: ${{ secrets.DATABASE_URL }}
 
-      - name: Prepare Standalone Artifact
+      - name: Prepare Standalone Artifact (Azure-safe)
         shell: bash
         run: |
           set -euo pipefail
           DIST_DIR="${NEXT_DIST_DIR}"
+          STANDALONE_DIR="${DIST_DIR}/standalone"
 
           echo "Using distDir: ${DIST_DIR}"
           ls -la "${DIST_DIR}" || true
 
-          if [ ! -d "${DIST_DIR}/standalone" ]; then
-            echo "ERROR: ${DIST_DIR}/standalone not found. Ensure next.config.js has output: 'standalone'."
+          if [ ! -d "${STANDALONE_DIR}" ]; then
+            echo "ERROR: ${STANDALONE_DIR} not found. Ensure next.config.js has output: 'standalone'."
             exit 1
           fi
 
-          mkdir -p "${DIST_DIR}/standalone/.next"
+          # Ensure expected dirs exist inside the standalone bundle
+          mkdir -p "${STANDALONE_DIR}/.next"
 
+          # Copy static assets only if they exist (distDir-aware)
           if [ -d "${DIST_DIR}/static" ]; then
-            mkdir -p "${DIST_DIR}/standalone/.next/static"
-            cp -R "${DIST_DIR}/static/"* "${DIST_DIR}/standalone/.next/static/" || true
+            mkdir -p "${STANDALONE_DIR}/.next/static"
+            cp -R "${DIST_DIR}/static/"* "${STANDALONE_DIR}/.next/static/" || true
           else
             echo "No ${DIST_DIR}/static directory found; skipping static copy."
           fi
 
+          # Public assets
           if [ -d "public" ]; then
-            cp -R public "${DIST_DIR}/standalone/public"
+            cp -R public "${STANDALONE_DIR}/public"
           fi
 
+          # Prisma engines (only if present)
           if [ -d "node_modules/.prisma" ]; then
-            mkdir -p "${DIST_DIR}/standalone/node_modules/.prisma"
-            cp -R node_modules/.prisma/* "${DIST_DIR}/standalone/node_modules/.prisma/"
+            mkdir -p "${STANDALONE_DIR}/node_modules/.prisma"
+            cp -R node_modules/.prisma/* "${STANDALONE_DIR}/node_modules/.prisma/" || true
           else
             echo "No node_modules/.prisma directory found; skipping Prisma engine copy."
           fi
+
+          # IMPORTANT:
+          # If a node_modules.tar.gz is deployed, Azure App Service will extract it to /node_modules
+          # and set NODE_PATH=/node_modules, which can break pnpm layouts (e.g. /node_modules/next shim).
+          if [ -f "${STANDALONE_DIR}/node_modules.tar.gz" ]; then
+            echo "Removing ${STANDALONE_DIR}/node_modules.tar.gz to prevent Azure /node_modules injection..."
+            rm -f "${STANDALONE_DIR}/node_modules.tar.gz"
+          fi
+
+          echo "Standalone package contents:"
+          ls -la "${STANDALONE_DIR}" || true
+
+          echo "Verifying required runtime files exist..."
+          test -f "${STANDALONE_DIR}/server.js"
+          test -f "${STANDALONE_DIR}/package.json"
 
       - name: Login to Azure
         uses: azure/login@v2
