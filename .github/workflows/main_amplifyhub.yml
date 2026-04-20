@@ -11,38 +11,40 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       contents: read
-
-    steps:
+steps:
       - uses: actions/checkout@v4
+
+      - name: Install pnpm
+        uses: pnpm/action-setup@v3
+        with:
+          version: 9 # or your specific version
 
       - name: Set up Node.js
         uses: actions/setup-node@v3
         with:
           node-version: '22.x'
-          cache: 'npm' # Speeds up subsequent runs
+          cache: 'pnpm' # Now it knows to look for pnpm-lock.yaml
 
       - name: Install dependencies
-        run: npm ci # Faster and more reliable than 'npm install' for CI
+        run: pnpm install --frozen-lockfile
 
       - name: Generate Prisma Client
-        run: npx prisma generate # Critical for Next.js + Prisma
+        run: pnpx prisma generate 
 
       - name: Build Next.js
-        run: npm run build
+        run: pnpm run build
         env:
-          # If your build needs the DB URL (e.g. for static generation)
-          DATABASE_URL: ${{ secrets.DATABASE_URL }} 
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
 
       - name: Upload artifact
         uses: actions/upload-artifact@v4
         with:
           name: node-app
-          # Only upload what's needed for production to save time/space
           path: |
             .next
             public
             package.json
-            package-lock.json
+            pnpm-lock.yaml
             prisma
             next.config.js
 
