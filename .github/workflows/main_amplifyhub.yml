@@ -16,19 +16,21 @@ jobs:
       - name: Install pnpm
         uses: pnpm/action-setup@v3
         with:
-          version: 9 # Matches your local pnpm version
+          version: 9
 
       - name: Set up Node.js
         uses: actions/setup-node@v4
         with:
           node-version: '22'
-          cache: 'pnpm' # Correctly caches pnpm modules
+          cache: 'pnpm'
 
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
       - name: Generate Prisma Client
-        run: pnpx prisma generate 
+        run: pnpm exec prisma generate
+        env:
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
 
       - name: Build Next.js
         run: pnpm run build
@@ -36,11 +38,11 @@ jobs:
           DATABASE_URL: ${{ secrets.DATABASE_URL }}
 
       - name: Prepare Standalone Artifact
+        # This step moves static assets and Prisma engines into the standalone folder
+        # so the 'node server.js' command has everything it needs to run on Azure.
         run: |
-          # Copy static files into standalone folder so Azure can serve them
           cp -R .next/static .next/standalone/.next/static
           cp -R public .next/standalone/public
-          # Ensure Prisma engine is available for the standalone server
           mkdir -p .next/standalone/node_modules/.prisma
           cp -R node_modules/.prisma .next/standalone/node_modules/.prisma
 
@@ -48,7 +50,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: node-app
-          path: .next/standalone # Only upload the minimal server files
+          path: .next/standalone
 
   deploy:
     runs-on: ubuntu-latest
