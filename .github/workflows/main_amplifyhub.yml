@@ -1,9 +1,10 @@
-name: Build and deploy Next.js app to Azure Web App - Amplifyhub
+name: Build and deploy Next.js (pnpm + Prisma) to Azure Web App - Amplifyhub
 
 on:
   push:
     branches:
       - main
+  workflow_dispatch:
 
 env:
   NODE_VERSION: '20.x'
@@ -13,32 +14,40 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout
+      # ✅ Checkout repo
+      - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Setup Node
+      # ✅ Setup Node with pnpm cache
+      - name: Setup Node.js
         uses: actions/setup-node@v3
         with:
           node-version: ${{ env.NODE_VERSION }}
           cache: 'pnpm'
 
-      # ✅ Install pnpm
-      - name: Install pnpm
-        run: npm install -g pnpm
+      # ✅ Enable pnpm (fixes your error)
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 9
 
-      # ✅ Install deps using pnpm
+      # (Optional safety fallback)
+      - name: Verify pnpm version
+        run: pnpm -v
+
+      # ✅ Install dependencies (strict lockfile)
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
-      # ✅ Prisma
+      # ✅ Generate Prisma client
       - name: Generate Prisma client
         run: pnpm prisma generate
 
-      # ✅ Build
-      - name: Build app
+      # ⚠️ Build Next.js app
+      - name: Build application
         run: pnpm build
 
-      # ✅ Prepare output
+      # ✅ Prepare deployment package (clean output)
       - name: Prepare deployment package
         run: |
           mkdir output
@@ -48,6 +57,7 @@ jobs:
           cp package.json output/package.json
           cp pnpm-lock.yaml output/pnpm-lock.yaml
 
+      # ✅ Upload artifact
       - name: Upload artifact
         uses: actions/upload-artifact@v4
         with:
@@ -63,30 +73,44 @@ jobs:
       contents: read
 
     steps:
+      # ✅ Download build
       - name: Download artifact
         uses: actions/download-artifact@v4
         with:
           name: app-build
 
-      - name: Install pnpm
-        run: npm install -g pnpm
+      # ✅ Setup Node again for Prisma migration
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ env.NODE_VERSION }}
 
-      - name: Install production deps
+      # ✅ Enable pnpm again in deploy stage
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 9
+
+      # ✅ Install production dependencies only
+      - name: Install production dependencies
         run: pnpm install --prod --frozen-lockfile
 
-      - name: Azure login
+      # ✅ Azure login
+      - name: Azure Login
         uses: azure/login@v2
         with:
           client-id: ${{ secrets.AZUREAPPSERVICE_CLIENTID_2E32F78D60C445C88A49502E8BB3499E }}
           tenant-id: ${{ secrets.AZUREAPPSERVICE_TENANTID_8D389E073F494A96ADDEE90DE67F9AF9 }}
           subscription-id: ${{ secrets.AZUREAPPSERVICE_SUBSCRIPTIONID_4AC0BEEBFB3C4AECA6392329FB44874F }}
 
+      # ✅ Run Prisma migrations in production DB
       - name: Run Prisma migrations
         run: pnpm prisma migrate deploy
         env:
           DATABASE_URL: ${{ secrets.DATABASE_URL }}
 
-      - name: Deploy to Azure
+      # ✅ Deploy to Azure Web App
+      - name: Deploy to Azure Web App
         uses: azure/webapps-deploy@v3
         with:
           app-name: 'Amplifyhub'
