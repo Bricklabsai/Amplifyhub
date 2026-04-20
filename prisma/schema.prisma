@@ -1,0 +1,338 @@
+generator client {
+  provider = "prisma-client-js"
+  output   = "../src/generated/client"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum Role {
+  USER
+  ADMIN
+}
+
+enum PostStatus {
+  DRAFT
+  SCHEDULED
+  PUBLISHED
+  FAILED
+}
+
+enum Platform {
+  FACEBOOK
+  TWITTER
+  INSTAGRAM
+  LINKEDIN
+  TIKTOK
+  YOUTUBE
+  WHATSAPP
+}
+
+enum CampaignStatus {
+  DRAFT
+  ACTIVE
+  PAUSED
+  COMPLETED
+}
+
+enum EmailCampaignStatus {
+  DRAFT
+  SENT
+  SCHEDULED
+}
+
+enum SubscriptionStatus {
+  ACTIVE
+  CANCELLED
+  EXPIRED
+}
+
+model User {
+  id             String    @id @default(cuid())
+  name           String?
+  email          String    @unique
+  emailVerified  DateTime?
+  image          String?
+  password       String?
+  role           Role      @default(USER)
+  createdAt      DateTime  @default(now())
+  updatedAt      DateTime  @updatedAt
+
+  accounts       Account[]
+  sessions       Session[]
+  socialAccounts SocialAccount[]
+  posts          Post[]
+  campaigns      Campaign[]
+  audienceGroups AudienceGroup[]
+  emailCampaigns EmailCampaign[]
+  media          Media[]
+  analytics      Analytics[]
+  notifications  Notification[]
+  subscription   Subscription?
+}
+
+model Account {
+  id                String  @id @default(cuid())
+  userId            String
+  type              String
+  provider          String
+  providerAccountId String
+  refresh_token     String?
+  access_token      String?
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String?
+  session_state     String?
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([provider, providerAccountId])
+}
+
+model Session {
+  id           String   @id @default(cuid())
+  sessionToken String   @unique
+  userId       String
+  expires      DateTime
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model VerificationToken {
+  identifier String
+  token      String   @unique
+  expires    DateTime
+
+  @@unique([identifier, token])
+}
+
+model Plan {
+  id            String   @id @default(cuid())
+  name          String   @unique
+  price         Float
+  description   String?
+  features      String[]
+  postsPerMonth Int
+  platforms     Int
+  aiCredits     Int
+  createdAt     DateTime @default(now())
+
+  subscriptions Subscription[]
+}
+
+model Subscription {
+  id        String             @id @default(cuid())
+  userId    String             @unique
+  planId    String
+  status    SubscriptionStatus @default(ACTIVE)
+  startDate DateTime           @default(now())
+  endDate   DateTime?
+  createdAt DateTime           @default(now())
+  updatedAt DateTime           @updatedAt
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  plan Plan @relation(fields: [planId], references: [id])
+}
+
+model SocialAccount {
+  id           String    @id @default(cuid())
+  userId       String
+  platform     Platform
+  accountName  String
+  accountId    String?
+  accessToken  String?
+  refreshToken String?
+  expiresAt    DateTime?
+  isActive     Boolean   @default(true)
+  followers    Int       @default(0)
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
+
+  user          User           @relation(fields: [userId], references: [id], onDelete: Cascade)
+  platformPosts PlatformPost[]
+
+  @@unique([userId, platform])
+}
+
+model Post {
+  id            String     @id @default(cuid())
+  userId        String
+  title         String?
+  content       String
+  mediaUrls     String[]
+  status        PostStatus @default(DRAFT)
+  scheduledAt   DateTime?
+  publishedAt   DateTime?
+  campaignId    String?
+  createdAt     DateTime   @default(now())
+  updatedAt     DateTime   @updatedAt
+
+  user          User           @relation(fields: [userId], references: [id], onDelete: Cascade)
+  campaign      Campaign?      @relation(fields: [campaignId], references: [id])
+  platformPosts PlatformPost[]
+}
+
+model PlatformPost {
+  id              String    @id @default(cuid())
+  postId          String
+  socialAccountId String
+  platform        Platform
+  content         String
+  status          PostStatus @default(DRAFT)
+  publishedAt     DateTime?
+  externalId      String?
+  likes           Int       @default(0)
+  shares          Int       @default(0)
+  comments        Int       @default(0)
+  reach           Int       @default(0)
+  createdAt       DateTime  @default(now())
+
+  post          Post          @relation(fields: [postId], references: [id], onDelete: Cascade)
+  socialAccount SocialAccount @relation(fields: [socialAccountId], references: [id])
+}
+
+model Campaign {
+  id          String         @id @default(cuid())
+  userId      String
+  name        String
+  description String?
+  status      CampaignStatus @default(DRAFT)
+  startDate   DateTime?
+  endDate     DateTime?
+  budget      Float?
+  platforms   Platform[]
+  createdAt   DateTime       @default(now())
+  updatedAt   DateTime       @updatedAt
+
+  user  User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  posts Post[]
+}
+
+model AudienceGroup {
+  id          String   @id @default(cuid())
+  userId      String
+  name        String
+  description String?
+  tags        String[]
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  user     User           @relation(fields: [userId], references: [id], onDelete: Cascade)
+  contacts ContactGroup[]
+}
+
+model Contact {
+  id        String   @id @default(cuid())
+  email     String
+  firstName String?
+  lastName  String?
+  phone     String?
+  company   String?
+  tags      String[]
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  groups         ContactGroup[]
+  emailRecipients EmailCampaignRecipient[]
+}
+
+model ContactGroup {
+  contactId String
+  groupId   String
+
+  contact Contact       @relation(fields: [contactId], references: [id], onDelete: Cascade)
+  group   AudienceGroup @relation(fields: [groupId], references: [id], onDelete: Cascade)
+
+  @@id([contactId, groupId])
+}
+
+model EmailCampaign {
+  id          String              @id @default(cuid())
+  userId      String
+  name        String
+  subject     String
+  previewText String?
+  htmlContent String
+  textContent String?
+  status      EmailCampaignStatus @default(DRAFT)
+  scheduledAt DateTime?
+  sentAt      DateTime?
+  openRate    Float               @default(0)
+  clickRate   Float               @default(0)
+  createdAt   DateTime            @default(now())
+  updatedAt   DateTime            @updatedAt
+
+  user       User                    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  recipients EmailCampaignRecipient[]
+}
+
+model EmailCampaignRecipient {
+  id             String    @id @default(cuid())
+  campaignId     String
+  contactId      String
+  sent           Boolean   @default(false)
+  opened         Boolean   @default(false)
+  clicked        Boolean   @default(false)
+  sentAt         DateTime?
+
+  campaign EmailCampaign @relation(fields: [campaignId], references: [id], onDelete: Cascade)
+  contact  Contact       @relation(fields: [contactId], references: [id])
+}
+
+model Media {
+  id        String   @id @default(cuid())
+  userId    String
+  url       String
+  type      String
+  filename  String
+  size      Int?
+  altText   String?
+  prompt    String?
+  isAI      Boolean  @default(false)
+  createdAt DateTime @default(now())
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model Analytics {
+  id        String   @id @default(cuid())
+  userId    String
+  platform  Platform?
+  date      DateTime @default(now())
+  followers Int      @default(0)
+  reach     Int      @default(0)
+  impressions Int    @default(0)
+  engagement Float   @default(0)
+  clicks    Int      @default(0)
+  shares    Int      @default(0)
+  likes     Int      @default(0)
+  comments  Int      @default(0)
+  createdAt DateTime @default(now())
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model Notification {
+  id        String   @id @default(cuid())
+  userId    String
+  title     String
+  message   String
+  type      String   @default("info")
+  read      Boolean  @default(false)
+  link      String?
+  createdAt DateTime @default(now())
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model RateLimit {
+  id        String   @id @default(cuid())
+  key       String   @unique
+  count     Int      @default(0)
+  resetAt   DateTime
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
