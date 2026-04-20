@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "next dev -H 0.0.0.0 --turbopack",
-    "start": "node server.js}",
+    "start": "node server.js",
     "build": "next build",
     "build:local": "next build",
     "lint": "bunx biome lint --write && bunx tsc --noEmit",
