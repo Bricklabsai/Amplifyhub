@@ -1,0 +1,109 @@
+name: Smart Build and Deploy - Amplifyhub
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - "app/**"
+      - "components/**"
+      - "prisma/**"
+      - "package.json"
+      - "package-lock.json"
+      - "next.config.js"
+  workflow_dispatch:
+
+env:
+  NODE_VERSION: '20.x'
+
+jobs:
+  changes:
+    runs-on: ubuntu-latest
+    outputs:
+      should_deploy: ${{ steps.filter.outputs.app }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Check for relevant changes
+        id: filter
+        uses: dorny/paths-filter@v3
+        with:
+          filters: |
+            app:
+              - 'app/**'
+              - 'components/**'
+              - 'prisma/**'
+              - 'package.json'
+              - 'package-lock.json'
+              - 'next.config.js'
+
+  build:
+    runs-on: ubuntu-latest
+    needs: changes
+    if: needs.changes.outputs.should_deploy == 'true'
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+
+      - name: Install deps
+        run: npm ci
+
+      - name: Generate Prisma
+        run: npx prisma generate
+
+      - name: Build app
+        run: npm run build
+
+      - name: Prepare output
+        run: |
+          mkdir output
+          cp -r .next output/.next
+          cp -r public output/public
+          cp -r prisma output/prisma
+          cp package.json output/package.json
+          cp package-lock.json output/package-lock.json
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: app-build
+          path: output
+
+  deploy:
+    runs-on: ubuntu-latest
+    needs: build
+    if: needs.build.result == 'success'
+
+    permissions:
+      id-token: write
+      contents: read
+
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          name: app-build
+
+      - name: Azure Login
+        uses: azure/login@v2
+        with:
+          client-id: ${{ secrets.AZUREAPPSERVICE_CLIENTID_2E32F78D60C445C88A49502E8BB3499E }}
+          tenant-id: ${{ secrets.AZUREAPPSERVICE_TENANTID_8D389E073F494A96ADDEE90DE67F9AF9 }}
+          subscription-id: ${{ secrets.AZUREAPPSERVICE_SUBSCRIPTIONID_4AC0BEEBFB3C4AECA6392329FB44874F }}
+
+      - name: Run Prisma migrations
+        run: npx prisma migrate deploy
+        env:
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
+
+      - name: Deploy
+        uses: azure/webapps-deploy@v3
+        with:
+          app-name: 'Amplifyhub'
+          slot-name: 'Production'
+          package: .
