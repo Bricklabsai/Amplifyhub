@@ -11,8 +11,11 @@ env:
   NEXT_DIST_DIR: ${{ vars.BUILD_DIR || '.next-build' }}
 
 jobs:
-  build:
+  build_and_deploy:
     runs-on: ubuntu-latest
+    permissions:
+      id-token: write
+      contents: read
 
     steps:
       - name: Checkout Code
@@ -46,24 +49,18 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-
           DIST_DIR="${NEXT_DIST_DIR}"
 
           echo "Using distDir: ${DIST_DIR}"
-          echo "Listing output:"
-          ls -la
           ls -la "${DIST_DIR}" || true
 
-          # Verify standalone folder exists
           if [ ! -d "${DIST_DIR}/standalone" ]; then
             echo "ERROR: ${DIST_DIR}/standalone not found. Ensure next.config.js has output: 'standalone'."
             exit 1
           fi
 
-          # Ensure expected dirs exist inside standalone bundle
           mkdir -p "${DIST_DIR}/standalone/.next"
 
-          # Copy static assets only if they exist
           if [ -d "${DIST_DIR}/static" ]; then
             mkdir -p "${DIST_DIR}/standalone/.next/static"
             cp -R "${DIST_DIR}/static/"* "${DIST_DIR}/standalone/.next/static/" || true
@@ -71,38 +68,16 @@ jobs:
             echo "No ${DIST_DIR}/static directory found; skipping static copy."
           fi
 
-          # Public assets
           if [ -d "public" ]; then
             cp -R public "${DIST_DIR}/standalone/public"
           fi
 
-          # Prisma engines (only if present)
           if [ -d "node_modules/.prisma" ]; then
             mkdir -p "${DIST_DIR}/standalone/node_modules/.prisma"
             cp -R node_modules/.prisma/* "${DIST_DIR}/standalone/node_modules/.prisma/"
           else
             echo "No node_modules/.prisma directory found; skipping Prisma engine copy."
           fi
-
-      - name: Upload artifact for deployment
-        uses: actions/upload-artifact@v4
-        with:
-          name: node-app
-          path: ${{ env.NEXT_DIST_DIR }}/standalone
-
-  deploy:
-    runs-on: ubuntu-latest
-    needs: build
-    permissions:
-      id-token: write
-      contents: read
-
-    steps:
-      - name: Download artifact
-        uses: actions/download-artifact@v4
-        with:
-          name: node-app
-          path: .
 
       - name: Login to Azure
         uses: azure/login@v2
@@ -116,4 +91,4 @@ jobs:
         with:
           app-name: Amplifyhub
           slot-name: Production
-          package: .
+          package: ${{ env.NEXT_DIST_DIR }}/standalone
