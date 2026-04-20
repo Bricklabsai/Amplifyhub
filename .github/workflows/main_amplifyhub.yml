@@ -1,73 +1,52 @@
-name: Smart Build and Deploy - Amplifyhub
+name: Build and deploy Next.js app to Azure Web App - Amplifyhub
 
 on:
   push:
     branches:
       - main
-    paths:
-      - "app/**"
-      - "components/**"
-      - "prisma/**"
-      - "package.json"
-      - "package-lock.json"
-      - "next.config.js"
-  workflow_dispatch:
 
 env:
   NODE_VERSION: '20.x'
 
 jobs:
-  changes:
-    runs-on: ubuntu-latest
-    outputs:
-      should_deploy: ${{ steps.filter.outputs.app }}
-    steps:
-      - uses: actions/checkout@v4
-
-      - name: Check for relevant changes
-        id: filter
-        uses: dorny/paths-filter@v3
-        with:
-          filters: |
-            app:
-              - 'app/**'
-              - 'components/**'
-              - 'prisma/**'
-              - 'package.json'
-              - 'package-lock.json'
-              - 'next.config.js'
-
   build:
     runs-on: ubuntu-latest
-    needs: changes
-    if: needs.changes.outputs.should_deploy == 'true'
 
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout
+        uses: actions/checkout@v4
 
       - name: Setup Node
         uses: actions/setup-node@v3
         with:
           node-version: ${{ env.NODE_VERSION }}
-          cache: 'npm'
+          cache: 'pnpm'
 
-      - name: Install deps
-        run: npm ci
+      # ✅ Install pnpm
+      - name: Install pnpm
+        run: npm install -g pnpm
 
-      - name: Generate Prisma
-        run: npx prisma generate
+      # ✅ Install deps using pnpm
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
 
+      # ✅ Prisma
+      - name: Generate Prisma client
+        run: pnpm prisma generate
+
+      # ✅ Build
       - name: Build app
-        run: npm run build
+        run: pnpm build
 
-      - name: Prepare output
+      # ✅ Prepare output
+      - name: Prepare deployment package
         run: |
           mkdir output
           cp -r .next output/.next
           cp -r public output/public
           cp -r prisma output/prisma
           cp package.json output/package.json
-          cp package-lock.json output/package-lock.json
+          cp pnpm-lock.yaml output/pnpm-lock.yaml
 
       - name: Upload artifact
         uses: actions/upload-artifact@v4
@@ -78,18 +57,24 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
     needs: build
-    if: needs.build.result == 'success'
 
     permissions:
       id-token: write
       contents: read
 
     steps:
-      - uses: actions/download-artifact@v4
+      - name: Download artifact
+        uses: actions/download-artifact@v4
         with:
           name: app-build
 
-      - name: Azure Login
+      - name: Install pnpm
+        run: npm install -g pnpm
+
+      - name: Install production deps
+        run: pnpm install --prod --frozen-lockfile
+
+      - name: Azure login
         uses: azure/login@v2
         with:
           client-id: ${{ secrets.AZUREAPPSERVICE_CLIENTID_2E32F78D60C445C88A49502E8BB3499E }}
@@ -97,11 +82,11 @@ jobs:
           subscription-id: ${{ secrets.AZUREAPPSERVICE_SUBSCRIPTIONID_4AC0BEEBFB3C4AECA6392329FB44874F }}
 
       - name: Run Prisma migrations
-        run: npx prisma migrate deploy
+        run: pnpm prisma migrate deploy
         env:
           DATABASE_URL: ${{ secrets.DATABASE_URL }}
 
-      - name: Deploy
+      - name: Deploy to Azure
         uses: azure/webapps-deploy@v3
         with:
           app-name: 'Amplifyhub'
