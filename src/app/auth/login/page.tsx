@@ -135,7 +135,7 @@ export default function LoginPage() {
               </Button>
             </form>
 
-            <div className="mt-5 pt-5 border-t border-gray-100">
+            {/* <div className="mt-5 pt-5 border-t border-gray-100">
               <p className="text-xs text-gray-500 text-center mb-3">Quick demo access:</p>
               <div className="grid grid-cols-2 gap-2">
                 <button
@@ -151,7 +151,7 @@ export default function LoginPage() {
                   Admin
                 </button>
               </div>
-            </div>
+            </div> */}
           </div>
 
           <div className="px-8 py-4 bg-gray-50 border-t border-gray-100 text-center">
