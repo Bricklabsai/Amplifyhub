@@ -1,32 +1,28 @@
 "use client";
 import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { Badge } from "@/components/ui/badge";
-import { HiPlus, HiTrash, HiCheck } from "react-icons/hi";
+import { HiPlus, HiTrash, HiCheck, HiRefresh } from "react-icons/hi";
 import { FaFacebook, FaInstagram, FaLinkedin, FaTiktok, FaYoutube, FaWhatsapp } from "react-icons/fa";
 import { FaXTwitter } from "react-icons/fa6";
 import { formatNumber } from "@/lib/utils";
+import { signIn } from "next-auth/react";
 
 const PLATFORM_CONFIG = [
-  { id: "FACEBOOK", label: "Facebook", Icon: FaFacebook, color: "#1877F2", bg: "#1877F215" },
-  { id: "TWITTER", label: "X (Twitter)", Icon: FaXTwitter, color: "#000000", bg: "#00000015" },
-  { id: "INSTAGRAM", label: "Instagram", Icon: FaInstagram, color: "#E1306C", bg: "#E1306C15" },
-  { id: "LINKEDIN", label: "LinkedIn", Icon: FaLinkedin, color: "#0A66C2", bg: "#0A66C215" },
-  { id: "TIKTOK", label: "TikTok", Icon: FaTiktok, color: "#000000", bg: "#00000015" },
-  { id: "YOUTUBE", label: "YouTube", Icon: FaYoutube, color: "#FF0000", bg: "#FF000015" },
-  { id: "WHATSAPP", label: "WhatsApp", Icon: FaWhatsapp, color: "#25D366", bg: "#25D36615" },
+  { id: "FACEBOOK", label: "Facebook", Icon: FaFacebook, color: "#1877F2", bg: "#1877F215", provider: "facebook" },
+  { id: "TWITTER", label: "X (Twitter)", Icon: FaXTwitter, color: "#000000", bg: "#00000015", provider: "twitter" },
+  { id: "INSTAGRAM", label: "Instagram", Icon: FaInstagram, color: "#E1306C", bg: "#E1306C15", provider: "instagram" },
+  { id: "LINKEDIN", label: "LinkedIn", Icon: FaLinkedin, color: "#0A66C2", bg: "#0A66C215", provider: "linkedin" },
+  { id: "TIKTOK", label: "TikTok", Icon: FaTiktok, color: "#000000", bg: "#00000015", provider: "tiktok" },
+  { id: "YOUTUBE", label: "YouTube", Icon: FaYoutube, color: "#FF0000", bg: "#FF000015", provider: "google" },
+  { id: "WHATSAPP", label: "WhatsApp", Icon: FaWhatsapp, color: "#25D366", bg: "#25D36615", provider: "whatsapp" },
 ];
 
 export default function SocialAccountsPage() {
   const [accounts, setAccounts] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
-  const [connecting, setConnecting] = useState<string | null>(null);
-  const [accountName, setAccountName] = useState("");
-  const [followers, setFollowers] = useState("1000");
-  const [selectedPlatform, setSelectedPlatform] = useState("");
+  const [refreshing, setRefreshing] = useState(false);
   const [open, setOpen] = useState(false);
 
   useEffect(() => { fetchAccounts(); }, []);
@@ -38,19 +34,21 @@ export default function SocialAccountsPage() {
     setLoading(false);
   }
 
-  async function connect() {
-    if (!selectedPlatform || !accountName) return;
-    setConnecting(selectedPlatform);
-    await fetch("/api/social-accounts", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ platform: selectedPlatform, accountName, followers: parseInt(followers) }),
-    });
-    await fetchAccounts();
-    setConnecting(null);
-    setOpen(false);
-    setAccountName("");
-    setFollowers("1000");
+  async function connect(provider: string) {
+    if (!provider) return;
+    signIn(provider, { callbackUrl: "/social-accounts" });
+  }
+
+  async function refreshProfiles() {
+    setRefreshing(true);
+    try {
+      await fetch("/api/social-accounts/refresh", { method: "POST" });
+      await fetchAccounts();
+    } catch (error) {
+      console.error("Failed to refresh profiles", error);
+    } finally {
+      setRefreshing(false);
+    }
   }
 
   async function disconnect(id: string) {
@@ -64,7 +62,21 @@ export default function SocialAccountsPage() {
   return (
     <div className="max-w-5xl space-y-6">
       <div className="flex items-center justify-between">
-        <p className="text-gray-500 text-sm">{accounts.length} connected accounts</p>
+        <div className="flex items-center gap-4">
+          <p className="text-gray-500 text-sm">{accounts.length} connected accounts</p>
+          {accounts.length > 0 && (
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={refreshProfiles}
+              disabled={refreshing}
+              className="rounded-xl flex items-center gap-2"
+            >
+              <HiRefresh className={`text-base ${refreshing ? "animate-spin" : ""}`} />
+              Refresh Profiles
+            </Button>
+          )}
+        </div>
         <Dialog open={open} onOpenChange={setOpen}>
           <DialogTrigger asChild>
             <Button className="brand-gradient-bg text-white border-0 hover:opacity-90 rounded-xl font-semibold text-sm flex items-center gap-2">
@@ -77,51 +89,33 @@ export default function SocialAccountsPage() {
               <DialogTitle style={{ fontFamily: "Outfit, sans-serif" }}>Connect Social Account</DialogTitle>
             </DialogHeader>
             <div className="space-y-4 pt-2">
-              <div>
-                <Label className="text-sm font-semibold text-gray-700 mb-3 block">Select Platform</Label>
-                <div className="grid grid-cols-3 gap-2">
-                  {PLATFORM_CONFIG.map(({ id, label, Icon, color, bg }) => (
-                    <button
-                      key={id}
-                      onClick={() => setSelectedPlatform(id)}
-                      className={`flex flex-col items-center gap-2 p-3 rounded-xl border-2 transition-all ${
-                        selectedPlatform === id ? "border-violet-400 bg-violet-50" : "border-gray-200 bg-gray-50"
-                      } ${connectedIds.includes(id) ? "opacity-50" : ""}`}
-                      disabled={connectedIds.includes(id)}
-                    >
-                      <Icon style={{ color, fontSize: "1.5rem" }} />
-                      <span className="text-xs font-medium text-gray-600">{label}</span>
-                      {connectedIds.includes(id) && <span className="text-xs text-emerald-500">Connected</span>}
-                    </button>
-                  ))}
-                </div>
+              <div className="grid grid-cols-2 gap-3">
+                {PLATFORM_CONFIG.map(({ id, label, Icon, color, bg, provider }) => (
+                  <button
+                    key={id}
+                    onClick={() => connect(provider)}
+                    className={`flex items-center gap-3 p-4 rounded-xl border-2 transition-all border-gray-100 bg-gray-50 hover:border-violet-200 hover:bg-violet-50/30 ${
+                      connectedIds.includes(id) ? "opacity-50 cursor-not-allowed" : ""
+                    }`}
+                    disabled={connectedIds.includes(id)}
+                  >
+                    <div className="w-10 h-10 rounded-lg flex items-center justify-center" style={{ background: bg }}>
+                      <Icon style={{ color, fontSize: "1.25rem" }} />
+                    </div>
+                    <div className="text-left">
+                      <span className="text-sm font-semibold text-gray-700 block">{label}</span>
+                      {connectedIds.includes(id) ? (
+                        <span className="text-[10px] text-emerald-500 font-medium">Connected</span>
+                      ) : (
+                        <span className="text-[10px] text-gray-400 font-medium">Click to connect</span>
+                      )}
+                    </div>
+                  </button>
+                ))}
               </div>
-              <div>
-                <Label className="text-sm font-semibold text-gray-700 mb-2 block">Account Name / Handle</Label>
-                <Input
-                  placeholder="@youraccount"
-                  value={accountName}
-                  onChange={(e) => setAccountName(e.target.value)}
-                  className="rounded-xl border-gray-200 h-11"
-                />
-              </div>
-              <div>
-                <Label className="text-sm font-semibold text-gray-700 mb-2 block">Follower Count</Label>
-                <Input
-                  type="number"
-                  placeholder="1000"
-                  value={followers}
-                  onChange={(e) => setFollowers(e.target.value)}
-                  className="rounded-xl border-gray-200 h-11"
-                />
-              </div>
-              <Button
-                onClick={connect}
-                disabled={!selectedPlatform || !accountName || !!connecting}
-                className="w-full brand-gradient-bg text-white border-0 hover:opacity-90 rounded-xl h-11 font-semibold"
-              >
-                {connecting ? "Connecting..." : "Connect Account"}
-              </Button>
+              <p className="text-[10px] text-gray-400 text-center px-4">
+                By connecting your account, you agree to our Terms of Service and Privacy Policy. We will only access the data necessary to provide our services.
+              </p>
             </div>
           </DialogContent>
         </Dialog>
@@ -129,7 +123,7 @@ export default function SocialAccountsPage() {
 
       {/* All Platforms Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-        {PLATFORM_CONFIG.map(({ id, label, Icon, color, bg }) => {
+        {PLATFORM_CONFIG.map(({ id, label, Icon, color, bg, provider }) => {
           const account = accounts.find((a) => a.platform === id);
           return (
             <div key={id} className={`bg-white rounded-2xl border p-5 transition-all ${account ? "border-gray-200 shadow-sm" : "border-dashed border-gray-200"}`}>
@@ -163,7 +157,7 @@ export default function SocialAccountsPage() {
                 </>
               ) : (
                 <button
-                  onClick={() => { setSelectedPlatform(id); setOpen(true); }}
+                  onClick={() => connect(provider)}
                   className="mt-2 text-sm text-violet-600 font-medium hover:text-violet-700 transition-colors"
                 >
                   + Connect

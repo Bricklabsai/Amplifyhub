@@ -2,9 +2,6 @@
 const nextConfig = {
   // Use different output dir ONLY for local production builds
   output: 'standalone',
-  distDir: process.env.NODE_ENV === 'production'
-    ? (process.env.BUILD_DIR || '.next-build')
-    : '.next',
   // Enable CORS for Design Mode to load resources cross-origin (dev only)
   // Note: Do NOT set allowedDevOrigins - the default allows all origins in dev mode
   async headers() {

@@ -4,7 +4,6 @@ import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Badge } from "@/components/ui/badge";
 import { HiSparkles, HiRefresh, HiSave, HiClock } from "react-icons/hi";
 import { FaFacebook, FaInstagram, FaLinkedin, FaTiktok, FaYoutube, FaWhatsapp } from "react-icons/fa";
 import { FaXTwitter } from "react-icons/fa6";
@@ -29,7 +28,6 @@ export default function ComposePage() {
   const [loading, setLoading] = useState(false);
   const [saving, setSaving] = useState(false);
   const [saved, setSaved] = useState(false);
-  const [isMock, setIsMock] = useState(false);
 
   function togglePlatform(id: string) {
     setSelectedPlatforms((prev) =>
@@ -48,7 +46,6 @@ export default function ComposePage() {
     });
     const data = await res.json();
     setVariations(data.variations || {});
-    setIsMock(data.mock || false);
     setLoading(false);
   }
 
@@ -73,7 +70,6 @@ export default function ComposePage() {
         <div className="flex items-center gap-2 mb-4">
           <HiSparkles className="text-violet-500 text-xl" />
           <h2 className="font-bold text-gray-900" style={{ fontFamily: "Outfit, sans-serif" }}>AI Content Generator</h2>
-          {isMock && <Badge className="bg-amber-100 text-amber-700 border-0 text-xs">Mock Mode</Badge>}
         </div>
 
         <div className="space-y-4">

@@ -8,7 +8,7 @@ on:
 
 env:
   # Matches next.config.js production distDir default (BUILD_DIR || '.next-build')
-  NEXT_DIST_DIR: ${{ vars.BUILD_DIR || '.next-build' }}
+   NEXT_DIST_DIR: .next
 
 jobs:
   build_and_deploy:
@@ -61,15 +61,18 @@ jobs:
             exit 1
           fi
 
-          # Ensure expected dirs exist inside the standalone bundle
-          mkdir -p "${STANDALONE_DIR}/.next"
+          echo "Copying static assets..."
 
-          # Copy static assets only if they exist (distDir-aware)
+          # Static assets
+          mkdir -p "${STANDALONE_DIR}/.next/static"
+
           if [ -d "${DIST_DIR}/static" ]; then
-            mkdir -p "${STANDALONE_DIR}/.next/static"
-            cp -R "${DIST_DIR}/static/"* "${STANDALONE_DIR}/.next/static/" || true
+             echo "Found static assets in ${DIST_DIR}/static"
+             cp -R "${DIST_DIR}/static/"* "${STANDALONE_DIR}/.next/static/" || true
           else
-            echo "No ${DIST_DIR}/static directory found; skipping static copy."
+             echo "ERROR: No static assets found in ${DIST_DIR}/static"
+             ls -la "${DIST_DIR}"
+          exit 1
           fi
 
           # Public assets
