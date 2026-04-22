@@ -3,7 +3,8 @@ import { useState, useEffect } from "react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { HiSearch, HiPlus, HiTrash, HiPencil, HiFilter } from "react-icons/hi";
+import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import { HiSearch, HiPlus, HiTrash, HiEye, HiPaperAirplane } from "react-icons/hi";
 import { formatRelative } from "@/lib/utils";
 import Link from "next/link";
 
@@ -22,9 +23,18 @@ export default function PostsPage() {
   const [loading, setLoading] = useState(true);
   const [filter, setFilter] = useState("all");
   const [search, setSearch] = useState("");
+  const [selectedPostId, setSelectedPostId] = useState("");
+  const [engagement, setEngagement] = useState<any | null>(null);
+  const [replyDraft, setReplyDraft] = useState<Record<string, string>>({});
+  const [analyzing, setAnalyzing] = useState(false);
+  const [socialAccounts, setSocialAccounts] = useState<any[]>([]);
+  const [selectedPublishAccounts, setSelectedPublishAccounts] = useState<string[]>([]);
+  const [publishingPostId, setPublishingPostId] = useState("");
+  const [publishResult, setPublishResult] = useState("");
 
   useEffect(() => {
     fetchPosts();
+    fetchSocialAccounts();
   }, [filter]);
 
   async function fetchPosts() {
@@ -36,10 +46,80 @@ export default function PostsPage() {
     setLoading(false);
   }
 
+  async function fetchSocialAccounts() {
+    const res = await fetch("/api/social-accounts");
+    if (!res.ok) return;
+    const data = await res.json();
+    const active = (Array.isArray(data) ? data : []).filter((x) => x.isActive);
+    setSocialAccounts(active);
+    if (active.length > 0) {
+      setSelectedPublishAccounts((prev) => (prev.length > 0 ? prev : active.map((x) => x.id)));
+    }
+  }
+
   async function deletePost(id: string) {
     if (!confirm("Delete this post?")) return;
     await fetch(`/api/posts/${id}`, { method: "DELETE" });
     setPosts((p) => p.filter((x) => x.id !== id));
+  }
+
+  async function loadEngagement(postId: string) {
+    setSelectedPostId(postId);
+    const res = await fetch(`/api/posts/${postId}/engagement`);
+    const data = await res.json();
+    if (res.ok) setEngagement(data);
+  }
+
+  async function replyToComment(commentId: string) {
+    const message = replyDraft[commentId];
+    if (!message?.trim() || !selectedPostId) return;
+    const res = await fetch(`/api/posts/${selectedPostId}/engagement`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ action: "reply", commentId, message }),
+    });
+    const data = await res.json();
+    if (res.ok) {
+      setEngagement(data);
+      setReplyDraft((prev) => ({ ...prev, [commentId]: "" }));
+    }
+  }
+
+  async function analyzeSentiment() {
+    if (!selectedPostId) return;
+    setAnalyzing(true);
+    const res = await fetch(`/api/posts/${selectedPostId}/engagement`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ action: "analyze" }),
+    });
+    const data = await res.json();
+    if (res.ok) setEngagement(data);
+    setAnalyzing(false);
+  }
+
+  function togglePublishAccount(id: string) {
+    setSelectedPublishAccounts((prev) => (prev.includes(id) ? prev.filter((x) => x !== id) : [...prev, id]));
+  }
+
+  async function publishPost(post: any) {
+    if (!post?.id || selectedPublishAccounts.length === 0) return;
+    setPublishingPostId(post.id);
+    setPublishResult("");
+    const res = await fetch(`/api/posts/${post.id}`, {
+      method: "PATCH",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        action: "publish",
+        content: post.content,
+        mediaUrls: post.mediaUrls || [],
+        selectedSocialAccountIds: selectedPublishAccounts,
+      }),
+    });
+    const data = await res.json();
+    setPublishResult(res.ok ? "Post published to selected social accounts." : data?.error || "Failed to publish post.");
+    setPublishingPostId("");
+    if (res.ok) await fetchPosts();
   }
 
   const filtered = search
@@ -114,10 +194,82 @@ export default function PostsPage() {
                     {post.scheduledAt && (
                       <span className="text-xs text-blue-500">📅 {new Date(post.scheduledAt).toLocaleDateString()}</span>
                     )}
+                    {post.status === "PUBLISHED" && (
+                      <button
+                        onClick={() => loadEngagement(post.id)}
+                        className="text-xs text-violet-600 hover:text-violet-700 font-semibold"
+                      >
+                        View likes/comments
+                      </button>
+                    )}
                   </div>
                 </div>
                 <div className="flex items-center gap-2 flex-shrink-0">
                   <Badge className={`${STATUS_COLORS[post.status]} border-0 text-xs font-medium`}>{post.status}</Badge>
+                  <Dialog>
+                    <DialogTrigger asChild>
+                      <button className="p-1.5 rounded-lg text-violet-500 hover:bg-violet-50 transition-all">
+                        <HiEye className="text-sm" />
+                      </button>
+                    </DialogTrigger>
+                    <DialogContent className="max-w-2xl">
+                      <DialogHeader>
+                        <DialogTitle>Post Preview</DialogTitle>
+                        <DialogDescription>Review the full text and media before publishing.</DialogDescription>
+                      </DialogHeader>
+                      <div className="space-y-4">
+                        <div className="rounded-lg border border-gray-100 bg-gray-50 p-4">
+                          <p className="text-sm text-gray-700 whitespace-pre-wrap">{post.content}</p>
+                          {Array.isArray(post.mediaUrls) && post.mediaUrls.length > 0 && (
+                            <div className="mt-3 grid grid-cols-3 gap-2">
+                              {post.mediaUrls.map((url: string, idx: number) => {
+                                const isVideo = /\.(mp4|mov|webm|ogg)(\?|$)/i.test(url);
+                                return isVideo ? (
+                                  <video key={`${post.id}-${idx}`} src={url} className="w-full h-20 object-cover rounded-md" controls />
+                                ) : (
+                                  <img key={`${post.id}-${idx}`} src={url} alt="Post media" className="w-full h-20 object-cover rounded-md" />
+                                );
+                              })}
+                            </div>
+                          )}
+                        </div>
+                        <div className="space-y-2">
+                          <p className="text-sm font-semibold text-gray-700">Publish to social accounts</p>
+                          <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                            {socialAccounts.map((account) => (
+                              <label key={`${post.id}-${account.id}`} className="flex items-center gap-2 text-sm text-gray-700 border border-gray-200 rounded-lg p-2">
+                                <input
+                                  type="checkbox"
+                                  checked={selectedPublishAccounts.includes(account.id)}
+                                  onChange={() => togglePublishAccount(account.id)}
+                                />
+                                <span className="truncate">{account.accountName} ({account.platform})</span>
+                              </label>
+                            ))}
+                          </div>
+                        </div>
+                      </div>
+                      <DialogFooter>
+                        <Button
+                          onClick={() => publishPost(post)}
+                          disabled={publishingPostId === post.id || selectedPublishAccounts.length === 0}
+                          className="bg-emerald-600 text-white hover:bg-emerald-700"
+                        >
+                          <HiPaperAirplane className="mr-1" />
+                          {publishingPostId === post.id ? "Publishing..." : "Publish now"}
+                        </Button>
+                      </DialogFooter>
+                    </DialogContent>
+                  </Dialog>
+                  {post.status !== "PUBLISHED" && (
+                    <button
+                      onClick={() => publishPost(post)}
+                      className="p-1.5 rounded-lg text-emerald-600 hover:bg-emerald-50 transition-all"
+                      title="Publish post"
+                    >
+                      <HiPaperAirplane className="text-sm" />
+                    </button>
+                  )}
                   <button
                     onClick={() => deletePost(post.id)}
                     className="opacity-0 group-hover:opacity-100 p-1.5 rounded-lg text-red-400 hover:bg-red-50 transition-all"
@@ -130,6 +282,45 @@ export default function PostsPage() {
           </div>
         )}
       </div>
+
+      {engagement && (
+        <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-5 space-y-4">
+          <div className="flex items-center justify-between">
+            <h3 className="font-bold text-gray-900">Published Post Engagement</h3>
+            <div className="flex items-center gap-3">
+              <span className="text-sm text-gray-600">👍 {engagement.likes} likes</span>
+              <Button size="sm" variant="outline" onClick={analyzeSentiment} disabled={analyzing}>
+                {analyzing ? "Analyzing..." : "AI Analyze Sentiment"}
+              </Button>
+            </div>
+          </div>
+          <div className="space-y-3">
+            {(engagement.comments || []).map((comment: any) => (
+              <div key={comment.id} className="border border-gray-100 rounded-xl p-3">
+                <div className="flex items-center justify-between">
+                  <p className="text-sm font-medium text-gray-800">{comment.author}</p>
+                  <span className="text-xs px-2 py-1 rounded-full bg-gray-100 text-gray-600">{comment.sentiment || "unknown"}</span>
+                </div>
+                <p className="text-sm text-gray-700 mt-1">{comment.message}</p>
+                <div className="mt-2 space-y-1">
+                  {(comment.replies || []).map((r: any) => (
+                    <p key={r.id} className="text-xs text-gray-600 bg-gray-50 rounded-md px-2 py-1">↳ {r.message}</p>
+                  ))}
+                </div>
+                <div className="mt-2 flex items-center gap-2">
+                  <Input
+                    placeholder="Reply through the site..."
+                    value={replyDraft[comment.id] || ""}
+                    onChange={(e) => setReplyDraft((prev) => ({ ...prev, [comment.id]: e.target.value }))}
+                  />
+                  <Button size="sm" onClick={() => replyToComment(comment.id)}>Reply</Button>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+      {publishResult && <p className="text-sm text-gray-600">{publishResult}</p>}
     </div>
   );
 }

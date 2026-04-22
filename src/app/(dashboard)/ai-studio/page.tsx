@@ -8,6 +8,11 @@ import { Badge } from "@/components/ui/badge";
 import { HiSparkles, HiPhotograph, HiDownload } from "react-icons/hi";
 
 const STYLES = ["photorealistic", "digital art", "illustration", "watercolor", "3D render", "minimalist", "abstract", "vintage"];
+const TEMPLATES = [
+  { id: "event-announcement", label: "Event Announcement" },
+  { id: "marketing-campaign", label: "Marketing Campaign" },
+  { id: "notice", label: "Notice" },
+];
 
 export default function AIStudioPage() {
   const [prompt, setPrompt] = useState("");
@@ -16,6 +21,7 @@ export default function AIStudioPage() {
   const [loading, setLoading] = useState(false);
   const [isMock, setIsMock] = useState(false);
   const [history, setHistory] = useState<Array<{ url: string; prompt: string; isMock: boolean }>>([]);
+  const [template, setTemplate] = useState("event-announcement");
 
   async function generate() {
     if (!prompt.trim()) return;
@@ -23,7 +29,7 @@ export default function AIStudioPage() {
     const res = await fetch("/api/ai/image", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ prompt, style }),
+      body: JSON.stringify({ prompt, style, template }),
     });
     const data = await res.json();
     if (data.url) {
@@ -42,7 +48,7 @@ export default function AIStudioPage() {
           <div className="flex items-center gap-2">
             <HiSparkles className="text-violet-500 text-xl" />
             <h2 className="font-bold text-gray-900" style={{ fontFamily: "Outfit, sans-serif" }}>AI Image Generator</h2>
-            <Badge className="bg-violet-100 text-violet-700 border-0 text-xs">DALL-E 3 / Unsplash</Badge>
+            <Badge className="bg-violet-100 text-violet-700 border-0 text-xs">Grok / OpenAI / Unsplash</Badge>
           </div>
 
           <div>
@@ -53,6 +59,20 @@ export default function AIStudioPage() {
               className="w-full min-h-28 rounded-xl border border-gray-200 px-4 py-3 text-sm text-gray-700 focus:outline-none focus:border-violet-400 resize-none"
               placeholder="A professional business team celebrating success in a modern office, golden hour lighting, high quality..."
             />
+          </div>
+
+          <div>
+            <Label className="text-sm font-semibold text-gray-700 mb-2 block">Template</Label>
+            <Select value={template} onValueChange={setTemplate}>
+              <SelectTrigger className="rounded-xl border-gray-200 h-11">
+                <SelectValue />
+              </SelectTrigger>
+              <SelectContent>
+                {TEMPLATES.map((t) => (
+                  <SelectItem key={t.id} value={t.id}>{t.label}</SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
           </div>
 
           <div>
@@ -89,7 +109,7 @@ export default function AIStudioPage() {
 
           {isMock && (
             <p className="text-xs text-amber-600 bg-amber-50 rounded-xl p-3">
-              ⚡ Using Unsplash mock. Add OPENAI_API_KEY to enable DALL-E 3.
+              ⚡ Using Unsplash mock. Add GROK_OPENAI_API_KEY (or XAI_API_KEY) to enable Grok image generation.
             </p>
           )}
         </div>

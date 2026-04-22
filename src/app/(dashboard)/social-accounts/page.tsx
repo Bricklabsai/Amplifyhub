@@ -36,7 +36,7 @@ export default function SocialAccountsPage() {
 
   async function connect(provider: string) {
     if (!provider) return;
-    signIn(provider, { callbackUrl: "/social-accounts" });
+    signIn(provider, { callbackUrl: "/dashboard" });
   }
 
   async function refreshProfiles() {

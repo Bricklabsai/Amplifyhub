@@ -1,12 +1,23 @@
 "use client";
-import { useState } from "react";
+import { ChangeEvent, useEffect, useMemo, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
+import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { HiSparkles, HiRefresh, HiSave, HiClock } from "react-icons/hi";
+import { HiSparkles, HiRefresh, HiSave, HiUpload, HiPaperAirplane, HiEye } from "react-icons/hi";
 import { FaFacebook, FaInstagram, FaLinkedin, FaTiktok, FaYoutube, FaWhatsapp } from "react-icons/fa";
 import { FaXTwitter } from "react-icons/fa6";
+import Link from "next/link";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
 
 const PLATFORMS = [
   { id: "FACEBOOK", label: "Facebook", Icon: FaFacebook, color: "#1877F2" },
@@ -19,20 +30,106 @@ const PLATFORMS = [
 ];
 
 const TONES = ["professional", "casual", "humorous", "inspirational", "educational", "promotional"];
+const SOCIAL_ASPECTS: Record<string, string> = {
+  FACEBOOK: "aspect-[1.91/1]",
+  TWITTER: "aspect-[16/9]",
+  INSTAGRAM: "aspect-square",
+  LINKEDIN: "aspect-[1.91/1]",
+  TIKTOK: "aspect-[9/16]",
+  YOUTUBE: "aspect-video",
+  WHATSAPP: "aspect-square",
+};
+
+type MediaItem = {
+  id: string;
+  url: string;
+  type: string;
+  filename: string;
+  isAI: boolean;
+};
+
+type Contact = { id: string; email: string; phone?: string | null; firstName?: string | null; lastName?: string | null };
+type Group = { id: string; name: string; contacts: Contact[]; contactCount: number };
+type SocialAccount = { id: string; platform: string; accountName: string; isActive: boolean };
 
 export default function ComposePage() {
   const [prompt, setPrompt] = useState("");
+  const [message, setMessage] = useState("");
   const [selectedPlatforms, setSelectedPlatforms] = useState(["FACEBOOK", "TWITTER", "INSTAGRAM", "LINKEDIN"]);
   const [tone, setTone] = useState("professional");
   const [variations, setVariations] = useState<Record<string, string>>({});
+  const [suggestions, setSuggestions] = useState<string[]>([]);
   const [loading, setLoading] = useState(false);
+  const [enhancing, setEnhancing] = useState(false);
   const [saving, setSaving] = useState(false);
+  const [sending, setSending] = useState(false);
   const [saved, setSaved] = useState(false);
+  const [sendResult, setSendResult] = useState("");
+  const [channel, setChannel] = useState<"EMAIL" | "WHATSAPP">("EMAIL");
+  const [media, setMedia] = useState<MediaItem[]>([]);
+  const [selectedMedia, setSelectedMedia] = useState<string[]>([]);
+  const [uploading, setUploading] = useState(false);
+  const [contacts, setContacts] = useState<Contact[]>([]);
+  const [groups, setGroups] = useState<Group[]>([]);
+  const [selectedGroupIds, setSelectedGroupIds] = useState<string[]>([]);
+  const [selectedContactIds, setSelectedContactIds] = useState<string[]>([]);
+  const [socialAccounts, setSocialAccounts] = useState<SocialAccount[]>([]);
+  const [publishAccountIds, setPublishAccountIds] = useState<string[]>([]);
+  const [publishingPlatform, setPublishingPlatform] = useState<string | null>(null);
+  const [publishResult, setPublishResult] = useState("");
 
   function togglePlatform(id: string) {
     setSelectedPlatforms((prev) =>
       prev.includes(id) ? prev.filter((p) => p !== id) : [...prev, id]
     );
+  }
+
+  function toggleArrayValue(value: string, setter: (cb: (prev: string[]) => string[]) => void) {
+    setter((prev) => (prev.includes(value) ? prev.filter((x) => x !== value) : [...prev, value]));
+  }
+
+  useEffect(() => {
+    void loadMedia();
+    void loadContactsAndGroups();
+    void loadSocialAccounts();
+  }, []);
+
+  useEffect(() => {
+    const fromLibrary = sessionStorage.getItem("compose-selected-media-ids");
+    if (!fromLibrary) return;
+    try {
+      const ids = JSON.parse(fromLibrary);
+      if (Array.isArray(ids)) setSelectedMedia(ids);
+    } catch {
+      // Ignore malformed storage payload
+    }
+    sessionStorage.removeItem("compose-selected-media-ids");
+  }, []);
+
+  async function loadMedia() {
+    const res = await fetch("/api/media");
+    if (!res.ok) return;
+    const data = await res.json();
+    setMedia(Array.isArray(data) ? data : []);
+  }
+
+  async function loadContactsAndGroups() {
+    const res = await fetch("/api/contacts");
+    if (!res.ok) return;
+    const data = await res.json();
+    setContacts(data.contacts || []);
+    setGroups(data.groups || []);
+  }
+
+  async function loadSocialAccounts() {
+    const res = await fetch("/api/social-accounts");
+    if (!res.ok) return;
+    const data = await res.json();
+    const activeAccounts = (Array.isArray(data) ? data : []).filter((account: SocialAccount) => account.isActive);
+    setSocialAccounts(activeAccounts);
+    if (activeAccounts.length > 0) {
+      setPublishAccountIds((prev) => (prev.length > 0 ? prev : activeAccounts.map((account: SocialAccount) => account.id)));
+    }
   }
 
   async function generate() {
@@ -49,19 +146,114 @@ export default function ComposePage() {
     setLoading(false);
   }
 
+  async function enhanceMessage() {
+    const source = message || prompt;
+    if (!source.trim()) return;
+    setEnhancing(true);
+    const res = await fetch("/api/ai/generate", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ action: "enhance", prompt, message: source, tone }),
+    });
+    const data = await res.json();
+    if (data.improvedMessage) setMessage(data.improvedMessage);
+    setSuggestions(data.suggestions || []);
+    setEnhancing(false);
+  }
+
+  async function uploadMedia(e: ChangeEvent<HTMLInputElement>) {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    setUploading(true);
+    const formData = new FormData();
+    formData.append("file", file);
+    const res = await fetch("/api/media", { method: "POST", body: formData });
+    const data = await res.json();
+    if (res.ok) {
+      setMedia((prev) => [data, ...prev]);
+      setSelectedMedia((prev) => [...prev, data.id]);
+    }
+    setUploading(false);
+  }
+
   async function savePost(platform: string, content: string) {
     setSaving(true);
+    const mediaUrls = media.filter((m) => selectedMedia.includes(m.id)).map((m) => m.url);
     await fetch("/api/posts", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ content, status: "DRAFT", title: `${platform} draft` }),
+      body: JSON.stringify({ content, status: "DRAFT", title: `${platform} draft`, mediaUrls }),
     });
     setSaved(true);
     setTimeout(() => setSaved(false), 2000);
     setSaving(false);
   }
 
-  const platformObj = PLATFORMS.find((p) => p.id === Object.keys(variations)[0]);
+  async function publishPost(platform: string, content: string) {
+    if (publishAccountIds.length === 0 || !content.trim()) return;
+    setPublishingPlatform(platform);
+    setPublishResult("");
+    const mediaUrls = media.filter((m) => selectedMedia.includes(m.id)).map((m) => m.url);
+
+    const createRes = await fetch("/api/posts", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        content,
+        status: "DRAFT",
+        title: `${platform} post`,
+        mediaUrls,
+      }),
+    });
+    const created = await createRes.json();
+    if (!createRes.ok || !created?.id) {
+      setPublishResult(created?.error || "Failed to create post for publishing.");
+      setPublishingPlatform(null);
+      return;
+    }
+
+    const publishRes = await fetch(`/api/posts/${created.id}`, {
+      method: "PATCH",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        action: "publish",
+        content,
+        mediaUrls,
+        selectedSocialAccountIds: publishAccountIds,
+      }),
+    });
+    const publishData = await publishRes.json();
+    setPublishResult(publishRes.ok ? "Post published to selected social accounts." : publishData?.error || "Publish failed.");
+    setPublishingPlatform(null);
+  }
+
+  async function sendNow() {
+    const content = message || Object.values(variations)[0] || prompt;
+    if (!content.trim()) return;
+    setSending(true);
+    const mediaUrls = media.filter((m) => selectedMedia.includes(m.id)).map((m) => m.url);
+    const res = await fetch("/api/compose/send", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        content,
+        channel,
+        mediaUrls,
+        groupIds: selectedGroupIds,
+        selectedContactIds: channel === "EMAIL" ? selectedContactIds : [],
+        whatsappContactIds: channel === "WHATSAPP" ? selectedContactIds : [],
+      }),
+    });
+    const data = await res.json();
+    setSendResult(data.message || data.error || "Completed");
+    setSending(false);
+  }
+
+  const selectedMediaItems = useMemo(
+    () => media.filter((m) => selectedMedia.includes(m.id)),
+    [media, selectedMedia]
+  );
+  const whatsappContacts = contacts.filter((c) => Boolean(c.phone));
 
   return (
     <div className="max-w-6xl space-y-6">
@@ -81,6 +273,32 @@ export default function ComposePage() {
               onChange={(e) => setPrompt(e.target.value)}
               className="min-h-24 rounded-xl border-gray-200 focus:border-violet-400 resize-none"
             />
+          </div>
+
+          <div>
+            <Label className="text-sm font-semibold text-gray-700 mb-2 block">Compose Message</Label>
+            <Textarea
+              placeholder="Write your message (or generate then refine with AI)..."
+              value={message}
+              onChange={(e) => setMessage(e.target.value)}
+              className="min-h-28 rounded-xl border-gray-200 focus:border-violet-400 resize-none"
+            />
+            <div className="flex flex-wrap gap-2 mt-2">
+              <Button type="button" variant="outline" onClick={enhanceMessage} disabled={enhancing || (!message && !prompt)} className="rounded-lg">
+                {enhancing ? <HiRefresh className="animate-spin mr-1" /> : <HiSparkles className="mr-1" />}
+                AI Rephrase by Tone
+              </Button>
+              {suggestions.map((s, idx) => (
+                <button
+                  key={`${s}-${idx}`}
+                  type="button"
+                  onClick={() => setMessage(s)}
+                  className="px-3 py-1.5 rounded-lg text-xs border border-violet-200 text-violet-700 bg-violet-50 hover:bg-violet-100"
+                >
+                  Use suggestion {idx + 1}
+                </button>
+              ))}
+            </div>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -120,6 +338,35 @@ export default function ComposePage() {
             </div>
           </div>
 
+          <div className="bg-gray-50 rounded-xl p-4 space-y-4">
+            <Label className="text-sm font-semibold text-gray-700 block">Media Upload</Label>
+            <div className="flex flex-wrap items-center gap-3">
+              <label className="inline-flex items-center gap-2 px-3 h-10 rounded-lg bg-white border border-gray-200 cursor-pointer text-sm">
+                <HiUpload />
+                {uploading ? "Uploading..." : "Upload image, event poster, or video"}
+                <input type="file" accept="image/*,video/*" className="hidden" onChange={uploadMedia} />
+              </label>
+              <Link href="/media-library?from=compose">
+                <Button type="button" variant="outline">Open Media Library / AI Studio Images</Button>
+              </Link>
+            </div>
+            <div className="space-y-2">
+              <p className="text-xs text-gray-500">Selected media: {selectedMediaItems.length}</p>
+              <div className="flex flex-wrap gap-2">
+                {selectedMediaItems.map((item) => (
+                  <button
+                    key={item.id}
+                    type="button"
+                    onClick={() => toggleArrayValue(item.id, setSelectedMedia)}
+                    className="text-xs px-2.5 py-1.5 rounded-md border border-gray-200 bg-white text-gray-700"
+                  >
+                    {item.filename} (remove)
+                  </button>
+                ))}
+              </div>
+            </div>
+          </div>
+
           <Button
             onClick={generate}
             disabled={loading || !prompt.trim() || selectedPlatforms.length === 0}
@@ -137,6 +384,98 @@ export default function ComposePage() {
               </span>
             )}
           </Button>
+        </div>
+      </div>
+
+      <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-6 space-y-4">
+        <h3 className="font-bold text-gray-900" style={{ fontFamily: "Outfit, sans-serif" }}>Recipients & Delivery</h3>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <div>
+            <Label className="text-sm font-semibold text-gray-700 mb-2 block">Category Channel</Label>
+            <Select value={channel} onValueChange={(v: "EMAIL" | "WHATSAPP") => { setChannel(v); setSelectedContactIds([]); }}>
+              <SelectTrigger className="rounded-xl border-gray-200 h-11">
+                <SelectValue />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="EMAIL">Email Category</SelectItem>
+                <SelectItem value="WHATSAPP">WhatsApp Category</SelectItem>
+              </SelectContent>
+            </Select>
+          </div>
+        </div>
+        <div>
+          <Label className="text-sm font-semibold text-gray-700 mb-2 block">Audience Categories</Label>
+          <div className="flex flex-wrap gap-2">
+            {groups.map((group) => (
+              <button
+                key={group.id}
+                type="button"
+                onClick={() => toggleArrayValue(group.id, setSelectedGroupIds)}
+                className={`px-3 py-1.5 rounded-lg text-xs border ${
+                  selectedGroupIds.includes(group.id)
+                    ? "border-violet-500 bg-violet-50 text-violet-700"
+                    : "border-gray-200 text-gray-600"
+                }`}
+              >
+                {group.name} ({group.contactCount})
+              </button>
+            ))}
+          </div>
+        </div>
+        <div>
+          <Label className="text-sm font-semibold text-gray-700 mb-2 block">
+            {channel === "WHATSAPP" ? "Individual WhatsApp Contacts" : "Individual Email Contacts"}
+          </Label>
+          <div className="max-h-44 overflow-auto border border-gray-100 rounded-xl p-3 grid grid-cols-1 md:grid-cols-2 gap-2">
+            {(channel === "WHATSAPP" ? whatsappContacts : contacts).map((contact) => {
+              const label = `${contact.firstName || ""} ${contact.lastName || ""}`.trim() || contact.email;
+              return (
+                <label key={contact.id} className="flex items-center gap-2 text-sm text-gray-700">
+                  <input
+                    type="checkbox"
+                    checked={selectedContactIds.includes(contact.id)}
+                    onChange={() => toggleArrayValue(contact.id, setSelectedContactIds)}
+                  />
+                  <span className="truncate">{label} - {channel === "WHATSAPP" ? contact.phone : contact.email}</span>
+                </label>
+              );
+            })}
+          </div>
+        </div>
+        <Button onClick={sendNow} disabled={sending} className="brand-gradient-bg text-white border-0 hover:opacity-90 px-8 h-11 rounded-xl font-semibold">
+          {sending ? "Sending..." : `Send ${channel === "WHATSAPP" ? "WhatsApp" : "Email"} Message`}
+        </Button>
+        {sendResult && <p className="text-sm text-gray-600">{sendResult}</p>}
+      </div>
+
+      <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-6">
+        <h3 className="font-bold text-gray-900 mb-4" style={{ fontFamily: "Outfit, sans-serif" }}>Preview on Selected Social Accounts</h3>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          {selectedPlatforms.map((platform) => {
+            const p = PLATFORMS.find((x) => x.id === platform);
+            if (!p) return null;
+            return (
+              <div key={platform} className="rounded-xl border border-gray-100 p-4 bg-gray-50">
+                <div className="font-semibold text-sm mb-2">{p.label}</div>
+                <p className="text-sm text-gray-700 whitespace-pre-wrap">{message || variations[platform] || prompt}</p>
+                {selectedMediaItems.length > 0 && (
+                  <div className="mt-3 grid grid-cols-3 gap-2">
+                    {selectedMediaItems.map((item) =>
+                      item.type === "video" ? (
+                        <div key={`${platform}-${item.id}`} className={`w-full rounded-md overflow-hidden bg-black/5 ${SOCIAL_ASPECTS[platform] || "aspect-square"}`}>
+                          <video src={item.url} className="w-full h-full object-cover" />
+                        </div>
+                      ) : (
+                        <div key={`${platform}-${item.id}`} className={`w-full rounded-md overflow-hidden bg-black/5 ${SOCIAL_ASPECTS[platform] || "aspect-square"}`}>
+                          <img src={item.url} alt={item.filename} className="w-full h-full object-cover" />
+                        </div>
+                      )
+                    )}
+                  </div>
+                )}
+              </div>
+            );
+          })}
         </div>
       </div>
 
@@ -162,6 +501,61 @@ export default function ComposePage() {
                       <HiSave className="text-sm" />
                       Save as draft
                     </button>
+                    <Dialog>
+                      <DialogTrigger asChild>
+                        <button className="flex items-center gap-1 text-xs text-gray-500 hover:text-violet-600 transition-colors">
+                          <HiEye className="text-sm" />
+                          Preview & publish
+                        </button>
+                      </DialogTrigger>
+                      <DialogContent className="max-w-2xl">
+                        <DialogHeader>
+                          <DialogTitle>{label} post preview</DialogTitle>
+                          <DialogDescription>Review all content before publishing to your social accounts.</DialogDescription>
+                        </DialogHeader>
+                        <div className="space-y-4">
+                          <div className="rounded-lg border border-gray-100 bg-gray-50 p-4">
+                            <p className="text-sm text-gray-700 whitespace-pre-wrap">{content as string}</p>
+                            {selectedMediaItems.length > 0 && (
+                              <div className="mt-3 grid grid-cols-3 gap-2">
+                                {selectedMediaItems.map((item) =>
+                                  item.type === "video" ? (
+                                    <video key={`preview-${platform}-${item.id}`} src={item.url} className="w-full h-20 object-cover rounded-md" />
+                                  ) : (
+                                    <img key={`preview-${platform}-${item.id}`} src={item.url} alt={item.filename} className="w-full h-20 object-cover rounded-md" />
+                                  )
+                                )}
+                              </div>
+                            )}
+                          </div>
+                          <div className="space-y-2">
+                            <Label className="text-sm font-semibold text-gray-700">Publish to social accounts</Label>
+                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                              {socialAccounts.map((account) => (
+                                <label key={`${platform}-${account.id}`} className="flex items-center gap-2 text-sm text-gray-700 border border-gray-200 rounded-lg p-2">
+                                  <input
+                                    type="checkbox"
+                                    checked={publishAccountIds.includes(account.id)}
+                                    onChange={() => toggleArrayValue(account.id, setPublishAccountIds)}
+                                  />
+                                  <span className="truncate">{account.accountName} ({account.platform})</span>
+                                </label>
+                              ))}
+                            </div>
+                          </div>
+                        </div>
+                        <DialogFooter>
+                          <Button
+                            onClick={() => publishPost(platform, content as string)}
+                            disabled={publishingPlatform === platform || publishAccountIds.length === 0}
+                            className="brand-gradient-bg text-white border-0 hover:opacity-90"
+                          >
+                            <HiPaperAirplane className="mr-1" />
+                            {publishingPlatform === platform ? "Publishing..." : "Publish now"}
+                          </Button>
+                        </DialogFooter>
+                      </DialogContent>
+                    </Dialog>
                   </div>
                 </div>
                 <div className="p-5">
@@ -180,6 +574,15 @@ export default function ComposePage() {
                       <HiSave className="mr-1" />
                       Save Draft
                     </Button>
+                    <Button
+                      size="sm"
+                      onClick={() => publishPost(platform, content as string)}
+                      disabled={publishingPlatform === platform || publishAccountIds.length === 0}
+                      className="bg-emerald-600 text-white hover:bg-emerald-700 rounded-lg text-xs h-8"
+                    >
+                      <HiPaperAirplane className="mr-1" />
+                      {publishingPlatform === platform ? "Publishing..." : "Publish"}
+                    </Button>
                   </div>
                 </div>
               </div>
@@ -191,6 +594,11 @@ export default function ComposePage() {
       {saved && (
         <div className="fixed bottom-6 right-6 bg-emerald-500 text-white px-5 py-3 rounded-xl shadow-xl text-sm font-medium flex items-center gap-2 z-50">
           ✓ Post saved as draft
+        </div>
+      )}
+      {publishResult && (
+        <div className="fixed bottom-6 left-6 bg-violet-600 text-white px-5 py-3 rounded-xl shadow-xl text-sm font-medium z-50">
+          {publishResult}
         </div>
       )}
     </div>

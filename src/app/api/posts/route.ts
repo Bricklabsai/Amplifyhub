@@ -21,6 +21,19 @@ export async function GET(req: NextRequest) {
       orderBy: { createdAt: "desc" },
       take: limit,
       skip: (page - 1) * limit,
+      include: {
+        platformPosts: {
+          include: {
+            socialAccount: {
+              select: {
+                id: true,
+                platform: true,
+                accountName: true,
+              },
+            },
+          },
+        },
+      },
     }),
     prisma.post.count({ where }),
   ]);
