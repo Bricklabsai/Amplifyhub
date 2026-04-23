@@ -209,6 +209,8 @@ exports.Prisma.PostScalarFieldEnum = {
   scheduledAt: 'scheduledAt',
   publishedAt: 'publishedAt',
   campaignId: 'campaignId',
+  googleCalendarEventId: 'googleCalendarEventId',
+  scheduleSource: 'scheduleSource',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 };
@@ -278,6 +280,8 @@ exports.Prisma.EmailCampaignScalarFieldEnum = {
   previewText: 'previewText',
   htmlContent: 'htmlContent',
   textContent: 'textContent',
+  channel: 'channel',
+  mediaUrls: 'mediaUrls',
   status: 'status',
   scheduledAt: 'scheduledAt',
   sentAt: 'sentAt',
@@ -393,6 +397,11 @@ exports.CampaignStatus = exports.$Enums.CampaignStatus = {
   ACTIVE: 'ACTIVE',
   PAUSED: 'PAUSED',
   COMPLETED: 'COMPLETED'
+};
+
+exports.CampaignChannel = exports.$Enums.CampaignChannel = {
+  EMAIL: 'EMAIL',
+  WHATSAPP: 'WHATSAPP'
 };
 
 exports.EmailCampaignStatus = exports.$Enums.EmailCampaignStatus = {

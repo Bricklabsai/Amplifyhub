@@ -16,20 +16,58 @@ export async function POST(req: NextRequest) {
 
   let published = 0;
   for (const post of scheduledPosts) {
-    await prisma.post.update({
-      where: { id: post.id },
-      data: { status: "PUBLISHED", publishedAt: now },
-    });
-    // Create notification
-    await prisma.notification.create({
-      data: {
-        userId: post.userId,
-        title: "Post Published",
-        message: `Your scheduled post has been published successfully.`,
-        type: "success",
-      },
-    });
-    published++;
+    try {
+      // Get social accounts for this user
+      const socialAccounts = await prisma.socialAccount.findMany({
+        where: { userId: post.userId, isActive: true },
+      });
+
+      // Create platform posts for each connected account
+      for (const account of socialAccounts) {
+        await prisma.platformPost.create({
+          data: {
+            postId: post.id,
+            socialAccountId: account.id,
+            platform: account.platform,
+            content: post.content,
+            status: "PUBLISHED",
+            publishedAt: now,
+          },
+        });
+      }
+
+      // Mark main post as published
+      await prisma.post.update({
+        where: { id: post.id },
+        data: { status: "PUBLISHED", publishedAt: now },
+      });
+
+      // Create notification
+      await prisma.notification.create({
+        data: {
+          userId: post.userId,
+          title: "Scheduled Post Published",
+          message: `Your scheduled post was published successfully to ${socialAccounts.length} platforms.`,
+          type: "success",
+        },
+      });
+
+      published++;
+    } catch (error) {
+      await prisma.post.update({
+        where: { id: post.id },
+        data: { status: "FAILED" },
+      });
+
+      await prisma.notification.create({
+        data: {
+          userId: post.userId,
+          title: "Post Failed",
+          message: `Your scheduled post failed to publish. Please try again.`,
+          type: "error",
+        },
+      });
+    }
   }
 
   return NextResponse.json({ processed: scheduledPosts.length, published });

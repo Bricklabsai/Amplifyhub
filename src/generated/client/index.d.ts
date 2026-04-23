@@ -163,6 +163,14 @@ export const EmailCampaignStatus: {
 export type EmailCampaignStatus = (typeof EmailCampaignStatus)[keyof typeof EmailCampaignStatus]
 
 
+export const CampaignChannel: {
+  EMAIL: 'EMAIL',
+  WHATSAPP: 'WHATSAPP'
+};
+
+export type CampaignChannel = (typeof CampaignChannel)[keyof typeof CampaignChannel]
+
+
 export const SubscriptionStatus: {
   ACTIVE: 'ACTIVE',
   CANCELLED: 'CANCELLED',
@@ -192,6 +200,10 @@ export const CampaignStatus: typeof $Enums.CampaignStatus
 export type EmailCampaignStatus = $Enums.EmailCampaignStatus
 
 export const EmailCampaignStatus: typeof $Enums.EmailCampaignStatus
+
+export type CampaignChannel = $Enums.CampaignChannel
+
+export const CampaignChannel: typeof $Enums.CampaignChannel
 
 export type SubscriptionStatus = $Enums.SubscriptionStatus
 
@@ -11019,6 +11031,8 @@ export namespace Prisma {
     scheduledAt: Date | null
     publishedAt: Date | null
     campaignId: string | null
+    googleCalendarEventId: string | null
+    scheduleSource: string | null
     createdAt: Date | null
     updatedAt: Date | null
   }
@@ -11032,6 +11046,8 @@ export namespace Prisma {
     scheduledAt: Date | null
     publishedAt: Date | null
     campaignId: string | null
+    googleCalendarEventId: string | null
+    scheduleSource: string | null
     createdAt: Date | null
     updatedAt: Date | null
   }
@@ -11046,6 +11062,8 @@ export namespace Prisma {
     scheduledAt: number
     publishedAt: number
     campaignId: number
+    googleCalendarEventId: number
+    scheduleSource: number
     createdAt: number
     updatedAt: number
     _all: number
@@ -11061,6 +11079,8 @@ export namespace Prisma {
     scheduledAt?: true
     publishedAt?: true
     campaignId?: true
+    googleCalendarEventId?: true
+    scheduleSource?: true
     createdAt?: true
     updatedAt?: true
   }
@@ -11074,6 +11094,8 @@ export namespace Prisma {
     scheduledAt?: true
     publishedAt?: true
     campaignId?: true
+    googleCalendarEventId?: true
+    scheduleSource?: true
     createdAt?: true
     updatedAt?: true
   }
@@ -11088,6 +11110,8 @@ export namespace Prisma {
     scheduledAt?: true
     publishedAt?: true
     campaignId?: true
+    googleCalendarEventId?: true
+    scheduleSource?: true
     createdAt?: true
     updatedAt?: true
     _all?: true
@@ -11175,6 +11199,8 @@ export namespace Prisma {
     scheduledAt: Date | null
     publishedAt: Date | null
     campaignId: string | null
+    googleCalendarEventId: string | null
+    scheduleSource: string | null
     createdAt: Date
     updatedAt: Date
     _count: PostCountAggregateOutputType | null
@@ -11206,6 +11232,8 @@ export namespace Prisma {
     scheduledAt?: boolean
     publishedAt?: boolean
     campaignId?: boolean
+    googleCalendarEventId?: boolean
+    scheduleSource?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     user?: boolean | UserDefaultArgs<ExtArgs>
@@ -11224,6 +11252,8 @@ export namespace Prisma {
     scheduledAt?: boolean
     publishedAt?: boolean
     campaignId?: boolean
+    googleCalendarEventId?: boolean
+    scheduleSource?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     user?: boolean | UserDefaultArgs<ExtArgs>
@@ -11240,6 +11270,8 @@ export namespace Prisma {
     scheduledAt?: boolean
     publishedAt?: boolean
     campaignId?: boolean
+    googleCalendarEventId?: boolean
+    scheduleSource?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     user?: boolean | UserDefaultArgs<ExtArgs>
@@ -11256,11 +11288,13 @@ export namespace Prisma {
     scheduledAt?: boolean
     publishedAt?: boolean
     campaignId?: boolean
+    googleCalendarEventId?: boolean
+    scheduleSource?: boolean
     createdAt?: boolean
     updatedAt?: boolean
   }
 
-  export type PostOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "userId" | "title" | "content" | "mediaUrls" | "status" | "scheduledAt" | "publishedAt" | "campaignId" | "createdAt" | "updatedAt", ExtArgs["result"]["post"]>
+  export type PostOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "userId" | "title" | "content" | "mediaUrls" | "status" | "scheduledAt" | "publishedAt" | "campaignId" | "googleCalendarEventId" | "scheduleSource" | "createdAt" | "updatedAt", ExtArgs["result"]["post"]>
   export type PostInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     user?: boolean | UserDefaultArgs<ExtArgs>
     campaign?: boolean | Post$campaignArgs<ExtArgs>
@@ -11293,6 +11327,8 @@ export namespace Prisma {
       scheduledAt: Date | null
       publishedAt: Date | null
       campaignId: string | null
+      googleCalendarEventId: string | null
+      scheduleSource: string | null
       createdAt: Date
       updatedAt: Date
     }, ExtArgs["result"]["post"]>
@@ -11730,6 +11766,8 @@ export namespace Prisma {
     readonly scheduledAt: FieldRef<"Post", 'DateTime'>
     readonly publishedAt: FieldRef<"Post", 'DateTime'>
     readonly campaignId: FieldRef<"Post", 'String'>
+    readonly googleCalendarEventId: FieldRef<"Post", 'String'>
+    readonly scheduleSource: FieldRef<"Post", 'String'>
     readonly createdAt: FieldRef<"Post", 'DateTime'>
     readonly updatedAt: FieldRef<"Post", 'DateTime'>
   }
@@ -17914,6 +17952,7 @@ export namespace Prisma {
     previewText: string | null
     htmlContent: string | null
     textContent: string | null
+    channel: $Enums.CampaignChannel | null
     status: $Enums.EmailCampaignStatus | null
     scheduledAt: Date | null
     sentAt: Date | null
@@ -17931,6 +17970,7 @@ export namespace Prisma {
     previewText: string | null
     htmlContent: string | null
     textContent: string | null
+    channel: $Enums.CampaignChannel | null
     status: $Enums.EmailCampaignStatus | null
     scheduledAt: Date | null
     sentAt: Date | null
@@ -17948,6 +17988,8 @@ export namespace Prisma {
     previewText: number
     htmlContent: number
     textContent: number
+    channel: number
+    mediaUrls: number
     status: number
     scheduledAt: number
     sentAt: number
@@ -17977,6 +18019,7 @@ export namespace Prisma {
     previewText?: true
     htmlContent?: true
     textContent?: true
+    channel?: true
     status?: true
     scheduledAt?: true
     sentAt?: true
@@ -17994,6 +18037,7 @@ export namespace Prisma {
     previewText?: true
     htmlContent?: true
     textContent?: true
+    channel?: true
     status?: true
     scheduledAt?: true
     sentAt?: true
@@ -18011,6 +18055,8 @@ export namespace Prisma {
     previewText?: true
     htmlContent?: true
     textContent?: true
+    channel?: true
+    mediaUrls?: true
     status?: true
     scheduledAt?: true
     sentAt?: true
@@ -18115,6 +18161,8 @@ export namespace Prisma {
     previewText: string | null
     htmlContent: string
     textContent: string | null
+    channel: $Enums.CampaignChannel
+    mediaUrls: string[]
     status: $Enums.EmailCampaignStatus
     scheduledAt: Date | null
     sentAt: Date | null
@@ -18151,6 +18199,8 @@ export namespace Prisma {
     previewText?: boolean
     htmlContent?: boolean
     textContent?: boolean
+    channel?: boolean
+    mediaUrls?: boolean
     status?: boolean
     scheduledAt?: boolean
     sentAt?: boolean
@@ -18171,6 +18221,8 @@ export namespace Prisma {
     previewText?: boolean
     htmlContent?: boolean
     textContent?: boolean
+    channel?: boolean
+    mediaUrls?: boolean
     status?: boolean
     scheduledAt?: boolean
     sentAt?: boolean
@@ -18189,6 +18241,8 @@ export namespace Prisma {
     previewText?: boolean
     htmlContent?: boolean
     textContent?: boolean
+    channel?: boolean
+    mediaUrls?: boolean
     status?: boolean
     scheduledAt?: boolean
     sentAt?: boolean
@@ -18207,6 +18261,8 @@ export namespace Prisma {
     previewText?: boolean
     htmlContent?: boolean
     textContent?: boolean
+    channel?: boolean
+    mediaUrls?: boolean
     status?: boolean
     scheduledAt?: boolean
     sentAt?: boolean
@@ -18216,7 +18272,7 @@ export namespace Prisma {
     updatedAt?: boolean
   }
 
-  export type EmailCampaignOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "userId" | "name" | "subject" | "previewText" | "htmlContent" | "textContent" | "status" | "scheduledAt" | "sentAt" | "openRate" | "clickRate" | "createdAt" | "updatedAt", ExtArgs["result"]["emailCampaign"]>
+  export type EmailCampaignOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "userId" | "name" | "subject" | "previewText" | "htmlContent" | "textContent" | "channel" | "mediaUrls" | "status" | "scheduledAt" | "sentAt" | "openRate" | "clickRate" | "createdAt" | "updatedAt", ExtArgs["result"]["emailCampaign"]>
   export type EmailCampaignInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     user?: boolean | UserDefaultArgs<ExtArgs>
     recipients?: boolean | EmailCampaign$recipientsArgs<ExtArgs>
@@ -18243,6 +18299,8 @@ export namespace Prisma {
       previewText: string | null
       htmlContent: string
       textContent: string | null
+      channel: $Enums.CampaignChannel
+      mediaUrls: string[]
       status: $Enums.EmailCampaignStatus
       scheduledAt: Date | null
       sentAt: Date | null
@@ -18682,6 +18740,8 @@ export namespace Prisma {
     readonly previewText: FieldRef<"EmailCampaign", 'String'>
     readonly htmlContent: FieldRef<"EmailCampaign", 'String'>
     readonly textContent: FieldRef<"EmailCampaign", 'String'>
+    readonly channel: FieldRef<"EmailCampaign", 'CampaignChannel'>
+    readonly mediaUrls: FieldRef<"EmailCampaign", 'String[]'>
     readonly status: FieldRef<"EmailCampaign", 'EmailCampaignStatus'>
     readonly scheduledAt: FieldRef<"EmailCampaign", 'DateTime'>
     readonly sentAt: FieldRef<"EmailCampaign", 'DateTime'>
@@ -24862,6 +24922,8 @@ export namespace Prisma {
     scheduledAt: 'scheduledAt',
     publishedAt: 'publishedAt',
     campaignId: 'campaignId',
+    googleCalendarEventId: 'googleCalendarEventId',
+    scheduleSource: 'scheduleSource',
     createdAt: 'createdAt',
     updatedAt: 'updatedAt'
   };
@@ -24949,6 +25011,8 @@ export namespace Prisma {
     previewText: 'previewText',
     htmlContent: 'htmlContent',
     textContent: 'textContent',
+    channel: 'channel',
+    mediaUrls: 'mediaUrls',
     status: 'status',
     scheduledAt: 'scheduledAt',
     sentAt: 'sentAt',
@@ -25194,6 +25258,20 @@ export namespace Prisma {
    * Reference to a field of type 'CampaignStatus[]'
    */
   export type ListEnumCampaignStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'CampaignStatus[]'>
+    
+
+
+  /**
+   * Reference to a field of type 'CampaignChannel'
+   */
+  export type EnumCampaignChannelFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'CampaignChannel'>
+    
+
+
+  /**
+   * Reference to a field of type 'CampaignChannel[]'
+   */
+  export type ListEnumCampaignChannelFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'CampaignChannel[]'>
     
 
 
@@ -25764,6 +25842,8 @@ export namespace Prisma {
     scheduledAt?: DateTimeNullableFilter<"Post"> | Date | string | null
     publishedAt?: DateTimeNullableFilter<"Post"> | Date | string | null
     campaignId?: StringNullableFilter<"Post"> | string | null
+    googleCalendarEventId?: StringNullableFilter<"Post"> | string | null
+    scheduleSource?: StringNullableFilter<"Post"> | string | null
     createdAt?: DateTimeFilter<"Post"> | Date | string
     updatedAt?: DateTimeFilter<"Post"> | Date | string
     user?: XOR<UserScalarRelationFilter, UserWhereInput>
@@ -25781,6 +25861,8 @@ export namespace Prisma {
     scheduledAt?: SortOrderInput | SortOrder
     publishedAt?: SortOrderInput | SortOrder
     campaignId?: SortOrderInput | SortOrder
+    googleCalendarEventId?: SortOrderInput | SortOrder
+    scheduleSource?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     user?: UserOrderByWithRelationInput
@@ -25801,6 +25883,8 @@ export namespace Prisma {
     scheduledAt?: DateTimeNullableFilter<"Post"> | Date | string | null
     publishedAt?: DateTimeNullableFilter<"Post"> | Date | string | null
     campaignId?: StringNullableFilter<"Post"> | string | null
+    googleCalendarEventId?: StringNullableFilter<"Post"> | string | null
+    scheduleSource?: StringNullableFilter<"Post"> | string | null
     createdAt?: DateTimeFilter<"Post"> | Date | string
     updatedAt?: DateTimeFilter<"Post"> | Date | string
     user?: XOR<UserScalarRelationFilter, UserWhereInput>
@@ -25818,6 +25902,8 @@ export namespace Prisma {
     scheduledAt?: SortOrderInput | SortOrder
     publishedAt?: SortOrderInput | SortOrder
     campaignId?: SortOrderInput | SortOrder
+    googleCalendarEventId?: SortOrderInput | SortOrder
+    scheduleSource?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     _count?: PostCountOrderByAggregateInput
@@ -25838,6 +25924,8 @@ export namespace Prisma {
     scheduledAt?: DateTimeNullableWithAggregatesFilter<"Post"> | Date | string | null
     publishedAt?: DateTimeNullableWithAggregatesFilter<"Post"> | Date | string | null
     campaignId?: StringNullableWithAggregatesFilter<"Post"> | string | null
+    googleCalendarEventId?: StringNullableWithAggregatesFilter<"Post"> | string | null
+    scheduleSource?: StringNullableWithAggregatesFilter<"Post"> | string | null
     createdAt?: DateTimeWithAggregatesFilter<"Post"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"Post"> | Date | string
   }
@@ -26133,10 +26221,10 @@ export namespace Prisma {
 
   export type ContactWhereUniqueInput = Prisma.AtLeast<{
     id?: string
+    email?: string
     AND?: ContactWhereInput | ContactWhereInput[]
     OR?: ContactWhereInput[]
     NOT?: ContactWhereInput | ContactWhereInput[]
-    email?: StringFilter<"Contact"> | string
     firstName?: StringNullableFilter<"Contact"> | string | null
     lastName?: StringNullableFilter<"Contact"> | string | null
     phone?: StringNullableFilter<"Contact"> | string | null
@@ -26146,7 +26234,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFilter<"Contact"> | Date | string
     groups?: ContactGroupListRelationFilter
     emailRecipients?: EmailCampaignRecipientListRelationFilter
-  }, "id">
+  }, "id" | "email">
 
   export type ContactOrderByWithAggregationInput = {
     id?: SortOrder
@@ -26233,6 +26321,8 @@ export namespace Prisma {
     previewText?: StringNullableFilter<"EmailCampaign"> | string | null
     htmlContent?: StringFilter<"EmailCampaign"> | string
     textContent?: StringNullableFilter<"EmailCampaign"> | string | null
+    channel?: EnumCampaignChannelFilter<"EmailCampaign"> | $Enums.CampaignChannel
+    mediaUrls?: StringNullableListFilter<"EmailCampaign">
     status?: EnumEmailCampaignStatusFilter<"EmailCampaign"> | $Enums.EmailCampaignStatus
     scheduledAt?: DateTimeNullableFilter<"EmailCampaign"> | Date | string | null
     sentAt?: DateTimeNullableFilter<"EmailCampaign"> | Date | string | null
@@ -26252,6 +26342,8 @@ export namespace Prisma {
     previewText?: SortOrderInput | SortOrder
     htmlContent?: SortOrder
     textContent?: SortOrderInput | SortOrder
+    channel?: SortOrder
+    mediaUrls?: SortOrder
     status?: SortOrder
     scheduledAt?: SortOrderInput | SortOrder
     sentAt?: SortOrderInput | SortOrder
@@ -26274,6 +26366,8 @@ export namespace Prisma {
     previewText?: StringNullableFilter<"EmailCampaign"> | string | null
     htmlContent?: StringFilter<"EmailCampaign"> | string
     textContent?: StringNullableFilter<"EmailCampaign"> | string | null
+    channel?: EnumCampaignChannelFilter<"EmailCampaign"> | $Enums.CampaignChannel
+    mediaUrls?: StringNullableListFilter<"EmailCampaign">
     status?: EnumEmailCampaignStatusFilter<"EmailCampaign"> | $Enums.EmailCampaignStatus
     scheduledAt?: DateTimeNullableFilter<"EmailCampaign"> | Date | string | null
     sentAt?: DateTimeNullableFilter<"EmailCampaign"> | Date | string | null
@@ -26293,6 +26387,8 @@ export namespace Prisma {
     previewText?: SortOrderInput | SortOrder
     htmlContent?: SortOrder
     textContent?: SortOrderInput | SortOrder
+    channel?: SortOrder
+    mediaUrls?: SortOrder
     status?: SortOrder
     scheduledAt?: SortOrderInput | SortOrder
     sentAt?: SortOrderInput | SortOrder
@@ -26318,6 +26414,8 @@ export namespace Prisma {
     previewText?: StringNullableWithAggregatesFilter<"EmailCampaign"> | string | null
     htmlContent?: StringWithAggregatesFilter<"EmailCampaign"> | string
     textContent?: StringNullableWithAggregatesFilter<"EmailCampaign"> | string | null
+    channel?: EnumCampaignChannelWithAggregatesFilter<"EmailCampaign"> | $Enums.CampaignChannel
+    mediaUrls?: StringNullableListFilter<"EmailCampaign">
     status?: EnumEmailCampaignStatusWithAggregatesFilter<"EmailCampaign"> | $Enums.EmailCampaignStatus
     scheduledAt?: DateTimeNullableWithAggregatesFilter<"EmailCampaign"> | Date | string | null
     sentAt?: DateTimeNullableWithAggregatesFilter<"EmailCampaign"> | Date | string | null
@@ -27304,6 +27402,8 @@ export namespace Prisma {
     status?: $Enums.PostStatus
     scheduledAt?: Date | string | null
     publishedAt?: Date | string | null
+    googleCalendarEventId?: string | null
+    scheduleSource?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     user: UserCreateNestedOneWithoutPostsInput
@@ -27321,6 +27421,8 @@ export namespace Prisma {
     scheduledAt?: Date | string | null
     publishedAt?: Date | string | null
     campaignId?: string | null
+    googleCalendarEventId?: string | null
+    scheduleSource?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     platformPosts?: PlatformPostUncheckedCreateNestedManyWithoutPostInput
@@ -27334,6 +27436,8 @@ export namespace Prisma {
     status?: EnumPostStatusFieldUpdateOperationsInput | $Enums.PostStatus
     scheduledAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     publishedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    googleCalendarEventId?: NullableStringFieldUpdateOperationsInput | string | null
+    scheduleSource?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     user?: UserUpdateOneRequiredWithoutPostsNestedInput
@@ -27351,6 +27455,8 @@ export namespace Prisma {
     scheduledAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     publishedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     campaignId?: NullableStringFieldUpdateOperationsInput | string | null
+    googleCalendarEventId?: NullableStringFieldUpdateOperationsInput | string | null
+    scheduleSource?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     platformPosts?: PlatformPostUncheckedUpdateManyWithoutPostNestedInput
@@ -27366,6 +27472,8 @@ export namespace Prisma {
     scheduledAt?: Date | string | null
     publishedAt?: Date | string | null
     campaignId?: string | null
+    googleCalendarEventId?: string | null
+    scheduleSource?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -27378,6 +27486,8 @@ export namespace Prisma {
     status?: EnumPostStatusFieldUpdateOperationsInput | $Enums.PostStatus
     scheduledAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     publishedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    googleCalendarEventId?: NullableStringFieldUpdateOperationsInput | string | null
+    scheduleSource?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -27392,6 +27502,8 @@ export namespace Prisma {
     scheduledAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     publishedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     campaignId?: NullableStringFieldUpdateOperationsInput | string | null
+    googleCalendarEventId?: NullableStringFieldUpdateOperationsInput | string | null
+    scheduleSource?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -27813,6 +27925,8 @@ export namespace Prisma {
     previewText?: string | null
     htmlContent: string
     textContent?: string | null
+    channel?: $Enums.CampaignChannel
+    mediaUrls?: EmailCampaignCreatemediaUrlsInput | string[]
     status?: $Enums.EmailCampaignStatus
     scheduledAt?: Date | string | null
     sentAt?: Date | string | null
@@ -27832,6 +27946,8 @@ export namespace Prisma {
     previewText?: string | null
     htmlContent: string
     textContent?: string | null
+    channel?: $Enums.CampaignChannel
+    mediaUrls?: EmailCampaignCreatemediaUrlsInput | string[]
     status?: $Enums.EmailCampaignStatus
     scheduledAt?: Date | string | null
     sentAt?: Date | string | null
@@ -27849,6 +27965,8 @@ export namespace Prisma {
     previewText?: NullableStringFieldUpdateOperationsInput | string | null
     htmlContent?: StringFieldUpdateOperationsInput | string
     textContent?: NullableStringFieldUpdateOperationsInput | string | null
+    channel?: EnumCampaignChannelFieldUpdateOperationsInput | $Enums.CampaignChannel
+    mediaUrls?: EmailCampaignUpdatemediaUrlsInput | string[]
     status?: EnumEmailCampaignStatusFieldUpdateOperationsInput | $Enums.EmailCampaignStatus
     scheduledAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     sentAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -27868,6 +27986,8 @@ export namespace Prisma {
     previewText?: NullableStringFieldUpdateOperationsInput | string | null
     htmlContent?: StringFieldUpdateOperationsInput | string
     textContent?: NullableStringFieldUpdateOperationsInput | string | null
+    channel?: EnumCampaignChannelFieldUpdateOperationsInput | $Enums.CampaignChannel
+    mediaUrls?: EmailCampaignUpdatemediaUrlsInput | string[]
     status?: EnumEmailCampaignStatusFieldUpdateOperationsInput | $Enums.EmailCampaignStatus
     scheduledAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     sentAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -27886,6 +28006,8 @@ export namespace Prisma {
     previewText?: string | null
     htmlContent: string
     textContent?: string | null
+    channel?: $Enums.CampaignChannel
+    mediaUrls?: EmailCampaignCreatemediaUrlsInput | string[]
     status?: $Enums.EmailCampaignStatus
     scheduledAt?: Date | string | null
     sentAt?: Date | string | null
@@ -27902,6 +28024,8 @@ export namespace Prisma {
     previewText?: NullableStringFieldUpdateOperationsInput | string | null
     htmlContent?: StringFieldUpdateOperationsInput | string
     textContent?: NullableStringFieldUpdateOperationsInput | string | null
+    channel?: EnumCampaignChannelFieldUpdateOperationsInput | $Enums.CampaignChannel
+    mediaUrls?: EmailCampaignUpdatemediaUrlsInput | string[]
     status?: EnumEmailCampaignStatusFieldUpdateOperationsInput | $Enums.EmailCampaignStatus
     scheduledAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     sentAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -27919,6 +28043,8 @@ export namespace Prisma {
     previewText?: NullableStringFieldUpdateOperationsInput | string | null
     htmlContent?: StringFieldUpdateOperationsInput | string
     textContent?: NullableStringFieldUpdateOperationsInput | string | null
+    channel?: EnumCampaignChannelFieldUpdateOperationsInput | $Enums.CampaignChannel
+    mediaUrls?: EmailCampaignUpdatemediaUrlsInput | string[]
     status?: EnumEmailCampaignStatusFieldUpdateOperationsInput | $Enums.EmailCampaignStatus
     scheduledAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     sentAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -29044,6 +29170,8 @@ export namespace Prisma {
     scheduledAt?: SortOrder
     publishedAt?: SortOrder
     campaignId?: SortOrder
+    googleCalendarEventId?: SortOrder
+    scheduleSource?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -29057,6 +29185,8 @@ export namespace Prisma {
     scheduledAt?: SortOrder
     publishedAt?: SortOrder
     campaignId?: SortOrder
+    googleCalendarEventId?: SortOrder
+    scheduleSource?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -29070,6 +29200,8 @@ export namespace Prisma {
     scheduledAt?: SortOrder
     publishedAt?: SortOrder
     campaignId?: SortOrder
+    googleCalendarEventId?: SortOrder
+    scheduleSource?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -29368,6 +29500,13 @@ export namespace Prisma {
     groupId?: SortOrder
   }
 
+  export type EnumCampaignChannelFilter<$PrismaModel = never> = {
+    equals?: $Enums.CampaignChannel | EnumCampaignChannelFieldRefInput<$PrismaModel>
+    in?: $Enums.CampaignChannel[] | ListEnumCampaignChannelFieldRefInput<$PrismaModel>
+    notIn?: $Enums.CampaignChannel[] | ListEnumCampaignChannelFieldRefInput<$PrismaModel>
+    not?: NestedEnumCampaignChannelFilter<$PrismaModel> | $Enums.CampaignChannel
+  }
+
   export type EnumEmailCampaignStatusFilter<$PrismaModel = never> = {
     equals?: $Enums.EmailCampaignStatus | EnumEmailCampaignStatusFieldRefInput<$PrismaModel>
     in?: $Enums.EmailCampaignStatus[] | ListEnumEmailCampaignStatusFieldRefInput<$PrismaModel>
@@ -29383,6 +29522,8 @@ export namespace Prisma {
     previewText?: SortOrder
     htmlContent?: SortOrder
     textContent?: SortOrder
+    channel?: SortOrder
+    mediaUrls?: SortOrder
     status?: SortOrder
     scheduledAt?: SortOrder
     sentAt?: SortOrder
@@ -29405,6 +29546,7 @@ export namespace Prisma {
     previewText?: SortOrder
     htmlContent?: SortOrder
     textContent?: SortOrder
+    channel?: SortOrder
     status?: SortOrder
     scheduledAt?: SortOrder
     sentAt?: SortOrder
@@ -29422,6 +29564,7 @@ export namespace Prisma {
     previewText?: SortOrder
     htmlContent?: SortOrder
     textContent?: SortOrder
+    channel?: SortOrder
     status?: SortOrder
     scheduledAt?: SortOrder
     sentAt?: SortOrder
@@ -29434,6 +29577,16 @@ export namespace Prisma {
   export type EmailCampaignSumOrderByAggregateInput = {
     openRate?: SortOrder
     clickRate?: SortOrder
+  }
+
+  export type EnumCampaignChannelWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.CampaignChannel | EnumCampaignChannelFieldRefInput<$PrismaModel>
+    in?: $Enums.CampaignChannel[] | ListEnumCampaignChannelFieldRefInput<$PrismaModel>
+    notIn?: $Enums.CampaignChannel[] | ListEnumCampaignChannelFieldRefInput<$PrismaModel>
+    not?: NestedEnumCampaignChannelWithAggregatesFilter<$PrismaModel> | $Enums.CampaignChannel
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumCampaignChannelFilter<$PrismaModel>
+    _max?: NestedEnumCampaignChannelFilter<$PrismaModel>
   }
 
   export type EnumEmailCampaignStatusWithAggregatesFilter<$PrismaModel = never> = {
@@ -30730,6 +30883,10 @@ export namespace Prisma {
     update?: XOR<XOR<AudienceGroupUpdateToOneWithWhereWithoutContactsInput, AudienceGroupUpdateWithoutContactsInput>, AudienceGroupUncheckedUpdateWithoutContactsInput>
   }
 
+  export type EmailCampaignCreatemediaUrlsInput = {
+    set: string[]
+  }
+
   export type UserCreateNestedOneWithoutEmailCampaignsInput = {
     create?: XOR<UserCreateWithoutEmailCampaignsInput, UserUncheckedCreateWithoutEmailCampaignsInput>
     connectOrCreate?: UserCreateOrConnectWithoutEmailCampaignsInput
@@ -30748,6 +30905,15 @@ export namespace Prisma {
     connectOrCreate?: EmailCampaignRecipientCreateOrConnectWithoutCampaignInput | EmailCampaignRecipientCreateOrConnectWithoutCampaignInput[]
     createMany?: EmailCampaignRecipientCreateManyCampaignInputEnvelope
     connect?: EmailCampaignRecipientWhereUniqueInput | EmailCampaignRecipientWhereUniqueInput[]
+  }
+
+  export type EnumCampaignChannelFieldUpdateOperationsInput = {
+    set?: $Enums.CampaignChannel
+  }
+
+  export type EmailCampaignUpdatemediaUrlsInput = {
+    set?: string[]
+    push?: string | string[]
   }
 
   export type EnumEmailCampaignStatusFieldUpdateOperationsInput = {
@@ -31182,11 +31348,28 @@ export namespace Prisma {
     _max?: NestedFloatNullableFilter<$PrismaModel>
   }
 
+  export type NestedEnumCampaignChannelFilter<$PrismaModel = never> = {
+    equals?: $Enums.CampaignChannel | EnumCampaignChannelFieldRefInput<$PrismaModel>
+    in?: $Enums.CampaignChannel[] | ListEnumCampaignChannelFieldRefInput<$PrismaModel>
+    notIn?: $Enums.CampaignChannel[] | ListEnumCampaignChannelFieldRefInput<$PrismaModel>
+    not?: NestedEnumCampaignChannelFilter<$PrismaModel> | $Enums.CampaignChannel
+  }
+
   export type NestedEnumEmailCampaignStatusFilter<$PrismaModel = never> = {
     equals?: $Enums.EmailCampaignStatus | EnumEmailCampaignStatusFieldRefInput<$PrismaModel>
     in?: $Enums.EmailCampaignStatus[] | ListEnumEmailCampaignStatusFieldRefInput<$PrismaModel>
     notIn?: $Enums.EmailCampaignStatus[] | ListEnumEmailCampaignStatusFieldRefInput<$PrismaModel>
     not?: NestedEnumEmailCampaignStatusFilter<$PrismaModel> | $Enums.EmailCampaignStatus
+  }
+
+  export type NestedEnumCampaignChannelWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.CampaignChannel | EnumCampaignChannelFieldRefInput<$PrismaModel>
+    in?: $Enums.CampaignChannel[] | ListEnumCampaignChannelFieldRefInput<$PrismaModel>
+    notIn?: $Enums.CampaignChannel[] | ListEnumCampaignChannelFieldRefInput<$PrismaModel>
+    not?: NestedEnumCampaignChannelWithAggregatesFilter<$PrismaModel> | $Enums.CampaignChannel
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumCampaignChannelFilter<$PrismaModel>
+    _max?: NestedEnumCampaignChannelFilter<$PrismaModel>
   }
 
   export type NestedEnumEmailCampaignStatusWithAggregatesFilter<$PrismaModel = never> = {
@@ -31324,6 +31507,8 @@ export namespace Prisma {
     status?: $Enums.PostStatus
     scheduledAt?: Date | string | null
     publishedAt?: Date | string | null
+    googleCalendarEventId?: string | null
+    scheduleSource?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     campaign?: CampaignCreateNestedOneWithoutPostsInput
@@ -31339,6 +31524,8 @@ export namespace Prisma {
     scheduledAt?: Date | string | null
     publishedAt?: Date | string | null
     campaignId?: string | null
+    googleCalendarEventId?: string | null
+    scheduleSource?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     platformPosts?: PlatformPostUncheckedCreateNestedManyWithoutPostInput
@@ -31429,6 +31616,8 @@ export namespace Prisma {
     previewText?: string | null
     htmlContent: string
     textContent?: string | null
+    channel?: $Enums.CampaignChannel
+    mediaUrls?: EmailCampaignCreatemediaUrlsInput | string[]
     status?: $Enums.EmailCampaignStatus
     scheduledAt?: Date | string | null
     sentAt?: Date | string | null
@@ -31446,6 +31635,8 @@ export namespace Prisma {
     previewText?: string | null
     htmlContent: string
     textContent?: string | null
+    channel?: $Enums.CampaignChannel
+    mediaUrls?: EmailCampaignCreatemediaUrlsInput | string[]
     status?: $Enums.EmailCampaignStatus
     scheduledAt?: Date | string | null
     sentAt?: Date | string | null
@@ -31718,6 +31909,8 @@ export namespace Prisma {
     scheduledAt?: DateTimeNullableFilter<"Post"> | Date | string | null
     publishedAt?: DateTimeNullableFilter<"Post"> | Date | string | null
     campaignId?: StringNullableFilter<"Post"> | string | null
+    googleCalendarEventId?: StringNullableFilter<"Post"> | string | null
+    scheduleSource?: StringNullableFilter<"Post"> | string | null
     createdAt?: DateTimeFilter<"Post"> | Date | string
     updatedAt?: DateTimeFilter<"Post"> | Date | string
   }
@@ -31811,6 +32004,8 @@ export namespace Prisma {
     previewText?: StringNullableFilter<"EmailCampaign"> | string | null
     htmlContent?: StringFilter<"EmailCampaign"> | string
     textContent?: StringNullableFilter<"EmailCampaign"> | string | null
+    channel?: EnumCampaignChannelFilter<"EmailCampaign"> | $Enums.CampaignChannel
+    mediaUrls?: StringNullableListFilter<"EmailCampaign">
     status?: EnumEmailCampaignStatusFilter<"EmailCampaign"> | $Enums.EmailCampaignStatus
     scheduledAt?: DateTimeNullableFilter<"EmailCampaign"> | Date | string | null
     sentAt?: DateTimeNullableFilter<"EmailCampaign"> | Date | string | null
@@ -32803,6 +32998,8 @@ export namespace Prisma {
     status?: $Enums.PostStatus
     scheduledAt?: Date | string | null
     publishedAt?: Date | string | null
+    googleCalendarEventId?: string | null
+    scheduleSource?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     user: UserCreateNestedOneWithoutPostsInput
@@ -32819,6 +33016,8 @@ export namespace Prisma {
     scheduledAt?: Date | string | null
     publishedAt?: Date | string | null
     campaignId?: string | null
+    googleCalendarEventId?: string | null
+    scheduleSource?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -32882,6 +33081,8 @@ export namespace Prisma {
     status?: EnumPostStatusFieldUpdateOperationsInput | $Enums.PostStatus
     scheduledAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     publishedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    googleCalendarEventId?: NullableStringFieldUpdateOperationsInput | string | null
+    scheduleSource?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     user?: UserUpdateOneRequiredWithoutPostsNestedInput
@@ -32898,6 +33099,8 @@ export namespace Prisma {
     scheduledAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     publishedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     campaignId?: NullableStringFieldUpdateOperationsInput | string | null
+    googleCalendarEventId?: NullableStringFieldUpdateOperationsInput | string | null
+    scheduleSource?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -33000,6 +33203,8 @@ export namespace Prisma {
     status?: $Enums.PostStatus
     scheduledAt?: Date | string | null
     publishedAt?: Date | string | null
+    googleCalendarEventId?: string | null
+    scheduleSource?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     user: UserCreateNestedOneWithoutPostsInput
@@ -33015,6 +33220,8 @@ export namespace Prisma {
     status?: $Enums.PostStatus
     scheduledAt?: Date | string | null
     publishedAt?: Date | string | null
+    googleCalendarEventId?: string | null
+    scheduleSource?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     platformPosts?: PlatformPostUncheckedCreateNestedManyWithoutPostInput
@@ -33617,6 +33824,8 @@ export namespace Prisma {
     previewText?: string | null
     htmlContent: string
     textContent?: string | null
+    channel?: $Enums.CampaignChannel
+    mediaUrls?: EmailCampaignCreatemediaUrlsInput | string[]
     status?: $Enums.EmailCampaignStatus
     scheduledAt?: Date | string | null
     sentAt?: Date | string | null
@@ -33635,6 +33844,8 @@ export namespace Prisma {
     previewText?: string | null
     htmlContent: string
     textContent?: string | null
+    channel?: $Enums.CampaignChannel
+    mediaUrls?: EmailCampaignCreatemediaUrlsInput | string[]
     status?: $Enums.EmailCampaignStatus
     scheduledAt?: Date | string | null
     sentAt?: Date | string | null
@@ -33698,6 +33909,8 @@ export namespace Prisma {
     previewText?: NullableStringFieldUpdateOperationsInput | string | null
     htmlContent?: StringFieldUpdateOperationsInput | string
     textContent?: NullableStringFieldUpdateOperationsInput | string | null
+    channel?: EnumCampaignChannelFieldUpdateOperationsInput | $Enums.CampaignChannel
+    mediaUrls?: EmailCampaignUpdatemediaUrlsInput | string[]
     status?: EnumEmailCampaignStatusFieldUpdateOperationsInput | $Enums.EmailCampaignStatus
     scheduledAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     sentAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -33716,6 +33929,8 @@ export namespace Prisma {
     previewText?: NullableStringFieldUpdateOperationsInput | string | null
     htmlContent?: StringFieldUpdateOperationsInput | string
     textContent?: NullableStringFieldUpdateOperationsInput | string | null
+    channel?: EnumCampaignChannelFieldUpdateOperationsInput | $Enums.CampaignChannel
+    mediaUrls?: EmailCampaignUpdatemediaUrlsInput | string[]
     status?: EnumEmailCampaignStatusFieldUpdateOperationsInput | $Enums.EmailCampaignStatus
     scheduledAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     sentAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -34117,6 +34332,8 @@ export namespace Prisma {
     scheduledAt?: Date | string | null
     publishedAt?: Date | string | null
     campaignId?: string | null
+    googleCalendarEventId?: string | null
+    scheduleSource?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -34150,6 +34367,8 @@ export namespace Prisma {
     previewText?: string | null
     htmlContent: string
     textContent?: string | null
+    channel?: $Enums.CampaignChannel
+    mediaUrls?: EmailCampaignCreatemediaUrlsInput | string[]
     status?: $Enums.EmailCampaignStatus
     scheduledAt?: Date | string | null
     sentAt?: Date | string | null
@@ -34308,6 +34527,8 @@ export namespace Prisma {
     status?: EnumPostStatusFieldUpdateOperationsInput | $Enums.PostStatus
     scheduledAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     publishedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    googleCalendarEventId?: NullableStringFieldUpdateOperationsInput | string | null
+    scheduleSource?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     campaign?: CampaignUpdateOneWithoutPostsNestedInput
@@ -34323,6 +34544,8 @@ export namespace Prisma {
     scheduledAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     publishedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     campaignId?: NullableStringFieldUpdateOperationsInput | string | null
+    googleCalendarEventId?: NullableStringFieldUpdateOperationsInput | string | null
+    scheduleSource?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     platformPosts?: PlatformPostUncheckedUpdateManyWithoutPostNestedInput
@@ -34337,6 +34560,8 @@ export namespace Prisma {
     scheduledAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     publishedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     campaignId?: NullableStringFieldUpdateOperationsInput | string | null
+    googleCalendarEventId?: NullableStringFieldUpdateOperationsInput | string | null
+    scheduleSource?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -34418,6 +34643,8 @@ export namespace Prisma {
     previewText?: NullableStringFieldUpdateOperationsInput | string | null
     htmlContent?: StringFieldUpdateOperationsInput | string
     textContent?: NullableStringFieldUpdateOperationsInput | string | null
+    channel?: EnumCampaignChannelFieldUpdateOperationsInput | $Enums.CampaignChannel
+    mediaUrls?: EmailCampaignUpdatemediaUrlsInput | string[]
     status?: EnumEmailCampaignStatusFieldUpdateOperationsInput | $Enums.EmailCampaignStatus
     scheduledAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     sentAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -34435,6 +34662,8 @@ export namespace Prisma {
     previewText?: NullableStringFieldUpdateOperationsInput | string | null
     htmlContent?: StringFieldUpdateOperationsInput | string
     textContent?: NullableStringFieldUpdateOperationsInput | string | null
+    channel?: EnumCampaignChannelFieldUpdateOperationsInput | $Enums.CampaignChannel
+    mediaUrls?: EmailCampaignUpdatemediaUrlsInput | string[]
     status?: EnumEmailCampaignStatusFieldUpdateOperationsInput | $Enums.EmailCampaignStatus
     scheduledAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     sentAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -34452,6 +34681,8 @@ export namespace Prisma {
     previewText?: NullableStringFieldUpdateOperationsInput | string | null
     htmlContent?: StringFieldUpdateOperationsInput | string
     textContent?: NullableStringFieldUpdateOperationsInput | string | null
+    channel?: EnumCampaignChannelFieldUpdateOperationsInput | $Enums.CampaignChannel
+    mediaUrls?: EmailCampaignUpdatemediaUrlsInput | string[]
     status?: EnumEmailCampaignStatusFieldUpdateOperationsInput | $Enums.EmailCampaignStatus
     scheduledAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     sentAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -34741,6 +34972,8 @@ export namespace Prisma {
     status?: $Enums.PostStatus
     scheduledAt?: Date | string | null
     publishedAt?: Date | string | null
+    googleCalendarEventId?: string | null
+    scheduleSource?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -34753,6 +34986,8 @@ export namespace Prisma {
     status?: EnumPostStatusFieldUpdateOperationsInput | $Enums.PostStatus
     scheduledAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     publishedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    googleCalendarEventId?: NullableStringFieldUpdateOperationsInput | string | null
+    scheduleSource?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     user?: UserUpdateOneRequiredWithoutPostsNestedInput
@@ -34768,6 +35003,8 @@ export namespace Prisma {
     status?: EnumPostStatusFieldUpdateOperationsInput | $Enums.PostStatus
     scheduledAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     publishedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    googleCalendarEventId?: NullableStringFieldUpdateOperationsInput | string | null
+    scheduleSource?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     platformPosts?: PlatformPostUncheckedUpdateManyWithoutPostNestedInput
@@ -34782,6 +35019,8 @@ export namespace Prisma {
     status?: EnumPostStatusFieldUpdateOperationsInput | $Enums.PostStatus
     scheduledAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     publishedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    googleCalendarEventId?: NullableStringFieldUpdateOperationsInput | string | null
+    scheduleSource?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }

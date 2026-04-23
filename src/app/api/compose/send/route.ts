@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
+import { sendBulkEmails } from "@/lib/email";
 
 type Channel = "EMAIL" | "WHATSAPP";
 
@@ -13,6 +14,7 @@ export async function POST(req: NextRequest) {
   const body = await req.json();
   const {
     content,
+    subject,
     channel,
     mediaUrls,
     groupIds,
@@ -20,6 +22,7 @@ export async function POST(req: NextRequest) {
     whatsappContactIds,
   }: {
     content: string;
+    subject?: string;
     channel: Channel;
     mediaUrls?: string[];
     groupIds?: string[];
@@ -34,25 +37,60 @@ export async function POST(req: NextRequest) {
 
   const groups = await prisma.audienceGroup.findMany({
     where: { userId, id: { in: groupIds || [] } },
-    include: { contacts: true },
+    include: { contacts: { include: { contact: true } } },
   });
 
-  const groupContactIds = groups.flatMap((group) => group.contacts.map((cg) => cg.contactId));
-  const allTargetIds = Array.from(
-    new Set([...(selectedContactIds || []), ...groupContactIds, ...(whatsappContactIds || [])])
-  );
-
-  const recipients = allTargetIds.length
-    ? await prisma.contact.findMany({ where: { id: { in: allTargetIds } } })
+  const groupContacts = groups.flatMap((group) => group.contacts.map((cg) => cg.contact));
+  
+  const individualContacts = (selectedContactIds || []).length 
+    ? await prisma.contact.findMany({ where: { id: { in: selectedContactIds } } })
     : [];
+
+  // Combine and deduplicate contacts
+  const allContactsMap = new Map();
+  [...groupContacts, ...individualContacts].forEach(c => allContactsMap.set(c.id, c));
+  const recipients = Array.from(allContactsMap.values());
 
   if (recipients.length === 0) {
     return NextResponse.json({ error: "Please choose at least one recipient." }, { status: 400 });
   }
 
-  // Simulation response so UI can complete end-to-end without provider setup.
-  // Integrate real ESP/WhatsApp APIs here when credentials are configured.
-  const sentTo = channel === "EMAIL" ? recipients.filter((r) => r.email) : recipients.filter((r) => r.phone);
+  if (channel === "EMAIL") {
+    const emailRecipients = recipients
+      .filter(r => r.email)
+      .map(r => ({
+        id: r.id,
+        email: r.email,
+        firstName: r.firstName,
+        lastName: r.lastName,
+        company: r.company
+      }));
+
+    if (emailRecipients.length === 0) {
+      return NextResponse.json({ error: "No recipients have a valid email address." }, { status: 400 });
+    }
+
+    const emailResult = await sendBulkEmails({
+      to: emailRecipients,
+      subject: subject || "Notification from AmplifyHub",
+      content: content,
+    });
+
+    return NextResponse.json({
+      success: emailResult.success,
+      channel,
+      attempted: emailRecipients.length,
+      sent: emailResult.sent,
+      failed: emailResult.failed,
+      message: emailResult.success 
+        ? `Successfully sent ${emailResult.sent} emails.`
+        : `Failed to send emails: ${emailResult.error || "Unknown error"}`,
+      details: emailResult.results
+    });
+  }
+
+  // Simulation response for WHATSAPP (to be implemented later)
+  const sentTo = recipients.filter((r) => r.phone);
   return NextResponse.json({
     success: true,
     channel,

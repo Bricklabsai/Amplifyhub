@@ -5,10 +5,12 @@ import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { HiSparkles, HiRefresh, HiSave, HiUpload, HiPaperAirplane, HiEye } from "react-icons/hi";
+import { HiSparkles, HiRefresh, HiSave, HiUpload, HiPaperAirplane, HiEye, HiCalendar } from "react-icons/hi";
 import { FaFacebook, FaInstagram, FaLinkedin, FaTiktok, FaYoutube, FaWhatsapp } from "react-icons/fa";
 import { FaXTwitter } from "react-icons/fa6";
 import Link from "next/link";
+import { useSearchParams } from "next/navigation";
+import { Suspense } from "react";
 import {
   Dialog,
   DialogContent,
@@ -52,9 +54,12 @@ type Contact = { id: string; email: string; phone?: string | null; firstName?: s
 type Group = { id: string; name: string; contacts: Contact[]; contactCount: number };
 type SocialAccount = { id: string; platform: string; accountName: string; isActive: boolean };
 
-export default function ComposePage() {
+function ComposeContent() {
+  const searchParams = useSearchParams();
+  const initialGroupId = searchParams.get("groupId");
   const [prompt, setPrompt] = useState("");
   const [message, setMessage] = useState("");
+  const [subject, setSubject] = useState("");
   const [selectedPlatforms, setSelectedPlatforms] = useState(["FACEBOOK", "TWITTER", "INSTAGRAM", "LINKEDIN"]);
   const [tone, setTone] = useState("professional");
   const [variations, setVariations] = useState<Record<string, string>>({});
@@ -77,6 +82,10 @@ export default function ComposePage() {
   const [publishAccountIds, setPublishAccountIds] = useState<string[]>([]);
   const [publishingPlatform, setPublishingPlatform] = useState<string | null>(null);
   const [publishResult, setPublishResult] = useState("");
+  const [scheduleEnabled, setScheduleEnabled] = useState(false);
+  const [scheduleDate, setScheduleDate] = useState("");
+  const [scheduleTime, setScheduleTime] = useState("");
+  const [scheduling, setScheduling] = useState(false);
 
   function togglePlatform(id: string) {
     setSelectedPlatforms((prev) =>
@@ -119,6 +128,10 @@ export default function ComposePage() {
     const data = await res.json();
     setContacts(data.contacts || []);
     setGroups(data.groups || []);
+    
+    if (initialGroupId && data.groups?.some((g: Group) => g.id === initialGroupId)) {
+      setSelectedGroupIds([initialGroupId]);
+    }
   }
 
   async function loadSocialAccounts() {
@@ -227,6 +240,45 @@ export default function ComposePage() {
     setPublishingPlatform(null);
   }
 
+  async function scheduleAllPosts() {
+    if (!scheduleDate || !scheduleTime) return;
+    setScheduling(true);
+    const scheduledAt = new Date(`${scheduleDate}T${scheduleTime}`);
+    const mediaUrls = media.filter((m) => selectedMedia.includes(m.id)).map((m) => m.url);
+    
+    // We'll create one main Post that will be picked up by the scheduler
+    // In a real scenario, you might want one per platform if they differ, 
+    // but the current /api/scheduler logic publishes to ALL active social accounts
+    const content = message || Object.values(variations)[0] || prompt;
+    if (!content.trim()) {
+      setScheduling(false);
+      return;
+    }
+
+    const res = await fetch("/api/posts", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        content,
+        status: "SCHEDULED",
+        scheduledAt: scheduledAt.toISOString(),
+        mediaUrls,
+        title: `Scheduled content for ${scheduleDate}`,
+      }),
+    });
+
+    if (res.ok) {
+      setPublishResult(`Content successfully scheduled for ${scheduleDate} at ${scheduleTime}`);
+      setScheduleEnabled(false);
+      setScheduleDate("");
+      setScheduleTime("");
+    } else {
+      const data = await res.json();
+      setPublishResult(data.error || "Failed to schedule content.");
+    }
+    setScheduling(false);
+  }
+
   async function sendNow() {
     const content = message || Object.values(variations)[0] || prompt;
     if (!content.trim()) return;
@@ -237,6 +289,7 @@ export default function ComposePage() {
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
         content,
+        subject,
         channel,
         mediaUrls,
         groupIds: selectedGroupIds,
@@ -278,11 +331,14 @@ export default function ComposePage() {
           <div>
             <Label className="text-sm font-semibold text-gray-700 mb-2 block">Compose Message</Label>
             <Textarea
-              placeholder="Write your message (or generate then refine with AI)..."
+              placeholder="Write your message (or generate then refine with AI)... e.g. 'Hello {{firstName}}, check out our new arrivals!'"
               value={message}
               onChange={(e) => setMessage(e.target.value)}
               className="min-h-28 rounded-xl border-gray-200 focus:border-violet-400 resize-none"
             />
+            <p className="text-[10px] text-gray-400 mt-1">
+              Available tags: {"{{firstName}}"}, {"{{lastName}}"}, {"{{name}}"}, {"{{company}}"}, {"{{email}}"}
+            </p>
             <div className="flex flex-wrap gap-2 mt-2">
               <Button type="button" variant="outline" onClick={enhanceMessage} disabled={enhancing || (!message && !prompt)} className="rounded-lg">
                 {enhancing ? <HiRefresh className="animate-spin mr-1" /> : <HiSparkles className="mr-1" />}
@@ -442,10 +498,12 @@ export default function ComposePage() {
             })}
           </div>
         </div>
-        <Button onClick={sendNow} disabled={sending} className="brand-gradient-bg text-white border-0 hover:opacity-90 px-8 h-11 rounded-xl font-semibold">
-          {sending ? "Sending..." : `Send ${channel === "WHATSAPP" ? "WhatsApp" : "Email"} Message`}
-        </Button>
-        {sendResult && <p className="text-sm text-gray-600">{sendResult}</p>}
+        {sendResult && <p className="text-sm text-gray-600 mt-4">{sendResult}</p>}
+        <div className="flex gap-3 pt-4">
+          <Button onClick={sendNow} disabled={sending} className="brand-gradient-bg text-white border-0 hover:opacity-90 px-8 h-11 rounded-xl font-semibold">
+            {sending ? "Sending..." : `Send ${channel === "WHATSAPP" ? "WhatsApp" : "Email"} Message`}
+          </Button>
+        </div>
       </div>
 
       <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-6">
@@ -477,6 +535,53 @@ export default function ComposePage() {
             );
           })}
         </div>
+      </div>
+
+      <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-6 space-y-4">
+        <div className="flex items-center justify-between">
+          <h3 className="font-bold text-gray-900" style={{ fontFamily: "Outfit, sans-serif" }}>Social Media Schedule</h3>
+          <label className="flex items-center gap-2 cursor-pointer">
+            <input
+              type="checkbox"
+              checked={scheduleEnabled}
+              onChange={(e) => setScheduleEnabled(e.target.checked)}
+            />
+            <span className="text-sm font-medium text-gray-700"><HiCalendar className="inline mr-1" /> Schedule for later</span>
+          </label>
+        </div>
+
+        {scheduleEnabled && (
+          <div className="space-y-4">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div>
+                <Label className="text-sm font-semibold text-gray-700 mb-2 block">Date</Label>
+                <Input
+                  type="date"
+                  value={scheduleDate}
+                  onChange={(e) => setScheduleDate(e.target.value)}
+                  className="rounded-xl h-11"
+                />
+              </div>
+              <div>
+                <Label className="text-sm font-semibold text-gray-700 mb-2 block">Time</Label>
+                <Input
+                  type="time"
+                  value={scheduleTime}
+                  onChange={(e) => setScheduleTime(e.target.value)}
+                  className="rounded-xl h-11"
+                />
+              </div>
+            </div>
+            <Button 
+              onClick={scheduleAllPosts} 
+              disabled={scheduling || !scheduleDate || !scheduleTime}
+              className="bg-blue-600 text-white border-0 hover:bg-blue-700 px-8 h-11 rounded-xl font-semibold w-full md:w-auto"
+            >
+              <HiCalendar className="mr-2" />
+              {scheduling ? "Scheduling..." : "Confirm Schedule for All Social Content"}
+            </Button>
+          </div>
+        )}
       </div>
 
       {/* Results */}
@@ -602,5 +707,13 @@ export default function ComposePage() {
         </div>
       )}
     </div>
+  );
+}
+
+export default function ComposePage() {
+  return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <ComposeContent />
+    </Suspense>
   );
 }

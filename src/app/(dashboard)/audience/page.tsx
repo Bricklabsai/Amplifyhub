@@ -1,5 +1,6 @@
 "use client";
 import { useState, useEffect, useRef } from "react";
+import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -8,6 +9,7 @@ import { HiPlus, HiUsers, HiUpload, HiDownload } from "react-icons/hi";
 import Papa from "papaparse";
 
 export default function AudiencePage() {
+  const router = useRouter();
   const [groups, setGroups] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [open, setOpen] = useState(false);
@@ -163,6 +165,15 @@ export default function AudiencePage() {
                 </span>
                 <span className="text-sm text-gray-400">contacts</span>
               </div>
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={() => router.push(`/compose?groupId=${g.id}`)}
+                className="w-full mt-4 text-xs font-semibold text-violet-600 hover:text-violet-700 hover:bg-violet-50 rounded-xl flex items-center gap-2"
+              >
+                <HiPlus className="text-sm" />
+                Compose Email
+              </Button>
             </div>
           ))}
         </div>
