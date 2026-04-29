@@ -19,8 +19,8 @@ export async function POST(req: NextRequest) {
     if (!c.email) continue;
     const contact = await prisma.contact.upsert({
       where: { email: c.email },
-      update: { firstName: c.firstName, lastName: c.lastName, company: c.company },
-      create: { email: c.email, firstName: c.firstName, lastName: c.lastName, company: c.company },
+      update: { firstName: c.firstName, lastName: c.lastName, company: c.company, phone: c.phone },
+      create: { email: c.email, firstName: c.firstName, lastName: c.lastName, company: c.company, phone: c.phone },
     });
     if (groupId) {
       await prisma.contactGroup.upsert({

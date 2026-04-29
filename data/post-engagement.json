@@ -1,0 +1,46 @@
+[
+  {
+    "postId": "cmojungy10005frzw7r8ms0jr",
+    "likes": 0,
+    "comments": [
+      {
+        "id": "811a8090-c701-4b59-889d-c4d3a9eb7a09",
+        "author": "Customer A",
+        "message": "Great update, this really helped our workflow.",
+        "sentiment": "positive",
+        "replies": [],
+        "createdAt": "2026-04-29T09:30:47.890Z"
+      },
+      {
+        "id": "6822f5ba-fc88-4a03-8d27-c99a9bc29a87",
+        "author": "Customer B",
+        "message": "I like it but the onboarding was a bit confusing.",
+        "sentiment": "neutral",
+        "replies": [],
+        "createdAt": "2026-04-29T09:30:47.890Z"
+      }
+    ]
+  },
+  {
+    "postId": "cmogy6lcf0003frkcoazmhi70",
+    "likes": 0,
+    "comments": [
+      {
+        "id": "5af4c2c8-3d09-4b09-b9a7-51dbdaee606f",
+        "author": "Customer A",
+        "message": "Great update, this really helped our workflow.",
+        "sentiment": "positive",
+        "replies": [],
+        "createdAt": "2026-04-28T12:34:08.729Z"
+      },
+      {
+        "id": "16ab6d38-9550-42ab-98b0-a02ab7f5721b",
+        "author": "Customer B",
+        "message": "I like it but the onboarding was a bit confusing.",
+        "sentiment": "neutral",
+        "replies": [],
+        "createdAt": "2026-04-28T12:34:08.729Z"
+      }
+    ]
+  }
+]

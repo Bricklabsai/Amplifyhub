@@ -6,7 +6,7 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { Badge } from "@/components/ui/badge";
-import { HiPlus, HiMail, HiPaperAirplane } from "react-icons/hi";
+import { HiPlus, HiMail, HiPaperAirplane, HiUsers } from "react-icons/hi";
 import { formatDate } from "@/lib/utils";
 
 const STATUS_COLORS: Record<string, string> = {
@@ -15,20 +15,40 @@ const STATUS_COLORS: Record<string, string> = {
   SCHEDULED: "bg-blue-100 text-blue-700",
 };
 
+type Group = { id: string; name: string; _count: { contacts: number } };
+
 export default function EmailCampaignsPage() {
   const [campaigns, setCampaigns] = useState<any[]>([]);
+  const [groups, setGroups] = useState<Group[]>([]);
   const [loading, setLoading] = useState(true);
   const [open, setOpen] = useState(false);
   const [sending, setSending] = useState<string | null>(null);
+  const [attaching, setAttaching] = useState<string | null>(null);
   const [form, setForm] = useState({ name: "", subject: "", htmlContent: "", previewText: "" });
+  const [selectedGroupIds, setSelectedGroupIds] = useState<string[]>([]);
 
-  useEffect(() => { fetchCampaigns(); }, []);
+  useEffect(() => { 
+    fetchCampaigns();
+    fetchGroups();
+  }, []);
 
   async function fetchCampaigns() {
     const res = await fetch("/api/email-campaigns");
     const data = await res.json();
     setCampaigns(data);
     setLoading(false);
+  }
+
+  async function fetchGroups() {
+    const res = await fetch("/api/audience");
+    const data = await res.json();
+    setGroups(data);
+  }
+
+  function toggleGroup(id: string) {
+    setSelectedGroupIds((prev) => 
+      prev.includes(id) ? prev.filter(g => g !== id) : [...prev, id]
+    );
   }
 
   async function create() {
@@ -38,9 +58,20 @@ export default function EmailCampaignsPage() {
       body: JSON.stringify(form),
     });
     const data = await res.json();
-    setCampaigns((c) => [{ ...data, _count: { recipients: 0 } }, ...c]);
+    
+    // If groups are selected, attach them to the new campaign
+    if (selectedGroupIds.length > 0) {
+      await fetch(`/api/email-campaigns/${data.id}/attach-groups`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ groupIds: selectedGroupIds }),
+      });
+    }
+
+    await fetchCampaigns();
     setOpen(false);
     setForm({ name: "", subject: "", htmlContent: "", previewText: "" });
+    setSelectedGroupIds([]);
   }
 
   async function send(id: string) {
@@ -50,6 +81,20 @@ export default function EmailCampaignsPage() {
       await fetchCampaigns();
     }
     setSending(null);
+  }
+
+  async function resend(id: string) {
+    setSending(id);
+    const res = await fetch(`/api/email-campaigns/${id}/resend`, { method: "POST" });
+    if (res.ok) {
+      await fetchCampaigns();
+    }
+    setSending(null);
+  }
+
+  async function deleteCampaign(id: string) {
+    await fetch(`/api/email-campaigns/${id}`, { method: "DELETE" });
+    await fetchCampaigns();
   }
 
   return (
@@ -85,9 +130,43 @@ export default function EmailCampaignsPage() {
                   value={form.htmlContent}
                   onChange={(e) => setForm({ ...form, htmlContent: e.target.value })}
                   className="rounded-xl min-h-32 font-mono text-xs"
-                  placeholder="<h1>Hello {name}!</h1><p>Your email content here...</p>"
+                  placeholder="<h1>Hello {{firstName}}!</h1><p>Your email content here...</p>"
                 />
+                <p className="text-[10px] text-gray-400 mt-1">
+                  Available tags: {"{{firstName}}"}, {"{{lastName}}"}, {"{{name}}"}, {"{{company}}"}, {"{{email}}"}
+                </p>
               </div>
+
+              <div>
+                <Label className="text-sm font-semibold text-gray-700 mb-2 block">
+                  <HiUsers className="inline mr-1" /> Target Audience Groups
+                </Label>
+                <div className="flex flex-wrap gap-2">
+                  {groups.map((group) => (
+                    <button
+                      key={group.id}
+                      type="button"
+                      onClick={() => toggleGroup(group.id)}
+                      className={`px-3 py-1.5 rounded-lg text-xs border transition-all ${
+                        selectedGroupIds.includes(group.id)
+                          ? "border-violet-500 bg-violet-50 text-violet-700"
+                          : "border-gray-200 text-gray-600 hover:border-gray-300"
+                      }`}
+                    >
+                      {group.name} ({group._count?.contacts || 0})
+                    </button>
+                  ))}
+                </div>
+                {selectedGroupIds.length > 0 && (
+                  <p className="text-xs text-gray-500 mt-2">
+                    {selectedGroupIds.reduce((total, id) => {
+                      const g = groups.find(x => x.id === id);
+                      return total + (g?._count?.contacts || 0);
+                    }, 0)} total recipients selected
+                  </p>
+                )}
+              </div>
+
               <Button onClick={create} disabled={!form.name || !form.subject} className="w-full brand-gradient-bg text-white border-0 hover:opacity-90 rounded-xl h-11 font-semibold">
                 Create Campaign
               </Button>
@@ -124,7 +203,7 @@ export default function EmailCampaignsPage() {
                     {c.clickRate > 0 && <span>🖱️ {(c.clickRate * 100).toFixed(1)}% click rate</span>}
                   </div>
                 </div>
-                <div className="flex items-center gap-3 flex-shrink-0">
+                <div className="flex items-center gap-2 flex-shrink-0">
                   <Badge className={`${STATUS_COLORS[c.status]} border-0 text-xs font-medium`}>{c.status}</Badge>
                   {c.status === "DRAFT" && (
                     <Button
@@ -137,6 +216,26 @@ export default function EmailCampaignsPage() {
                       {sending === c.id ? "Sending..." : "Send"}
                     </Button>
                   )}
+                  {c.status === "SENT" && (
+                    <Button
+                      size="sm"
+                      variant="outline"
+                      onClick={() => resend(c.id)}
+                      disabled={sending === c.id}
+                      className="rounded-lg text-xs h-8 flex items-center gap-1"
+                    >
+                      <HiPaperAirplane className="text-xs" />
+                      Resend
+                    </Button>
+                  )}
+                  <Button
+                    size="sm"
+                    variant="ghost"
+                    onClick={() => deleteCampaign(c.id)}
+                    className="text-red-500 hover:text-red-600 hover:bg-red-50 rounded-lg text-xs h-8"
+                  >
+                    Delete
+                  </Button>
                 </div>
               </div>
             ))}

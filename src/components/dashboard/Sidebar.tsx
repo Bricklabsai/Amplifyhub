@@ -2,7 +2,7 @@
 import { usePathname } from "next/navigation";
 import Link from "next/link";
 import { useSession, signOut } from "next-auth/react";
-import { HiSparkles, HiHome, HiPencil, HiCollection, HiShare, HiFlag, HiUsers, HiMail, HiPhotograph, HiChartBar, HiCreditCard, HiCog, HiShieldCheck, HiLogout } from "react-icons/hi";
+import { HiSparkles, HiHome, HiPencil, HiCollection, HiShare, HiFlag, HiUsers, HiMail, HiPhotograph, HiChartBar, HiCreditCard, HiCog, HiShieldCheck, HiLogout, HiUserGroup } from "react-icons/hi";
 import { cn } from "@/lib/utils";
 
 const NAV_ITEMS = [
@@ -12,6 +12,7 @@ const NAV_ITEMS = [
   { href: "/social-accounts", icon: HiShare, label: "Social Accounts" },
   { href: "/campaigns", icon: HiFlag, label: "Campaigns" },
   { href: "/audience", icon: HiUsers, label: "Audience" },
+  { href: "/team", icon: HiUserGroup, label: "Team" },
   { href: "/email-campaigns", icon: HiMail, label: "Email Campaigns" },
   { href: "/ai-studio", icon: HiPhotograph, label: "AI Studio" },
   { href: "/analytics", icon: HiChartBar, label: "Analytics" },

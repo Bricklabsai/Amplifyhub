@@ -145,7 +145,8 @@ exports.Prisma.AccountScalarFieldEnum = {
   token_type: 'token_type',
   scope: 'scope',
   id_token: 'id_token',
-  session_state: 'session_state'
+  session_state: 'session_state',
+  refresh_token_expires_in: 'refresh_token_expires_in'
 };
 
 exports.Prisma.SessionScalarFieldEnum = {
@@ -192,6 +193,7 @@ exports.Prisma.SocialAccountScalarFieldEnum = {
   accountId: 'accountId',
   accessToken: 'accessToken',
   refreshToken: 'refreshToken',
+  zernioAccountId: 'zernioAccountId',
   expiresAt: 'expiresAt',
   isActive: 'isActive',
   followers: 'followers',
@@ -209,6 +211,8 @@ exports.Prisma.PostScalarFieldEnum = {
   scheduledAt: 'scheduledAt',
   publishedAt: 'publishedAt',
   campaignId: 'campaignId',
+  googleCalendarEventId: 'googleCalendarEventId',
+  scheduleSource: 'scheduleSource',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 };
@@ -222,6 +226,7 @@ exports.Prisma.PlatformPostScalarFieldEnum = {
   status: 'status',
   publishedAt: 'publishedAt',
   externalId: 'externalId',
+  idempotencyKey: 'idempotencyKey',
   likes: 'likes',
   shares: 'shares',
   comments: 'comments',
