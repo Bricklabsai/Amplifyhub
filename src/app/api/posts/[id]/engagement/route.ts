@@ -4,6 +4,7 @@ import { authOptions } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import { readJsonStore, writeJsonStore } from "@/lib/json-store";
 import { randomUUID } from "crypto";
+import { fetchPlatformPostEngagement, fetchPlatformPostComments } from "@/lib/social";
 
 type EngagementComment = {
   id: string;
@@ -57,35 +58,105 @@ export async function GET(req: NextRequest, { params }: { params: Promise<{ id: 
   const userId = (session.user as any).id;
 
   const { id } = await params;
-  const post = await prisma.post.findFirst({ where: { id, userId, status: "PUBLISHED" } });
+  const post = await prisma.post.findFirst({
+    where: { id, userId, status: "PUBLISHED" },
+    include: {
+      platformPosts: {
+        include: {
+          socialAccount: true,
+        },
+      },
+    },
+  });
   if (!post) return NextResponse.json({ error: "Published post not found" }, { status: 404 });
 
   const store = await readJsonStore<PostEngagement[]>(FILE_NAME, []);
-  const existing =
-    store.find((x) => x.postId === id) ||
-    {
-      postId: id,
-      likes: 12,
-      comments: [
-        {
-          id: randomUUID(),
-          author: "Customer A",
-          message: "Great update, this really helped our workflow.",
-          sentiment: "positive",
-          replies: [],
-          createdAt: new Date().toISOString(),
-        },
-        {
-          id: randomUUID(),
-          author: "Customer B",
-          message: "I like it but the onboarding was a bit confusing.",
-          sentiment: "neutral",
-          replies: [],
-          createdAt: new Date().toISOString(),
-        },
-      ],
-    };
-  return NextResponse.json(existing);
+  const existing = store.find((x) => x.postId === id);
+
+  // Fetch live engagement from each platform post in parallel. Per-account
+  // failures are isolated so one platform's outage can't black out the rest.
+  const perPostResults = await Promise.all(
+    post.platformPosts
+      .filter((pp) => Boolean(pp.externalId))
+      .map(async (pp) => {
+        try {
+          const [engagement, comments] = await Promise.all([
+            fetchPlatformPostEngagement(pp.socialAccountId, pp.externalId),
+            fetchPlatformPostComments(pp.socialAccountId, pp.externalId),
+          ]);
+
+          // Persist the latest counts so the dashboard list reflects them
+          // without forcing a refetch.
+          await prisma.platformPost.update({
+            where: { id: pp.id },
+            data: {
+              likes: engagement?.likes ?? pp.likes,
+              comments: engagement?.comments ?? pp.comments,
+            },
+          });
+
+          type RawComment = {
+            id?: string;
+            author?: string;
+            message?: string;
+            createdAt?: string;
+            replies?: { id: string; message: string; createdAt: string }[];
+          };
+          const rawComments = (comments ?? []) as RawComment[];
+          return {
+            likes: engagement?.likes ?? 0,
+            commentsCount: engagement?.comments ?? 0,
+            comments: rawComments
+              .filter((c) => Boolean(c.message))
+              .map<EngagementComment>((c) => ({
+                id: c.id || randomUUID(),
+                author: c.author || `User on ${pp.platform}`,
+                message: c.message as string,
+                sentiment: undefined,
+                replies: c.replies || [],
+                createdAt: c.createdAt || new Date().toISOString(),
+              })),
+          };
+        } catch (e) {
+          console.error(
+            `Failed to fetch engagement for platform post ${pp.id}:`,
+            e
+          );
+          return { likes: 0, commentsCount: 0, comments: [] };
+        }
+      })
+  );
+
+  const totalLikes = perPostResults.reduce((sum, r) => sum + r.likes, 0);
+  const liveComments: EngagementComment[] = perPostResults
+    .flatMap((r) => r.comments)
+    .slice(0, 50);
+
+  // If platforms returned no live comments yet, surface any comments
+  // the user has previously interacted with (replies/sentiment marks)
+  // rather than throwing away that history. Don't synthesise mock
+  // commenters anymore — an empty array is honest.
+  const finalComments: EngagementComment[] =
+    liveComments.length > 0
+      ? liveComments
+      : existing?.comments ?? [];
+
+  const result: PostEngagement = {
+    postId: id,
+    likes: totalLikes,
+    comments: finalComments,
+  };
+
+  // Update store
+  if (existing) {
+    const idx = store.findIndex((x) => x.postId === id);
+    store[idx] = result;
+  } else {
+    store.unshift(result);
+  }
+  await writeJsonStore(FILE_NAME, store);
+
+  return NextResponse.json(result);
 }
 
 export async function POST(req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
@@ -101,7 +172,7 @@ export async function POST(req: NextRequest, { params }: { params: Promise<{ id:
   const { action, commentId, message } = body as { action: "reply" | "analyze"; commentId?: string; message?: string };
   const store = await readJsonStore<PostEngagement[]>(FILE_NAME, []);
   const idx = store.findIndex((x) => x.postId === id);
-  const current: PostEngagement = idx >= 0 ? store[idx] : { postId: id, likes: 12, comments: [] };
+  const current: PostEngagement = idx >= 0 ? store[idx] : { postId: id, likes: 0, comments: [] };
 
   if (action === "reply") {
     if (!commentId || !message?.trim()) return NextResponse.json({ error: "commentId and message required" }, { status: 400 });

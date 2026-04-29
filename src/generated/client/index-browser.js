@@ -145,7 +145,8 @@ exports.Prisma.AccountScalarFieldEnum = {
   token_type: 'token_type',
   scope: 'scope',
   id_token: 'id_token',
-  session_state: 'session_state'
+  session_state: 'session_state',
+  refresh_token_expires_in: 'refresh_token_expires_in'
 };
 
 exports.Prisma.SessionScalarFieldEnum = {
@@ -192,6 +193,7 @@ exports.Prisma.SocialAccountScalarFieldEnum = {
   accountId: 'accountId',
   accessToken: 'accessToken',
   refreshToken: 'refreshToken',
+  zernioAccountId: 'zernioAccountId',
   expiresAt: 'expiresAt',
   isActive: 'isActive',
   followers: 'followers',
@@ -224,6 +226,7 @@ exports.Prisma.PlatformPostScalarFieldEnum = {
   status: 'status',
   publishedAt: 'publishedAt',
   externalId: 'externalId',
+  idempotencyKey: 'idempotencyKey',
   likes: 'likes',
   shares: 'shares',
   comments: 'comments',
@@ -280,8 +283,6 @@ exports.Prisma.EmailCampaignScalarFieldEnum = {
   previewText: 'previewText',
   htmlContent: 'htmlContent',
   textContent: 'textContent',
-  channel: 'channel',
-  mediaUrls: 'mediaUrls',
   status: 'status',
   scheduledAt: 'scheduledAt',
   sentAt: 'sentAt',
@@ -397,11 +398,6 @@ exports.CampaignStatus = exports.$Enums.CampaignStatus = {
   ACTIVE: 'ACTIVE',
   PAUSED: 'PAUSED',
   COMPLETED: 'COMPLETED'
-};
-
-exports.CampaignChannel = exports.$Enums.CampaignChannel = {
-  EMAIL: 'EMAIL',
-  WHATSAPP: 'WHATSAPP'
 };
 
 exports.EmailCampaignStatus = exports.$Enums.EmailCampaignStatus = {

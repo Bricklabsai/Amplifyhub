@@ -47,20 +47,47 @@ export async function POST(req: NextRequest) {
   const userId = (session.user as any).id;
 
   const body = await req.json();
-  const { content, title, status, scheduledAt, campaignId, mediaUrls } = body;
+  const { content, title, status, scheduledAt, campaignId, mediaUrls, selectedSocialAccountIds } = body;
 
   if (!content) return NextResponse.json({ error: "Content is required" }, { status: 400 });
 
-  const post = await prisma.post.create({
-    data: {
-      userId,
-      content,
-      title,
-      status: status || "DRAFT",
-      scheduledAt: scheduledAt ? new Date(scheduledAt) : null,
-      campaignId,
-      mediaUrls: mediaUrls || [],
-    },
+  const socialAccountIds = Array.isArray(selectedSocialAccountIds) ? selectedSocialAccountIds : [];
+
+  const post = await prisma.$transaction(async (tx) => {
+    const createdPost = await tx.post.create({
+      data: {
+        userId,
+        content,
+        title,
+        status: status || "DRAFT",
+        scheduledAt: scheduledAt ? new Date(scheduledAt) : null,
+        campaignId,
+        mediaUrls: mediaUrls || [],
+      },
+    });
+
+    if (socialAccountIds.length > 0) {
+      const accounts = await tx.socialAccount.findMany({
+        where: {
+          id: { in: socialAccountIds },
+          userId,
+        },
+      });
+
+      for (const account of accounts) {
+        await tx.platformPost.create({
+          data: {
+            postId: createdPost.id,
+            socialAccountId: account.id,
+            platform: account.platform,
+            content,
+            status: status === "PUBLISHED" ? "PUBLISHED" : "DRAFT",
+          },
+        });
+      }
+    }
+
+    return createdPost;
   });
 
   return NextResponse.json(post, { status: 201 });

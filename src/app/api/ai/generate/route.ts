@@ -62,35 +62,23 @@ export async function POST(req: NextRequest) {
       });
     }
 
-    const variations: Record<string, string> = {};
-    for (const platform of targetPlatforms) {
-      const platformGuide: Record<string, string> = {
-        FACEBOOK: "engaging, conversational, 150-250 words with emojis and hashtags",
-        TWITTER: "punchy, under 280 chars with 1-2 hashtags",
-        INSTAGRAM: "visual, aspirational, 100-150 words with emojis and 5-10 hashtags",
-        LINKEDIN: "professional, insightful, 200-300 words, no excessive emojis",
-        TIKTOK: "trendy, casual, short hooks, use popular hashtags like #fyp",
-        YOUTUBE: "detailed description with SEO keywords, 150-200 words",
-        WHATSAPP: "friendly, personal, conversational, under 100 words",
-      };
-      
-      const response = await client.chat.completions.create({
-        model: deployment,
-        messages: [
-          { 
-            role: "system", 
-            content: `You are a social media expert. Generate ${platformGuide[platform] || "engaging"} content. Tone: ${tone || "professional"}.` 
-          },
-          { 
-            role: "user", 
-            content: `Create a ${platform} post about: ${prompt}` 
-          },
-        ],
-        max_tokens: 400,
-      });
-      variations[platform] = response.choices[0].message.content || "";
-    }
-    return NextResponse.json({ variations });
+    const response = await client.chat.completions.create({
+      model: deployment,
+      messages: [
+        { 
+          role: "system", 
+          content: `You are a social media expert. Generate a single engaging post suitable for all major platforms (Facebook, X/Twitter, LinkedIn, Instagram, etc.). Tone: ${tone || "professional"}. Keep it concise enough for all platforms.` 
+        },
+        { 
+          role: "user", 
+          content: `Create a post about: ${prompt}` 
+        },
+      ],
+      max_tokens: 500,
+    });
+    
+    const content = response.choices[0].message.content || "";
+    return NextResponse.json({ content });
   } catch (err: any) {
     console.error("OpenAI error:", err);
     return NextResponse.json({ error: err.message || "Failed to generate content" }, { status: 500 });

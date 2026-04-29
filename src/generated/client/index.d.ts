@@ -163,14 +163,6 @@ export const EmailCampaignStatus: {
 export type EmailCampaignStatus = (typeof EmailCampaignStatus)[keyof typeof EmailCampaignStatus]
 
 
-export const CampaignChannel: {
-  EMAIL: 'EMAIL',
-  WHATSAPP: 'WHATSAPP'
-};
-
-export type CampaignChannel = (typeof CampaignChannel)[keyof typeof CampaignChannel]
-
-
 export const SubscriptionStatus: {
   ACTIVE: 'ACTIVE',
   CANCELLED: 'CANCELLED',
@@ -200,10 +192,6 @@ export const CampaignStatus: typeof $Enums.CampaignStatus
 export type EmailCampaignStatus = $Enums.EmailCampaignStatus
 
 export const EmailCampaignStatus: typeof $Enums.EmailCampaignStatus
-
-export type CampaignChannel = $Enums.CampaignChannel
-
-export const CampaignChannel: typeof $Enums.CampaignChannel
 
 export type SubscriptionStatus = $Enums.SubscriptionStatus
 
@@ -4347,10 +4335,12 @@ export namespace Prisma {
 
   export type AccountAvgAggregateOutputType = {
     expires_at: number | null
+    refresh_token_expires_in: number | null
   }
 
   export type AccountSumAggregateOutputType = {
     expires_at: number | null
+    refresh_token_expires_in: number | null
   }
 
   export type AccountMinAggregateOutputType = {
@@ -4366,6 +4356,7 @@ export namespace Prisma {
     scope: string | null
     id_token: string | null
     session_state: string | null
+    refresh_token_expires_in: number | null
   }
 
   export type AccountMaxAggregateOutputType = {
@@ -4381,6 +4372,7 @@ export namespace Prisma {
     scope: string | null
     id_token: string | null
     session_state: string | null
+    refresh_token_expires_in: number | null
   }
 
   export type AccountCountAggregateOutputType = {
@@ -4396,16 +4388,19 @@ export namespace Prisma {
     scope: number
     id_token: number
     session_state: number
+    refresh_token_expires_in: number
     _all: number
   }
 
 
   export type AccountAvgAggregateInputType = {
     expires_at?: true
+    refresh_token_expires_in?: true
   }
 
   export type AccountSumAggregateInputType = {
     expires_at?: true
+    refresh_token_expires_in?: true
   }
 
   export type AccountMinAggregateInputType = {
@@ -4421,6 +4416,7 @@ export namespace Prisma {
     scope?: true
     id_token?: true
     session_state?: true
+    refresh_token_expires_in?: true
   }
 
   export type AccountMaxAggregateInputType = {
@@ -4436,6 +4432,7 @@ export namespace Prisma {
     scope?: true
     id_token?: true
     session_state?: true
+    refresh_token_expires_in?: true
   }
 
   export type AccountCountAggregateInputType = {
@@ -4451,6 +4448,7 @@ export namespace Prisma {
     scope?: true
     id_token?: true
     session_state?: true
+    refresh_token_expires_in?: true
     _all?: true
   }
 
@@ -4553,6 +4551,7 @@ export namespace Prisma {
     scope: string | null
     id_token: string | null
     session_state: string | null
+    refresh_token_expires_in: number | null
     _count: AccountCountAggregateOutputType | null
     _avg: AccountAvgAggregateOutputType | null
     _sum: AccountSumAggregateOutputType | null
@@ -4587,6 +4586,7 @@ export namespace Prisma {
     scope?: boolean
     id_token?: boolean
     session_state?: boolean
+    refresh_token_expires_in?: boolean
     user?: boolean | UserDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["account"]>
 
@@ -4603,6 +4603,7 @@ export namespace Prisma {
     scope?: boolean
     id_token?: boolean
     session_state?: boolean
+    refresh_token_expires_in?: boolean
     user?: boolean | UserDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["account"]>
 
@@ -4619,6 +4620,7 @@ export namespace Prisma {
     scope?: boolean
     id_token?: boolean
     session_state?: boolean
+    refresh_token_expires_in?: boolean
     user?: boolean | UserDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["account"]>
 
@@ -4635,9 +4637,10 @@ export namespace Prisma {
     scope?: boolean
     id_token?: boolean
     session_state?: boolean
+    refresh_token_expires_in?: boolean
   }
 
-  export type AccountOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "userId" | "type" | "provider" | "providerAccountId" | "refresh_token" | "access_token" | "expires_at" | "token_type" | "scope" | "id_token" | "session_state", ExtArgs["result"]["account"]>
+  export type AccountOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "userId" | "type" | "provider" | "providerAccountId" | "refresh_token" | "access_token" | "expires_at" | "token_type" | "scope" | "id_token" | "session_state" | "refresh_token_expires_in", ExtArgs["result"]["account"]>
   export type AccountInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     user?: boolean | UserDefaultArgs<ExtArgs>
   }
@@ -4666,6 +4669,7 @@ export namespace Prisma {
       scope: string | null
       id_token: string | null
       session_state: string | null
+      refresh_token_expires_in: number | null
     }, ExtArgs["result"]["account"]>
     composites: {}
   }
@@ -5102,6 +5106,7 @@ export namespace Prisma {
     readonly scope: FieldRef<"Account", 'String'>
     readonly id_token: FieldRef<"Account", 'String'>
     readonly session_state: FieldRef<"Account", 'String'>
+    readonly refresh_token_expires_in: FieldRef<"Account", 'Int'>
   }
     
 
@@ -9827,6 +9832,7 @@ export namespace Prisma {
     accountId: string | null
     accessToken: string | null
     refreshToken: string | null
+    zernioAccountId: string | null
     expiresAt: Date | null
     isActive: boolean | null
     followers: number | null
@@ -9842,6 +9848,7 @@ export namespace Prisma {
     accountId: string | null
     accessToken: string | null
     refreshToken: string | null
+    zernioAccountId: string | null
     expiresAt: Date | null
     isActive: boolean | null
     followers: number | null
@@ -9857,6 +9864,7 @@ export namespace Prisma {
     accountId: number
     accessToken: number
     refreshToken: number
+    zernioAccountId: number
     expiresAt: number
     isActive: number
     followers: number
@@ -9882,6 +9890,7 @@ export namespace Prisma {
     accountId?: true
     accessToken?: true
     refreshToken?: true
+    zernioAccountId?: true
     expiresAt?: true
     isActive?: true
     followers?: true
@@ -9897,6 +9906,7 @@ export namespace Prisma {
     accountId?: true
     accessToken?: true
     refreshToken?: true
+    zernioAccountId?: true
     expiresAt?: true
     isActive?: true
     followers?: true
@@ -9912,6 +9922,7 @@ export namespace Prisma {
     accountId?: true
     accessToken?: true
     refreshToken?: true
+    zernioAccountId?: true
     expiresAt?: true
     isActive?: true
     followers?: true
@@ -10014,6 +10025,7 @@ export namespace Prisma {
     accountId: string | null
     accessToken: string | null
     refreshToken: string | null
+    zernioAccountId: string | null
     expiresAt: Date | null
     isActive: boolean
     followers: number
@@ -10048,6 +10060,7 @@ export namespace Prisma {
     accountId?: boolean
     accessToken?: boolean
     refreshToken?: boolean
+    zernioAccountId?: boolean
     expiresAt?: boolean
     isActive?: boolean
     followers?: boolean
@@ -10066,6 +10079,7 @@ export namespace Prisma {
     accountId?: boolean
     accessToken?: boolean
     refreshToken?: boolean
+    zernioAccountId?: boolean
     expiresAt?: boolean
     isActive?: boolean
     followers?: boolean
@@ -10082,6 +10096,7 @@ export namespace Prisma {
     accountId?: boolean
     accessToken?: boolean
     refreshToken?: boolean
+    zernioAccountId?: boolean
     expiresAt?: boolean
     isActive?: boolean
     followers?: boolean
@@ -10098,6 +10113,7 @@ export namespace Prisma {
     accountId?: boolean
     accessToken?: boolean
     refreshToken?: boolean
+    zernioAccountId?: boolean
     expiresAt?: boolean
     isActive?: boolean
     followers?: boolean
@@ -10105,7 +10121,7 @@ export namespace Prisma {
     updatedAt?: boolean
   }
 
-  export type SocialAccountOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "userId" | "platform" | "accountName" | "accountId" | "accessToken" | "refreshToken" | "expiresAt" | "isActive" | "followers" | "createdAt" | "updatedAt", ExtArgs["result"]["socialAccount"]>
+  export type SocialAccountOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "userId" | "platform" | "accountName" | "accountId" | "accessToken" | "refreshToken" | "zernioAccountId" | "expiresAt" | "isActive" | "followers" | "createdAt" | "updatedAt", ExtArgs["result"]["socialAccount"]>
   export type SocialAccountInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     user?: boolean | UserDefaultArgs<ExtArgs>
     platformPosts?: boolean | SocialAccount$platformPostsArgs<ExtArgs>
@@ -10132,6 +10148,7 @@ export namespace Prisma {
       accountId: string | null
       accessToken: string | null
       refreshToken: string | null
+      zernioAccountId: string | null
       expiresAt: Date | null
       isActive: boolean
       followers: number
@@ -10569,6 +10586,7 @@ export namespace Prisma {
     readonly accountId: FieldRef<"SocialAccount", 'String'>
     readonly accessToken: FieldRef<"SocialAccount", 'String'>
     readonly refreshToken: FieldRef<"SocialAccount", 'String'>
+    readonly zernioAccountId: FieldRef<"SocialAccount", 'String'>
     readonly expiresAt: FieldRef<"SocialAccount", 'DateTime'>
     readonly isActive: FieldRef<"SocialAccount", 'Boolean'>
     readonly followers: FieldRef<"SocialAccount", 'Int'>
@@ -12262,6 +12280,7 @@ export namespace Prisma {
     status: $Enums.PostStatus | null
     publishedAt: Date | null
     externalId: string | null
+    idempotencyKey: string | null
     likes: number | null
     shares: number | null
     comments: number | null
@@ -12278,6 +12297,7 @@ export namespace Prisma {
     status: $Enums.PostStatus | null
     publishedAt: Date | null
     externalId: string | null
+    idempotencyKey: string | null
     likes: number | null
     shares: number | null
     comments: number | null
@@ -12294,6 +12314,7 @@ export namespace Prisma {
     status: number
     publishedAt: number
     externalId: number
+    idempotencyKey: number
     likes: number
     shares: number
     comments: number
@@ -12326,6 +12347,7 @@ export namespace Prisma {
     status?: true
     publishedAt?: true
     externalId?: true
+    idempotencyKey?: true
     likes?: true
     shares?: true
     comments?: true
@@ -12342,6 +12364,7 @@ export namespace Prisma {
     status?: true
     publishedAt?: true
     externalId?: true
+    idempotencyKey?: true
     likes?: true
     shares?: true
     comments?: true
@@ -12358,6 +12381,7 @@ export namespace Prisma {
     status?: true
     publishedAt?: true
     externalId?: true
+    idempotencyKey?: true
     likes?: true
     shares?: true
     comments?: true
@@ -12461,6 +12485,7 @@ export namespace Prisma {
     status: $Enums.PostStatus
     publishedAt: Date | null
     externalId: string | null
+    idempotencyKey: string | null
     likes: number
     shares: number
     comments: number
@@ -12496,6 +12521,7 @@ export namespace Prisma {
     status?: boolean
     publishedAt?: boolean
     externalId?: boolean
+    idempotencyKey?: boolean
     likes?: boolean
     shares?: boolean
     comments?: boolean
@@ -12514,6 +12540,7 @@ export namespace Prisma {
     status?: boolean
     publishedAt?: boolean
     externalId?: boolean
+    idempotencyKey?: boolean
     likes?: boolean
     shares?: boolean
     comments?: boolean
@@ -12532,6 +12559,7 @@ export namespace Prisma {
     status?: boolean
     publishedAt?: boolean
     externalId?: boolean
+    idempotencyKey?: boolean
     likes?: boolean
     shares?: boolean
     comments?: boolean
@@ -12550,6 +12578,7 @@ export namespace Prisma {
     status?: boolean
     publishedAt?: boolean
     externalId?: boolean
+    idempotencyKey?: boolean
     likes?: boolean
     shares?: boolean
     comments?: boolean
@@ -12557,7 +12586,7 @@ export namespace Prisma {
     createdAt?: boolean
   }
 
-  export type PlatformPostOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "postId" | "socialAccountId" | "platform" | "content" | "status" | "publishedAt" | "externalId" | "likes" | "shares" | "comments" | "reach" | "createdAt", ExtArgs["result"]["platformPost"]>
+  export type PlatformPostOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "postId" | "socialAccountId" | "platform" | "content" | "status" | "publishedAt" | "externalId" | "idempotencyKey" | "likes" | "shares" | "comments" | "reach" | "createdAt", ExtArgs["result"]["platformPost"]>
   export type PlatformPostInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     post?: boolean | PostDefaultArgs<ExtArgs>
     socialAccount?: boolean | SocialAccountDefaultArgs<ExtArgs>
@@ -12586,6 +12615,7 @@ export namespace Prisma {
       status: $Enums.PostStatus
       publishedAt: Date | null
       externalId: string | null
+      idempotencyKey: string | null
       likes: number
       shares: number
       comments: number
@@ -13024,6 +13054,7 @@ export namespace Prisma {
     readonly status: FieldRef<"PlatformPost", 'PostStatus'>
     readonly publishedAt: FieldRef<"PlatformPost", 'DateTime'>
     readonly externalId: FieldRef<"PlatformPost", 'String'>
+    readonly idempotencyKey: FieldRef<"PlatformPost", 'String'>
     readonly likes: FieldRef<"PlatformPost", 'Int'>
     readonly shares: FieldRef<"PlatformPost", 'Int'>
     readonly comments: FieldRef<"PlatformPost", 'Int'>
@@ -17952,7 +17983,6 @@ export namespace Prisma {
     previewText: string | null
     htmlContent: string | null
     textContent: string | null
-    channel: $Enums.CampaignChannel | null
     status: $Enums.EmailCampaignStatus | null
     scheduledAt: Date | null
     sentAt: Date | null
@@ -17970,7 +18000,6 @@ export namespace Prisma {
     previewText: string | null
     htmlContent: string | null
     textContent: string | null
-    channel: $Enums.CampaignChannel | null
     status: $Enums.EmailCampaignStatus | null
     scheduledAt: Date | null
     sentAt: Date | null
@@ -17988,8 +18017,6 @@ export namespace Prisma {
     previewText: number
     htmlContent: number
     textContent: number
-    channel: number
-    mediaUrls: number
     status: number
     scheduledAt: number
     sentAt: number
@@ -18019,7 +18046,6 @@ export namespace Prisma {
     previewText?: true
     htmlContent?: true
     textContent?: true
-    channel?: true
     status?: true
     scheduledAt?: true
     sentAt?: true
@@ -18037,7 +18063,6 @@ export namespace Prisma {
     previewText?: true
     htmlContent?: true
     textContent?: true
-    channel?: true
     status?: true
     scheduledAt?: true
     sentAt?: true
@@ -18055,8 +18080,6 @@ export namespace Prisma {
     previewText?: true
     htmlContent?: true
     textContent?: true
-    channel?: true
-    mediaUrls?: true
     status?: true
     scheduledAt?: true
     sentAt?: true
@@ -18161,8 +18184,6 @@ export namespace Prisma {
     previewText: string | null
     htmlContent: string
     textContent: string | null
-    channel: $Enums.CampaignChannel
-    mediaUrls: string[]
     status: $Enums.EmailCampaignStatus
     scheduledAt: Date | null
     sentAt: Date | null
@@ -18199,8 +18220,6 @@ export namespace Prisma {
     previewText?: boolean
     htmlContent?: boolean
     textContent?: boolean
-    channel?: boolean
-    mediaUrls?: boolean
     status?: boolean
     scheduledAt?: boolean
     sentAt?: boolean
@@ -18221,8 +18240,6 @@ export namespace Prisma {
     previewText?: boolean
     htmlContent?: boolean
     textContent?: boolean
-    channel?: boolean
-    mediaUrls?: boolean
     status?: boolean
     scheduledAt?: boolean
     sentAt?: boolean
@@ -18241,8 +18258,6 @@ export namespace Prisma {
     previewText?: boolean
     htmlContent?: boolean
     textContent?: boolean
-    channel?: boolean
-    mediaUrls?: boolean
     status?: boolean
     scheduledAt?: boolean
     sentAt?: boolean
@@ -18261,8 +18276,6 @@ export namespace Prisma {
     previewText?: boolean
     htmlContent?: boolean
     textContent?: boolean
-    channel?: boolean
-    mediaUrls?: boolean
     status?: boolean
     scheduledAt?: boolean
     sentAt?: boolean
@@ -18272,7 +18285,7 @@ export namespace Prisma {
     updatedAt?: boolean
   }
 
-  export type EmailCampaignOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "userId" | "name" | "subject" | "previewText" | "htmlContent" | "textContent" | "channel" | "mediaUrls" | "status" | "scheduledAt" | "sentAt" | "openRate" | "clickRate" | "createdAt" | "updatedAt", ExtArgs["result"]["emailCampaign"]>
+  export type EmailCampaignOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "userId" | "name" | "subject" | "previewText" | "htmlContent" | "textContent" | "status" | "scheduledAt" | "sentAt" | "openRate" | "clickRate" | "createdAt" | "updatedAt", ExtArgs["result"]["emailCampaign"]>
   export type EmailCampaignInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     user?: boolean | UserDefaultArgs<ExtArgs>
     recipients?: boolean | EmailCampaign$recipientsArgs<ExtArgs>
@@ -18299,8 +18312,6 @@ export namespace Prisma {
       previewText: string | null
       htmlContent: string
       textContent: string | null
-      channel: $Enums.CampaignChannel
-      mediaUrls: string[]
       status: $Enums.EmailCampaignStatus
       scheduledAt: Date | null
       sentAt: Date | null
@@ -18740,8 +18751,6 @@ export namespace Prisma {
     readonly previewText: FieldRef<"EmailCampaign", 'String'>
     readonly htmlContent: FieldRef<"EmailCampaign", 'String'>
     readonly textContent: FieldRef<"EmailCampaign", 'String'>
-    readonly channel: FieldRef<"EmailCampaign", 'CampaignChannel'>
-    readonly mediaUrls: FieldRef<"EmailCampaign", 'String[]'>
     readonly status: FieldRef<"EmailCampaign", 'EmailCampaignStatus'>
     readonly scheduledAt: FieldRef<"EmailCampaign", 'DateTime'>
     readonly sentAt: FieldRef<"EmailCampaign", 'DateTime'>
@@ -24840,7 +24849,8 @@ export namespace Prisma {
     token_type: 'token_type',
     scope: 'scope',
     id_token: 'id_token',
-    session_state: 'session_state'
+    session_state: 'session_state',
+    refresh_token_expires_in: 'refresh_token_expires_in'
   };
 
   export type AccountScalarFieldEnum = (typeof AccountScalarFieldEnum)[keyof typeof AccountScalarFieldEnum]
@@ -24902,6 +24912,7 @@ export namespace Prisma {
     accountId: 'accountId',
     accessToken: 'accessToken',
     refreshToken: 'refreshToken',
+    zernioAccountId: 'zernioAccountId',
     expiresAt: 'expiresAt',
     isActive: 'isActive',
     followers: 'followers',
@@ -24940,6 +24951,7 @@ export namespace Prisma {
     status: 'status',
     publishedAt: 'publishedAt',
     externalId: 'externalId',
+    idempotencyKey: 'idempotencyKey',
     likes: 'likes',
     shares: 'shares',
     comments: 'comments',
@@ -25011,8 +25023,6 @@ export namespace Prisma {
     previewText: 'previewText',
     htmlContent: 'htmlContent',
     textContent: 'textContent',
-    channel: 'channel',
-    mediaUrls: 'mediaUrls',
     status: 'status',
     scheduledAt: 'scheduledAt',
     sentAt: 'sentAt',
@@ -25262,20 +25272,6 @@ export namespace Prisma {
 
 
   /**
-   * Reference to a field of type 'CampaignChannel'
-   */
-  export type EnumCampaignChannelFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'CampaignChannel'>
-    
-
-
-  /**
-   * Reference to a field of type 'CampaignChannel[]'
-   */
-  export type ListEnumCampaignChannelFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'CampaignChannel[]'>
-    
-
-
-  /**
    * Reference to a field of type 'EmailCampaignStatus'
    */
   export type EnumEmailCampaignStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'EmailCampaignStatus'>
@@ -25413,6 +25409,7 @@ export namespace Prisma {
     scope?: StringNullableFilter<"Account"> | string | null
     id_token?: StringNullableFilter<"Account"> | string | null
     session_state?: StringNullableFilter<"Account"> | string | null
+    refresh_token_expires_in?: IntNullableFilter<"Account"> | number | null
     user?: XOR<UserScalarRelationFilter, UserWhereInput>
   }
 
@@ -25429,6 +25426,7 @@ export namespace Prisma {
     scope?: SortOrderInput | SortOrder
     id_token?: SortOrderInput | SortOrder
     session_state?: SortOrderInput | SortOrder
+    refresh_token_expires_in?: SortOrderInput | SortOrder
     user?: UserOrderByWithRelationInput
   }
 
@@ -25449,6 +25447,7 @@ export namespace Prisma {
     scope?: StringNullableFilter<"Account"> | string | null
     id_token?: StringNullableFilter<"Account"> | string | null
     session_state?: StringNullableFilter<"Account"> | string | null
+    refresh_token_expires_in?: IntNullableFilter<"Account"> | number | null
     user?: XOR<UserScalarRelationFilter, UserWhereInput>
   }, "id" | "provider_providerAccountId">
 
@@ -25465,6 +25464,7 @@ export namespace Prisma {
     scope?: SortOrderInput | SortOrder
     id_token?: SortOrderInput | SortOrder
     session_state?: SortOrderInput | SortOrder
+    refresh_token_expires_in?: SortOrderInput | SortOrder
     _count?: AccountCountOrderByAggregateInput
     _avg?: AccountAvgOrderByAggregateInput
     _max?: AccountMaxOrderByAggregateInput
@@ -25488,6 +25488,7 @@ export namespace Prisma {
     scope?: StringNullableWithAggregatesFilter<"Account"> | string | null
     id_token?: StringNullableWithAggregatesFilter<"Account"> | string | null
     session_state?: StringNullableWithAggregatesFilter<"Account"> | string | null
+    refresh_token_expires_in?: IntNullableWithAggregatesFilter<"Account"> | number | null
   }
 
   export type SessionWhereInput = {
@@ -25744,6 +25745,7 @@ export namespace Prisma {
     accountId?: StringNullableFilter<"SocialAccount"> | string | null
     accessToken?: StringNullableFilter<"SocialAccount"> | string | null
     refreshToken?: StringNullableFilter<"SocialAccount"> | string | null
+    zernioAccountId?: StringNullableFilter<"SocialAccount"> | string | null
     expiresAt?: DateTimeNullableFilter<"SocialAccount"> | Date | string | null
     isActive?: BoolFilter<"SocialAccount"> | boolean
     followers?: IntFilter<"SocialAccount"> | number
@@ -25761,6 +25763,7 @@ export namespace Prisma {
     accountId?: SortOrderInput | SortOrder
     accessToken?: SortOrderInput | SortOrder
     refreshToken?: SortOrderInput | SortOrder
+    zernioAccountId?: SortOrderInput | SortOrder
     expiresAt?: SortOrderInput | SortOrder
     isActive?: SortOrder
     followers?: SortOrder
@@ -25772,6 +25775,7 @@ export namespace Prisma {
 
   export type SocialAccountWhereUniqueInput = Prisma.AtLeast<{
     id?: string
+    zernioAccountId?: string
     userId_platform?: SocialAccountUserIdPlatformCompoundUniqueInput
     AND?: SocialAccountWhereInput | SocialAccountWhereInput[]
     OR?: SocialAccountWhereInput[]
@@ -25789,7 +25793,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFilter<"SocialAccount"> | Date | string
     user?: XOR<UserScalarRelationFilter, UserWhereInput>
     platformPosts?: PlatformPostListRelationFilter
-  }, "id" | "userId_platform">
+  }, "id" | "zernioAccountId" | "userId_platform">
 
   export type SocialAccountOrderByWithAggregationInput = {
     id?: SortOrder
@@ -25799,6 +25803,7 @@ export namespace Prisma {
     accountId?: SortOrderInput | SortOrder
     accessToken?: SortOrderInput | SortOrder
     refreshToken?: SortOrderInput | SortOrder
+    zernioAccountId?: SortOrderInput | SortOrder
     expiresAt?: SortOrderInput | SortOrder
     isActive?: SortOrder
     followers?: SortOrder
@@ -25822,6 +25827,7 @@ export namespace Prisma {
     accountId?: StringNullableWithAggregatesFilter<"SocialAccount"> | string | null
     accessToken?: StringNullableWithAggregatesFilter<"SocialAccount"> | string | null
     refreshToken?: StringNullableWithAggregatesFilter<"SocialAccount"> | string | null
+    zernioAccountId?: StringNullableWithAggregatesFilter<"SocialAccount"> | string | null
     expiresAt?: DateTimeNullableWithAggregatesFilter<"SocialAccount"> | Date | string | null
     isActive?: BoolWithAggregatesFilter<"SocialAccount"> | boolean
     followers?: IntWithAggregatesFilter<"SocialAccount"> | number
@@ -25942,6 +25948,7 @@ export namespace Prisma {
     status?: EnumPostStatusFilter<"PlatformPost"> | $Enums.PostStatus
     publishedAt?: DateTimeNullableFilter<"PlatformPost"> | Date | string | null
     externalId?: StringNullableFilter<"PlatformPost"> | string | null
+    idempotencyKey?: StringNullableFilter<"PlatformPost"> | string | null
     likes?: IntFilter<"PlatformPost"> | number
     shares?: IntFilter<"PlatformPost"> | number
     comments?: IntFilter<"PlatformPost"> | number
@@ -25960,6 +25967,7 @@ export namespace Prisma {
     status?: SortOrder
     publishedAt?: SortOrderInput | SortOrder
     externalId?: SortOrderInput | SortOrder
+    idempotencyKey?: SortOrderInput | SortOrder
     likes?: SortOrder
     shares?: SortOrder
     comments?: SortOrder
@@ -25971,6 +25979,7 @@ export namespace Prisma {
 
   export type PlatformPostWhereUniqueInput = Prisma.AtLeast<{
     id?: string
+    idempotencyKey?: string
     AND?: PlatformPostWhereInput | PlatformPostWhereInput[]
     OR?: PlatformPostWhereInput[]
     NOT?: PlatformPostWhereInput | PlatformPostWhereInput[]
@@ -25988,7 +25997,7 @@ export namespace Prisma {
     createdAt?: DateTimeFilter<"PlatformPost"> | Date | string
     post?: XOR<PostScalarRelationFilter, PostWhereInput>
     socialAccount?: XOR<SocialAccountScalarRelationFilter, SocialAccountWhereInput>
-  }, "id">
+  }, "id" | "idempotencyKey">
 
   export type PlatformPostOrderByWithAggregationInput = {
     id?: SortOrder
@@ -25999,6 +26008,7 @@ export namespace Prisma {
     status?: SortOrder
     publishedAt?: SortOrderInput | SortOrder
     externalId?: SortOrderInput | SortOrder
+    idempotencyKey?: SortOrderInput | SortOrder
     likes?: SortOrder
     shares?: SortOrder
     comments?: SortOrder
@@ -26023,6 +26033,7 @@ export namespace Prisma {
     status?: EnumPostStatusWithAggregatesFilter<"PlatformPost"> | $Enums.PostStatus
     publishedAt?: DateTimeNullableWithAggregatesFilter<"PlatformPost"> | Date | string | null
     externalId?: StringNullableWithAggregatesFilter<"PlatformPost"> | string | null
+    idempotencyKey?: StringNullableWithAggregatesFilter<"PlatformPost"> | string | null
     likes?: IntWithAggregatesFilter<"PlatformPost"> | number
     shares?: IntWithAggregatesFilter<"PlatformPost"> | number
     comments?: IntWithAggregatesFilter<"PlatformPost"> | number
@@ -26321,8 +26332,6 @@ export namespace Prisma {
     previewText?: StringNullableFilter<"EmailCampaign"> | string | null
     htmlContent?: StringFilter<"EmailCampaign"> | string
     textContent?: StringNullableFilter<"EmailCampaign"> | string | null
-    channel?: EnumCampaignChannelFilter<"EmailCampaign"> | $Enums.CampaignChannel
-    mediaUrls?: StringNullableListFilter<"EmailCampaign">
     status?: EnumEmailCampaignStatusFilter<"EmailCampaign"> | $Enums.EmailCampaignStatus
     scheduledAt?: DateTimeNullableFilter<"EmailCampaign"> | Date | string | null
     sentAt?: DateTimeNullableFilter<"EmailCampaign"> | Date | string | null
@@ -26342,8 +26351,6 @@ export namespace Prisma {
     previewText?: SortOrderInput | SortOrder
     htmlContent?: SortOrder
     textContent?: SortOrderInput | SortOrder
-    channel?: SortOrder
-    mediaUrls?: SortOrder
     status?: SortOrder
     scheduledAt?: SortOrderInput | SortOrder
     sentAt?: SortOrderInput | SortOrder
@@ -26366,8 +26373,6 @@ export namespace Prisma {
     previewText?: StringNullableFilter<"EmailCampaign"> | string | null
     htmlContent?: StringFilter<"EmailCampaign"> | string
     textContent?: StringNullableFilter<"EmailCampaign"> | string | null
-    channel?: EnumCampaignChannelFilter<"EmailCampaign"> | $Enums.CampaignChannel
-    mediaUrls?: StringNullableListFilter<"EmailCampaign">
     status?: EnumEmailCampaignStatusFilter<"EmailCampaign"> | $Enums.EmailCampaignStatus
     scheduledAt?: DateTimeNullableFilter<"EmailCampaign"> | Date | string | null
     sentAt?: DateTimeNullableFilter<"EmailCampaign"> | Date | string | null
@@ -26387,8 +26392,6 @@ export namespace Prisma {
     previewText?: SortOrderInput | SortOrder
     htmlContent?: SortOrder
     textContent?: SortOrderInput | SortOrder
-    channel?: SortOrder
-    mediaUrls?: SortOrder
     status?: SortOrder
     scheduledAt?: SortOrderInput | SortOrder
     sentAt?: SortOrderInput | SortOrder
@@ -26414,8 +26417,6 @@ export namespace Prisma {
     previewText?: StringNullableWithAggregatesFilter<"EmailCampaign"> | string | null
     htmlContent?: StringWithAggregatesFilter<"EmailCampaign"> | string
     textContent?: StringNullableWithAggregatesFilter<"EmailCampaign"> | string | null
-    channel?: EnumCampaignChannelWithAggregatesFilter<"EmailCampaign"> | $Enums.CampaignChannel
-    mediaUrls?: StringNullableListFilter<"EmailCampaign">
     status?: EnumEmailCampaignStatusWithAggregatesFilter<"EmailCampaign"> | $Enums.EmailCampaignStatus
     scheduledAt?: DateTimeNullableWithAggregatesFilter<"EmailCampaign"> | Date | string | null
     sentAt?: DateTimeNullableWithAggregatesFilter<"EmailCampaign"> | Date | string | null
@@ -26941,6 +26942,7 @@ export namespace Prisma {
     scope?: string | null
     id_token?: string | null
     session_state?: string | null
+    refresh_token_expires_in?: number | null
     user: UserCreateNestedOneWithoutAccountsInput
   }
 
@@ -26957,6 +26959,7 @@ export namespace Prisma {
     scope?: string | null
     id_token?: string | null
     session_state?: string | null
+    refresh_token_expires_in?: number | null
   }
 
   export type AccountUpdateInput = {
@@ -26971,6 +26974,7 @@ export namespace Prisma {
     scope?: NullableStringFieldUpdateOperationsInput | string | null
     id_token?: NullableStringFieldUpdateOperationsInput | string | null
     session_state?: NullableStringFieldUpdateOperationsInput | string | null
+    refresh_token_expires_in?: NullableIntFieldUpdateOperationsInput | number | null
     user?: UserUpdateOneRequiredWithoutAccountsNestedInput
   }
 
@@ -26987,6 +26991,7 @@ export namespace Prisma {
     scope?: NullableStringFieldUpdateOperationsInput | string | null
     id_token?: NullableStringFieldUpdateOperationsInput | string | null
     session_state?: NullableStringFieldUpdateOperationsInput | string | null
+    refresh_token_expires_in?: NullableIntFieldUpdateOperationsInput | number | null
   }
 
   export type AccountCreateManyInput = {
@@ -27002,6 +27007,7 @@ export namespace Prisma {
     scope?: string | null
     id_token?: string | null
     session_state?: string | null
+    refresh_token_expires_in?: number | null
   }
 
   export type AccountUpdateManyMutationInput = {
@@ -27016,6 +27022,7 @@ export namespace Prisma {
     scope?: NullableStringFieldUpdateOperationsInput | string | null
     id_token?: NullableStringFieldUpdateOperationsInput | string | null
     session_state?: NullableStringFieldUpdateOperationsInput | string | null
+    refresh_token_expires_in?: NullableIntFieldUpdateOperationsInput | number | null
   }
 
   export type AccountUncheckedUpdateManyInput = {
@@ -27031,6 +27038,7 @@ export namespace Prisma {
     scope?: NullableStringFieldUpdateOperationsInput | string | null
     id_token?: NullableStringFieldUpdateOperationsInput | string | null
     session_state?: NullableStringFieldUpdateOperationsInput | string | null
+    refresh_token_expires_in?: NullableIntFieldUpdateOperationsInput | number | null
   }
 
   export type SessionCreateInput = {
@@ -27293,6 +27301,7 @@ export namespace Prisma {
     accountId?: string | null
     accessToken?: string | null
     refreshToken?: string | null
+    zernioAccountId?: string | null
     expiresAt?: Date | string | null
     isActive?: boolean
     followers?: number
@@ -27310,6 +27319,7 @@ export namespace Prisma {
     accountId?: string | null
     accessToken?: string | null
     refreshToken?: string | null
+    zernioAccountId?: string | null
     expiresAt?: Date | string | null
     isActive?: boolean
     followers?: number
@@ -27325,6 +27335,7 @@ export namespace Prisma {
     accountId?: NullableStringFieldUpdateOperationsInput | string | null
     accessToken?: NullableStringFieldUpdateOperationsInput | string | null
     refreshToken?: NullableStringFieldUpdateOperationsInput | string | null
+    zernioAccountId?: NullableStringFieldUpdateOperationsInput | string | null
     expiresAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     isActive?: BoolFieldUpdateOperationsInput | boolean
     followers?: IntFieldUpdateOperationsInput | number
@@ -27342,6 +27353,7 @@ export namespace Prisma {
     accountId?: NullableStringFieldUpdateOperationsInput | string | null
     accessToken?: NullableStringFieldUpdateOperationsInput | string | null
     refreshToken?: NullableStringFieldUpdateOperationsInput | string | null
+    zernioAccountId?: NullableStringFieldUpdateOperationsInput | string | null
     expiresAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     isActive?: BoolFieldUpdateOperationsInput | boolean
     followers?: IntFieldUpdateOperationsInput | number
@@ -27358,6 +27370,7 @@ export namespace Prisma {
     accountId?: string | null
     accessToken?: string | null
     refreshToken?: string | null
+    zernioAccountId?: string | null
     expiresAt?: Date | string | null
     isActive?: boolean
     followers?: number
@@ -27372,6 +27385,7 @@ export namespace Prisma {
     accountId?: NullableStringFieldUpdateOperationsInput | string | null
     accessToken?: NullableStringFieldUpdateOperationsInput | string | null
     refreshToken?: NullableStringFieldUpdateOperationsInput | string | null
+    zernioAccountId?: NullableStringFieldUpdateOperationsInput | string | null
     expiresAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     isActive?: BoolFieldUpdateOperationsInput | boolean
     followers?: IntFieldUpdateOperationsInput | number
@@ -27387,6 +27401,7 @@ export namespace Prisma {
     accountId?: NullableStringFieldUpdateOperationsInput | string | null
     accessToken?: NullableStringFieldUpdateOperationsInput | string | null
     refreshToken?: NullableStringFieldUpdateOperationsInput | string | null
+    zernioAccountId?: NullableStringFieldUpdateOperationsInput | string | null
     expiresAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     isActive?: BoolFieldUpdateOperationsInput | boolean
     followers?: IntFieldUpdateOperationsInput | number
@@ -27515,6 +27530,7 @@ export namespace Prisma {
     status?: $Enums.PostStatus
     publishedAt?: Date | string | null
     externalId?: string | null
+    idempotencyKey?: string | null
     likes?: number
     shares?: number
     comments?: number
@@ -27533,6 +27549,7 @@ export namespace Prisma {
     status?: $Enums.PostStatus
     publishedAt?: Date | string | null
     externalId?: string | null
+    idempotencyKey?: string | null
     likes?: number
     shares?: number
     comments?: number
@@ -27547,6 +27564,7 @@ export namespace Prisma {
     status?: EnumPostStatusFieldUpdateOperationsInput | $Enums.PostStatus
     publishedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     externalId?: NullableStringFieldUpdateOperationsInput | string | null
+    idempotencyKey?: NullableStringFieldUpdateOperationsInput | string | null
     likes?: IntFieldUpdateOperationsInput | number
     shares?: IntFieldUpdateOperationsInput | number
     comments?: IntFieldUpdateOperationsInput | number
@@ -27565,6 +27583,7 @@ export namespace Prisma {
     status?: EnumPostStatusFieldUpdateOperationsInput | $Enums.PostStatus
     publishedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     externalId?: NullableStringFieldUpdateOperationsInput | string | null
+    idempotencyKey?: NullableStringFieldUpdateOperationsInput | string | null
     likes?: IntFieldUpdateOperationsInput | number
     shares?: IntFieldUpdateOperationsInput | number
     comments?: IntFieldUpdateOperationsInput | number
@@ -27581,6 +27600,7 @@ export namespace Prisma {
     status?: $Enums.PostStatus
     publishedAt?: Date | string | null
     externalId?: string | null
+    idempotencyKey?: string | null
     likes?: number
     shares?: number
     comments?: number
@@ -27595,6 +27615,7 @@ export namespace Prisma {
     status?: EnumPostStatusFieldUpdateOperationsInput | $Enums.PostStatus
     publishedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     externalId?: NullableStringFieldUpdateOperationsInput | string | null
+    idempotencyKey?: NullableStringFieldUpdateOperationsInput | string | null
     likes?: IntFieldUpdateOperationsInput | number
     shares?: IntFieldUpdateOperationsInput | number
     comments?: IntFieldUpdateOperationsInput | number
@@ -27611,6 +27632,7 @@ export namespace Prisma {
     status?: EnumPostStatusFieldUpdateOperationsInput | $Enums.PostStatus
     publishedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     externalId?: NullableStringFieldUpdateOperationsInput | string | null
+    idempotencyKey?: NullableStringFieldUpdateOperationsInput | string | null
     likes?: IntFieldUpdateOperationsInput | number
     shares?: IntFieldUpdateOperationsInput | number
     comments?: IntFieldUpdateOperationsInput | number
@@ -27925,8 +27947,6 @@ export namespace Prisma {
     previewText?: string | null
     htmlContent: string
     textContent?: string | null
-    channel?: $Enums.CampaignChannel
-    mediaUrls?: EmailCampaignCreatemediaUrlsInput | string[]
     status?: $Enums.EmailCampaignStatus
     scheduledAt?: Date | string | null
     sentAt?: Date | string | null
@@ -27946,8 +27966,6 @@ export namespace Prisma {
     previewText?: string | null
     htmlContent: string
     textContent?: string | null
-    channel?: $Enums.CampaignChannel
-    mediaUrls?: EmailCampaignCreatemediaUrlsInput | string[]
     status?: $Enums.EmailCampaignStatus
     scheduledAt?: Date | string | null
     sentAt?: Date | string | null
@@ -27965,8 +27983,6 @@ export namespace Prisma {
     previewText?: NullableStringFieldUpdateOperationsInput | string | null
     htmlContent?: StringFieldUpdateOperationsInput | string
     textContent?: NullableStringFieldUpdateOperationsInput | string | null
-    channel?: EnumCampaignChannelFieldUpdateOperationsInput | $Enums.CampaignChannel
-    mediaUrls?: EmailCampaignUpdatemediaUrlsInput | string[]
     status?: EnumEmailCampaignStatusFieldUpdateOperationsInput | $Enums.EmailCampaignStatus
     scheduledAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     sentAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -27986,8 +28002,6 @@ export namespace Prisma {
     previewText?: NullableStringFieldUpdateOperationsInput | string | null
     htmlContent?: StringFieldUpdateOperationsInput | string
     textContent?: NullableStringFieldUpdateOperationsInput | string | null
-    channel?: EnumCampaignChannelFieldUpdateOperationsInput | $Enums.CampaignChannel
-    mediaUrls?: EmailCampaignUpdatemediaUrlsInput | string[]
     status?: EnumEmailCampaignStatusFieldUpdateOperationsInput | $Enums.EmailCampaignStatus
     scheduledAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     sentAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -28006,8 +28020,6 @@ export namespace Prisma {
     previewText?: string | null
     htmlContent: string
     textContent?: string | null
-    channel?: $Enums.CampaignChannel
-    mediaUrls?: EmailCampaignCreatemediaUrlsInput | string[]
     status?: $Enums.EmailCampaignStatus
     scheduledAt?: Date | string | null
     sentAt?: Date | string | null
@@ -28024,8 +28036,6 @@ export namespace Prisma {
     previewText?: NullableStringFieldUpdateOperationsInput | string | null
     htmlContent?: StringFieldUpdateOperationsInput | string
     textContent?: NullableStringFieldUpdateOperationsInput | string | null
-    channel?: EnumCampaignChannelFieldUpdateOperationsInput | $Enums.CampaignChannel
-    mediaUrls?: EmailCampaignUpdatemediaUrlsInput | string[]
     status?: EnumEmailCampaignStatusFieldUpdateOperationsInput | $Enums.EmailCampaignStatus
     scheduledAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     sentAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -28043,8 +28053,6 @@ export namespace Prisma {
     previewText?: NullableStringFieldUpdateOperationsInput | string | null
     htmlContent?: StringFieldUpdateOperationsInput | string
     textContent?: NullableStringFieldUpdateOperationsInput | string | null
-    channel?: EnumCampaignChannelFieldUpdateOperationsInput | $Enums.CampaignChannel
-    mediaUrls?: EmailCampaignUpdatemediaUrlsInput | string[]
     status?: EnumEmailCampaignStatusFieldUpdateOperationsInput | $Enums.EmailCampaignStatus
     scheduledAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     sentAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -28775,10 +28783,12 @@ export namespace Prisma {
     scope?: SortOrder
     id_token?: SortOrder
     session_state?: SortOrder
+    refresh_token_expires_in?: SortOrder
   }
 
   export type AccountAvgOrderByAggregateInput = {
     expires_at?: SortOrder
+    refresh_token_expires_in?: SortOrder
   }
 
   export type AccountMaxOrderByAggregateInput = {
@@ -28794,6 +28804,7 @@ export namespace Prisma {
     scope?: SortOrder
     id_token?: SortOrder
     session_state?: SortOrder
+    refresh_token_expires_in?: SortOrder
   }
 
   export type AccountMinOrderByAggregateInput = {
@@ -28809,10 +28820,12 @@ export namespace Prisma {
     scope?: SortOrder
     id_token?: SortOrder
     session_state?: SortOrder
+    refresh_token_expires_in?: SortOrder
   }
 
   export type AccountSumOrderByAggregateInput = {
     expires_at?: SortOrder
+    refresh_token_expires_in?: SortOrder
   }
 
   export type IntNullableWithAggregatesFilter<$PrismaModel = never> = {
@@ -29085,6 +29098,7 @@ export namespace Prisma {
     accountId?: SortOrder
     accessToken?: SortOrder
     refreshToken?: SortOrder
+    zernioAccountId?: SortOrder
     expiresAt?: SortOrder
     isActive?: SortOrder
     followers?: SortOrder
@@ -29104,6 +29118,7 @@ export namespace Prisma {
     accountId?: SortOrder
     accessToken?: SortOrder
     refreshToken?: SortOrder
+    zernioAccountId?: SortOrder
     expiresAt?: SortOrder
     isActive?: SortOrder
     followers?: SortOrder
@@ -29119,6 +29134,7 @@ export namespace Prisma {
     accountId?: SortOrder
     accessToken?: SortOrder
     refreshToken?: SortOrder
+    zernioAccountId?: SortOrder
     expiresAt?: SortOrder
     isActive?: SortOrder
     followers?: SortOrder
@@ -29235,6 +29251,7 @@ export namespace Prisma {
     status?: SortOrder
     publishedAt?: SortOrder
     externalId?: SortOrder
+    idempotencyKey?: SortOrder
     likes?: SortOrder
     shares?: SortOrder
     comments?: SortOrder
@@ -29258,6 +29275,7 @@ export namespace Prisma {
     status?: SortOrder
     publishedAt?: SortOrder
     externalId?: SortOrder
+    idempotencyKey?: SortOrder
     likes?: SortOrder
     shares?: SortOrder
     comments?: SortOrder
@@ -29274,6 +29292,7 @@ export namespace Prisma {
     status?: SortOrder
     publishedAt?: SortOrder
     externalId?: SortOrder
+    idempotencyKey?: SortOrder
     likes?: SortOrder
     shares?: SortOrder
     comments?: SortOrder
@@ -29500,13 +29519,6 @@ export namespace Prisma {
     groupId?: SortOrder
   }
 
-  export type EnumCampaignChannelFilter<$PrismaModel = never> = {
-    equals?: $Enums.CampaignChannel | EnumCampaignChannelFieldRefInput<$PrismaModel>
-    in?: $Enums.CampaignChannel[] | ListEnumCampaignChannelFieldRefInput<$PrismaModel>
-    notIn?: $Enums.CampaignChannel[] | ListEnumCampaignChannelFieldRefInput<$PrismaModel>
-    not?: NestedEnumCampaignChannelFilter<$PrismaModel> | $Enums.CampaignChannel
-  }
-
   export type EnumEmailCampaignStatusFilter<$PrismaModel = never> = {
     equals?: $Enums.EmailCampaignStatus | EnumEmailCampaignStatusFieldRefInput<$PrismaModel>
     in?: $Enums.EmailCampaignStatus[] | ListEnumEmailCampaignStatusFieldRefInput<$PrismaModel>
@@ -29522,8 +29534,6 @@ export namespace Prisma {
     previewText?: SortOrder
     htmlContent?: SortOrder
     textContent?: SortOrder
-    channel?: SortOrder
-    mediaUrls?: SortOrder
     status?: SortOrder
     scheduledAt?: SortOrder
     sentAt?: SortOrder
@@ -29546,7 +29556,6 @@ export namespace Prisma {
     previewText?: SortOrder
     htmlContent?: SortOrder
     textContent?: SortOrder
-    channel?: SortOrder
     status?: SortOrder
     scheduledAt?: SortOrder
     sentAt?: SortOrder
@@ -29564,7 +29573,6 @@ export namespace Prisma {
     previewText?: SortOrder
     htmlContent?: SortOrder
     textContent?: SortOrder
-    channel?: SortOrder
     status?: SortOrder
     scheduledAt?: SortOrder
     sentAt?: SortOrder
@@ -29577,16 +29585,6 @@ export namespace Prisma {
   export type EmailCampaignSumOrderByAggregateInput = {
     openRate?: SortOrder
     clickRate?: SortOrder
-  }
-
-  export type EnumCampaignChannelWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: $Enums.CampaignChannel | EnumCampaignChannelFieldRefInput<$PrismaModel>
-    in?: $Enums.CampaignChannel[] | ListEnumCampaignChannelFieldRefInput<$PrismaModel>
-    notIn?: $Enums.CampaignChannel[] | ListEnumCampaignChannelFieldRefInput<$PrismaModel>
-    not?: NestedEnumCampaignChannelWithAggregatesFilter<$PrismaModel> | $Enums.CampaignChannel
-    _count?: NestedIntFilter<$PrismaModel>
-    _min?: NestedEnumCampaignChannelFilter<$PrismaModel>
-    _max?: NestedEnumCampaignChannelFilter<$PrismaModel>
   }
 
   export type EnumEmailCampaignStatusWithAggregatesFilter<$PrismaModel = never> = {
@@ -30883,10 +30881,6 @@ export namespace Prisma {
     update?: XOR<XOR<AudienceGroupUpdateToOneWithWhereWithoutContactsInput, AudienceGroupUpdateWithoutContactsInput>, AudienceGroupUncheckedUpdateWithoutContactsInput>
   }
 
-  export type EmailCampaignCreatemediaUrlsInput = {
-    set: string[]
-  }
-
   export type UserCreateNestedOneWithoutEmailCampaignsInput = {
     create?: XOR<UserCreateWithoutEmailCampaignsInput, UserUncheckedCreateWithoutEmailCampaignsInput>
     connectOrCreate?: UserCreateOrConnectWithoutEmailCampaignsInput
@@ -30905,15 +30899,6 @@ export namespace Prisma {
     connectOrCreate?: EmailCampaignRecipientCreateOrConnectWithoutCampaignInput | EmailCampaignRecipientCreateOrConnectWithoutCampaignInput[]
     createMany?: EmailCampaignRecipientCreateManyCampaignInputEnvelope
     connect?: EmailCampaignRecipientWhereUniqueInput | EmailCampaignRecipientWhereUniqueInput[]
-  }
-
-  export type EnumCampaignChannelFieldUpdateOperationsInput = {
-    set?: $Enums.CampaignChannel
-  }
-
-  export type EmailCampaignUpdatemediaUrlsInput = {
-    set?: string[]
-    push?: string | string[]
   }
 
   export type EnumEmailCampaignStatusFieldUpdateOperationsInput = {
@@ -31348,28 +31333,11 @@ export namespace Prisma {
     _max?: NestedFloatNullableFilter<$PrismaModel>
   }
 
-  export type NestedEnumCampaignChannelFilter<$PrismaModel = never> = {
-    equals?: $Enums.CampaignChannel | EnumCampaignChannelFieldRefInput<$PrismaModel>
-    in?: $Enums.CampaignChannel[] | ListEnumCampaignChannelFieldRefInput<$PrismaModel>
-    notIn?: $Enums.CampaignChannel[] | ListEnumCampaignChannelFieldRefInput<$PrismaModel>
-    not?: NestedEnumCampaignChannelFilter<$PrismaModel> | $Enums.CampaignChannel
-  }
-
   export type NestedEnumEmailCampaignStatusFilter<$PrismaModel = never> = {
     equals?: $Enums.EmailCampaignStatus | EnumEmailCampaignStatusFieldRefInput<$PrismaModel>
     in?: $Enums.EmailCampaignStatus[] | ListEnumEmailCampaignStatusFieldRefInput<$PrismaModel>
     notIn?: $Enums.EmailCampaignStatus[] | ListEnumEmailCampaignStatusFieldRefInput<$PrismaModel>
     not?: NestedEnumEmailCampaignStatusFilter<$PrismaModel> | $Enums.EmailCampaignStatus
-  }
-
-  export type NestedEnumCampaignChannelWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: $Enums.CampaignChannel | EnumCampaignChannelFieldRefInput<$PrismaModel>
-    in?: $Enums.CampaignChannel[] | ListEnumCampaignChannelFieldRefInput<$PrismaModel>
-    notIn?: $Enums.CampaignChannel[] | ListEnumCampaignChannelFieldRefInput<$PrismaModel>
-    not?: NestedEnumCampaignChannelWithAggregatesFilter<$PrismaModel> | $Enums.CampaignChannel
-    _count?: NestedIntFilter<$PrismaModel>
-    _min?: NestedEnumCampaignChannelFilter<$PrismaModel>
-    _max?: NestedEnumCampaignChannelFilter<$PrismaModel>
   }
 
   export type NestedEnumEmailCampaignStatusWithAggregatesFilter<$PrismaModel = never> = {
@@ -31411,6 +31379,7 @@ export namespace Prisma {
     scope?: string | null
     id_token?: string | null
     session_state?: string | null
+    refresh_token_expires_in?: number | null
   }
 
   export type AccountUncheckedCreateWithoutUserInput = {
@@ -31425,6 +31394,7 @@ export namespace Prisma {
     scope?: string | null
     id_token?: string | null
     session_state?: string | null
+    refresh_token_expires_in?: number | null
   }
 
   export type AccountCreateOrConnectWithoutUserInput = {
@@ -31466,6 +31436,7 @@ export namespace Prisma {
     accountId?: string | null
     accessToken?: string | null
     refreshToken?: string | null
+    zernioAccountId?: string | null
     expiresAt?: Date | string | null
     isActive?: boolean
     followers?: number
@@ -31481,6 +31452,7 @@ export namespace Prisma {
     accountId?: string | null
     accessToken?: string | null
     refreshToken?: string | null
+    zernioAccountId?: string | null
     expiresAt?: Date | string | null
     isActive?: boolean
     followers?: number
@@ -31616,8 +31588,6 @@ export namespace Prisma {
     previewText?: string | null
     htmlContent: string
     textContent?: string | null
-    channel?: $Enums.CampaignChannel
-    mediaUrls?: EmailCampaignCreatemediaUrlsInput | string[]
     status?: $Enums.EmailCampaignStatus
     scheduledAt?: Date | string | null
     sentAt?: Date | string | null
@@ -31635,8 +31605,6 @@ export namespace Prisma {
     previewText?: string | null
     htmlContent: string
     textContent?: string | null
-    channel?: $Enums.CampaignChannel
-    mediaUrls?: EmailCampaignCreatemediaUrlsInput | string[]
     status?: $Enums.EmailCampaignStatus
     scheduledAt?: Date | string | null
     sentAt?: Date | string | null
@@ -31818,6 +31786,7 @@ export namespace Prisma {
     scope?: StringNullableFilter<"Account"> | string | null
     id_token?: StringNullableFilter<"Account"> | string | null
     session_state?: StringNullableFilter<"Account"> | string | null
+    refresh_token_expires_in?: IntNullableFilter<"Account"> | number | null
   }
 
   export type SessionUpsertWithWhereUniqueWithoutUserInput = {
@@ -31873,6 +31842,7 @@ export namespace Prisma {
     accountId?: StringNullableFilter<"SocialAccount"> | string | null
     accessToken?: StringNullableFilter<"SocialAccount"> | string | null
     refreshToken?: StringNullableFilter<"SocialAccount"> | string | null
+    zernioAccountId?: StringNullableFilter<"SocialAccount"> | string | null
     expiresAt?: DateTimeNullableFilter<"SocialAccount"> | Date | string | null
     isActive?: BoolFilter<"SocialAccount"> | boolean
     followers?: IntFilter<"SocialAccount"> | number
@@ -32004,8 +31974,6 @@ export namespace Prisma {
     previewText?: StringNullableFilter<"EmailCampaign"> | string | null
     htmlContent?: StringFilter<"EmailCampaign"> | string
     textContent?: StringNullableFilter<"EmailCampaign"> | string | null
-    channel?: EnumCampaignChannelFilter<"EmailCampaign"> | $Enums.CampaignChannel
-    mediaUrls?: StringNullableListFilter<"EmailCampaign">
     status?: EnumEmailCampaignStatusFilter<"EmailCampaign"> | $Enums.EmailCampaignStatus
     scheduledAt?: DateTimeNullableFilter<"EmailCampaign"> | Date | string | null
     sentAt?: DateTimeNullableFilter<"EmailCampaign"> | Date | string | null
@@ -32635,6 +32603,7 @@ export namespace Prisma {
     status?: $Enums.PostStatus
     publishedAt?: Date | string | null
     externalId?: string | null
+    idempotencyKey?: string | null
     likes?: number
     shares?: number
     comments?: number
@@ -32651,6 +32620,7 @@ export namespace Prisma {
     status?: $Enums.PostStatus
     publishedAt?: Date | string | null
     externalId?: string | null
+    idempotencyKey?: string | null
     likes?: number
     shares?: number
     comments?: number
@@ -32751,6 +32721,7 @@ export namespace Prisma {
     status?: EnumPostStatusFilter<"PlatformPost"> | $Enums.PostStatus
     publishedAt?: DateTimeNullableFilter<"PlatformPost"> | Date | string | null
     externalId?: StringNullableFilter<"PlatformPost"> | string | null
+    idempotencyKey?: StringNullableFilter<"PlatformPost"> | string | null
     likes?: IntFilter<"PlatformPost"> | number
     shares?: IntFilter<"PlatformPost"> | number
     comments?: IntFilter<"PlatformPost"> | number
@@ -32847,6 +32818,7 @@ export namespace Prisma {
     status?: $Enums.PostStatus
     publishedAt?: Date | string | null
     externalId?: string | null
+    idempotencyKey?: string | null
     likes?: number
     shares?: number
     comments?: number
@@ -32863,6 +32835,7 @@ export namespace Prisma {
     status?: $Enums.PostStatus
     publishedAt?: Date | string | null
     externalId?: string | null
+    idempotencyKey?: string | null
     likes?: number
     shares?: number
     comments?: number
@@ -33034,6 +33007,7 @@ export namespace Prisma {
     accountId?: string | null
     accessToken?: string | null
     refreshToken?: string | null
+    zernioAccountId?: string | null
     expiresAt?: Date | string | null
     isActive?: boolean
     followers?: number
@@ -33050,6 +33024,7 @@ export namespace Prisma {
     accountId?: string | null
     accessToken?: string | null
     refreshToken?: string | null
+    zernioAccountId?: string | null
     expiresAt?: Date | string | null
     isActive?: boolean
     followers?: number
@@ -33123,6 +33098,7 @@ export namespace Prisma {
     accountId?: NullableStringFieldUpdateOperationsInput | string | null
     accessToken?: NullableStringFieldUpdateOperationsInput | string | null
     refreshToken?: NullableStringFieldUpdateOperationsInput | string | null
+    zernioAccountId?: NullableStringFieldUpdateOperationsInput | string | null
     expiresAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     isActive?: BoolFieldUpdateOperationsInput | boolean
     followers?: IntFieldUpdateOperationsInput | number
@@ -33139,6 +33115,7 @@ export namespace Prisma {
     accountId?: NullableStringFieldUpdateOperationsInput | string | null
     accessToken?: NullableStringFieldUpdateOperationsInput | string | null
     refreshToken?: NullableStringFieldUpdateOperationsInput | string | null
+    zernioAccountId?: NullableStringFieldUpdateOperationsInput | string | null
     expiresAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     isActive?: BoolFieldUpdateOperationsInput | boolean
     followers?: IntFieldUpdateOperationsInput | number
@@ -33824,8 +33801,6 @@ export namespace Prisma {
     previewText?: string | null
     htmlContent: string
     textContent?: string | null
-    channel?: $Enums.CampaignChannel
-    mediaUrls?: EmailCampaignCreatemediaUrlsInput | string[]
     status?: $Enums.EmailCampaignStatus
     scheduledAt?: Date | string | null
     sentAt?: Date | string | null
@@ -33844,8 +33819,6 @@ export namespace Prisma {
     previewText?: string | null
     htmlContent: string
     textContent?: string | null
-    channel?: $Enums.CampaignChannel
-    mediaUrls?: EmailCampaignCreatemediaUrlsInput | string[]
     status?: $Enums.EmailCampaignStatus
     scheduledAt?: Date | string | null
     sentAt?: Date | string | null
@@ -33909,8 +33882,6 @@ export namespace Prisma {
     previewText?: NullableStringFieldUpdateOperationsInput | string | null
     htmlContent?: StringFieldUpdateOperationsInput | string
     textContent?: NullableStringFieldUpdateOperationsInput | string | null
-    channel?: EnumCampaignChannelFieldUpdateOperationsInput | $Enums.CampaignChannel
-    mediaUrls?: EmailCampaignUpdatemediaUrlsInput | string[]
     status?: EnumEmailCampaignStatusFieldUpdateOperationsInput | $Enums.EmailCampaignStatus
     scheduledAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     sentAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -33929,8 +33900,6 @@ export namespace Prisma {
     previewText?: NullableStringFieldUpdateOperationsInput | string | null
     htmlContent?: StringFieldUpdateOperationsInput | string
     textContent?: NullableStringFieldUpdateOperationsInput | string | null
-    channel?: EnumCampaignChannelFieldUpdateOperationsInput | $Enums.CampaignChannel
-    mediaUrls?: EmailCampaignUpdatemediaUrlsInput | string[]
     status?: EnumEmailCampaignStatusFieldUpdateOperationsInput | $Enums.EmailCampaignStatus
     scheduledAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     sentAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -34301,6 +34270,7 @@ export namespace Prisma {
     scope?: string | null
     id_token?: string | null
     session_state?: string | null
+    refresh_token_expires_in?: number | null
   }
 
   export type SessionCreateManyUserInput = {
@@ -34316,6 +34286,7 @@ export namespace Prisma {
     accountId?: string | null
     accessToken?: string | null
     refreshToken?: string | null
+    zernioAccountId?: string | null
     expiresAt?: Date | string | null
     isActive?: boolean
     followers?: number
@@ -34367,8 +34338,6 @@ export namespace Prisma {
     previewText?: string | null
     htmlContent: string
     textContent?: string | null
-    channel?: $Enums.CampaignChannel
-    mediaUrls?: EmailCampaignCreatemediaUrlsInput | string[]
     status?: $Enums.EmailCampaignStatus
     scheduledAt?: Date | string | null
     sentAt?: Date | string | null
@@ -34427,6 +34396,7 @@ export namespace Prisma {
     scope?: NullableStringFieldUpdateOperationsInput | string | null
     id_token?: NullableStringFieldUpdateOperationsInput | string | null
     session_state?: NullableStringFieldUpdateOperationsInput | string | null
+    refresh_token_expires_in?: NullableIntFieldUpdateOperationsInput | number | null
   }
 
   export type AccountUncheckedUpdateWithoutUserInput = {
@@ -34441,6 +34411,7 @@ export namespace Prisma {
     scope?: NullableStringFieldUpdateOperationsInput | string | null
     id_token?: NullableStringFieldUpdateOperationsInput | string | null
     session_state?: NullableStringFieldUpdateOperationsInput | string | null
+    refresh_token_expires_in?: NullableIntFieldUpdateOperationsInput | number | null
   }
 
   export type AccountUncheckedUpdateManyWithoutUserInput = {
@@ -34455,6 +34426,7 @@ export namespace Prisma {
     scope?: NullableStringFieldUpdateOperationsInput | string | null
     id_token?: NullableStringFieldUpdateOperationsInput | string | null
     session_state?: NullableStringFieldUpdateOperationsInput | string | null
+    refresh_token_expires_in?: NullableIntFieldUpdateOperationsInput | number | null
   }
 
   export type SessionUpdateWithoutUserInput = {
@@ -34482,6 +34454,7 @@ export namespace Prisma {
     accountId?: NullableStringFieldUpdateOperationsInput | string | null
     accessToken?: NullableStringFieldUpdateOperationsInput | string | null
     refreshToken?: NullableStringFieldUpdateOperationsInput | string | null
+    zernioAccountId?: NullableStringFieldUpdateOperationsInput | string | null
     expiresAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     isActive?: BoolFieldUpdateOperationsInput | boolean
     followers?: IntFieldUpdateOperationsInput | number
@@ -34497,6 +34470,7 @@ export namespace Prisma {
     accountId?: NullableStringFieldUpdateOperationsInput | string | null
     accessToken?: NullableStringFieldUpdateOperationsInput | string | null
     refreshToken?: NullableStringFieldUpdateOperationsInput | string | null
+    zernioAccountId?: NullableStringFieldUpdateOperationsInput | string | null
     expiresAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     isActive?: BoolFieldUpdateOperationsInput | boolean
     followers?: IntFieldUpdateOperationsInput | number
@@ -34512,6 +34486,7 @@ export namespace Prisma {
     accountId?: NullableStringFieldUpdateOperationsInput | string | null
     accessToken?: NullableStringFieldUpdateOperationsInput | string | null
     refreshToken?: NullableStringFieldUpdateOperationsInput | string | null
+    zernioAccountId?: NullableStringFieldUpdateOperationsInput | string | null
     expiresAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     isActive?: BoolFieldUpdateOperationsInput | boolean
     followers?: IntFieldUpdateOperationsInput | number
@@ -34643,8 +34618,6 @@ export namespace Prisma {
     previewText?: NullableStringFieldUpdateOperationsInput | string | null
     htmlContent?: StringFieldUpdateOperationsInput | string
     textContent?: NullableStringFieldUpdateOperationsInput | string | null
-    channel?: EnumCampaignChannelFieldUpdateOperationsInput | $Enums.CampaignChannel
-    mediaUrls?: EmailCampaignUpdatemediaUrlsInput | string[]
     status?: EnumEmailCampaignStatusFieldUpdateOperationsInput | $Enums.EmailCampaignStatus
     scheduledAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     sentAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -34662,8 +34635,6 @@ export namespace Prisma {
     previewText?: NullableStringFieldUpdateOperationsInput | string | null
     htmlContent?: StringFieldUpdateOperationsInput | string
     textContent?: NullableStringFieldUpdateOperationsInput | string | null
-    channel?: EnumCampaignChannelFieldUpdateOperationsInput | $Enums.CampaignChannel
-    mediaUrls?: EmailCampaignUpdatemediaUrlsInput | string[]
     status?: EnumEmailCampaignStatusFieldUpdateOperationsInput | $Enums.EmailCampaignStatus
     scheduledAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     sentAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -34681,8 +34652,6 @@ export namespace Prisma {
     previewText?: NullableStringFieldUpdateOperationsInput | string | null
     htmlContent?: StringFieldUpdateOperationsInput | string
     textContent?: NullableStringFieldUpdateOperationsInput | string | null
-    channel?: EnumCampaignChannelFieldUpdateOperationsInput | $Enums.CampaignChannel
-    mediaUrls?: EmailCampaignUpdatemediaUrlsInput | string[]
     status?: EnumEmailCampaignStatusFieldUpdateOperationsInput | $Enums.EmailCampaignStatus
     scheduledAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     sentAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -34851,6 +34820,7 @@ export namespace Prisma {
     status?: $Enums.PostStatus
     publishedAt?: Date | string | null
     externalId?: string | null
+    idempotencyKey?: string | null
     likes?: number
     shares?: number
     comments?: number
@@ -34865,6 +34835,7 @@ export namespace Prisma {
     status?: EnumPostStatusFieldUpdateOperationsInput | $Enums.PostStatus
     publishedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     externalId?: NullableStringFieldUpdateOperationsInput | string | null
+    idempotencyKey?: NullableStringFieldUpdateOperationsInput | string | null
     likes?: IntFieldUpdateOperationsInput | number
     shares?: IntFieldUpdateOperationsInput | number
     comments?: IntFieldUpdateOperationsInput | number
@@ -34881,6 +34852,7 @@ export namespace Prisma {
     status?: EnumPostStatusFieldUpdateOperationsInput | $Enums.PostStatus
     publishedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     externalId?: NullableStringFieldUpdateOperationsInput | string | null
+    idempotencyKey?: NullableStringFieldUpdateOperationsInput | string | null
     likes?: IntFieldUpdateOperationsInput | number
     shares?: IntFieldUpdateOperationsInput | number
     comments?: IntFieldUpdateOperationsInput | number
@@ -34896,6 +34868,7 @@ export namespace Prisma {
     status?: EnumPostStatusFieldUpdateOperationsInput | $Enums.PostStatus
     publishedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     externalId?: NullableStringFieldUpdateOperationsInput | string | null
+    idempotencyKey?: NullableStringFieldUpdateOperationsInput | string | null
     likes?: IntFieldUpdateOperationsInput | number
     shares?: IntFieldUpdateOperationsInput | number
     comments?: IntFieldUpdateOperationsInput | number
@@ -34911,6 +34884,7 @@ export namespace Prisma {
     status?: $Enums.PostStatus
     publishedAt?: Date | string | null
     externalId?: string | null
+    idempotencyKey?: string | null
     likes?: number
     shares?: number
     comments?: number
@@ -34925,6 +34899,7 @@ export namespace Prisma {
     status?: EnumPostStatusFieldUpdateOperationsInput | $Enums.PostStatus
     publishedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     externalId?: NullableStringFieldUpdateOperationsInput | string | null
+    idempotencyKey?: NullableStringFieldUpdateOperationsInput | string | null
     likes?: IntFieldUpdateOperationsInput | number
     shares?: IntFieldUpdateOperationsInput | number
     comments?: IntFieldUpdateOperationsInput | number
@@ -34941,6 +34916,7 @@ export namespace Prisma {
     status?: EnumPostStatusFieldUpdateOperationsInput | $Enums.PostStatus
     publishedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     externalId?: NullableStringFieldUpdateOperationsInput | string | null
+    idempotencyKey?: NullableStringFieldUpdateOperationsInput | string | null
     likes?: IntFieldUpdateOperationsInput | number
     shares?: IntFieldUpdateOperationsInput | number
     comments?: IntFieldUpdateOperationsInput | number
@@ -34956,6 +34932,7 @@ export namespace Prisma {
     status?: EnumPostStatusFieldUpdateOperationsInput | $Enums.PostStatus
     publishedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     externalId?: NullableStringFieldUpdateOperationsInput | string | null
+    idempotencyKey?: NullableStringFieldUpdateOperationsInput | string | null
     likes?: IntFieldUpdateOperationsInput | number
     shares?: IntFieldUpdateOperationsInput | number
     comments?: IntFieldUpdateOperationsInput | number

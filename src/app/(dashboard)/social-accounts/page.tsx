@@ -9,13 +9,25 @@ import { FaXTwitter } from "react-icons/fa6";
 import { formatNumber } from "@/lib/utils";
 import { signIn } from "next-auth/react";
 
-const PLATFORM_CONFIG = [
-  { id: "FACEBOOK", label: "Facebook", Icon: FaFacebook, color: "#1877F2", bg: "#1877F215", provider: "facebook" },
-  { id: "TWITTER", label: "X (Twitter)", Icon: FaXTwitter, color: "#000000", bg: "#00000015", provider: "twitter" },
-  { id: "INSTAGRAM", label: "Instagram", Icon: FaInstagram, color: "#E1306C", bg: "#E1306C15", provider: "instagram" },
-  { id: "LINKEDIN", label: "LinkedIn", Icon: FaLinkedin, color: "#0A66C2", bg: "#0A66C215", provider: "linkedin" },
-  { id: "TIKTOK", label: "TikTok", Icon: FaTiktok, color: "#000000", bg: "#00000015", provider: "tiktok" },
-  { id: "YOUTUBE", label: "YouTube", Icon: FaYoutube, color: "#FF0000", bg: "#FF000015", provider: "google" },
+type PlatformConfig = {
+  id: string;
+  label: string;
+  Icon: React.ComponentType<{ style?: React.CSSProperties }>;
+  color: string;
+  bg: string;
+  provider: string;
+  /** Lowercase identifier consumed by the Zernio Connect API. */
+  zernioPlatform?: "facebook" | "twitter" | "instagram" | "linkedin" | "tiktok" | "youtube";
+};
+
+const PLATFORM_CONFIG: PlatformConfig[] = [
+  { id: "FACEBOOK", label: "Facebook", Icon: FaFacebook, color: "#1877F2", bg: "#1877F215", provider: "facebook", zernioPlatform: "facebook" },
+  { id: "TWITTER", label: "X (Twitter)", Icon: FaXTwitter, color: "#000000", bg: "#00000015", provider: "twitter", zernioPlatform: "twitter" },
+  { id: "INSTAGRAM", label: "Instagram", Icon: FaInstagram, color: "#E1306C", bg: "#E1306C15", provider: "instagram", zernioPlatform: "instagram" },
+  { id: "LINKEDIN", label: "LinkedIn", Icon: FaLinkedin, color: "#0A66C2", bg: "#0A66C215", provider: "linkedin", zernioPlatform: "linkedin" },
+  { id: "TIKTOK", label: "TikTok", Icon: FaTiktok, color: "#000000", bg: "#00000015", provider: "tiktok", zernioPlatform: "tiktok" },
+  { id: "YOUTUBE", label: "YouTube", Icon: FaYoutube, color: "#FF0000", bg: "#FF000015", provider: "google", zernioPlatform: "youtube" },
+  // WhatsApp uses Zernio's separate `connectWhatsAppCredentials` flow, not OAuth.
   { id: "WHATSAPP", label: "WhatsApp", Icon: FaWhatsapp, color: "#25D366", bg: "#25D36615", provider: "whatsapp" },
 ];
 
@@ -23,6 +35,7 @@ export default function SocialAccountsPage() {
   const [accounts, setAccounts] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
+  const [connectingPlatform, setConnectingPlatform] = useState<string | null>(null);
   const [open, setOpen] = useState(false);
 
   useEffect(() => { fetchAccounts(); }, []);
@@ -34,9 +47,41 @@ export default function SocialAccountsPage() {
     setLoading(false);
   }
 
-  async function connect(provider: string) {
-    if (!provider) return;
-    signIn(provider, { callbackUrl: "/dashboard" });
+  /**
+   * Kicks off the Zernio-hosted OAuth handshake for a platform. Hits
+   * /api/connect/zernio to mint a one-time auth URL, then performs a
+   * full-page redirect so Zernio can complete the handshake on its side.
+   */
+  async function connectViaZernio(platform: string) {
+    if (!platform) return;
+    setConnectingPlatform(platform);
+    try {
+      const res = await fetch(`/api/connect/zernio?platform=${encodeURIComponent(platform)}`, {
+        method: "GET",
+        cache: "no-store",
+      });
+      if (!res.ok) {
+        const body = await res.json().catch(() => ({}));
+        throw new Error(body?.error || `Connect failed (${res.status})`);
+      }
+      const { url } = (await res.json()) as { url?: string };
+      if (!url) throw new Error("Connect URL missing from server response");
+      window.location.href = url;
+    } catch (err) {
+      console.error("Zernio connect failed", err);
+      alert(err instanceof Error ? err.message : "Failed to start connection");
+      setConnectingPlatform(null);
+    }
+  }
+
+  function connect(config: PlatformConfig) {
+    if (config.zernioPlatform) {
+      connectViaZernio(config.zernioPlatform);
+      return;
+    }
+    if (config.provider) {
+      signIn(config.provider, { callbackUrl: "/dashboard" });
+    }
   }
 
   async function refreshProfiles() {
@@ -90,28 +135,35 @@ export default function SocialAccountsPage() {
             </DialogHeader>
             <div className="space-y-4 pt-2">
               <div className="grid grid-cols-2 gap-3">
-                {PLATFORM_CONFIG.map(({ id, label, Icon, color, bg, provider }) => (
-                  <button
-                    key={id}
-                    onClick={() => connect(provider)}
-                    className={`flex items-center gap-3 p-4 rounded-xl border-2 transition-all border-gray-100 bg-gray-50 hover:border-violet-200 hover:bg-violet-50/30 ${
-                      connectedIds.includes(id) ? "opacity-50 cursor-not-allowed" : ""
-                    }`}
-                    disabled={connectedIds.includes(id)}
-                  >
-                    <div className="w-10 h-10 rounded-lg flex items-center justify-center" style={{ background: bg }}>
-                      <Icon style={{ color, fontSize: "1.25rem" }} />
-                    </div>
-                    <div className="text-left">
-                      <span className="text-sm font-semibold text-gray-700 block">{label}</span>
-                      {connectedIds.includes(id) ? (
-                        <span className="text-[10px] text-emerald-500 font-medium">Connected</span>
-                      ) : (
-                        <span className="text-[10px] text-gray-400 font-medium">Click to connect</span>
-                      )}
-                    </div>
-                  </button>
-                ))}
+                {PLATFORM_CONFIG.map((config) => {
+                  const { id, label, Icon, color, bg, zernioPlatform } = config;
+                  const isConnected = connectedIds.includes(id);
+                  const isConnecting = connectingPlatform === zernioPlatform;
+                  return (
+                    <button
+                      key={id}
+                      onClick={() => connect(config)}
+                      className={`flex items-center gap-3 p-4 rounded-xl border-2 transition-all border-gray-100 bg-gray-50 hover:border-violet-200 hover:bg-violet-50/30 ${
+                        isConnected || isConnecting ? "opacity-50 cursor-not-allowed" : ""
+                      }`}
+                      disabled={isConnected || isConnecting}
+                    >
+                      <div className="w-10 h-10 rounded-lg flex items-center justify-center" style={{ background: bg }}>
+                        <Icon style={{ color, fontSize: "1.25rem" }} />
+                      </div>
+                      <div className="text-left">
+                        <span className="text-sm font-semibold text-gray-700 block">{label}</span>
+                        {isConnected ? (
+                          <span className="text-[10px] text-emerald-500 font-medium">Connected</span>
+                        ) : isConnecting ? (
+                          <span className="text-[10px] text-violet-500 font-medium">Redirecting…</span>
+                        ) : (
+                          <span className="text-[10px] text-gray-400 font-medium">Click to connect</span>
+                        )}
+                      </div>
+                    </button>
+                  );
+                })}
               </div>
               <p className="text-[10px] text-gray-400 text-center px-4">
                 By connecting your account, you agree to our Terms of Service and Privacy Policy. We will only access the data necessary to provide our services.
@@ -123,7 +175,8 @@ export default function SocialAccountsPage() {
 
       {/* All Platforms Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-        {PLATFORM_CONFIG.map(({ id, label, Icon, color, bg, provider }) => {
+        {PLATFORM_CONFIG.map((config) => {
+          const { id, label, Icon, color, bg } = config;
           const account = accounts.find((a) => a.platform === id);
           return (
             <div key={id} className={`bg-white rounded-2xl border p-5 transition-all ${account ? "border-gray-200 shadow-sm" : "border-dashed border-gray-200"}`}>
@@ -157,10 +210,11 @@ export default function SocialAccountsPage() {
                 </>
               ) : (
                 <button
-                  onClick={() => connect(provider)}
-                  className="mt-2 text-sm text-violet-600 font-medium hover:text-violet-700 transition-colors"
+                  onClick={() => connect(config)}
+                  disabled={connectingPlatform === config.zernioPlatform}
+                  className="mt-2 text-sm text-violet-600 font-medium hover:text-violet-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                 >
-                  + Connect
+                  {connectingPlatform === config.zernioPlatform ? "Redirecting…" : "+ Connect"}
                 </button>
               )}
             </div>

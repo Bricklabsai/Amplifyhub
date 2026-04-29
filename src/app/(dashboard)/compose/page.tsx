@@ -62,7 +62,6 @@ function ComposeContent() {
   const [subject, setSubject] = useState("");
   const [selectedPlatforms, setSelectedPlatforms] = useState(["FACEBOOK", "TWITTER", "INSTAGRAM", "LINKEDIN"]);
   const [tone, setTone] = useState("professional");
-  const [variations, setVariations] = useState<Record<string, string>>({});
   const [suggestions, setSuggestions] = useState<string[]>([]);
   const [loading, setLoading] = useState(false);
   const [enhancing, setEnhancing] = useState(false);
@@ -80,7 +79,7 @@ function ComposeContent() {
   const [selectedContactIds, setSelectedContactIds] = useState<string[]>([]);
   const [socialAccounts, setSocialAccounts] = useState<SocialAccount[]>([]);
   const [publishAccountIds, setPublishAccountIds] = useState<string[]>([]);
-  const [publishingPlatform, setPublishingPlatform] = useState<string | null>(null);
+  const [publishing, setPublishing] = useState(false);
   const [publishResult, setPublishResult] = useState("");
   const [scheduleEnabled, setScheduleEnabled] = useState(false);
   const [scheduleDate, setScheduleDate] = useState("");
@@ -148,14 +147,13 @@ function ComposeContent() {
   async function generate() {
     if (!prompt.trim()) return;
     setLoading(true);
-    setVariations({});
     const res = await fetch("/api/ai/generate", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ prompt, platforms: selectedPlatforms, tone }),
     });
     const data = await res.json();
-    setVariations(data.variations || {});
+    if (data.content) setMessage(data.content);
     setLoading(false);
   }
 
@@ -189,22 +187,29 @@ function ComposeContent() {
     setUploading(false);
   }
 
-  async function savePost(platform: string, content: string) {
+  async function saveAsDraft() {
+    if (!message.trim()) return;
     setSaving(true);
     const mediaUrls = media.filter((m) => selectedMedia.includes(m.id)).map((m) => m.url);
     await fetch("/api/posts", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ content, status: "DRAFT", title: `${platform} draft`, mediaUrls }),
+      body: JSON.stringify({ 
+        content: message, 
+        status: "DRAFT", 
+        title: `Draft - ${new Date().toLocaleDateString()}`, 
+        mediaUrls,
+        selectedSocialAccountIds: publishAccountIds
+      }),
     });
     setSaved(true);
     setTimeout(() => setSaved(false), 2000);
     setSaving(false);
   }
 
-  async function publishPost(platform: string, content: string) {
-    if (publishAccountIds.length === 0 || !content.trim()) return;
-    setPublishingPlatform(platform);
+  async function publishToAll() {
+    if (publishAccountIds.length === 0 || !message.trim()) return;
+    setPublishing(true);
     setPublishResult("");
     const mediaUrls = media.filter((m) => selectedMedia.includes(m.id)).map((m) => m.url);
 
@@ -212,16 +217,17 @@ function ComposeContent() {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
-        content,
+        content: message,
         status: "DRAFT",
-        title: `${platform} post`,
+        title: `Post - ${new Date().toLocaleDateString()}`,
         mediaUrls,
+        selectedSocialAccountIds: publishAccountIds,
       }),
     });
     const created = await createRes.json();
     if (!createRes.ok || !created?.id) {
       setPublishResult(created?.error || "Failed to create post for publishing.");
-      setPublishingPlatform(null);
+      setPublishing(false);
       return;
     }
 
@@ -230,14 +236,14 @@ function ComposeContent() {
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
         action: "publish",
-        content,
+        content: message,
         mediaUrls,
         selectedSocialAccountIds: publishAccountIds,
       }),
     });
     const publishData = await publishRes.json();
     setPublishResult(publishRes.ok ? "Post published to selected social accounts." : publishData?.error || "Publish failed.");
-    setPublishingPlatform(null);
+    setPublishing(false);
   }
 
   async function scheduleAllPosts() {
@@ -249,7 +255,7 @@ function ComposeContent() {
     // We'll create one main Post that will be picked up by the scheduler
     // In a real scenario, you might want one per platform if they differ, 
     // but the current /api/scheduler logic publishes to ALL active social accounts
-    const content = message || Object.values(variations)[0] || prompt;
+    const content = message || prompt;
     if (!content.trim()) {
       setScheduling(false);
       return;
@@ -264,6 +270,7 @@ function ComposeContent() {
         scheduledAt: scheduledAt.toISOString(),
         mediaUrls,
         title: `Scheduled content for ${scheduleDate}`,
+        selectedSocialAccountIds: publishAccountIds,
       }),
     });
 
@@ -280,7 +287,7 @@ function ComposeContent() {
   }
 
   async function sendNow() {
-    const content = message || Object.values(variations)[0] || prompt;
+    const content = message || prompt;
     if (!content.trim()) return;
     setSending(true);
     const mediaUrls = media.filter((m) => selectedMedia.includes(m.id)).map((m) => m.url);
@@ -459,6 +466,19 @@ function ComposeContent() {
             </Select>
           </div>
         </div>
+
+        {channel === "EMAIL" && (
+          <div className="mt-2">
+            <Label className="text-sm font-semibold text-gray-700 mb-2 block">Email Subject</Label>
+            <Input
+              placeholder="Enter email subject..."
+              value={subject}
+              onChange={(e) => setSubject(e.target.value)}
+              className="rounded-xl border-gray-200 h-11"
+            />
+          </div>
+        )}
+
         <div>
           <Label className="text-sm font-semibold text-gray-700 mb-2 block">Audience Categories</Label>
           <div className="flex flex-wrap gap-2">
@@ -507,6 +527,22 @@ function ComposeContent() {
       </div>
 
       <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-6">
+        <div className="flex items-center justify-between mb-4">
+          <h3 className="font-bold text-gray-900" style={{ fontFamily: "Outfit, sans-serif" }}>Review & Edit Final Post</h3>
+          <span className="text-xs text-gray-400">Character count: {message.length}</span>
+        </div>
+        <Textarea
+          value={message}
+          onChange={(e) => setMessage(e.target.value)}
+          placeholder="Finalize your generated content here before publishing..."
+          className="min-h-40 rounded-xl border-gray-200 focus:border-violet-400 shadow-inner bg-gray-50/10"
+        />
+        <p className="text-[10px] text-gray-400 mt-2">
+          Tip: You can edit this text directly. All previews below will update in real-time.
+        </p>
+      </div>
+
+      <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-6">
         <h3 className="font-bold text-gray-900 mb-4" style={{ fontFamily: "Outfit, sans-serif" }}>Preview on Selected Social Accounts</h3>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           {selectedPlatforms.map((platform) => {
@@ -515,7 +551,7 @@ function ComposeContent() {
             return (
               <div key={platform} className="rounded-xl border border-gray-100 p-4 bg-gray-50">
                 <div className="font-semibold text-sm mb-2">{p.label}</div>
-                <p className="text-sm text-gray-700 whitespace-pre-wrap">{message || variations[platform] || prompt}</p>
+                <p className="text-sm text-gray-700 whitespace-pre-wrap">{message || prompt}</p>
                 {selectedMediaItems.length > 0 && (
                   <div className="mt-3 grid grid-cols-3 gap-2">
                     {selectedMediaItems.map((item) =>
@@ -534,6 +570,51 @@ function ComposeContent() {
               </div>
             );
           })}
+        </div>
+      </div>
+
+      <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-6 space-y-4">
+        <h3 className="font-bold text-gray-900" style={{ fontFamily: "Outfit, sans-serif" }}>Finalize & Publish</h3>
+        <div className="space-y-4">
+          <div className="space-y-2">
+            <Label className="text-sm font-semibold text-gray-700">Select Accounts for Publishing</Label>
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-2">
+              {socialAccounts.map((account) => (
+                <label key={`publish-${account.id}`} className="flex items-center gap-2 text-sm text-gray-700 border border-gray-200 rounded-lg p-2 bg-gray-50/50">
+                  <input
+                    type="checkbox"
+                    checked={publishAccountIds.includes(account.id)}
+                    onChange={() => toggleArrayValue(account.id, setPublishAccountIds)}
+                  />
+                  <span className="truncate text-xs font-medium">{account.accountName}</span>
+                  <span className="text-[10px] text-gray-400 uppercase">{account.platform}</span>
+                </label>
+              ))}
+              {socialAccounts.length === 0 && (
+                <p className="text-xs text-amber-600 bg-amber-50 p-2 rounded-lg border border-amber-100 col-span-full">
+                  No connected social accounts found.
+                </p>
+              )}
+            </div>
+          </div>
+          
+          <div className="flex flex-wrap gap-3 pt-2">
+            <Button
+              onClick={publishToAll}
+              disabled={publishing || publishAccountIds.length === 0 || !message.trim()}
+              className="brand-gradient-bg text-white border-0 hover:opacity-90 px-8 h-11 rounded-xl font-semibold"
+            >
+              {publishing ? "Publishing..." : "Publish to All Selected Accounts"}
+            </Button>
+            <Button
+              onClick={saveAsDraft}
+              disabled={saving || !message.trim()}
+              variant="outline"
+              className="px-8 h-11 rounded-xl font-semibold border-gray-200"
+            >
+              {saving ? "Saving..." : "Save as Draft"}
+            </Button>
+          </div>
         </div>
       </div>
 
@@ -574,127 +655,15 @@ function ComposeContent() {
             </div>
             <Button 
               onClick={scheduleAllPosts} 
-              disabled={scheduling || !scheduleDate || !scheduleTime}
+              disabled={scheduling || !scheduleDate || !scheduleTime || publishAccountIds.length === 0}
               className="bg-blue-600 text-white border-0 hover:bg-blue-700 px-8 h-11 rounded-xl font-semibold w-full md:w-auto"
             >
               <HiCalendar className="mr-2" />
-              {scheduling ? "Scheduling..." : "Confirm Schedule for All Social Content"}
+              {scheduling ? "Scheduling..." : "Confirm Schedule for All Selected Accounts"}
             </Button>
           </div>
         )}
       </div>
-
-      {/* Results */}
-      {Object.keys(variations).length > 0 && (
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          {Object.entries(variations).map(([platform, content]) => {
-            const p = PLATFORMS.find((x) => x.id === platform);
-            if (!p) return null;
-            const { Icon, color, label } = p;
-            return (
-              <div key={platform} className="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden">
-                <div className="flex items-center justify-between px-5 py-4 border-b border-gray-50">
-                  <div className="flex items-center gap-2">
-                    <Icon style={{ color, fontSize: "1.2rem" }} />
-                    <span className="font-bold text-gray-900 text-sm" style={{ fontFamily: "Outfit, sans-serif" }}>{label}</span>
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <button
-                      onClick={() => savePost(platform, content as string)}
-                      className="flex items-center gap-1 text-xs text-gray-500 hover:text-violet-600 transition-colors"
-                    >
-                      <HiSave className="text-sm" />
-                      Save as draft
-                    </button>
-                    <Dialog>
-                      <DialogTrigger asChild>
-                        <button className="flex items-center gap-1 text-xs text-gray-500 hover:text-violet-600 transition-colors">
-                          <HiEye className="text-sm" />
-                          Preview & publish
-                        </button>
-                      </DialogTrigger>
-                      <DialogContent className="max-w-2xl">
-                        <DialogHeader>
-                          <DialogTitle>{label} post preview</DialogTitle>
-                          <DialogDescription>Review all content before publishing to your social accounts.</DialogDescription>
-                        </DialogHeader>
-                        <div className="space-y-4">
-                          <div className="rounded-lg border border-gray-100 bg-gray-50 p-4">
-                            <p className="text-sm text-gray-700 whitespace-pre-wrap">{content as string}</p>
-                            {selectedMediaItems.length > 0 && (
-                              <div className="mt-3 grid grid-cols-3 gap-2">
-                                {selectedMediaItems.map((item) =>
-                                  item.type === "video" ? (
-                                    <video key={`preview-${platform}-${item.id}`} src={item.url} className="w-full h-20 object-cover rounded-md" />
-                                  ) : (
-                                    <img key={`preview-${platform}-${item.id}`} src={item.url} alt={item.filename} className="w-full h-20 object-cover rounded-md" />
-                                  )
-                                )}
-                              </div>
-                            )}
-                          </div>
-                          <div className="space-y-2">
-                            <Label className="text-sm font-semibold text-gray-700">Publish to social accounts</Label>
-                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
-                              {socialAccounts.map((account) => (
-                                <label key={`${platform}-${account.id}`} className="flex items-center gap-2 text-sm text-gray-700 border border-gray-200 rounded-lg p-2">
-                                  <input
-                                    type="checkbox"
-                                    checked={publishAccountIds.includes(account.id)}
-                                    onChange={() => toggleArrayValue(account.id, setPublishAccountIds)}
-                                  />
-                                  <span className="truncate">{account.accountName} ({account.platform})</span>
-                                </label>
-                              ))}
-                            </div>
-                          </div>
-                        </div>
-                        <DialogFooter>
-                          <Button
-                            onClick={() => publishPost(platform, content as string)}
-                            disabled={publishingPlatform === platform || publishAccountIds.length === 0}
-                            className="brand-gradient-bg text-white border-0 hover:opacity-90"
-                          >
-                            <HiPaperAirplane className="mr-1" />
-                            {publishingPlatform === platform ? "Publishing..." : "Publish now"}
-                          </Button>
-                        </DialogFooter>
-                      </DialogContent>
-                    </Dialog>
-                  </div>
-                </div>
-                <div className="p-5">
-                  <Textarea
-                    value={content as string}
-                    onChange={(e) => setVariations((v) => ({ ...v, [platform]: e.target.value }))}
-                    className="min-h-40 border-0 resize-none text-sm text-gray-700 p-0 focus:ring-0 shadow-none"
-                  />
-                  <div className="flex items-center justify-between mt-3 pt-3 border-t border-gray-50">
-                    <span className="text-xs text-gray-400">{(content as string).length} chars</span>
-                    <Button
-                      size="sm"
-                      onClick={() => savePost(platform, content as string)}
-                      className="brand-gradient-bg text-white border-0 hover:opacity-90 rounded-lg text-xs h-8"
-                    >
-                      <HiSave className="mr-1" />
-                      Save Draft
-                    </Button>
-                    <Button
-                      size="sm"
-                      onClick={() => publishPost(platform, content as string)}
-                      disabled={publishingPlatform === platform || publishAccountIds.length === 0}
-                      className="bg-emerald-600 text-white hover:bg-emerald-700 rounded-lg text-xs h-8"
-                    >
-                      <HiPaperAirplane className="mr-1" />
-                      {publishingPlatform === platform ? "Publishing..." : "Publish"}
-                    </Button>
-                  </div>
-                </div>
-              </div>
-            );
-          })}
-        </div>
-      )}
 
       {saved && (
         <div className="fixed bottom-6 right-6 bg-emerald-500 text-white px-5 py-3 rounded-xl shadow-xl text-sm font-medium flex items-center gap-2 z-50">
