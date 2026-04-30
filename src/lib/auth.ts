@@ -1,4 +1,4 @@
-import type { NextAuthOptions } from "next-auth";
+import { type NextAuthOptions } from "next-auth";
 import type { Adapter } from "next-auth/adapters";
 import CredentialsProvider from "next-auth/providers/credentials";
 import FacebookProvider from "next-auth/providers/facebook";
@@ -9,6 +9,7 @@ import GoogleProvider from "next-auth/providers/google";
 import { PrismaAdapter } from "@auth/prisma-adapter";
 import type { Platform } from "@/generated/client";
 import { prisma } from "@/lib/prisma";
+import { getZernioClient } from "@/lib/zernio";
 import bcrypt from "bcryptjs";
 
 import { refreshSocialProfile } from "./social";
@@ -120,6 +121,55 @@ async function syncSocialAccountFromOAuth(
     await refreshSocialProfile(result.id);
   } catch (error) {
     console.error(`Failed to refresh profile after ${source}:`, error);
+  }
+}
+
+/**
+ * Ensures a user has a Zernio profile. If the user doesn't have a
+ * zernioProfileId, creates a new profile and saves the ID to the database.
+ */
+async function ensureZernioProfile(userId: string): Promise<void> {
+  try {
+    const user = await prisma.user.findUnique({
+      where: { id: userId },
+      select: { id: true, name: true, email: true, zernioProfileId: true },
+    });
+
+    if (!user) {
+      console.error(`[ensureZernioProfile] User not found: ${userId}`);
+      return;
+    }
+
+    // User already has a Zernio profile
+    if (user.zernioProfileId) {
+      return;
+    }
+
+    // Create a new Zernio profile for this user
+    const zernio = getZernioClient();
+    const profileResult = await zernio.profiles.createProfile({
+      body: { name: user.name || user.email },
+    });
+
+    if (profileResult.error || !profileResult.data?.id) {
+      console.error(
+        `[ensureZernioProfile] Failed to create profile for user ${userId}:`,
+        profileResult.error
+      );
+      return;
+    }
+
+    // Update the user with the Zernio profile ID
+    await prisma.user.update({
+      where: { id: userId },
+      data: { zernioProfileId: profileResult.data.id },
+    });
+
+    console.log(
+      `[ensureZernioProfile] Created Zernio profile ${profileResult.data.id} for user ${userId}`
+    );
+  } catch (error) {
+    console.error(`[ensureZernioProfile] Error for user ${userId}:`, error);
   }
 }
 
@@ -272,6 +322,15 @@ export const authOptions: NextAuthOptions = {
           );
         } catch (error) {
           console.error("[signIn] Failed to sync social account:", error);
+        }
+      }
+
+      // Ensure user has a Zernio profile
+      if (user.id) {
+        try {
+          await ensureZernioProfile(user.id);
+        } catch (error) {
+          console.error("[signIn] Failed to ensure Zernio profile:", error);
         }
       }
 

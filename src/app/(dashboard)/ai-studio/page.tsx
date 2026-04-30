@@ -47,8 +47,8 @@ export default function AIStudioPage() {
         <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-6 space-y-5">
           <div className="flex items-center gap-2">
             <HiSparkles className="text-violet-500 text-xl" />
-            <h2 className="font-bold text-gray-900" style={{ fontFamily: "Outfit, sans-serif" }}>AI Image Generator</h2>
-            <Badge className="bg-violet-100 text-violet-700 border-0 text-xs">Grok / OpenAI / Unsplash</Badge>
+            <h2 className="font-bold text-gray-900" style={{ fontFamily: "Outfit, sans-serif" }}>AI Content Generator</h2>
+            <Badge className="bg-violet-100 text-violet-700 border-0 text-xs">Gemini Flash / OpenAI</Badge>
           </div>
 
           <div>
@@ -109,7 +109,7 @@ export default function AIStudioPage() {
 
           {isMock && (
             <p className="text-xs text-amber-600 bg-amber-50 rounded-xl p-3">
-              ⚡ Using Unsplash mock. Add GROK_OPENAI_API_KEY (or XAI_API_KEY) to enable Grok image generation.
+              ⚡ Using mock content. Add NANO_API_KEY to your environment to enable Gemini AI generation.
             </p>
           )}
         </div>

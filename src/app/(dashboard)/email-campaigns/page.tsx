@@ -1,13 +1,10 @@
 "use client";
 import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { Textarea } from "@/components/ui/textarea";
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { Badge } from "@/components/ui/badge";
-import { HiPlus, HiMail, HiPaperAirplane, HiUsers } from "react-icons/hi";
+import { HiMail, HiPaperAirplane } from "react-icons/hi";
 import { formatDate } from "@/lib/utils";
+import EmailCampaignWizard from "@/components/email-campaigns/EmailCampaignWizard";
 
 const STATUS_COLORS: Record<string, string> = {
   SENT: "bg-emerald-100 text-emerald-700",
@@ -21,13 +18,9 @@ export default function EmailCampaignsPage() {
   const [campaigns, setCampaigns] = useState<any[]>([]);
   const [groups, setGroups] = useState<Group[]>([]);
   const [loading, setLoading] = useState(true);
-  const [open, setOpen] = useState(false);
   const [sending, setSending] = useState<string | null>(null);
-  const [attaching, setAttaching] = useState<string | null>(null);
-  const [form, setForm] = useState({ name: "", subject: "", htmlContent: "", previewText: "" });
-  const [selectedGroupIds, setSelectedGroupIds] = useState<string[]>([]);
 
-  useEffect(() => { 
+  useEffect(() => {
     fetchCampaigns();
     fetchGroups();
   }, []);
@@ -43,35 +36,6 @@ export default function EmailCampaignsPage() {
     const res = await fetch("/api/audience");
     const data = await res.json();
     setGroups(data);
-  }
-
-  function toggleGroup(id: string) {
-    setSelectedGroupIds((prev) => 
-      prev.includes(id) ? prev.filter(g => g !== id) : [...prev, id]
-    );
-  }
-
-  async function create() {
-    const res = await fetch("/api/email-campaigns", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(form),
-    });
-    const data = await res.json();
-    
-    // If groups are selected, attach them to the new campaign
-    if (selectedGroupIds.length > 0) {
-      await fetch(`/api/email-campaigns/${data.id}/attach-groups`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ groupIds: selectedGroupIds }),
-      });
-    }
-
-    await fetchCampaigns();
-    setOpen(false);
-    setForm({ name: "", subject: "", htmlContent: "", previewText: "" });
-    setSelectedGroupIds([]);
   }
 
   async function send(id: string) {
@@ -101,78 +65,7 @@ export default function EmailCampaignsPage() {
     <div className="max-w-6xl space-y-6">
       <div className="flex items-center justify-between">
         <p className="text-gray-500 text-sm">{campaigns.length} email campaigns</p>
-        <Dialog open={open} onOpenChange={setOpen}>
-          <DialogTrigger asChild>
-            <Button className="brand-gradient-bg text-white border-0 hover:opacity-90 rounded-xl font-semibold text-sm flex items-center gap-2">
-              <HiPlus /> New Campaign
-            </Button>
-          </DialogTrigger>
-          <DialogContent className="rounded-2xl max-w-lg">
-            <DialogHeader>
-              <DialogTitle style={{ fontFamily: "Outfit, sans-serif" }}>Create Email Campaign</DialogTitle>
-            </DialogHeader>
-            <div className="space-y-4 pt-2">
-              <div>
-                <Label className="text-sm font-semibold text-gray-700 mb-2 block">Campaign Name</Label>
-                <Input value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })} className="rounded-xl h-11" placeholder="Monthly Newsletter" />
-              </div>
-              <div>
-                <Label className="text-sm font-semibold text-gray-700 mb-2 block">Subject Line</Label>
-                <Input value={form.subject} onChange={(e) => setForm({ ...form, subject: e.target.value })} className="rounded-xl h-11" placeholder="Your exciting subject line" />
-              </div>
-              <div>
-                <Label className="text-sm font-semibold text-gray-700 mb-2 block">Preview Text</Label>
-                <Input value={form.previewText} onChange={(e) => setForm({ ...form, previewText: e.target.value })} className="rounded-xl h-11" placeholder="Short preview shown in inbox..." />
-              </div>
-              <div>
-                <Label className="text-sm font-semibold text-gray-700 mb-2 block">Email Content (HTML or text)</Label>
-                <Textarea
-                  value={form.htmlContent}
-                  onChange={(e) => setForm({ ...form, htmlContent: e.target.value })}
-                  className="rounded-xl min-h-32 font-mono text-xs"
-                  placeholder="<h1>Hello {{firstName}}!</h1><p>Your email content here...</p>"
-                />
-                <p className="text-[10px] text-gray-400 mt-1">
-                  Available tags: {"{{firstName}}"}, {"{{lastName}}"}, {"{{name}}"}, {"{{company}}"}, {"{{email}}"}
-                </p>
-              </div>
-
-              <div>
-                <Label className="text-sm font-semibold text-gray-700 mb-2 block">
-                  <HiUsers className="inline mr-1" /> Target Audience Groups
-                </Label>
-                <div className="flex flex-wrap gap-2">
-                  {groups.map((group) => (
-                    <button
-                      key={group.id}
-                      type="button"
-                      onClick={() => toggleGroup(group.id)}
-                      className={`px-3 py-1.5 rounded-lg text-xs border transition-all ${
-                        selectedGroupIds.includes(group.id)
-                          ? "border-violet-500 bg-violet-50 text-violet-700"
-                          : "border-gray-200 text-gray-600 hover:border-gray-300"
-                      }`}
-                    >
-                      {group.name} ({group._count?.contacts || 0})
-                    </button>
-                  ))}
-                </div>
-                {selectedGroupIds.length > 0 && (
-                  <p className="text-xs text-gray-500 mt-2">
-                    {selectedGroupIds.reduce((total, id) => {
-                      const g = groups.find(x => x.id === id);
-                      return total + (g?._count?.contacts || 0);
-                    }, 0)} total recipients selected
-                  </p>
-                )}
-              </div>
-
-              <Button onClick={create} disabled={!form.name || !form.subject} className="w-full brand-gradient-bg text-white border-0 hover:opacity-90 rounded-xl h-11 font-semibold">
-                Create Campaign
-              </Button>
-            </div>
-          </DialogContent>
-        </Dialog>
+        <EmailCampaignWizard groups={groups} onCampaignCreated={fetchCampaigns} />
       </div>
 
       {loading ? (

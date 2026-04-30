@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
+import { getZernioClient } from "@/lib/zernio";
 import bcrypt from "bcryptjs";
 import { z } from "zod";
 
@@ -23,6 +24,31 @@ export async function POST(req: NextRequest) {
     const user = await prisma.user.create({
       data: { name, email, password: hashed },
     });
+
+    // Create Zernio profile for the user
+    try {
+      const zernio = getZernioClient();
+      const profileResult = await zernio.profiles.createProfile({
+        body: { name: user.name || user.email },
+      });
+
+      if (profileResult.error || !profileResult.data?.id) {
+        console.error(
+          "Failed to create Zernio profile:",
+          profileResult.error
+        );
+        // Log the error but continue - profile can be created later
+      } else {
+        // Update user with the Zernio profile ID
+        await prisma.user.update({
+          where: { id: user.id },
+          data: { zernioProfileId: profileResult.data.id },
+        });
+      }
+    } catch (zernioError) {
+      console.error("Error creating Zernio profile:", zernioError);
+      // Continue without blocking user creation
+    }
 
     // Assign basic plan
     const basicPlan = await prisma.plan.findFirst({ where: { name: "Basic" } });
