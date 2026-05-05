@@ -124,55 +124,6 @@ async function syncSocialAccountFromOAuth(
   }
 }
 
-/**
- * Ensures a user has a Zernio profile. If the user doesn't have a
- * zernioProfileId, creates a new profile and saves the ID to the database.
- */
-async function ensureZernioProfile(userId: string): Promise<void> {
-  try {
-    const user = await prisma.user.findUnique({
-      where: { id: userId },
-      select: { id: true, name: true, email: true, zernioProfileId: true },
-    });
-
-    if (!user) {
-      console.error(`[ensureZernioProfile] User not found: ${userId}`);
-      return;
-    }
-
-    // User already has a Zernio profile
-    if (user.zernioProfileId) {
-      return;
-    }
-
-    // Create a new Zernio profile for this user
-    const zernio = getZernioClient();
-    const profileResult = await zernio.profiles.createProfile({
-      body: { name: user.name || user.email },
-    });
-
-    if (profileResult.error || !profileResult.data?.id) {
-      console.error(
-        `[ensureZernioProfile] Failed to create profile for user ${userId}:`,
-        profileResult.error
-      );
-      return;
-    }
-
-    // Update the user with the Zernio profile ID
-    await prisma.user.update({
-      where: { id: userId },
-      data: { zernioProfileId: profileResult.data.id },
-    });
-
-    console.log(
-      `[ensureZernioProfile] Created Zernio profile ${profileResult.data.id} for user ${userId}`
-    );
-  } catch (error) {
-    console.error(`[ensureZernioProfile] Error for user ${userId}:`, error);
-  }
-}
-
 export const authOptions: NextAuthOptions = {
   adapter: PrismaAdapter(prisma) as Adapter,
   providers: [
@@ -325,15 +276,7 @@ export const authOptions: NextAuthOptions = {
         }
       }
 
-      // Ensure user has a Zernio profile
-      if (user.id) {
-        try {
-          await ensureZernioProfile(user.id);
-        } catch (error) {
-          console.error("[signIn] Failed to ensure Zernio profile:", error);
-        }
-      }
-
+      // Zernio profile is created only during signup, not during login
       return true;
     },
     async jwt({ token, user }) {

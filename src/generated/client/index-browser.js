@@ -121,6 +121,16 @@ exports.Prisma.TransactionIsolationLevel = makeStrictEnum({
   Serializable: 'Serializable'
 });
 
+exports.Prisma.WhatsAppConfigScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  phoneNumberId: 'phoneNumberId',
+  wabaId: 'wabaId',
+  accessToken: 'accessToken',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
 exports.Prisma.UserScalarFieldEnum = {
   id: 'id',
   name: 'name',
@@ -172,6 +182,9 @@ exports.Prisma.PlanScalarFieldEnum = {
   postsPerMonth: 'postsPerMonth',
   platforms: 'platforms',
   aiCredits: 'aiCredits',
+  aiTextLimit: 'aiTextLimit',
+  aiImageLimit: 'aiImageLimit',
+  paystackPlanCode: 'paystackPlanCode',
   createdAt: 'createdAt'
 };
 
@@ -182,6 +195,26 @@ exports.Prisma.SubscriptionScalarFieldEnum = {
   status: 'status',
   startDate: 'startDate',
   endDate: 'endDate',
+  postsUsed: 'postsUsed',
+  aiTextUsed: 'aiTextUsed',
+  aiImageUsed: 'aiImageUsed',
+  lastResetAt: 'lastResetAt',
+  paystackSubscriptionCode: 'paystackSubscriptionCode',
+  paystackCustomerCode: 'paystackCustomerCode',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.TransactionScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  amount: 'amount',
+  currency: 'currency',
+  status: 'status',
+  reference: 'reference',
+  paystackId: 'paystackId',
+  channel: 'channel',
+  paidAt: 'paidAt',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 };
@@ -465,12 +498,14 @@ exports.EmailCampaignStatus = exports.$Enums.EmailCampaignStatus = {
 };
 
 exports.Prisma.ModelName = {
+  WhatsAppConfig: 'WhatsAppConfig',
   User: 'User',
   Account: 'Account',
   Session: 'Session',
   VerificationToken: 'VerificationToken',
   Plan: 'Plan',
   Subscription: 'Subscription',
+  Transaction: 'Transaction',
   SocialAccount: 'SocialAccount',
   Post: 'Post',
   PlatformPost: 'PlatformPost',

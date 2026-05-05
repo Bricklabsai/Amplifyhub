@@ -3,17 +3,59 @@ import { useState, useEffect } from "react";
 import { HiCheck, HiSparkles, HiCreditCard } from "react-icons/hi";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import { UsageStats } from "@/components/billing/UsageStats";
 
 export default function BillingPage() {
   const [plans, setPlans] = useState<any[]>([]);
+  const [currentPlan, setCurrentPlan] = useState<any>(null);
   const [loading, setLoading] = useState(true);
+  const [upgradeLoading, setUpgradeLoading] = useState<string | null>(null);
 
   useEffect(() => {
-    fetch("/api/plans").then((r) => r.json()).then((d) => { setPlans(d); setLoading(false); });
+    Promise.all([
+      fetch("/api/plans").then((r) => r.json()),
+      fetch("/api/billing/info").then((r) => r.json()),
+    ]).then(([plansData, billingData]) => {
+      setPlans(plansData);
+      setCurrentPlan(billingData.subscription?.plan);
+      setLoading(false);
+    });
   }, []);
 
+  const handleUpgrade = async (planId: string) => {
+    setUpgradeLoading(planId);
+    try {
+      const res = await fetch("/api/payments/initialize", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ planId }),
+      });
+
+      const data = await res.json();
+      if (data.authorization_url) {
+        window.location.href = data.authorization_url;
+      } else if (data.success) {
+        // Free plan - refresh page to show new subscription
+        window.location.reload();
+      } else {
+        alert(data.error || "Failed to initialize payment");
+      }
+    } catch (error) {
+      console.error("Upgrade error:", error);
+      alert("Failed to process upgrade");
+    } finally {
+      setUpgradeLoading(null);
+    }
+  };
+
   return (
-    <div className="max-w-5xl space-y-8">
+    <div className="max-w-6xl space-y-8">
+      {/* Usage Stats */}
+      <div>
+        <h3 className="font-bold text-gray-900 text-xl mb-4" style={{ fontFamily: "Outfit, sans-serif" }}>Your Usage</h3>
+        <UsageStats />
+      </div>
+
       {/* Current Plan Banner */}
       <div className="brand-gradient-bg rounded-2xl p-6 text-white relative overflow-hidden">
         <div className="absolute top-0 right-0 w-64 h-64 bg-white/5 rounded-full -translate-y-1/2 translate-x-1/2" />
@@ -22,11 +64,15 @@ export default function BillingPage() {
             <HiCreditCard className="text-xl" />
             <p className="font-semibold text-sm text-white/80">Current Subscription</p>
           </div>
-          <h2 className="text-3xl font-black mb-1" style={{ fontFamily: "Outfit, sans-serif" }}>Pro Plan</h2>
-          <p className="text-white/70 text-sm">Your subscription renews on May 19, 2024</p>
+          <h2 className="text-3xl font-black mb-1" style={{ fontFamily: "Outfit, sans-serif" }}>
+            {currentPlan?.name || "Loading..."}
+          </h2>
+          <p className="text-white/70 text-sm">{currentPlan?.description}</p>
           <div className="flex items-center gap-3 mt-4">
             <span className="bg-white/20 text-white text-xs font-medium px-3 py-1 rounded-full">✓ Active</span>
-            <span className="text-white/60 text-xs">Payment via Stripe</span>
+            {currentPlan?.price === 0 && (
+              <span className="text-white/60 text-xs">Free forever plan</span>
+            )}
           </div>
         </div>
       </div>
@@ -41,19 +87,19 @@ export default function BillingPage() {
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             {plans.map((plan, idx) => {
-              const isPro = plan.name === "Pro";
+              const isCurrent = currentPlan?.id === plan.id;
               const gradients = ["from-blue-500 to-violet-500", "from-violet-500 to-pink-500", "from-pink-500 to-red-500"];
               return (
                 <div
                   key={plan.id}
                   className={`relative bg-white rounded-3xl border p-7 transition-all ${
-                    isPro ? "border-violet-400 shadow-2xl shadow-violet-100" : "border-gray-200 hover:shadow-lg"
+                    isCurrent ? "border-violet-400 shadow-2xl shadow-violet-100" : "border-gray-200 hover:shadow-lg"
                   }`}
                 >
-                  {isPro && (
+                  {isCurrent && (
                     <div className="absolute -top-3 left-1/2 -translate-x-1/2">
                       <span className="brand-gradient-bg text-white text-xs font-bold px-4 py-1 rounded-full shadow-md">
-                        ⚡ Most Popular
+                        ✓ Current Plan
                       </span>
                     </div>
                   )}
@@ -85,19 +131,20 @@ export default function BillingPage() {
 
                   <div className="space-y-2 text-xs text-gray-400 mb-6 bg-gray-50 rounded-xl p-3">
                     <div className="flex justify-between"><span>Posts/month</span><span className="font-semibold text-gray-700">{plan.postsPerMonth >= 999999 ? "Unlimited" : plan.postsPerMonth}</span></div>
-                    <div className="flex justify-between"><span>AI Credits</span><span className="font-semibold text-gray-700">{plan.aiCredits >= 999999 ? "Unlimited" : plan.aiCredits}</span></div>
-                    <div className="flex justify-between"><span>Platforms</span><span className="font-semibold text-gray-700">{plan.platforms >= 999999 ? "Unlimited" : plan.platforms}</span></div>
+                    <div className="flex justify-between"><span>AI Text</span><span className="font-semibold text-gray-700">{plan.aiTextLimit >= 999999 ? "Unlimited" : plan.aiTextLimit}</span></div>
+                    <div className="flex justify-between"><span>AI Image</span><span className="font-semibold text-gray-700">{plan.aiImageLimit >= 999999 ? "Unlimited" : plan.aiImageLimit}</span></div>
                   </div>
 
                   <Button
                     className={`w-full rounded-xl font-bold py-5 ${
-                      isPro
-                        ? "brand-gradient-bg text-white border-0 hover:opacity-90"
+                      isCurrent
+                        ? "brand-gradient-bg text-white border-0 opacity-50 cursor-default hover:opacity-50"
                         : "border-2 border-gray-200 bg-white text-gray-700 hover:bg-gray-50"
                     }`}
-                    onClick={() => alert(`Stripe integration needed for plan: ${plan.name}`)}
+                    onClick={() => handleUpgrade(plan.id)}
+                    disabled={isCurrent || upgradeLoading === plan.id}
                   >
-                    {isPro ? "Upgrade to Pro" : `Switch to ${plan.name}`}
+                    {isCurrent ? "Current Plan" : (upgradeLoading === plan.id ? "Processing..." : `Upgrade to ${plan.name}`)}
                   </Button>
                 </div>
               );

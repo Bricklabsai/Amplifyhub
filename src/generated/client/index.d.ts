@@ -14,6 +14,11 @@ export type PrismaPromise<T> = $Public.PrismaPromise<T>
 
 
 /**
+ * Model WhatsAppConfig
+ * 
+ */
+export type WhatsAppConfig = $Result.DefaultSelection<Prisma.$WhatsAppConfigPayload>
+/**
  * Model User
  * 
  */
@@ -43,6 +48,11 @@ export type Plan = $Result.DefaultSelection<Prisma.$PlanPayload>
  * 
  */
 export type Subscription = $Result.DefaultSelection<Prisma.$SubscriptionPayload>
+/**
+ * Model Transaction
+ * 
+ */
+export type Transaction = $Result.DefaultSelection<Prisma.$TransactionPayload>
 /**
  * Model SocialAccount
  * 
@@ -245,8 +255,8 @@ export const AutomationFrequency: typeof $Enums.AutomationFrequency
  * @example
  * ```
  * const prisma = new PrismaClient()
- * // Fetch zero or more Users
- * const users = await prisma.user.findMany()
+ * // Fetch zero or more WhatsAppConfigs
+ * const whatsAppConfigs = await prisma.whatsAppConfig.findMany()
  * ```
  *
  *
@@ -266,8 +276,8 @@ export class PrismaClient<
    * @example
    * ```
    * const prisma = new PrismaClient()
-   * // Fetch zero or more Users
-   * const users = await prisma.user.findMany()
+   * // Fetch zero or more WhatsAppConfigs
+   * const whatsAppConfigs = await prisma.whatsAppConfig.findMany()
    * ```
    *
    *
@@ -357,6 +367,16 @@ export class PrismaClient<
   }>>
 
       /**
+   * `prisma.whatsAppConfig`: Exposes CRUD operations for the **WhatsAppConfig** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more WhatsAppConfigs
+    * const whatsAppConfigs = await prisma.whatsAppConfig.findMany()
+    * ```
+    */
+  get whatsAppConfig(): Prisma.WhatsAppConfigDelegate<ExtArgs, ClientOptions>;
+
+  /**
    * `prisma.user`: Exposes CRUD operations for the **User** model.
     * Example usage:
     * ```ts
@@ -415,6 +435,16 @@ export class PrismaClient<
     * ```
     */
   get subscription(): Prisma.SubscriptionDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.transaction`: Exposes CRUD operations for the **Transaction** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more Transactions
+    * const transactions = await prisma.transaction.findMany()
+    * ```
+    */
+  get transaction(): Prisma.TransactionDelegate<ExtArgs, ClientOptions>;
 
   /**
    * `prisma.socialAccount`: Exposes CRUD operations for the **SocialAccount** model.
@@ -1006,12 +1036,14 @@ export namespace Prisma {
 
 
   export const ModelName: {
+    WhatsAppConfig: 'WhatsAppConfig',
     User: 'User',
     Account: 'Account',
     Session: 'Session',
     VerificationToken: 'VerificationToken',
     Plan: 'Plan',
     Subscription: 'Subscription',
+    Transaction: 'Transaction',
     SocialAccount: 'SocialAccount',
     Post: 'Post',
     PlatformPost: 'PlatformPost',
@@ -1045,10 +1077,84 @@ export namespace Prisma {
       omit: GlobalOmitOptions
     }
     meta: {
-      modelProps: "user" | "account" | "session" | "verificationToken" | "plan" | "subscription" | "socialAccount" | "post" | "platformPost" | "campaign" | "audienceGroup" | "contact" | "contactGroup" | "emailTemplate" | "scheduledCampaign" | "emailCampaign" | "emailCampaignRecipient" | "media" | "analytics" | "notification" | "rateLimit"
+      modelProps: "whatsAppConfig" | "user" | "account" | "session" | "verificationToken" | "plan" | "subscription" | "transaction" | "socialAccount" | "post" | "platformPost" | "campaign" | "audienceGroup" | "contact" | "contactGroup" | "emailTemplate" | "scheduledCampaign" | "emailCampaign" | "emailCampaignRecipient" | "media" | "analytics" | "notification" | "rateLimit"
       txIsolationLevel: Prisma.TransactionIsolationLevel
     }
     model: {
+      WhatsAppConfig: {
+        payload: Prisma.$WhatsAppConfigPayload<ExtArgs>
+        fields: Prisma.WhatsAppConfigFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.WhatsAppConfigFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$WhatsAppConfigPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.WhatsAppConfigFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$WhatsAppConfigPayload>
+          }
+          findFirst: {
+            args: Prisma.WhatsAppConfigFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$WhatsAppConfigPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.WhatsAppConfigFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$WhatsAppConfigPayload>
+          }
+          findMany: {
+            args: Prisma.WhatsAppConfigFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$WhatsAppConfigPayload>[]
+          }
+          create: {
+            args: Prisma.WhatsAppConfigCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$WhatsAppConfigPayload>
+          }
+          createMany: {
+            args: Prisma.WhatsAppConfigCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.WhatsAppConfigCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$WhatsAppConfigPayload>[]
+          }
+          delete: {
+            args: Prisma.WhatsAppConfigDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$WhatsAppConfigPayload>
+          }
+          update: {
+            args: Prisma.WhatsAppConfigUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$WhatsAppConfigPayload>
+          }
+          deleteMany: {
+            args: Prisma.WhatsAppConfigDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.WhatsAppConfigUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.WhatsAppConfigUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$WhatsAppConfigPayload>[]
+          }
+          upsert: {
+            args: Prisma.WhatsAppConfigUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$WhatsAppConfigPayload>
+          }
+          aggregate: {
+            args: Prisma.WhatsAppConfigAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateWhatsAppConfig>
+          }
+          groupBy: {
+            args: Prisma.WhatsAppConfigGroupByArgs<ExtArgs>
+            result: $Utils.Optional<WhatsAppConfigGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.WhatsAppConfigCountArgs<ExtArgs>
+            result: $Utils.Optional<WhatsAppConfigCountAggregateOutputType> | number
+          }
+        }
+      }
       User: {
         payload: Prisma.$UserPayload<ExtArgs>
         fields: Prisma.UserFieldRefs
@@ -1490,6 +1596,80 @@ export namespace Prisma {
           count: {
             args: Prisma.SubscriptionCountArgs<ExtArgs>
             result: $Utils.Optional<SubscriptionCountAggregateOutputType> | number
+          }
+        }
+      }
+      Transaction: {
+        payload: Prisma.$TransactionPayload<ExtArgs>
+        fields: Prisma.TransactionFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.TransactionFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$TransactionPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.TransactionFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$TransactionPayload>
+          }
+          findFirst: {
+            args: Prisma.TransactionFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$TransactionPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.TransactionFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$TransactionPayload>
+          }
+          findMany: {
+            args: Prisma.TransactionFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$TransactionPayload>[]
+          }
+          create: {
+            args: Prisma.TransactionCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$TransactionPayload>
+          }
+          createMany: {
+            args: Prisma.TransactionCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.TransactionCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$TransactionPayload>[]
+          }
+          delete: {
+            args: Prisma.TransactionDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$TransactionPayload>
+          }
+          update: {
+            args: Prisma.TransactionUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$TransactionPayload>
+          }
+          deleteMany: {
+            args: Prisma.TransactionDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.TransactionUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.TransactionUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$TransactionPayload>[]
+          }
+          upsert: {
+            args: Prisma.TransactionUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$TransactionPayload>
+          }
+          aggregate: {
+            args: Prisma.TransactionAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateTransaction>
+          }
+          groupBy: {
+            args: Prisma.TransactionGroupByArgs<ExtArgs>
+            result: $Utils.Optional<TransactionGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.TransactionCountArgs<ExtArgs>
+            result: $Utils.Optional<TransactionCountAggregateOutputType> | number
           }
         }
       }
@@ -2699,12 +2879,14 @@ export namespace Prisma {
     omit?: Prisma.GlobalOmitConfig
   }
   export type GlobalOmitConfig = {
+    whatsAppConfig?: WhatsAppConfigOmit
     user?: UserOmit
     account?: AccountOmit
     session?: SessionOmit
     verificationToken?: VerificationTokenOmit
     plan?: PlanOmit
     subscription?: SubscriptionOmit
+    transaction?: TransactionOmit
     socialAccount?: SocialAccountOmit
     post?: PostOmit
     platformPost?: PlatformPostOmit
@@ -2812,6 +2994,7 @@ export namespace Prisma {
     media: number
     analytics: number
     notifications: number
+    transactions: number
   }
 
   export type UserCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -2827,6 +3010,7 @@ export namespace Prisma {
     media?: boolean | UserCountOutputTypeCountMediaArgs
     analytics?: boolean | UserCountOutputTypeCountAnalyticsArgs
     notifications?: boolean | UserCountOutputTypeCountNotificationsArgs
+    transactions?: boolean | UserCountOutputTypeCountTransactionsArgs
   }
 
   // Custom InputTypes
@@ -2922,6 +3106,13 @@ export namespace Prisma {
    */
   export type UserCountOutputTypeCountNotificationsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: NotificationWhereInput
+  }
+
+  /**
+   * UserCountOutputType without action
+   */
+  export type UserCountOutputTypeCountTransactionsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: TransactionWhereInput
   }
 
 
@@ -3187,6 +3378,1090 @@ export namespace Prisma {
    */
 
   /**
+   * Model WhatsAppConfig
+   */
+
+  export type AggregateWhatsAppConfig = {
+    _count: WhatsAppConfigCountAggregateOutputType | null
+    _min: WhatsAppConfigMinAggregateOutputType | null
+    _max: WhatsAppConfigMaxAggregateOutputType | null
+  }
+
+  export type WhatsAppConfigMinAggregateOutputType = {
+    id: string | null
+    userId: string | null
+    phoneNumberId: string | null
+    wabaId: string | null
+    accessToken: string | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type WhatsAppConfigMaxAggregateOutputType = {
+    id: string | null
+    userId: string | null
+    phoneNumberId: string | null
+    wabaId: string | null
+    accessToken: string | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type WhatsAppConfigCountAggregateOutputType = {
+    id: number
+    userId: number
+    phoneNumberId: number
+    wabaId: number
+    accessToken: number
+    createdAt: number
+    updatedAt: number
+    _all: number
+  }
+
+
+  export type WhatsAppConfigMinAggregateInputType = {
+    id?: true
+    userId?: true
+    phoneNumberId?: true
+    wabaId?: true
+    accessToken?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type WhatsAppConfigMaxAggregateInputType = {
+    id?: true
+    userId?: true
+    phoneNumberId?: true
+    wabaId?: true
+    accessToken?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type WhatsAppConfigCountAggregateInputType = {
+    id?: true
+    userId?: true
+    phoneNumberId?: true
+    wabaId?: true
+    accessToken?: true
+    createdAt?: true
+    updatedAt?: true
+    _all?: true
+  }
+
+  export type WhatsAppConfigAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which WhatsAppConfig to aggregate.
+     */
+    where?: WhatsAppConfigWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of WhatsAppConfigs to fetch.
+     */
+    orderBy?: WhatsAppConfigOrderByWithRelationInput | WhatsAppConfigOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: WhatsAppConfigWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` WhatsAppConfigs from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` WhatsAppConfigs.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned WhatsAppConfigs
+    **/
+    _count?: true | WhatsAppConfigCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: WhatsAppConfigMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: WhatsAppConfigMaxAggregateInputType
+  }
+
+  export type GetWhatsAppConfigAggregateType<T extends WhatsAppConfigAggregateArgs> = {
+        [P in keyof T & keyof AggregateWhatsAppConfig]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateWhatsAppConfig[P]>
+      : GetScalarType<T[P], AggregateWhatsAppConfig[P]>
+  }
+
+
+
+
+  export type WhatsAppConfigGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: WhatsAppConfigWhereInput
+    orderBy?: WhatsAppConfigOrderByWithAggregationInput | WhatsAppConfigOrderByWithAggregationInput[]
+    by: WhatsAppConfigScalarFieldEnum[] | WhatsAppConfigScalarFieldEnum
+    having?: WhatsAppConfigScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: WhatsAppConfigCountAggregateInputType | true
+    _min?: WhatsAppConfigMinAggregateInputType
+    _max?: WhatsAppConfigMaxAggregateInputType
+  }
+
+  export type WhatsAppConfigGroupByOutputType = {
+    id: string
+    userId: string
+    phoneNumberId: string
+    wabaId: string
+    accessToken: string
+    createdAt: Date
+    updatedAt: Date
+    _count: WhatsAppConfigCountAggregateOutputType | null
+    _min: WhatsAppConfigMinAggregateOutputType | null
+    _max: WhatsAppConfigMaxAggregateOutputType | null
+  }
+
+  type GetWhatsAppConfigGroupByPayload<T extends WhatsAppConfigGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<WhatsAppConfigGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof WhatsAppConfigGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], WhatsAppConfigGroupByOutputType[P]>
+            : GetScalarType<T[P], WhatsAppConfigGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type WhatsAppConfigSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    userId?: boolean
+    phoneNumberId?: boolean
+    wabaId?: boolean
+    accessToken?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    user?: boolean | UserDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["whatsAppConfig"]>
+
+  export type WhatsAppConfigSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    userId?: boolean
+    phoneNumberId?: boolean
+    wabaId?: boolean
+    accessToken?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    user?: boolean | UserDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["whatsAppConfig"]>
+
+  export type WhatsAppConfigSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    userId?: boolean
+    phoneNumberId?: boolean
+    wabaId?: boolean
+    accessToken?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    user?: boolean | UserDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["whatsAppConfig"]>
+
+  export type WhatsAppConfigSelectScalar = {
+    id?: boolean
+    userId?: boolean
+    phoneNumberId?: boolean
+    wabaId?: boolean
+    accessToken?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }
+
+  export type WhatsAppConfigOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "userId" | "phoneNumberId" | "wabaId" | "accessToken" | "createdAt" | "updatedAt", ExtArgs["result"]["whatsAppConfig"]>
+  export type WhatsAppConfigInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    user?: boolean | UserDefaultArgs<ExtArgs>
+  }
+  export type WhatsAppConfigIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    user?: boolean | UserDefaultArgs<ExtArgs>
+  }
+  export type WhatsAppConfigIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    user?: boolean | UserDefaultArgs<ExtArgs>
+  }
+
+  export type $WhatsAppConfigPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "WhatsAppConfig"
+    objects: {
+      user: Prisma.$UserPayload<ExtArgs>
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      userId: string
+      phoneNumberId: string
+      wabaId: string
+      accessToken: string
+      createdAt: Date
+      updatedAt: Date
+    }, ExtArgs["result"]["whatsAppConfig"]>
+    composites: {}
+  }
+
+  type WhatsAppConfigGetPayload<S extends boolean | null | undefined | WhatsAppConfigDefaultArgs> = $Result.GetResult<Prisma.$WhatsAppConfigPayload, S>
+
+  type WhatsAppConfigCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<WhatsAppConfigFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: WhatsAppConfigCountAggregateInputType | true
+    }
+
+  export interface WhatsAppConfigDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['WhatsAppConfig'], meta: { name: 'WhatsAppConfig' } }
+    /**
+     * Find zero or one WhatsAppConfig that matches the filter.
+     * @param {WhatsAppConfigFindUniqueArgs} args - Arguments to find a WhatsAppConfig
+     * @example
+     * // Get one WhatsAppConfig
+     * const whatsAppConfig = await prisma.whatsAppConfig.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends WhatsAppConfigFindUniqueArgs>(args: SelectSubset<T, WhatsAppConfigFindUniqueArgs<ExtArgs>>): Prisma__WhatsAppConfigClient<$Result.GetResult<Prisma.$WhatsAppConfigPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one WhatsAppConfig that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {WhatsAppConfigFindUniqueOrThrowArgs} args - Arguments to find a WhatsAppConfig
+     * @example
+     * // Get one WhatsAppConfig
+     * const whatsAppConfig = await prisma.whatsAppConfig.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends WhatsAppConfigFindUniqueOrThrowArgs>(args: SelectSubset<T, WhatsAppConfigFindUniqueOrThrowArgs<ExtArgs>>): Prisma__WhatsAppConfigClient<$Result.GetResult<Prisma.$WhatsAppConfigPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first WhatsAppConfig that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {WhatsAppConfigFindFirstArgs} args - Arguments to find a WhatsAppConfig
+     * @example
+     * // Get one WhatsAppConfig
+     * const whatsAppConfig = await prisma.whatsAppConfig.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends WhatsAppConfigFindFirstArgs>(args?: SelectSubset<T, WhatsAppConfigFindFirstArgs<ExtArgs>>): Prisma__WhatsAppConfigClient<$Result.GetResult<Prisma.$WhatsAppConfigPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first WhatsAppConfig that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {WhatsAppConfigFindFirstOrThrowArgs} args - Arguments to find a WhatsAppConfig
+     * @example
+     * // Get one WhatsAppConfig
+     * const whatsAppConfig = await prisma.whatsAppConfig.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends WhatsAppConfigFindFirstOrThrowArgs>(args?: SelectSubset<T, WhatsAppConfigFindFirstOrThrowArgs<ExtArgs>>): Prisma__WhatsAppConfigClient<$Result.GetResult<Prisma.$WhatsAppConfigPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more WhatsAppConfigs that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {WhatsAppConfigFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all WhatsAppConfigs
+     * const whatsAppConfigs = await prisma.whatsAppConfig.findMany()
+     * 
+     * // Get first 10 WhatsAppConfigs
+     * const whatsAppConfigs = await prisma.whatsAppConfig.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const whatsAppConfigWithIdOnly = await prisma.whatsAppConfig.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends WhatsAppConfigFindManyArgs>(args?: SelectSubset<T, WhatsAppConfigFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$WhatsAppConfigPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a WhatsAppConfig.
+     * @param {WhatsAppConfigCreateArgs} args - Arguments to create a WhatsAppConfig.
+     * @example
+     * // Create one WhatsAppConfig
+     * const WhatsAppConfig = await prisma.whatsAppConfig.create({
+     *   data: {
+     *     // ... data to create a WhatsAppConfig
+     *   }
+     * })
+     * 
+     */
+    create<T extends WhatsAppConfigCreateArgs>(args: SelectSubset<T, WhatsAppConfigCreateArgs<ExtArgs>>): Prisma__WhatsAppConfigClient<$Result.GetResult<Prisma.$WhatsAppConfigPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many WhatsAppConfigs.
+     * @param {WhatsAppConfigCreateManyArgs} args - Arguments to create many WhatsAppConfigs.
+     * @example
+     * // Create many WhatsAppConfigs
+     * const whatsAppConfig = await prisma.whatsAppConfig.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends WhatsAppConfigCreateManyArgs>(args?: SelectSubset<T, WhatsAppConfigCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many WhatsAppConfigs and returns the data saved in the database.
+     * @param {WhatsAppConfigCreateManyAndReturnArgs} args - Arguments to create many WhatsAppConfigs.
+     * @example
+     * // Create many WhatsAppConfigs
+     * const whatsAppConfig = await prisma.whatsAppConfig.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many WhatsAppConfigs and only return the `id`
+     * const whatsAppConfigWithIdOnly = await prisma.whatsAppConfig.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends WhatsAppConfigCreateManyAndReturnArgs>(args?: SelectSubset<T, WhatsAppConfigCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$WhatsAppConfigPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a WhatsAppConfig.
+     * @param {WhatsAppConfigDeleteArgs} args - Arguments to delete one WhatsAppConfig.
+     * @example
+     * // Delete one WhatsAppConfig
+     * const WhatsAppConfig = await prisma.whatsAppConfig.delete({
+     *   where: {
+     *     // ... filter to delete one WhatsAppConfig
+     *   }
+     * })
+     * 
+     */
+    delete<T extends WhatsAppConfigDeleteArgs>(args: SelectSubset<T, WhatsAppConfigDeleteArgs<ExtArgs>>): Prisma__WhatsAppConfigClient<$Result.GetResult<Prisma.$WhatsAppConfigPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one WhatsAppConfig.
+     * @param {WhatsAppConfigUpdateArgs} args - Arguments to update one WhatsAppConfig.
+     * @example
+     * // Update one WhatsAppConfig
+     * const whatsAppConfig = await prisma.whatsAppConfig.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends WhatsAppConfigUpdateArgs>(args: SelectSubset<T, WhatsAppConfigUpdateArgs<ExtArgs>>): Prisma__WhatsAppConfigClient<$Result.GetResult<Prisma.$WhatsAppConfigPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more WhatsAppConfigs.
+     * @param {WhatsAppConfigDeleteManyArgs} args - Arguments to filter WhatsAppConfigs to delete.
+     * @example
+     * // Delete a few WhatsAppConfigs
+     * const { count } = await prisma.whatsAppConfig.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends WhatsAppConfigDeleteManyArgs>(args?: SelectSubset<T, WhatsAppConfigDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more WhatsAppConfigs.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {WhatsAppConfigUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many WhatsAppConfigs
+     * const whatsAppConfig = await prisma.whatsAppConfig.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends WhatsAppConfigUpdateManyArgs>(args: SelectSubset<T, WhatsAppConfigUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more WhatsAppConfigs and returns the data updated in the database.
+     * @param {WhatsAppConfigUpdateManyAndReturnArgs} args - Arguments to update many WhatsAppConfigs.
+     * @example
+     * // Update many WhatsAppConfigs
+     * const whatsAppConfig = await prisma.whatsAppConfig.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more WhatsAppConfigs and only return the `id`
+     * const whatsAppConfigWithIdOnly = await prisma.whatsAppConfig.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends WhatsAppConfigUpdateManyAndReturnArgs>(args: SelectSubset<T, WhatsAppConfigUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$WhatsAppConfigPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one WhatsAppConfig.
+     * @param {WhatsAppConfigUpsertArgs} args - Arguments to update or create a WhatsAppConfig.
+     * @example
+     * // Update or create a WhatsAppConfig
+     * const whatsAppConfig = await prisma.whatsAppConfig.upsert({
+     *   create: {
+     *     // ... data to create a WhatsAppConfig
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the WhatsAppConfig we want to update
+     *   }
+     * })
+     */
+    upsert<T extends WhatsAppConfigUpsertArgs>(args: SelectSubset<T, WhatsAppConfigUpsertArgs<ExtArgs>>): Prisma__WhatsAppConfigClient<$Result.GetResult<Prisma.$WhatsAppConfigPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of WhatsAppConfigs.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {WhatsAppConfigCountArgs} args - Arguments to filter WhatsAppConfigs to count.
+     * @example
+     * // Count the number of WhatsAppConfigs
+     * const count = await prisma.whatsAppConfig.count({
+     *   where: {
+     *     // ... the filter for the WhatsAppConfigs we want to count
+     *   }
+     * })
+    **/
+    count<T extends WhatsAppConfigCountArgs>(
+      args?: Subset<T, WhatsAppConfigCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], WhatsAppConfigCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a WhatsAppConfig.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {WhatsAppConfigAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends WhatsAppConfigAggregateArgs>(args: Subset<T, WhatsAppConfigAggregateArgs>): Prisma.PrismaPromise<GetWhatsAppConfigAggregateType<T>>
+
+    /**
+     * Group by WhatsAppConfig.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {WhatsAppConfigGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends WhatsAppConfigGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: WhatsAppConfigGroupByArgs['orderBy'] }
+        : { orderBy?: WhatsAppConfigGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, WhatsAppConfigGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetWhatsAppConfigGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the WhatsAppConfig model
+   */
+  readonly fields: WhatsAppConfigFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for WhatsAppConfig.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__WhatsAppConfigClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    user<T extends UserDefaultArgs<ExtArgs> = {}>(args?: Subset<T, UserDefaultArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the WhatsAppConfig model
+   */
+  interface WhatsAppConfigFieldRefs {
+    readonly id: FieldRef<"WhatsAppConfig", 'String'>
+    readonly userId: FieldRef<"WhatsAppConfig", 'String'>
+    readonly phoneNumberId: FieldRef<"WhatsAppConfig", 'String'>
+    readonly wabaId: FieldRef<"WhatsAppConfig", 'String'>
+    readonly accessToken: FieldRef<"WhatsAppConfig", 'String'>
+    readonly createdAt: FieldRef<"WhatsAppConfig", 'DateTime'>
+    readonly updatedAt: FieldRef<"WhatsAppConfig", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * WhatsAppConfig findUnique
+   */
+  export type WhatsAppConfigFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the WhatsAppConfig
+     */
+    select?: WhatsAppConfigSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the WhatsAppConfig
+     */
+    omit?: WhatsAppConfigOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: WhatsAppConfigInclude<ExtArgs> | null
+    /**
+     * Filter, which WhatsAppConfig to fetch.
+     */
+    where: WhatsAppConfigWhereUniqueInput
+  }
+
+  /**
+   * WhatsAppConfig findUniqueOrThrow
+   */
+  export type WhatsAppConfigFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the WhatsAppConfig
+     */
+    select?: WhatsAppConfigSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the WhatsAppConfig
+     */
+    omit?: WhatsAppConfigOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: WhatsAppConfigInclude<ExtArgs> | null
+    /**
+     * Filter, which WhatsAppConfig to fetch.
+     */
+    where: WhatsAppConfigWhereUniqueInput
+  }
+
+  /**
+   * WhatsAppConfig findFirst
+   */
+  export type WhatsAppConfigFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the WhatsAppConfig
+     */
+    select?: WhatsAppConfigSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the WhatsAppConfig
+     */
+    omit?: WhatsAppConfigOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: WhatsAppConfigInclude<ExtArgs> | null
+    /**
+     * Filter, which WhatsAppConfig to fetch.
+     */
+    where?: WhatsAppConfigWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of WhatsAppConfigs to fetch.
+     */
+    orderBy?: WhatsAppConfigOrderByWithRelationInput | WhatsAppConfigOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for WhatsAppConfigs.
+     */
+    cursor?: WhatsAppConfigWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` WhatsAppConfigs from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` WhatsAppConfigs.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of WhatsAppConfigs.
+     */
+    distinct?: WhatsAppConfigScalarFieldEnum | WhatsAppConfigScalarFieldEnum[]
+  }
+
+  /**
+   * WhatsAppConfig findFirstOrThrow
+   */
+  export type WhatsAppConfigFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the WhatsAppConfig
+     */
+    select?: WhatsAppConfigSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the WhatsAppConfig
+     */
+    omit?: WhatsAppConfigOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: WhatsAppConfigInclude<ExtArgs> | null
+    /**
+     * Filter, which WhatsAppConfig to fetch.
+     */
+    where?: WhatsAppConfigWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of WhatsAppConfigs to fetch.
+     */
+    orderBy?: WhatsAppConfigOrderByWithRelationInput | WhatsAppConfigOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for WhatsAppConfigs.
+     */
+    cursor?: WhatsAppConfigWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` WhatsAppConfigs from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` WhatsAppConfigs.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of WhatsAppConfigs.
+     */
+    distinct?: WhatsAppConfigScalarFieldEnum | WhatsAppConfigScalarFieldEnum[]
+  }
+
+  /**
+   * WhatsAppConfig findMany
+   */
+  export type WhatsAppConfigFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the WhatsAppConfig
+     */
+    select?: WhatsAppConfigSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the WhatsAppConfig
+     */
+    omit?: WhatsAppConfigOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: WhatsAppConfigInclude<ExtArgs> | null
+    /**
+     * Filter, which WhatsAppConfigs to fetch.
+     */
+    where?: WhatsAppConfigWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of WhatsAppConfigs to fetch.
+     */
+    orderBy?: WhatsAppConfigOrderByWithRelationInput | WhatsAppConfigOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing WhatsAppConfigs.
+     */
+    cursor?: WhatsAppConfigWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` WhatsAppConfigs from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` WhatsAppConfigs.
+     */
+    skip?: number
+    distinct?: WhatsAppConfigScalarFieldEnum | WhatsAppConfigScalarFieldEnum[]
+  }
+
+  /**
+   * WhatsAppConfig create
+   */
+  export type WhatsAppConfigCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the WhatsAppConfig
+     */
+    select?: WhatsAppConfigSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the WhatsAppConfig
+     */
+    omit?: WhatsAppConfigOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: WhatsAppConfigInclude<ExtArgs> | null
+    /**
+     * The data needed to create a WhatsAppConfig.
+     */
+    data: XOR<WhatsAppConfigCreateInput, WhatsAppConfigUncheckedCreateInput>
+  }
+
+  /**
+   * WhatsAppConfig createMany
+   */
+  export type WhatsAppConfigCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many WhatsAppConfigs.
+     */
+    data: WhatsAppConfigCreateManyInput | WhatsAppConfigCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * WhatsAppConfig createManyAndReturn
+   */
+  export type WhatsAppConfigCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the WhatsAppConfig
+     */
+    select?: WhatsAppConfigSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the WhatsAppConfig
+     */
+    omit?: WhatsAppConfigOmit<ExtArgs> | null
+    /**
+     * The data used to create many WhatsAppConfigs.
+     */
+    data: WhatsAppConfigCreateManyInput | WhatsAppConfigCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: WhatsAppConfigIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * WhatsAppConfig update
+   */
+  export type WhatsAppConfigUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the WhatsAppConfig
+     */
+    select?: WhatsAppConfigSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the WhatsAppConfig
+     */
+    omit?: WhatsAppConfigOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: WhatsAppConfigInclude<ExtArgs> | null
+    /**
+     * The data needed to update a WhatsAppConfig.
+     */
+    data: XOR<WhatsAppConfigUpdateInput, WhatsAppConfigUncheckedUpdateInput>
+    /**
+     * Choose, which WhatsAppConfig to update.
+     */
+    where: WhatsAppConfigWhereUniqueInput
+  }
+
+  /**
+   * WhatsAppConfig updateMany
+   */
+  export type WhatsAppConfigUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update WhatsAppConfigs.
+     */
+    data: XOR<WhatsAppConfigUpdateManyMutationInput, WhatsAppConfigUncheckedUpdateManyInput>
+    /**
+     * Filter which WhatsAppConfigs to update
+     */
+    where?: WhatsAppConfigWhereInput
+    /**
+     * Limit how many WhatsAppConfigs to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * WhatsAppConfig updateManyAndReturn
+   */
+  export type WhatsAppConfigUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the WhatsAppConfig
+     */
+    select?: WhatsAppConfigSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the WhatsAppConfig
+     */
+    omit?: WhatsAppConfigOmit<ExtArgs> | null
+    /**
+     * The data used to update WhatsAppConfigs.
+     */
+    data: XOR<WhatsAppConfigUpdateManyMutationInput, WhatsAppConfigUncheckedUpdateManyInput>
+    /**
+     * Filter which WhatsAppConfigs to update
+     */
+    where?: WhatsAppConfigWhereInput
+    /**
+     * Limit how many WhatsAppConfigs to update.
+     */
+    limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: WhatsAppConfigIncludeUpdateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * WhatsAppConfig upsert
+   */
+  export type WhatsAppConfigUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the WhatsAppConfig
+     */
+    select?: WhatsAppConfigSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the WhatsAppConfig
+     */
+    omit?: WhatsAppConfigOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: WhatsAppConfigInclude<ExtArgs> | null
+    /**
+     * The filter to search for the WhatsAppConfig to update in case it exists.
+     */
+    where: WhatsAppConfigWhereUniqueInput
+    /**
+     * In case the WhatsAppConfig found by the `where` argument doesn't exist, create a new WhatsAppConfig with this data.
+     */
+    create: XOR<WhatsAppConfigCreateInput, WhatsAppConfigUncheckedCreateInput>
+    /**
+     * In case the WhatsAppConfig was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<WhatsAppConfigUpdateInput, WhatsAppConfigUncheckedUpdateInput>
+  }
+
+  /**
+   * WhatsAppConfig delete
+   */
+  export type WhatsAppConfigDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the WhatsAppConfig
+     */
+    select?: WhatsAppConfigSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the WhatsAppConfig
+     */
+    omit?: WhatsAppConfigOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: WhatsAppConfigInclude<ExtArgs> | null
+    /**
+     * Filter which WhatsAppConfig to delete.
+     */
+    where: WhatsAppConfigWhereUniqueInput
+  }
+
+  /**
+   * WhatsAppConfig deleteMany
+   */
+  export type WhatsAppConfigDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which WhatsAppConfigs to delete
+     */
+    where?: WhatsAppConfigWhereInput
+    /**
+     * Limit how many WhatsAppConfigs to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * WhatsAppConfig without action
+   */
+  export type WhatsAppConfigDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the WhatsAppConfig
+     */
+    select?: WhatsAppConfigSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the WhatsAppConfig
+     */
+    omit?: WhatsAppConfigOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: WhatsAppConfigInclude<ExtArgs> | null
+  }
+
+
+  /**
    * Model User
    */
 
@@ -3403,6 +4678,8 @@ export namespace Prisma {
     analytics?: boolean | User$analyticsArgs<ExtArgs>
     notifications?: boolean | User$notificationsArgs<ExtArgs>
     subscription?: boolean | User$subscriptionArgs<ExtArgs>
+    transactions?: boolean | User$transactionsArgs<ExtArgs>
+    whatsappConfig?: boolean | User$whatsappConfigArgs<ExtArgs>
     _count?: boolean | UserCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["user"]>
 
@@ -3460,6 +4737,8 @@ export namespace Prisma {
     analytics?: boolean | User$analyticsArgs<ExtArgs>
     notifications?: boolean | User$notificationsArgs<ExtArgs>
     subscription?: boolean | User$subscriptionArgs<ExtArgs>
+    transactions?: boolean | User$transactionsArgs<ExtArgs>
+    whatsappConfig?: boolean | User$whatsappConfigArgs<ExtArgs>
     _count?: boolean | UserCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type UserIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
@@ -3481,6 +4760,8 @@ export namespace Prisma {
       analytics: Prisma.$AnalyticsPayload<ExtArgs>[]
       notifications: Prisma.$NotificationPayload<ExtArgs>[]
       subscription: Prisma.$SubscriptionPayload<ExtArgs> | null
+      transactions: Prisma.$TransactionPayload<ExtArgs>[]
+      whatsappConfig: Prisma.$WhatsAppConfigPayload<ExtArgs> | null
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
@@ -3900,6 +5181,8 @@ export namespace Prisma {
     analytics<T extends User$analyticsArgs<ExtArgs> = {}>(args?: Subset<T, User$analyticsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$AnalyticsPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     notifications<T extends User$notificationsArgs<ExtArgs> = {}>(args?: Subset<T, User$notificationsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$NotificationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     subscription<T extends User$subscriptionArgs<ExtArgs> = {}>(args?: Subset<T, User$subscriptionArgs<ExtArgs>>): Prisma__SubscriptionClient<$Result.GetResult<Prisma.$SubscriptionPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+    transactions<T extends User$transactionsArgs<ExtArgs> = {}>(args?: Subset<T, User$transactionsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$TransactionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    whatsappConfig<T extends User$whatsappConfigArgs<ExtArgs> = {}>(args?: Subset<T, User$whatsappConfigArgs<ExtArgs>>): Prisma__WhatsAppConfigClient<$Result.GetResult<Prisma.$WhatsAppConfigPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -4631,6 +5914,49 @@ export namespace Prisma {
      */
     include?: SubscriptionInclude<ExtArgs> | null
     where?: SubscriptionWhereInput
+  }
+
+  /**
+   * User.transactions
+   */
+  export type User$transactionsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Transaction
+     */
+    select?: TransactionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Transaction
+     */
+    omit?: TransactionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TransactionInclude<ExtArgs> | null
+    where?: TransactionWhereInput
+    orderBy?: TransactionOrderByWithRelationInput | TransactionOrderByWithRelationInput[]
+    cursor?: TransactionWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: TransactionScalarFieldEnum | TransactionScalarFieldEnum[]
+  }
+
+  /**
+   * User.whatsappConfig
+   */
+  export type User$whatsappConfigArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the WhatsAppConfig
+     */
+    select?: WhatsAppConfigSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the WhatsAppConfig
+     */
+    omit?: WhatsAppConfigOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: WhatsAppConfigInclude<ExtArgs> | null
+    where?: WhatsAppConfigWhereInput
   }
 
   /**
@@ -7883,6 +9209,8 @@ export namespace Prisma {
     postsPerMonth: number | null
     platforms: number | null
     aiCredits: number | null
+    aiTextLimit: number | null
+    aiImageLimit: number | null
   }
 
   export type PlanSumAggregateOutputType = {
@@ -7890,6 +9218,8 @@ export namespace Prisma {
     postsPerMonth: number | null
     platforms: number | null
     aiCredits: number | null
+    aiTextLimit: number | null
+    aiImageLimit: number | null
   }
 
   export type PlanMinAggregateOutputType = {
@@ -7900,6 +9230,9 @@ export namespace Prisma {
     postsPerMonth: number | null
     platforms: number | null
     aiCredits: number | null
+    aiTextLimit: number | null
+    aiImageLimit: number | null
+    paystackPlanCode: string | null
     createdAt: Date | null
   }
 
@@ -7911,6 +9244,9 @@ export namespace Prisma {
     postsPerMonth: number | null
     platforms: number | null
     aiCredits: number | null
+    aiTextLimit: number | null
+    aiImageLimit: number | null
+    paystackPlanCode: string | null
     createdAt: Date | null
   }
 
@@ -7923,6 +9259,9 @@ export namespace Prisma {
     postsPerMonth: number
     platforms: number
     aiCredits: number
+    aiTextLimit: number
+    aiImageLimit: number
+    paystackPlanCode: number
     createdAt: number
     _all: number
   }
@@ -7933,6 +9272,8 @@ export namespace Prisma {
     postsPerMonth?: true
     platforms?: true
     aiCredits?: true
+    aiTextLimit?: true
+    aiImageLimit?: true
   }
 
   export type PlanSumAggregateInputType = {
@@ -7940,6 +9281,8 @@ export namespace Prisma {
     postsPerMonth?: true
     platforms?: true
     aiCredits?: true
+    aiTextLimit?: true
+    aiImageLimit?: true
   }
 
   export type PlanMinAggregateInputType = {
@@ -7950,6 +9293,9 @@ export namespace Prisma {
     postsPerMonth?: true
     platforms?: true
     aiCredits?: true
+    aiTextLimit?: true
+    aiImageLimit?: true
+    paystackPlanCode?: true
     createdAt?: true
   }
 
@@ -7961,6 +9307,9 @@ export namespace Prisma {
     postsPerMonth?: true
     platforms?: true
     aiCredits?: true
+    aiTextLimit?: true
+    aiImageLimit?: true
+    paystackPlanCode?: true
     createdAt?: true
   }
 
@@ -7973,6 +9322,9 @@ export namespace Prisma {
     postsPerMonth?: true
     platforms?: true
     aiCredits?: true
+    aiTextLimit?: true
+    aiImageLimit?: true
+    paystackPlanCode?: true
     createdAt?: true
     _all?: true
   }
@@ -8072,6 +9424,9 @@ export namespace Prisma {
     postsPerMonth: number
     platforms: number
     aiCredits: number
+    aiTextLimit: number
+    aiImageLimit: number
+    paystackPlanCode: string | null
     createdAt: Date
     _count: PlanCountAggregateOutputType | null
     _avg: PlanAvgAggregateOutputType | null
@@ -8103,6 +9458,9 @@ export namespace Prisma {
     postsPerMonth?: boolean
     platforms?: boolean
     aiCredits?: boolean
+    aiTextLimit?: boolean
+    aiImageLimit?: boolean
+    paystackPlanCode?: boolean
     createdAt?: boolean
     subscriptions?: boolean | Plan$subscriptionsArgs<ExtArgs>
     _count?: boolean | PlanCountOutputTypeDefaultArgs<ExtArgs>
@@ -8117,6 +9475,9 @@ export namespace Prisma {
     postsPerMonth?: boolean
     platforms?: boolean
     aiCredits?: boolean
+    aiTextLimit?: boolean
+    aiImageLimit?: boolean
+    paystackPlanCode?: boolean
     createdAt?: boolean
   }, ExtArgs["result"]["plan"]>
 
@@ -8129,6 +9490,9 @@ export namespace Prisma {
     postsPerMonth?: boolean
     platforms?: boolean
     aiCredits?: boolean
+    aiTextLimit?: boolean
+    aiImageLimit?: boolean
+    paystackPlanCode?: boolean
     createdAt?: boolean
   }, ExtArgs["result"]["plan"]>
 
@@ -8141,10 +9505,13 @@ export namespace Prisma {
     postsPerMonth?: boolean
     platforms?: boolean
     aiCredits?: boolean
+    aiTextLimit?: boolean
+    aiImageLimit?: boolean
+    paystackPlanCode?: boolean
     createdAt?: boolean
   }
 
-  export type PlanOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "price" | "description" | "features" | "postsPerMonth" | "platforms" | "aiCredits" | "createdAt", ExtArgs["result"]["plan"]>
+  export type PlanOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "price" | "description" | "features" | "postsPerMonth" | "platforms" | "aiCredits" | "aiTextLimit" | "aiImageLimit" | "paystackPlanCode" | "createdAt", ExtArgs["result"]["plan"]>
   export type PlanInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     subscriptions?: boolean | Plan$subscriptionsArgs<ExtArgs>
     _count?: boolean | PlanCountOutputTypeDefaultArgs<ExtArgs>
@@ -8166,6 +9533,9 @@ export namespace Prisma {
       postsPerMonth: number
       platforms: number
       aiCredits: number
+      aiTextLimit: number
+      aiImageLimit: number
+      paystackPlanCode: string | null
       createdAt: Date
     }, ExtArgs["result"]["plan"]>
     composites: {}
@@ -8599,6 +9969,9 @@ export namespace Prisma {
     readonly postsPerMonth: FieldRef<"Plan", 'Int'>
     readonly platforms: FieldRef<"Plan", 'Int'>
     readonly aiCredits: FieldRef<"Plan", 'Int'>
+    readonly aiTextLimit: FieldRef<"Plan", 'Int'>
+    readonly aiImageLimit: FieldRef<"Plan", 'Int'>
+    readonly paystackPlanCode: FieldRef<"Plan", 'String'>
     readonly createdAt: FieldRef<"Plan", 'DateTime'>
   }
     
@@ -9036,8 +10409,22 @@ export namespace Prisma {
 
   export type AggregateSubscription = {
     _count: SubscriptionCountAggregateOutputType | null
+    _avg: SubscriptionAvgAggregateOutputType | null
+    _sum: SubscriptionSumAggregateOutputType | null
     _min: SubscriptionMinAggregateOutputType | null
     _max: SubscriptionMaxAggregateOutputType | null
+  }
+
+  export type SubscriptionAvgAggregateOutputType = {
+    postsUsed: number | null
+    aiTextUsed: number | null
+    aiImageUsed: number | null
+  }
+
+  export type SubscriptionSumAggregateOutputType = {
+    postsUsed: number | null
+    aiTextUsed: number | null
+    aiImageUsed: number | null
   }
 
   export type SubscriptionMinAggregateOutputType = {
@@ -9047,6 +10434,12 @@ export namespace Prisma {
     status: $Enums.SubscriptionStatus | null
     startDate: Date | null
     endDate: Date | null
+    postsUsed: number | null
+    aiTextUsed: number | null
+    aiImageUsed: number | null
+    lastResetAt: Date | null
+    paystackSubscriptionCode: string | null
+    paystackCustomerCode: string | null
     createdAt: Date | null
     updatedAt: Date | null
   }
@@ -9058,6 +10451,12 @@ export namespace Prisma {
     status: $Enums.SubscriptionStatus | null
     startDate: Date | null
     endDate: Date | null
+    postsUsed: number | null
+    aiTextUsed: number | null
+    aiImageUsed: number | null
+    lastResetAt: Date | null
+    paystackSubscriptionCode: string | null
+    paystackCustomerCode: string | null
     createdAt: Date | null
     updatedAt: Date | null
   }
@@ -9069,11 +10468,29 @@ export namespace Prisma {
     status: number
     startDate: number
     endDate: number
+    postsUsed: number
+    aiTextUsed: number
+    aiImageUsed: number
+    lastResetAt: number
+    paystackSubscriptionCode: number
+    paystackCustomerCode: number
     createdAt: number
     updatedAt: number
     _all: number
   }
 
+
+  export type SubscriptionAvgAggregateInputType = {
+    postsUsed?: true
+    aiTextUsed?: true
+    aiImageUsed?: true
+  }
+
+  export type SubscriptionSumAggregateInputType = {
+    postsUsed?: true
+    aiTextUsed?: true
+    aiImageUsed?: true
+  }
 
   export type SubscriptionMinAggregateInputType = {
     id?: true
@@ -9082,6 +10499,12 @@ export namespace Prisma {
     status?: true
     startDate?: true
     endDate?: true
+    postsUsed?: true
+    aiTextUsed?: true
+    aiImageUsed?: true
+    lastResetAt?: true
+    paystackSubscriptionCode?: true
+    paystackCustomerCode?: true
     createdAt?: true
     updatedAt?: true
   }
@@ -9093,6 +10516,12 @@ export namespace Prisma {
     status?: true
     startDate?: true
     endDate?: true
+    postsUsed?: true
+    aiTextUsed?: true
+    aiImageUsed?: true
+    lastResetAt?: true
+    paystackSubscriptionCode?: true
+    paystackCustomerCode?: true
     createdAt?: true
     updatedAt?: true
   }
@@ -9104,6 +10533,12 @@ export namespace Prisma {
     status?: true
     startDate?: true
     endDate?: true
+    postsUsed?: true
+    aiTextUsed?: true
+    aiImageUsed?: true
+    lastResetAt?: true
+    paystackSubscriptionCode?: true
+    paystackCustomerCode?: true
     createdAt?: true
     updatedAt?: true
     _all?: true
@@ -9147,6 +10582,18 @@ export namespace Prisma {
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
      * 
+     * Select which fields to average
+    **/
+    _avg?: SubscriptionAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: SubscriptionSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
      * Select which fields to find the minimum value
     **/
     _min?: SubscriptionMinAggregateInputType
@@ -9177,6 +10624,8 @@ export namespace Prisma {
     take?: number
     skip?: number
     _count?: SubscriptionCountAggregateInputType | true
+    _avg?: SubscriptionAvgAggregateInputType
+    _sum?: SubscriptionSumAggregateInputType
     _min?: SubscriptionMinAggregateInputType
     _max?: SubscriptionMaxAggregateInputType
   }
@@ -9188,9 +10637,17 @@ export namespace Prisma {
     status: $Enums.SubscriptionStatus
     startDate: Date
     endDate: Date | null
+    postsUsed: number
+    aiTextUsed: number
+    aiImageUsed: number
+    lastResetAt: Date
+    paystackSubscriptionCode: string | null
+    paystackCustomerCode: string | null
     createdAt: Date
     updatedAt: Date
     _count: SubscriptionCountAggregateOutputType | null
+    _avg: SubscriptionAvgAggregateOutputType | null
+    _sum: SubscriptionSumAggregateOutputType | null
     _min: SubscriptionMinAggregateOutputType | null
     _max: SubscriptionMaxAggregateOutputType | null
   }
@@ -9216,6 +10673,12 @@ export namespace Prisma {
     status?: boolean
     startDate?: boolean
     endDate?: boolean
+    postsUsed?: boolean
+    aiTextUsed?: boolean
+    aiImageUsed?: boolean
+    lastResetAt?: boolean
+    paystackSubscriptionCode?: boolean
+    paystackCustomerCode?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     user?: boolean | UserDefaultArgs<ExtArgs>
@@ -9229,6 +10692,12 @@ export namespace Prisma {
     status?: boolean
     startDate?: boolean
     endDate?: boolean
+    postsUsed?: boolean
+    aiTextUsed?: boolean
+    aiImageUsed?: boolean
+    lastResetAt?: boolean
+    paystackSubscriptionCode?: boolean
+    paystackCustomerCode?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     user?: boolean | UserDefaultArgs<ExtArgs>
@@ -9242,6 +10711,12 @@ export namespace Prisma {
     status?: boolean
     startDate?: boolean
     endDate?: boolean
+    postsUsed?: boolean
+    aiTextUsed?: boolean
+    aiImageUsed?: boolean
+    lastResetAt?: boolean
+    paystackSubscriptionCode?: boolean
+    paystackCustomerCode?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     user?: boolean | UserDefaultArgs<ExtArgs>
@@ -9255,11 +10730,17 @@ export namespace Prisma {
     status?: boolean
     startDate?: boolean
     endDate?: boolean
+    postsUsed?: boolean
+    aiTextUsed?: boolean
+    aiImageUsed?: boolean
+    lastResetAt?: boolean
+    paystackSubscriptionCode?: boolean
+    paystackCustomerCode?: boolean
     createdAt?: boolean
     updatedAt?: boolean
   }
 
-  export type SubscriptionOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "userId" | "planId" | "status" | "startDate" | "endDate" | "createdAt" | "updatedAt", ExtArgs["result"]["subscription"]>
+  export type SubscriptionOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "userId" | "planId" | "status" | "startDate" | "endDate" | "postsUsed" | "aiTextUsed" | "aiImageUsed" | "lastResetAt" | "paystackSubscriptionCode" | "paystackCustomerCode" | "createdAt" | "updatedAt", ExtArgs["result"]["subscription"]>
   export type SubscriptionInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     user?: boolean | UserDefaultArgs<ExtArgs>
     plan?: boolean | PlanDefaultArgs<ExtArgs>
@@ -9286,6 +10767,12 @@ export namespace Prisma {
       status: $Enums.SubscriptionStatus
       startDate: Date
       endDate: Date | null
+      postsUsed: number
+      aiTextUsed: number
+      aiImageUsed: number
+      lastResetAt: Date
+      paystackSubscriptionCode: string | null
+      paystackCustomerCode: string | null
       createdAt: Date
       updatedAt: Date
     }, ExtArgs["result"]["subscription"]>
@@ -9719,6 +11206,12 @@ export namespace Prisma {
     readonly status: FieldRef<"Subscription", 'SubscriptionStatus'>
     readonly startDate: FieldRef<"Subscription", 'DateTime'>
     readonly endDate: FieldRef<"Subscription", 'DateTime'>
+    readonly postsUsed: FieldRef<"Subscription", 'Int'>
+    readonly aiTextUsed: FieldRef<"Subscription", 'Int'>
+    readonly aiImageUsed: FieldRef<"Subscription", 'Int'>
+    readonly lastResetAt: FieldRef<"Subscription", 'DateTime'>
+    readonly paystackSubscriptionCode: FieldRef<"Subscription", 'String'>
+    readonly paystackCustomerCode: FieldRef<"Subscription", 'String'>
     readonly createdAt: FieldRef<"Subscription", 'DateTime'>
     readonly updatedAt: FieldRef<"Subscription", 'DateTime'>
   }
@@ -10132,6 +11625,1176 @@ export namespace Prisma {
      * Choose, which related nodes to fetch as well
      */
     include?: SubscriptionInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model Transaction
+   */
+
+  export type AggregateTransaction = {
+    _count: TransactionCountAggregateOutputType | null
+    _avg: TransactionAvgAggregateOutputType | null
+    _sum: TransactionSumAggregateOutputType | null
+    _min: TransactionMinAggregateOutputType | null
+    _max: TransactionMaxAggregateOutputType | null
+  }
+
+  export type TransactionAvgAggregateOutputType = {
+    amount: number | null
+  }
+
+  export type TransactionSumAggregateOutputType = {
+    amount: number | null
+  }
+
+  export type TransactionMinAggregateOutputType = {
+    id: string | null
+    userId: string | null
+    amount: number | null
+    currency: string | null
+    status: string | null
+    reference: string | null
+    paystackId: string | null
+    channel: string | null
+    paidAt: Date | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type TransactionMaxAggregateOutputType = {
+    id: string | null
+    userId: string | null
+    amount: number | null
+    currency: string | null
+    status: string | null
+    reference: string | null
+    paystackId: string | null
+    channel: string | null
+    paidAt: Date | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type TransactionCountAggregateOutputType = {
+    id: number
+    userId: number
+    amount: number
+    currency: number
+    status: number
+    reference: number
+    paystackId: number
+    channel: number
+    paidAt: number
+    createdAt: number
+    updatedAt: number
+    _all: number
+  }
+
+
+  export type TransactionAvgAggregateInputType = {
+    amount?: true
+  }
+
+  export type TransactionSumAggregateInputType = {
+    amount?: true
+  }
+
+  export type TransactionMinAggregateInputType = {
+    id?: true
+    userId?: true
+    amount?: true
+    currency?: true
+    status?: true
+    reference?: true
+    paystackId?: true
+    channel?: true
+    paidAt?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type TransactionMaxAggregateInputType = {
+    id?: true
+    userId?: true
+    amount?: true
+    currency?: true
+    status?: true
+    reference?: true
+    paystackId?: true
+    channel?: true
+    paidAt?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type TransactionCountAggregateInputType = {
+    id?: true
+    userId?: true
+    amount?: true
+    currency?: true
+    status?: true
+    reference?: true
+    paystackId?: true
+    channel?: true
+    paidAt?: true
+    createdAt?: true
+    updatedAt?: true
+    _all?: true
+  }
+
+  export type TransactionAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which Transaction to aggregate.
+     */
+    where?: TransactionWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Transactions to fetch.
+     */
+    orderBy?: TransactionOrderByWithRelationInput | TransactionOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: TransactionWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Transactions from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Transactions.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned Transactions
+    **/
+    _count?: true | TransactionCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: TransactionAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: TransactionSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: TransactionMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: TransactionMaxAggregateInputType
+  }
+
+  export type GetTransactionAggregateType<T extends TransactionAggregateArgs> = {
+        [P in keyof T & keyof AggregateTransaction]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateTransaction[P]>
+      : GetScalarType<T[P], AggregateTransaction[P]>
+  }
+
+
+
+
+  export type TransactionGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: TransactionWhereInput
+    orderBy?: TransactionOrderByWithAggregationInput | TransactionOrderByWithAggregationInput[]
+    by: TransactionScalarFieldEnum[] | TransactionScalarFieldEnum
+    having?: TransactionScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: TransactionCountAggregateInputType | true
+    _avg?: TransactionAvgAggregateInputType
+    _sum?: TransactionSumAggregateInputType
+    _min?: TransactionMinAggregateInputType
+    _max?: TransactionMaxAggregateInputType
+  }
+
+  export type TransactionGroupByOutputType = {
+    id: string
+    userId: string
+    amount: number
+    currency: string
+    status: string
+    reference: string
+    paystackId: string | null
+    channel: string | null
+    paidAt: Date | null
+    createdAt: Date
+    updatedAt: Date
+    _count: TransactionCountAggregateOutputType | null
+    _avg: TransactionAvgAggregateOutputType | null
+    _sum: TransactionSumAggregateOutputType | null
+    _min: TransactionMinAggregateOutputType | null
+    _max: TransactionMaxAggregateOutputType | null
+  }
+
+  type GetTransactionGroupByPayload<T extends TransactionGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<TransactionGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof TransactionGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], TransactionGroupByOutputType[P]>
+            : GetScalarType<T[P], TransactionGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type TransactionSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    userId?: boolean
+    amount?: boolean
+    currency?: boolean
+    status?: boolean
+    reference?: boolean
+    paystackId?: boolean
+    channel?: boolean
+    paidAt?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    user?: boolean | UserDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["transaction"]>
+
+  export type TransactionSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    userId?: boolean
+    amount?: boolean
+    currency?: boolean
+    status?: boolean
+    reference?: boolean
+    paystackId?: boolean
+    channel?: boolean
+    paidAt?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    user?: boolean | UserDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["transaction"]>
+
+  export type TransactionSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    userId?: boolean
+    amount?: boolean
+    currency?: boolean
+    status?: boolean
+    reference?: boolean
+    paystackId?: boolean
+    channel?: boolean
+    paidAt?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    user?: boolean | UserDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["transaction"]>
+
+  export type TransactionSelectScalar = {
+    id?: boolean
+    userId?: boolean
+    amount?: boolean
+    currency?: boolean
+    status?: boolean
+    reference?: boolean
+    paystackId?: boolean
+    channel?: boolean
+    paidAt?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }
+
+  export type TransactionOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "userId" | "amount" | "currency" | "status" | "reference" | "paystackId" | "channel" | "paidAt" | "createdAt" | "updatedAt", ExtArgs["result"]["transaction"]>
+  export type TransactionInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    user?: boolean | UserDefaultArgs<ExtArgs>
+  }
+  export type TransactionIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    user?: boolean | UserDefaultArgs<ExtArgs>
+  }
+  export type TransactionIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    user?: boolean | UserDefaultArgs<ExtArgs>
+  }
+
+  export type $TransactionPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "Transaction"
+    objects: {
+      user: Prisma.$UserPayload<ExtArgs>
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      userId: string
+      amount: number
+      currency: string
+      status: string
+      reference: string
+      paystackId: string | null
+      channel: string | null
+      paidAt: Date | null
+      createdAt: Date
+      updatedAt: Date
+    }, ExtArgs["result"]["transaction"]>
+    composites: {}
+  }
+
+  type TransactionGetPayload<S extends boolean | null | undefined | TransactionDefaultArgs> = $Result.GetResult<Prisma.$TransactionPayload, S>
+
+  type TransactionCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<TransactionFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: TransactionCountAggregateInputType | true
+    }
+
+  export interface TransactionDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['Transaction'], meta: { name: 'Transaction' } }
+    /**
+     * Find zero or one Transaction that matches the filter.
+     * @param {TransactionFindUniqueArgs} args - Arguments to find a Transaction
+     * @example
+     * // Get one Transaction
+     * const transaction = await prisma.transaction.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends TransactionFindUniqueArgs>(args: SelectSubset<T, TransactionFindUniqueArgs<ExtArgs>>): Prisma__TransactionClient<$Result.GetResult<Prisma.$TransactionPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one Transaction that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {TransactionFindUniqueOrThrowArgs} args - Arguments to find a Transaction
+     * @example
+     * // Get one Transaction
+     * const transaction = await prisma.transaction.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends TransactionFindUniqueOrThrowArgs>(args: SelectSubset<T, TransactionFindUniqueOrThrowArgs<ExtArgs>>): Prisma__TransactionClient<$Result.GetResult<Prisma.$TransactionPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first Transaction that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {TransactionFindFirstArgs} args - Arguments to find a Transaction
+     * @example
+     * // Get one Transaction
+     * const transaction = await prisma.transaction.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends TransactionFindFirstArgs>(args?: SelectSubset<T, TransactionFindFirstArgs<ExtArgs>>): Prisma__TransactionClient<$Result.GetResult<Prisma.$TransactionPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first Transaction that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {TransactionFindFirstOrThrowArgs} args - Arguments to find a Transaction
+     * @example
+     * // Get one Transaction
+     * const transaction = await prisma.transaction.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends TransactionFindFirstOrThrowArgs>(args?: SelectSubset<T, TransactionFindFirstOrThrowArgs<ExtArgs>>): Prisma__TransactionClient<$Result.GetResult<Prisma.$TransactionPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more Transactions that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {TransactionFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all Transactions
+     * const transactions = await prisma.transaction.findMany()
+     * 
+     * // Get first 10 Transactions
+     * const transactions = await prisma.transaction.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const transactionWithIdOnly = await prisma.transaction.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends TransactionFindManyArgs>(args?: SelectSubset<T, TransactionFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$TransactionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a Transaction.
+     * @param {TransactionCreateArgs} args - Arguments to create a Transaction.
+     * @example
+     * // Create one Transaction
+     * const Transaction = await prisma.transaction.create({
+     *   data: {
+     *     // ... data to create a Transaction
+     *   }
+     * })
+     * 
+     */
+    create<T extends TransactionCreateArgs>(args: SelectSubset<T, TransactionCreateArgs<ExtArgs>>): Prisma__TransactionClient<$Result.GetResult<Prisma.$TransactionPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many Transactions.
+     * @param {TransactionCreateManyArgs} args - Arguments to create many Transactions.
+     * @example
+     * // Create many Transactions
+     * const transaction = await prisma.transaction.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends TransactionCreateManyArgs>(args?: SelectSubset<T, TransactionCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many Transactions and returns the data saved in the database.
+     * @param {TransactionCreateManyAndReturnArgs} args - Arguments to create many Transactions.
+     * @example
+     * // Create many Transactions
+     * const transaction = await prisma.transaction.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many Transactions and only return the `id`
+     * const transactionWithIdOnly = await prisma.transaction.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends TransactionCreateManyAndReturnArgs>(args?: SelectSubset<T, TransactionCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$TransactionPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a Transaction.
+     * @param {TransactionDeleteArgs} args - Arguments to delete one Transaction.
+     * @example
+     * // Delete one Transaction
+     * const Transaction = await prisma.transaction.delete({
+     *   where: {
+     *     // ... filter to delete one Transaction
+     *   }
+     * })
+     * 
+     */
+    delete<T extends TransactionDeleteArgs>(args: SelectSubset<T, TransactionDeleteArgs<ExtArgs>>): Prisma__TransactionClient<$Result.GetResult<Prisma.$TransactionPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one Transaction.
+     * @param {TransactionUpdateArgs} args - Arguments to update one Transaction.
+     * @example
+     * // Update one Transaction
+     * const transaction = await prisma.transaction.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends TransactionUpdateArgs>(args: SelectSubset<T, TransactionUpdateArgs<ExtArgs>>): Prisma__TransactionClient<$Result.GetResult<Prisma.$TransactionPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more Transactions.
+     * @param {TransactionDeleteManyArgs} args - Arguments to filter Transactions to delete.
+     * @example
+     * // Delete a few Transactions
+     * const { count } = await prisma.transaction.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends TransactionDeleteManyArgs>(args?: SelectSubset<T, TransactionDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more Transactions.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {TransactionUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many Transactions
+     * const transaction = await prisma.transaction.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends TransactionUpdateManyArgs>(args: SelectSubset<T, TransactionUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more Transactions and returns the data updated in the database.
+     * @param {TransactionUpdateManyAndReturnArgs} args - Arguments to update many Transactions.
+     * @example
+     * // Update many Transactions
+     * const transaction = await prisma.transaction.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more Transactions and only return the `id`
+     * const transactionWithIdOnly = await prisma.transaction.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends TransactionUpdateManyAndReturnArgs>(args: SelectSubset<T, TransactionUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$TransactionPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one Transaction.
+     * @param {TransactionUpsertArgs} args - Arguments to update or create a Transaction.
+     * @example
+     * // Update or create a Transaction
+     * const transaction = await prisma.transaction.upsert({
+     *   create: {
+     *     // ... data to create a Transaction
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the Transaction we want to update
+     *   }
+     * })
+     */
+    upsert<T extends TransactionUpsertArgs>(args: SelectSubset<T, TransactionUpsertArgs<ExtArgs>>): Prisma__TransactionClient<$Result.GetResult<Prisma.$TransactionPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of Transactions.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {TransactionCountArgs} args - Arguments to filter Transactions to count.
+     * @example
+     * // Count the number of Transactions
+     * const count = await prisma.transaction.count({
+     *   where: {
+     *     // ... the filter for the Transactions we want to count
+     *   }
+     * })
+    **/
+    count<T extends TransactionCountArgs>(
+      args?: Subset<T, TransactionCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], TransactionCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a Transaction.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {TransactionAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends TransactionAggregateArgs>(args: Subset<T, TransactionAggregateArgs>): Prisma.PrismaPromise<GetTransactionAggregateType<T>>
+
+    /**
+     * Group by Transaction.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {TransactionGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends TransactionGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: TransactionGroupByArgs['orderBy'] }
+        : { orderBy?: TransactionGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, TransactionGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetTransactionGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the Transaction model
+   */
+  readonly fields: TransactionFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for Transaction.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__TransactionClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    user<T extends UserDefaultArgs<ExtArgs> = {}>(args?: Subset<T, UserDefaultArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the Transaction model
+   */
+  interface TransactionFieldRefs {
+    readonly id: FieldRef<"Transaction", 'String'>
+    readonly userId: FieldRef<"Transaction", 'String'>
+    readonly amount: FieldRef<"Transaction", 'Float'>
+    readonly currency: FieldRef<"Transaction", 'String'>
+    readonly status: FieldRef<"Transaction", 'String'>
+    readonly reference: FieldRef<"Transaction", 'String'>
+    readonly paystackId: FieldRef<"Transaction", 'String'>
+    readonly channel: FieldRef<"Transaction", 'String'>
+    readonly paidAt: FieldRef<"Transaction", 'DateTime'>
+    readonly createdAt: FieldRef<"Transaction", 'DateTime'>
+    readonly updatedAt: FieldRef<"Transaction", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * Transaction findUnique
+   */
+  export type TransactionFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Transaction
+     */
+    select?: TransactionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Transaction
+     */
+    omit?: TransactionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TransactionInclude<ExtArgs> | null
+    /**
+     * Filter, which Transaction to fetch.
+     */
+    where: TransactionWhereUniqueInput
+  }
+
+  /**
+   * Transaction findUniqueOrThrow
+   */
+  export type TransactionFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Transaction
+     */
+    select?: TransactionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Transaction
+     */
+    omit?: TransactionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TransactionInclude<ExtArgs> | null
+    /**
+     * Filter, which Transaction to fetch.
+     */
+    where: TransactionWhereUniqueInput
+  }
+
+  /**
+   * Transaction findFirst
+   */
+  export type TransactionFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Transaction
+     */
+    select?: TransactionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Transaction
+     */
+    omit?: TransactionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TransactionInclude<ExtArgs> | null
+    /**
+     * Filter, which Transaction to fetch.
+     */
+    where?: TransactionWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Transactions to fetch.
+     */
+    orderBy?: TransactionOrderByWithRelationInput | TransactionOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for Transactions.
+     */
+    cursor?: TransactionWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Transactions from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Transactions.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of Transactions.
+     */
+    distinct?: TransactionScalarFieldEnum | TransactionScalarFieldEnum[]
+  }
+
+  /**
+   * Transaction findFirstOrThrow
+   */
+  export type TransactionFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Transaction
+     */
+    select?: TransactionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Transaction
+     */
+    omit?: TransactionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TransactionInclude<ExtArgs> | null
+    /**
+     * Filter, which Transaction to fetch.
+     */
+    where?: TransactionWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Transactions to fetch.
+     */
+    orderBy?: TransactionOrderByWithRelationInput | TransactionOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for Transactions.
+     */
+    cursor?: TransactionWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Transactions from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Transactions.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of Transactions.
+     */
+    distinct?: TransactionScalarFieldEnum | TransactionScalarFieldEnum[]
+  }
+
+  /**
+   * Transaction findMany
+   */
+  export type TransactionFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Transaction
+     */
+    select?: TransactionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Transaction
+     */
+    omit?: TransactionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TransactionInclude<ExtArgs> | null
+    /**
+     * Filter, which Transactions to fetch.
+     */
+    where?: TransactionWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Transactions to fetch.
+     */
+    orderBy?: TransactionOrderByWithRelationInput | TransactionOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing Transactions.
+     */
+    cursor?: TransactionWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Transactions from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Transactions.
+     */
+    skip?: number
+    distinct?: TransactionScalarFieldEnum | TransactionScalarFieldEnum[]
+  }
+
+  /**
+   * Transaction create
+   */
+  export type TransactionCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Transaction
+     */
+    select?: TransactionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Transaction
+     */
+    omit?: TransactionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TransactionInclude<ExtArgs> | null
+    /**
+     * The data needed to create a Transaction.
+     */
+    data: XOR<TransactionCreateInput, TransactionUncheckedCreateInput>
+  }
+
+  /**
+   * Transaction createMany
+   */
+  export type TransactionCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many Transactions.
+     */
+    data: TransactionCreateManyInput | TransactionCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * Transaction createManyAndReturn
+   */
+  export type TransactionCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Transaction
+     */
+    select?: TransactionSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the Transaction
+     */
+    omit?: TransactionOmit<ExtArgs> | null
+    /**
+     * The data used to create many Transactions.
+     */
+    data: TransactionCreateManyInput | TransactionCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TransactionIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * Transaction update
+   */
+  export type TransactionUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Transaction
+     */
+    select?: TransactionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Transaction
+     */
+    omit?: TransactionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TransactionInclude<ExtArgs> | null
+    /**
+     * The data needed to update a Transaction.
+     */
+    data: XOR<TransactionUpdateInput, TransactionUncheckedUpdateInput>
+    /**
+     * Choose, which Transaction to update.
+     */
+    where: TransactionWhereUniqueInput
+  }
+
+  /**
+   * Transaction updateMany
+   */
+  export type TransactionUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update Transactions.
+     */
+    data: XOR<TransactionUpdateManyMutationInput, TransactionUncheckedUpdateManyInput>
+    /**
+     * Filter which Transactions to update
+     */
+    where?: TransactionWhereInput
+    /**
+     * Limit how many Transactions to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * Transaction updateManyAndReturn
+   */
+  export type TransactionUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Transaction
+     */
+    select?: TransactionSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the Transaction
+     */
+    omit?: TransactionOmit<ExtArgs> | null
+    /**
+     * The data used to update Transactions.
+     */
+    data: XOR<TransactionUpdateManyMutationInput, TransactionUncheckedUpdateManyInput>
+    /**
+     * Filter which Transactions to update
+     */
+    where?: TransactionWhereInput
+    /**
+     * Limit how many Transactions to update.
+     */
+    limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TransactionIncludeUpdateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * Transaction upsert
+   */
+  export type TransactionUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Transaction
+     */
+    select?: TransactionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Transaction
+     */
+    omit?: TransactionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TransactionInclude<ExtArgs> | null
+    /**
+     * The filter to search for the Transaction to update in case it exists.
+     */
+    where: TransactionWhereUniqueInput
+    /**
+     * In case the Transaction found by the `where` argument doesn't exist, create a new Transaction with this data.
+     */
+    create: XOR<TransactionCreateInput, TransactionUncheckedCreateInput>
+    /**
+     * In case the Transaction was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<TransactionUpdateInput, TransactionUncheckedUpdateInput>
+  }
+
+  /**
+   * Transaction delete
+   */
+  export type TransactionDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Transaction
+     */
+    select?: TransactionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Transaction
+     */
+    omit?: TransactionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TransactionInclude<ExtArgs> | null
+    /**
+     * Filter which Transaction to delete.
+     */
+    where: TransactionWhereUniqueInput
+  }
+
+  /**
+   * Transaction deleteMany
+   */
+  export type TransactionDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which Transactions to delete
+     */
+    where?: TransactionWhereInput
+    /**
+     * Limit how many Transactions to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * Transaction without action
+   */
+  export type TransactionDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Transaction
+     */
+    select?: TransactionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Transaction
+     */
+    omit?: TransactionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TransactionInclude<ExtArgs> | null
   }
 
 
@@ -27684,6 +30347,19 @@ export namespace Prisma {
   export type TransactionIsolationLevel = (typeof TransactionIsolationLevel)[keyof typeof TransactionIsolationLevel]
 
 
+  export const WhatsAppConfigScalarFieldEnum: {
+    id: 'id',
+    userId: 'userId',
+    phoneNumberId: 'phoneNumberId',
+    wabaId: 'wabaId',
+    accessToken: 'accessToken',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt'
+  };
+
+  export type WhatsAppConfigScalarFieldEnum = (typeof WhatsAppConfigScalarFieldEnum)[keyof typeof WhatsAppConfigScalarFieldEnum]
+
+
   export const UserScalarFieldEnum: {
     id: 'id',
     name: 'name',
@@ -27747,6 +30423,9 @@ export namespace Prisma {
     postsPerMonth: 'postsPerMonth',
     platforms: 'platforms',
     aiCredits: 'aiCredits',
+    aiTextLimit: 'aiTextLimit',
+    aiImageLimit: 'aiImageLimit',
+    paystackPlanCode: 'paystackPlanCode',
     createdAt: 'createdAt'
   };
 
@@ -27760,11 +30439,34 @@ export namespace Prisma {
     status: 'status',
     startDate: 'startDate',
     endDate: 'endDate',
+    postsUsed: 'postsUsed',
+    aiTextUsed: 'aiTextUsed',
+    aiImageUsed: 'aiImageUsed',
+    lastResetAt: 'lastResetAt',
+    paystackSubscriptionCode: 'paystackSubscriptionCode',
+    paystackCustomerCode: 'paystackCustomerCode',
     createdAt: 'createdAt',
     updatedAt: 'updatedAt'
   };
 
   export type SubscriptionScalarFieldEnum = (typeof SubscriptionScalarFieldEnum)[keyof typeof SubscriptionScalarFieldEnum]
+
+
+  export const TransactionScalarFieldEnum: {
+    id: 'id',
+    userId: 'userId',
+    amount: 'amount',
+    currency: 'currency',
+    status: 'status',
+    reference: 'reference',
+    paystackId: 'paystackId',
+    channel: 'channel',
+    paidAt: 'paidAt',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt'
+  };
+
+  export type TransactionScalarFieldEnum = (typeof TransactionScalarFieldEnum)[keyof typeof TransactionScalarFieldEnum]
 
 
   export const SocialAccountScalarFieldEnum: {
@@ -28225,6 +30927,71 @@ export namespace Prisma {
    */
 
 
+  export type WhatsAppConfigWhereInput = {
+    AND?: WhatsAppConfigWhereInput | WhatsAppConfigWhereInput[]
+    OR?: WhatsAppConfigWhereInput[]
+    NOT?: WhatsAppConfigWhereInput | WhatsAppConfigWhereInput[]
+    id?: StringFilter<"WhatsAppConfig"> | string
+    userId?: StringFilter<"WhatsAppConfig"> | string
+    phoneNumberId?: StringFilter<"WhatsAppConfig"> | string
+    wabaId?: StringFilter<"WhatsAppConfig"> | string
+    accessToken?: StringFilter<"WhatsAppConfig"> | string
+    createdAt?: DateTimeFilter<"WhatsAppConfig"> | Date | string
+    updatedAt?: DateTimeFilter<"WhatsAppConfig"> | Date | string
+    user?: XOR<UserScalarRelationFilter, UserWhereInput>
+  }
+
+  export type WhatsAppConfigOrderByWithRelationInput = {
+    id?: SortOrder
+    userId?: SortOrder
+    phoneNumberId?: SortOrder
+    wabaId?: SortOrder
+    accessToken?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    user?: UserOrderByWithRelationInput
+  }
+
+  export type WhatsAppConfigWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    userId?: string
+    AND?: WhatsAppConfigWhereInput | WhatsAppConfigWhereInput[]
+    OR?: WhatsAppConfigWhereInput[]
+    NOT?: WhatsAppConfigWhereInput | WhatsAppConfigWhereInput[]
+    phoneNumberId?: StringFilter<"WhatsAppConfig"> | string
+    wabaId?: StringFilter<"WhatsAppConfig"> | string
+    accessToken?: StringFilter<"WhatsAppConfig"> | string
+    createdAt?: DateTimeFilter<"WhatsAppConfig"> | Date | string
+    updatedAt?: DateTimeFilter<"WhatsAppConfig"> | Date | string
+    user?: XOR<UserScalarRelationFilter, UserWhereInput>
+  }, "id" | "userId">
+
+  export type WhatsAppConfigOrderByWithAggregationInput = {
+    id?: SortOrder
+    userId?: SortOrder
+    phoneNumberId?: SortOrder
+    wabaId?: SortOrder
+    accessToken?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    _count?: WhatsAppConfigCountOrderByAggregateInput
+    _max?: WhatsAppConfigMaxOrderByAggregateInput
+    _min?: WhatsAppConfigMinOrderByAggregateInput
+  }
+
+  export type WhatsAppConfigScalarWhereWithAggregatesInput = {
+    AND?: WhatsAppConfigScalarWhereWithAggregatesInput | WhatsAppConfigScalarWhereWithAggregatesInput[]
+    OR?: WhatsAppConfigScalarWhereWithAggregatesInput[]
+    NOT?: WhatsAppConfigScalarWhereWithAggregatesInput | WhatsAppConfigScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"WhatsAppConfig"> | string
+    userId?: StringWithAggregatesFilter<"WhatsAppConfig"> | string
+    phoneNumberId?: StringWithAggregatesFilter<"WhatsAppConfig"> | string
+    wabaId?: StringWithAggregatesFilter<"WhatsAppConfig"> | string
+    accessToken?: StringWithAggregatesFilter<"WhatsAppConfig"> | string
+    createdAt?: DateTimeWithAggregatesFilter<"WhatsAppConfig"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"WhatsAppConfig"> | Date | string
+  }
+
   export type UserWhereInput = {
     AND?: UserWhereInput | UserWhereInput[]
     OR?: UserWhereInput[]
@@ -28252,6 +31019,8 @@ export namespace Prisma {
     analytics?: AnalyticsListRelationFilter
     notifications?: NotificationListRelationFilter
     subscription?: XOR<SubscriptionNullableScalarRelationFilter, SubscriptionWhereInput> | null
+    transactions?: TransactionListRelationFilter
+    whatsappConfig?: XOR<WhatsAppConfigNullableScalarRelationFilter, WhatsAppConfigWhereInput> | null
   }
 
   export type UserOrderByWithRelationInput = {
@@ -28278,6 +31047,8 @@ export namespace Prisma {
     analytics?: AnalyticsOrderByRelationAggregateInput
     notifications?: NotificationOrderByRelationAggregateInput
     subscription?: SubscriptionOrderByWithRelationInput
+    transactions?: TransactionOrderByRelationAggregateInput
+    whatsappConfig?: WhatsAppConfigOrderByWithRelationInput
   }
 
   export type UserWhereUniqueInput = Prisma.AtLeast<{
@@ -28307,6 +31078,8 @@ export namespace Prisma {
     analytics?: AnalyticsListRelationFilter
     notifications?: NotificationListRelationFilter
     subscription?: XOR<SubscriptionNullableScalarRelationFilter, SubscriptionWhereInput> | null
+    transactions?: TransactionListRelationFilter
+    whatsappConfig?: XOR<WhatsAppConfigNullableScalarRelationFilter, WhatsAppConfigWhereInput> | null
   }, "id" | "email" | "zernioProfileId">
 
   export type UserOrderByWithAggregationInput = {
@@ -28544,6 +31317,9 @@ export namespace Prisma {
     postsPerMonth?: IntFilter<"Plan"> | number
     platforms?: IntFilter<"Plan"> | number
     aiCredits?: IntFilter<"Plan"> | number
+    aiTextLimit?: IntFilter<"Plan"> | number
+    aiImageLimit?: IntFilter<"Plan"> | number
+    paystackPlanCode?: StringNullableFilter<"Plan"> | string | null
     createdAt?: DateTimeFilter<"Plan"> | Date | string
     subscriptions?: SubscriptionListRelationFilter
   }
@@ -28557,6 +31333,9 @@ export namespace Prisma {
     postsPerMonth?: SortOrder
     platforms?: SortOrder
     aiCredits?: SortOrder
+    aiTextLimit?: SortOrder
+    aiImageLimit?: SortOrder
+    paystackPlanCode?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     subscriptions?: SubscriptionOrderByRelationAggregateInput
   }
@@ -28573,6 +31352,9 @@ export namespace Prisma {
     postsPerMonth?: IntFilter<"Plan"> | number
     platforms?: IntFilter<"Plan"> | number
     aiCredits?: IntFilter<"Plan"> | number
+    aiTextLimit?: IntFilter<"Plan"> | number
+    aiImageLimit?: IntFilter<"Plan"> | number
+    paystackPlanCode?: StringNullableFilter<"Plan"> | string | null
     createdAt?: DateTimeFilter<"Plan"> | Date | string
     subscriptions?: SubscriptionListRelationFilter
   }, "id" | "name">
@@ -28586,6 +31368,9 @@ export namespace Prisma {
     postsPerMonth?: SortOrder
     platforms?: SortOrder
     aiCredits?: SortOrder
+    aiTextLimit?: SortOrder
+    aiImageLimit?: SortOrder
+    paystackPlanCode?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     _count?: PlanCountOrderByAggregateInput
     _avg?: PlanAvgOrderByAggregateInput
@@ -28606,6 +31391,9 @@ export namespace Prisma {
     postsPerMonth?: IntWithAggregatesFilter<"Plan"> | number
     platforms?: IntWithAggregatesFilter<"Plan"> | number
     aiCredits?: IntWithAggregatesFilter<"Plan"> | number
+    aiTextLimit?: IntWithAggregatesFilter<"Plan"> | number
+    aiImageLimit?: IntWithAggregatesFilter<"Plan"> | number
+    paystackPlanCode?: StringNullableWithAggregatesFilter<"Plan"> | string | null
     createdAt?: DateTimeWithAggregatesFilter<"Plan"> | Date | string
   }
 
@@ -28619,6 +31407,12 @@ export namespace Prisma {
     status?: EnumSubscriptionStatusFilter<"Subscription"> | $Enums.SubscriptionStatus
     startDate?: DateTimeFilter<"Subscription"> | Date | string
     endDate?: DateTimeNullableFilter<"Subscription"> | Date | string | null
+    postsUsed?: IntFilter<"Subscription"> | number
+    aiTextUsed?: IntFilter<"Subscription"> | number
+    aiImageUsed?: IntFilter<"Subscription"> | number
+    lastResetAt?: DateTimeFilter<"Subscription"> | Date | string
+    paystackSubscriptionCode?: StringNullableFilter<"Subscription"> | string | null
+    paystackCustomerCode?: StringNullableFilter<"Subscription"> | string | null
     createdAt?: DateTimeFilter<"Subscription"> | Date | string
     updatedAt?: DateTimeFilter<"Subscription"> | Date | string
     user?: XOR<UserScalarRelationFilter, UserWhereInput>
@@ -28632,6 +31426,12 @@ export namespace Prisma {
     status?: SortOrder
     startDate?: SortOrder
     endDate?: SortOrderInput | SortOrder
+    postsUsed?: SortOrder
+    aiTextUsed?: SortOrder
+    aiImageUsed?: SortOrder
+    lastResetAt?: SortOrder
+    paystackSubscriptionCode?: SortOrderInput | SortOrder
+    paystackCustomerCode?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     user?: UserOrderByWithRelationInput
@@ -28648,6 +31448,12 @@ export namespace Prisma {
     status?: EnumSubscriptionStatusFilter<"Subscription"> | $Enums.SubscriptionStatus
     startDate?: DateTimeFilter<"Subscription"> | Date | string
     endDate?: DateTimeNullableFilter<"Subscription"> | Date | string | null
+    postsUsed?: IntFilter<"Subscription"> | number
+    aiTextUsed?: IntFilter<"Subscription"> | number
+    aiImageUsed?: IntFilter<"Subscription"> | number
+    lastResetAt?: DateTimeFilter<"Subscription"> | Date | string
+    paystackSubscriptionCode?: StringNullableFilter<"Subscription"> | string | null
+    paystackCustomerCode?: StringNullableFilter<"Subscription"> | string | null
     createdAt?: DateTimeFilter<"Subscription"> | Date | string
     updatedAt?: DateTimeFilter<"Subscription"> | Date | string
     user?: XOR<UserScalarRelationFilter, UserWhereInput>
@@ -28661,11 +31467,19 @@ export namespace Prisma {
     status?: SortOrder
     startDate?: SortOrder
     endDate?: SortOrderInput | SortOrder
+    postsUsed?: SortOrder
+    aiTextUsed?: SortOrder
+    aiImageUsed?: SortOrder
+    lastResetAt?: SortOrder
+    paystackSubscriptionCode?: SortOrderInput | SortOrder
+    paystackCustomerCode?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     _count?: SubscriptionCountOrderByAggregateInput
+    _avg?: SubscriptionAvgOrderByAggregateInput
     _max?: SubscriptionMaxOrderByAggregateInput
     _min?: SubscriptionMinOrderByAggregateInput
+    _sum?: SubscriptionSumOrderByAggregateInput
   }
 
   export type SubscriptionScalarWhereWithAggregatesInput = {
@@ -28678,8 +31492,101 @@ export namespace Prisma {
     status?: EnumSubscriptionStatusWithAggregatesFilter<"Subscription"> | $Enums.SubscriptionStatus
     startDate?: DateTimeWithAggregatesFilter<"Subscription"> | Date | string
     endDate?: DateTimeNullableWithAggregatesFilter<"Subscription"> | Date | string | null
+    postsUsed?: IntWithAggregatesFilter<"Subscription"> | number
+    aiTextUsed?: IntWithAggregatesFilter<"Subscription"> | number
+    aiImageUsed?: IntWithAggregatesFilter<"Subscription"> | number
+    lastResetAt?: DateTimeWithAggregatesFilter<"Subscription"> | Date | string
+    paystackSubscriptionCode?: StringNullableWithAggregatesFilter<"Subscription"> | string | null
+    paystackCustomerCode?: StringNullableWithAggregatesFilter<"Subscription"> | string | null
     createdAt?: DateTimeWithAggregatesFilter<"Subscription"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"Subscription"> | Date | string
+  }
+
+  export type TransactionWhereInput = {
+    AND?: TransactionWhereInput | TransactionWhereInput[]
+    OR?: TransactionWhereInput[]
+    NOT?: TransactionWhereInput | TransactionWhereInput[]
+    id?: StringFilter<"Transaction"> | string
+    userId?: StringFilter<"Transaction"> | string
+    amount?: FloatFilter<"Transaction"> | number
+    currency?: StringFilter<"Transaction"> | string
+    status?: StringFilter<"Transaction"> | string
+    reference?: StringFilter<"Transaction"> | string
+    paystackId?: StringNullableFilter<"Transaction"> | string | null
+    channel?: StringNullableFilter<"Transaction"> | string | null
+    paidAt?: DateTimeNullableFilter<"Transaction"> | Date | string | null
+    createdAt?: DateTimeFilter<"Transaction"> | Date | string
+    updatedAt?: DateTimeFilter<"Transaction"> | Date | string
+    user?: XOR<UserScalarRelationFilter, UserWhereInput>
+  }
+
+  export type TransactionOrderByWithRelationInput = {
+    id?: SortOrder
+    userId?: SortOrder
+    amount?: SortOrder
+    currency?: SortOrder
+    status?: SortOrder
+    reference?: SortOrder
+    paystackId?: SortOrderInput | SortOrder
+    channel?: SortOrderInput | SortOrder
+    paidAt?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    user?: UserOrderByWithRelationInput
+  }
+
+  export type TransactionWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    reference?: string
+    AND?: TransactionWhereInput | TransactionWhereInput[]
+    OR?: TransactionWhereInput[]
+    NOT?: TransactionWhereInput | TransactionWhereInput[]
+    userId?: StringFilter<"Transaction"> | string
+    amount?: FloatFilter<"Transaction"> | number
+    currency?: StringFilter<"Transaction"> | string
+    status?: StringFilter<"Transaction"> | string
+    paystackId?: StringNullableFilter<"Transaction"> | string | null
+    channel?: StringNullableFilter<"Transaction"> | string | null
+    paidAt?: DateTimeNullableFilter<"Transaction"> | Date | string | null
+    createdAt?: DateTimeFilter<"Transaction"> | Date | string
+    updatedAt?: DateTimeFilter<"Transaction"> | Date | string
+    user?: XOR<UserScalarRelationFilter, UserWhereInput>
+  }, "id" | "reference">
+
+  export type TransactionOrderByWithAggregationInput = {
+    id?: SortOrder
+    userId?: SortOrder
+    amount?: SortOrder
+    currency?: SortOrder
+    status?: SortOrder
+    reference?: SortOrder
+    paystackId?: SortOrderInput | SortOrder
+    channel?: SortOrderInput | SortOrder
+    paidAt?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    _count?: TransactionCountOrderByAggregateInput
+    _avg?: TransactionAvgOrderByAggregateInput
+    _max?: TransactionMaxOrderByAggregateInput
+    _min?: TransactionMinOrderByAggregateInput
+    _sum?: TransactionSumOrderByAggregateInput
+  }
+
+  export type TransactionScalarWhereWithAggregatesInput = {
+    AND?: TransactionScalarWhereWithAggregatesInput | TransactionScalarWhereWithAggregatesInput[]
+    OR?: TransactionScalarWhereWithAggregatesInput[]
+    NOT?: TransactionScalarWhereWithAggregatesInput | TransactionScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"Transaction"> | string
+    userId?: StringWithAggregatesFilter<"Transaction"> | string
+    amount?: FloatWithAggregatesFilter<"Transaction"> | number
+    currency?: StringWithAggregatesFilter<"Transaction"> | string
+    status?: StringWithAggregatesFilter<"Transaction"> | string
+    reference?: StringWithAggregatesFilter<"Transaction"> | string
+    paystackId?: StringNullableWithAggregatesFilter<"Transaction"> | string | null
+    channel?: StringNullableWithAggregatesFilter<"Transaction"> | string | null
+    paidAt?: DateTimeNullableWithAggregatesFilter<"Transaction"> | Date | string | null
+    createdAt?: DateTimeWithAggregatesFilter<"Transaction"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"Transaction"> | Date | string
   }
 
   export type SocialAccountWhereInput = {
@@ -29988,6 +32895,75 @@ export namespace Prisma {
     updatedAt?: DateTimeWithAggregatesFilter<"RateLimit"> | Date | string
   }
 
+  export type WhatsAppConfigCreateInput = {
+    id?: string
+    phoneNumberId: string
+    wabaId: string
+    accessToken: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    user: UserCreateNestedOneWithoutWhatsappConfigInput
+  }
+
+  export type WhatsAppConfigUncheckedCreateInput = {
+    id?: string
+    userId: string
+    phoneNumberId: string
+    wabaId: string
+    accessToken: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type WhatsAppConfigUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    phoneNumberId?: StringFieldUpdateOperationsInput | string
+    wabaId?: StringFieldUpdateOperationsInput | string
+    accessToken?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    user?: UserUpdateOneRequiredWithoutWhatsappConfigNestedInput
+  }
+
+  export type WhatsAppConfigUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    userId?: StringFieldUpdateOperationsInput | string
+    phoneNumberId?: StringFieldUpdateOperationsInput | string
+    wabaId?: StringFieldUpdateOperationsInput | string
+    accessToken?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type WhatsAppConfigCreateManyInput = {
+    id?: string
+    userId: string
+    phoneNumberId: string
+    wabaId: string
+    accessToken: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type WhatsAppConfigUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    phoneNumberId?: StringFieldUpdateOperationsInput | string
+    wabaId?: StringFieldUpdateOperationsInput | string
+    accessToken?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type WhatsAppConfigUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    userId?: StringFieldUpdateOperationsInput | string
+    phoneNumberId?: StringFieldUpdateOperationsInput | string
+    wabaId?: StringFieldUpdateOperationsInput | string
+    accessToken?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
   export type UserCreateInput = {
     id?: string
     name?: string | null
@@ -30012,6 +32988,8 @@ export namespace Prisma {
     analytics?: AnalyticsCreateNestedManyWithoutUserInput
     notifications?: NotificationCreateNestedManyWithoutUserInput
     subscription?: SubscriptionCreateNestedOneWithoutUserInput
+    transactions?: TransactionCreateNestedManyWithoutUserInput
+    whatsappConfig?: WhatsAppConfigCreateNestedOneWithoutUserInput
   }
 
   export type UserUncheckedCreateInput = {
@@ -30038,6 +33016,8 @@ export namespace Prisma {
     analytics?: AnalyticsUncheckedCreateNestedManyWithoutUserInput
     notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
     subscription?: SubscriptionUncheckedCreateNestedOneWithoutUserInput
+    transactions?: TransactionUncheckedCreateNestedManyWithoutUserInput
+    whatsappConfig?: WhatsAppConfigUncheckedCreateNestedOneWithoutUserInput
   }
 
   export type UserUpdateInput = {
@@ -30064,6 +33044,8 @@ export namespace Prisma {
     analytics?: AnalyticsUpdateManyWithoutUserNestedInput
     notifications?: NotificationUpdateManyWithoutUserNestedInput
     subscription?: SubscriptionUpdateOneWithoutUserNestedInput
+    transactions?: TransactionUpdateManyWithoutUserNestedInput
+    whatsappConfig?: WhatsAppConfigUpdateOneWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateInput = {
@@ -30090,6 +33072,8 @@ export namespace Prisma {
     analytics?: AnalyticsUncheckedUpdateManyWithoutUserNestedInput
     notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
     subscription?: SubscriptionUncheckedUpdateOneWithoutUserNestedInput
+    transactions?: TransactionUncheckedUpdateManyWithoutUserNestedInput
+    whatsappConfig?: WhatsAppConfigUncheckedUpdateOneWithoutUserNestedInput
   }
 
   export type UserCreateManyInput = {
@@ -30340,7 +33324,10 @@ export namespace Prisma {
     features?: PlanCreatefeaturesInput | string[]
     postsPerMonth: number
     platforms: number
-    aiCredits: number
+    aiCredits?: number
+    aiTextLimit?: number
+    aiImageLimit?: number
+    paystackPlanCode?: string | null
     createdAt?: Date | string
     subscriptions?: SubscriptionCreateNestedManyWithoutPlanInput
   }
@@ -30353,7 +33340,10 @@ export namespace Prisma {
     features?: PlanCreatefeaturesInput | string[]
     postsPerMonth: number
     platforms: number
-    aiCredits: number
+    aiCredits?: number
+    aiTextLimit?: number
+    aiImageLimit?: number
+    paystackPlanCode?: string | null
     createdAt?: Date | string
     subscriptions?: SubscriptionUncheckedCreateNestedManyWithoutPlanInput
   }
@@ -30367,6 +33357,9 @@ export namespace Prisma {
     postsPerMonth?: IntFieldUpdateOperationsInput | number
     platforms?: IntFieldUpdateOperationsInput | number
     aiCredits?: IntFieldUpdateOperationsInput | number
+    aiTextLimit?: IntFieldUpdateOperationsInput | number
+    aiImageLimit?: IntFieldUpdateOperationsInput | number
+    paystackPlanCode?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     subscriptions?: SubscriptionUpdateManyWithoutPlanNestedInput
   }
@@ -30380,6 +33373,9 @@ export namespace Prisma {
     postsPerMonth?: IntFieldUpdateOperationsInput | number
     platforms?: IntFieldUpdateOperationsInput | number
     aiCredits?: IntFieldUpdateOperationsInput | number
+    aiTextLimit?: IntFieldUpdateOperationsInput | number
+    aiImageLimit?: IntFieldUpdateOperationsInput | number
+    paystackPlanCode?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     subscriptions?: SubscriptionUncheckedUpdateManyWithoutPlanNestedInput
   }
@@ -30392,7 +33388,10 @@ export namespace Prisma {
     features?: PlanCreatefeaturesInput | string[]
     postsPerMonth: number
     platforms: number
-    aiCredits: number
+    aiCredits?: number
+    aiTextLimit?: number
+    aiImageLimit?: number
+    paystackPlanCode?: string | null
     createdAt?: Date | string
   }
 
@@ -30405,6 +33404,9 @@ export namespace Prisma {
     postsPerMonth?: IntFieldUpdateOperationsInput | number
     platforms?: IntFieldUpdateOperationsInput | number
     aiCredits?: IntFieldUpdateOperationsInput | number
+    aiTextLimit?: IntFieldUpdateOperationsInput | number
+    aiImageLimit?: IntFieldUpdateOperationsInput | number
+    paystackPlanCode?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
@@ -30417,6 +33419,9 @@ export namespace Prisma {
     postsPerMonth?: IntFieldUpdateOperationsInput | number
     platforms?: IntFieldUpdateOperationsInput | number
     aiCredits?: IntFieldUpdateOperationsInput | number
+    aiTextLimit?: IntFieldUpdateOperationsInput | number
+    aiImageLimit?: IntFieldUpdateOperationsInput | number
+    paystackPlanCode?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
@@ -30425,6 +33430,12 @@ export namespace Prisma {
     status?: $Enums.SubscriptionStatus
     startDate?: Date | string
     endDate?: Date | string | null
+    postsUsed?: number
+    aiTextUsed?: number
+    aiImageUsed?: number
+    lastResetAt?: Date | string
+    paystackSubscriptionCode?: string | null
+    paystackCustomerCode?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     user: UserCreateNestedOneWithoutSubscriptionInput
@@ -30438,6 +33449,12 @@ export namespace Prisma {
     status?: $Enums.SubscriptionStatus
     startDate?: Date | string
     endDate?: Date | string | null
+    postsUsed?: number
+    aiTextUsed?: number
+    aiImageUsed?: number
+    lastResetAt?: Date | string
+    paystackSubscriptionCode?: string | null
+    paystackCustomerCode?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -30447,6 +33464,12 @@ export namespace Prisma {
     status?: EnumSubscriptionStatusFieldUpdateOperationsInput | $Enums.SubscriptionStatus
     startDate?: DateTimeFieldUpdateOperationsInput | Date | string
     endDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    postsUsed?: IntFieldUpdateOperationsInput | number
+    aiTextUsed?: IntFieldUpdateOperationsInput | number
+    aiImageUsed?: IntFieldUpdateOperationsInput | number
+    lastResetAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    paystackSubscriptionCode?: NullableStringFieldUpdateOperationsInput | string | null
+    paystackCustomerCode?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     user?: UserUpdateOneRequiredWithoutSubscriptionNestedInput
@@ -30460,6 +33483,12 @@ export namespace Prisma {
     status?: EnumSubscriptionStatusFieldUpdateOperationsInput | $Enums.SubscriptionStatus
     startDate?: DateTimeFieldUpdateOperationsInput | Date | string
     endDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    postsUsed?: IntFieldUpdateOperationsInput | number
+    aiTextUsed?: IntFieldUpdateOperationsInput | number
+    aiImageUsed?: IntFieldUpdateOperationsInput | number
+    lastResetAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    paystackSubscriptionCode?: NullableStringFieldUpdateOperationsInput | string | null
+    paystackCustomerCode?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -30471,6 +33500,12 @@ export namespace Prisma {
     status?: $Enums.SubscriptionStatus
     startDate?: Date | string
     endDate?: Date | string | null
+    postsUsed?: number
+    aiTextUsed?: number
+    aiImageUsed?: number
+    lastResetAt?: Date | string
+    paystackSubscriptionCode?: string | null
+    paystackCustomerCode?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -30480,6 +33515,12 @@ export namespace Prisma {
     status?: EnumSubscriptionStatusFieldUpdateOperationsInput | $Enums.SubscriptionStatus
     startDate?: DateTimeFieldUpdateOperationsInput | Date | string
     endDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    postsUsed?: IntFieldUpdateOperationsInput | number
+    aiTextUsed?: IntFieldUpdateOperationsInput | number
+    aiImageUsed?: IntFieldUpdateOperationsInput | number
+    lastResetAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    paystackSubscriptionCode?: NullableStringFieldUpdateOperationsInput | string | null
+    paystackCustomerCode?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -30491,6 +33532,109 @@ export namespace Prisma {
     status?: EnumSubscriptionStatusFieldUpdateOperationsInput | $Enums.SubscriptionStatus
     startDate?: DateTimeFieldUpdateOperationsInput | Date | string
     endDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    postsUsed?: IntFieldUpdateOperationsInput | number
+    aiTextUsed?: IntFieldUpdateOperationsInput | number
+    aiImageUsed?: IntFieldUpdateOperationsInput | number
+    lastResetAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    paystackSubscriptionCode?: NullableStringFieldUpdateOperationsInput | string | null
+    paystackCustomerCode?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type TransactionCreateInput = {
+    id?: string
+    amount: number
+    currency?: string
+    status: string
+    reference: string
+    paystackId?: string | null
+    channel?: string | null
+    paidAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    user: UserCreateNestedOneWithoutTransactionsInput
+  }
+
+  export type TransactionUncheckedCreateInput = {
+    id?: string
+    userId: string
+    amount: number
+    currency?: string
+    status: string
+    reference: string
+    paystackId?: string | null
+    channel?: string | null
+    paidAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type TransactionUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    amount?: FloatFieldUpdateOperationsInput | number
+    currency?: StringFieldUpdateOperationsInput | string
+    status?: StringFieldUpdateOperationsInput | string
+    reference?: StringFieldUpdateOperationsInput | string
+    paystackId?: NullableStringFieldUpdateOperationsInput | string | null
+    channel?: NullableStringFieldUpdateOperationsInput | string | null
+    paidAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    user?: UserUpdateOneRequiredWithoutTransactionsNestedInput
+  }
+
+  export type TransactionUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    userId?: StringFieldUpdateOperationsInput | string
+    amount?: FloatFieldUpdateOperationsInput | number
+    currency?: StringFieldUpdateOperationsInput | string
+    status?: StringFieldUpdateOperationsInput | string
+    reference?: StringFieldUpdateOperationsInput | string
+    paystackId?: NullableStringFieldUpdateOperationsInput | string | null
+    channel?: NullableStringFieldUpdateOperationsInput | string | null
+    paidAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type TransactionCreateManyInput = {
+    id?: string
+    userId: string
+    amount: number
+    currency?: string
+    status: string
+    reference: string
+    paystackId?: string | null
+    channel?: string | null
+    paidAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type TransactionUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    amount?: FloatFieldUpdateOperationsInput | number
+    currency?: StringFieldUpdateOperationsInput | string
+    status?: StringFieldUpdateOperationsInput | string
+    reference?: StringFieldUpdateOperationsInput | string
+    paystackId?: NullableStringFieldUpdateOperationsInput | string | null
+    channel?: NullableStringFieldUpdateOperationsInput | string | null
+    paidAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type TransactionUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    userId?: StringFieldUpdateOperationsInput | string
+    amount?: FloatFieldUpdateOperationsInput | number
+    currency?: StringFieldUpdateOperationsInput | string
+    status?: StringFieldUpdateOperationsInput | string
+    reference?: StringFieldUpdateOperationsInput | string
+    paystackId?: NullableStringFieldUpdateOperationsInput | string | null
+    channel?: NullableStringFieldUpdateOperationsInput | string | null
+    paidAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -31967,6 +35111,84 @@ export namespace Prisma {
     not?: NestedStringFilter<$PrismaModel> | string
   }
 
+  export type DateTimeFilter<$PrismaModel = never> = {
+    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel>
+    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel>
+    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    not?: NestedDateTimeFilter<$PrismaModel> | Date | string
+  }
+
+  export type UserScalarRelationFilter = {
+    is?: UserWhereInput
+    isNot?: UserWhereInput
+  }
+
+  export type WhatsAppConfigCountOrderByAggregateInput = {
+    id?: SortOrder
+    userId?: SortOrder
+    phoneNumberId?: SortOrder
+    wabaId?: SortOrder
+    accessToken?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type WhatsAppConfigMaxOrderByAggregateInput = {
+    id?: SortOrder
+    userId?: SortOrder
+    phoneNumberId?: SortOrder
+    wabaId?: SortOrder
+    accessToken?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type WhatsAppConfigMinOrderByAggregateInput = {
+    id?: SortOrder
+    userId?: SortOrder
+    phoneNumberId?: SortOrder
+    wabaId?: SortOrder
+    accessToken?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type StringWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: string | StringFieldRefInput<$PrismaModel>
+    in?: string[] | ListStringFieldRefInput<$PrismaModel>
+    notIn?: string[] | ListStringFieldRefInput<$PrismaModel>
+    lt?: string | StringFieldRefInput<$PrismaModel>
+    lte?: string | StringFieldRefInput<$PrismaModel>
+    gt?: string | StringFieldRefInput<$PrismaModel>
+    gte?: string | StringFieldRefInput<$PrismaModel>
+    contains?: string | StringFieldRefInput<$PrismaModel>
+    startsWith?: string | StringFieldRefInput<$PrismaModel>
+    endsWith?: string | StringFieldRefInput<$PrismaModel>
+    mode?: QueryMode
+    not?: NestedStringWithAggregatesFilter<$PrismaModel> | string
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedStringFilter<$PrismaModel>
+    _max?: NestedStringFilter<$PrismaModel>
+  }
+
+  export type DateTimeWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel>
+    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel>
+    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    not?: NestedDateTimeWithAggregatesFilter<$PrismaModel> | Date | string
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedDateTimeFilter<$PrismaModel>
+    _max?: NestedDateTimeFilter<$PrismaModel>
+  }
+
   export type StringNullableFilter<$PrismaModel = never> = {
     equals?: string | StringFieldRefInput<$PrismaModel> | null
     in?: string[] | ListStringFieldRefInput<$PrismaModel> | null
@@ -31998,17 +35220,6 @@ export namespace Prisma {
     in?: $Enums.Role[] | ListEnumRoleFieldRefInput<$PrismaModel>
     notIn?: $Enums.Role[] | ListEnumRoleFieldRefInput<$PrismaModel>
     not?: NestedEnumRoleFilter<$PrismaModel> | $Enums.Role
-  }
-
-  export type DateTimeFilter<$PrismaModel = never> = {
-    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel>
-    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel>
-    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    not?: NestedDateTimeFilter<$PrismaModel> | Date | string
   }
 
   export type AccountListRelationFilter = {
@@ -32088,6 +35299,17 @@ export namespace Prisma {
     isNot?: SubscriptionWhereInput | null
   }
 
+  export type TransactionListRelationFilter = {
+    every?: TransactionWhereInput
+    some?: TransactionWhereInput
+    none?: TransactionWhereInput
+  }
+
+  export type WhatsAppConfigNullableScalarRelationFilter = {
+    is?: WhatsAppConfigWhereInput | null
+    isNot?: WhatsAppConfigWhereInput | null
+  }
+
   export type SortOrderInput = {
     sort: SortOrder
     nulls?: NullsOrder
@@ -32141,6 +35363,10 @@ export namespace Prisma {
     _count?: SortOrder
   }
 
+  export type TransactionOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
   export type UserCountOrderByAggregateInput = {
     id?: SortOrder
     name?: SortOrder
@@ -32178,24 +35404,6 @@ export namespace Prisma {
     createdAt?: SortOrder
     updatedAt?: SortOrder
     zernioProfileId?: SortOrder
-  }
-
-  export type StringWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: string | StringFieldRefInput<$PrismaModel>
-    in?: string[] | ListStringFieldRefInput<$PrismaModel>
-    notIn?: string[] | ListStringFieldRefInput<$PrismaModel>
-    lt?: string | StringFieldRefInput<$PrismaModel>
-    lte?: string | StringFieldRefInput<$PrismaModel>
-    gt?: string | StringFieldRefInput<$PrismaModel>
-    gte?: string | StringFieldRefInput<$PrismaModel>
-    contains?: string | StringFieldRefInput<$PrismaModel>
-    startsWith?: string | StringFieldRefInput<$PrismaModel>
-    endsWith?: string | StringFieldRefInput<$PrismaModel>
-    mode?: QueryMode
-    not?: NestedStringWithAggregatesFilter<$PrismaModel> | string
-    _count?: NestedIntFilter<$PrismaModel>
-    _min?: NestedStringFilter<$PrismaModel>
-    _max?: NestedStringFilter<$PrismaModel>
   }
 
   export type StringNullableWithAggregatesFilter<$PrismaModel = never> = {
@@ -32240,20 +35448,6 @@ export namespace Prisma {
     _max?: NestedEnumRoleFilter<$PrismaModel>
   }
 
-  export type DateTimeWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel>
-    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel>
-    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    not?: NestedDateTimeWithAggregatesFilter<$PrismaModel> | Date | string
-    _count?: NestedIntFilter<$PrismaModel>
-    _min?: NestedDateTimeFilter<$PrismaModel>
-    _max?: NestedDateTimeFilter<$PrismaModel>
-  }
-
   export type IntNullableFilter<$PrismaModel = never> = {
     equals?: number | IntFieldRefInput<$PrismaModel> | null
     in?: number[] | ListIntFieldRefInput<$PrismaModel> | null
@@ -32263,11 +35457,6 @@ export namespace Prisma {
     gt?: number | IntFieldRefInput<$PrismaModel>
     gte?: number | IntFieldRefInput<$PrismaModel>
     not?: NestedIntNullableFilter<$PrismaModel> | number | null
-  }
-
-  export type UserScalarRelationFilter = {
-    is?: UserWhereInput
-    isNot?: UserWhereInput
   }
 
   export type AccountProviderProviderAccountIdCompoundUniqueInput = {
@@ -32442,6 +35631,9 @@ export namespace Prisma {
     postsPerMonth?: SortOrder
     platforms?: SortOrder
     aiCredits?: SortOrder
+    aiTextLimit?: SortOrder
+    aiImageLimit?: SortOrder
+    paystackPlanCode?: SortOrder
     createdAt?: SortOrder
   }
 
@@ -32450,6 +35642,8 @@ export namespace Prisma {
     postsPerMonth?: SortOrder
     platforms?: SortOrder
     aiCredits?: SortOrder
+    aiTextLimit?: SortOrder
+    aiImageLimit?: SortOrder
   }
 
   export type PlanMaxOrderByAggregateInput = {
@@ -32460,6 +35654,9 @@ export namespace Prisma {
     postsPerMonth?: SortOrder
     platforms?: SortOrder
     aiCredits?: SortOrder
+    aiTextLimit?: SortOrder
+    aiImageLimit?: SortOrder
+    paystackPlanCode?: SortOrder
     createdAt?: SortOrder
   }
 
@@ -32471,6 +35668,9 @@ export namespace Prisma {
     postsPerMonth?: SortOrder
     platforms?: SortOrder
     aiCredits?: SortOrder
+    aiTextLimit?: SortOrder
+    aiImageLimit?: SortOrder
+    paystackPlanCode?: SortOrder
     createdAt?: SortOrder
   }
 
@@ -32479,6 +35679,8 @@ export namespace Prisma {
     postsPerMonth?: SortOrder
     platforms?: SortOrder
     aiCredits?: SortOrder
+    aiTextLimit?: SortOrder
+    aiImageLimit?: SortOrder
   }
 
   export type FloatWithAggregatesFilter<$PrismaModel = never> = {
@@ -32532,8 +35734,20 @@ export namespace Prisma {
     status?: SortOrder
     startDate?: SortOrder
     endDate?: SortOrder
+    postsUsed?: SortOrder
+    aiTextUsed?: SortOrder
+    aiImageUsed?: SortOrder
+    lastResetAt?: SortOrder
+    paystackSubscriptionCode?: SortOrder
+    paystackCustomerCode?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
+  }
+
+  export type SubscriptionAvgOrderByAggregateInput = {
+    postsUsed?: SortOrder
+    aiTextUsed?: SortOrder
+    aiImageUsed?: SortOrder
   }
 
   export type SubscriptionMaxOrderByAggregateInput = {
@@ -32543,6 +35757,12 @@ export namespace Prisma {
     status?: SortOrder
     startDate?: SortOrder
     endDate?: SortOrder
+    postsUsed?: SortOrder
+    aiTextUsed?: SortOrder
+    aiImageUsed?: SortOrder
+    lastResetAt?: SortOrder
+    paystackSubscriptionCode?: SortOrder
+    paystackCustomerCode?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -32554,8 +35774,20 @@ export namespace Prisma {
     status?: SortOrder
     startDate?: SortOrder
     endDate?: SortOrder
+    postsUsed?: SortOrder
+    aiTextUsed?: SortOrder
+    aiImageUsed?: SortOrder
+    lastResetAt?: SortOrder
+    paystackSubscriptionCode?: SortOrder
+    paystackCustomerCode?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
+  }
+
+  export type SubscriptionSumOrderByAggregateInput = {
+    postsUsed?: SortOrder
+    aiTextUsed?: SortOrder
+    aiImageUsed?: SortOrder
   }
 
   export type EnumSubscriptionStatusWithAggregatesFilter<$PrismaModel = never> = {
@@ -32566,6 +35798,56 @@ export namespace Prisma {
     _count?: NestedIntFilter<$PrismaModel>
     _min?: NestedEnumSubscriptionStatusFilter<$PrismaModel>
     _max?: NestedEnumSubscriptionStatusFilter<$PrismaModel>
+  }
+
+  export type TransactionCountOrderByAggregateInput = {
+    id?: SortOrder
+    userId?: SortOrder
+    amount?: SortOrder
+    currency?: SortOrder
+    status?: SortOrder
+    reference?: SortOrder
+    paystackId?: SortOrder
+    channel?: SortOrder
+    paidAt?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type TransactionAvgOrderByAggregateInput = {
+    amount?: SortOrder
+  }
+
+  export type TransactionMaxOrderByAggregateInput = {
+    id?: SortOrder
+    userId?: SortOrder
+    amount?: SortOrder
+    currency?: SortOrder
+    status?: SortOrder
+    reference?: SortOrder
+    paystackId?: SortOrder
+    channel?: SortOrder
+    paidAt?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type TransactionMinOrderByAggregateInput = {
+    id?: SortOrder
+    userId?: SortOrder
+    amount?: SortOrder
+    currency?: SortOrder
+    status?: SortOrder
+    reference?: SortOrder
+    paystackId?: SortOrder
+    channel?: SortOrder
+    paidAt?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type TransactionSumOrderByAggregateInput = {
+    amount?: SortOrder
   }
 
   export type EnumPlatformFilter<$PrismaModel = never> = {
@@ -33512,6 +36794,28 @@ export namespace Prisma {
     count?: SortOrder
   }
 
+  export type UserCreateNestedOneWithoutWhatsappConfigInput = {
+    create?: XOR<UserCreateWithoutWhatsappConfigInput, UserUncheckedCreateWithoutWhatsappConfigInput>
+    connectOrCreate?: UserCreateOrConnectWithoutWhatsappConfigInput
+    connect?: UserWhereUniqueInput
+  }
+
+  export type StringFieldUpdateOperationsInput = {
+    set?: string
+  }
+
+  export type DateTimeFieldUpdateOperationsInput = {
+    set?: Date | string
+  }
+
+  export type UserUpdateOneRequiredWithoutWhatsappConfigNestedInput = {
+    create?: XOR<UserCreateWithoutWhatsappConfigInput, UserUncheckedCreateWithoutWhatsappConfigInput>
+    connectOrCreate?: UserCreateOrConnectWithoutWhatsappConfigInput
+    upsert?: UserUpsertWithoutWhatsappConfigInput
+    connect?: UserWhereUniqueInput
+    update?: XOR<XOR<UserUpdateToOneWithWhereWithoutWhatsappConfigInput, UserUpdateWithoutWhatsappConfigInput>, UserUncheckedUpdateWithoutWhatsappConfigInput>
+  }
+
   export type AccountCreateNestedManyWithoutUserInput = {
     create?: XOR<AccountCreateWithoutUserInput, AccountUncheckedCreateWithoutUserInput> | AccountCreateWithoutUserInput[] | AccountUncheckedCreateWithoutUserInput[]
     connectOrCreate?: AccountCreateOrConnectWithoutUserInput | AccountCreateOrConnectWithoutUserInput[]
@@ -33600,6 +36904,19 @@ export namespace Prisma {
     create?: XOR<SubscriptionCreateWithoutUserInput, SubscriptionUncheckedCreateWithoutUserInput>
     connectOrCreate?: SubscriptionCreateOrConnectWithoutUserInput
     connect?: SubscriptionWhereUniqueInput
+  }
+
+  export type TransactionCreateNestedManyWithoutUserInput = {
+    create?: XOR<TransactionCreateWithoutUserInput, TransactionUncheckedCreateWithoutUserInput> | TransactionCreateWithoutUserInput[] | TransactionUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: TransactionCreateOrConnectWithoutUserInput | TransactionCreateOrConnectWithoutUserInput[]
+    createMany?: TransactionCreateManyUserInputEnvelope
+    connect?: TransactionWhereUniqueInput | TransactionWhereUniqueInput[]
+  }
+
+  export type WhatsAppConfigCreateNestedOneWithoutUserInput = {
+    create?: XOR<WhatsAppConfigCreateWithoutUserInput, WhatsAppConfigUncheckedCreateWithoutUserInput>
+    connectOrCreate?: WhatsAppConfigCreateOrConnectWithoutUserInput
+    connect?: WhatsAppConfigWhereUniqueInput
   }
 
   export type AccountUncheckedCreateNestedManyWithoutUserInput = {
@@ -33692,8 +37009,17 @@ export namespace Prisma {
     connect?: SubscriptionWhereUniqueInput
   }
 
-  export type StringFieldUpdateOperationsInput = {
-    set?: string
+  export type TransactionUncheckedCreateNestedManyWithoutUserInput = {
+    create?: XOR<TransactionCreateWithoutUserInput, TransactionUncheckedCreateWithoutUserInput> | TransactionCreateWithoutUserInput[] | TransactionUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: TransactionCreateOrConnectWithoutUserInput | TransactionCreateOrConnectWithoutUserInput[]
+    createMany?: TransactionCreateManyUserInputEnvelope
+    connect?: TransactionWhereUniqueInput | TransactionWhereUniqueInput[]
+  }
+
+  export type WhatsAppConfigUncheckedCreateNestedOneWithoutUserInput = {
+    create?: XOR<WhatsAppConfigCreateWithoutUserInput, WhatsAppConfigUncheckedCreateWithoutUserInput>
+    connectOrCreate?: WhatsAppConfigCreateOrConnectWithoutUserInput
+    connect?: WhatsAppConfigWhereUniqueInput
   }
 
   export type NullableStringFieldUpdateOperationsInput = {
@@ -33706,10 +37032,6 @@ export namespace Prisma {
 
   export type EnumRoleFieldUpdateOperationsInput = {
     set?: $Enums.Role
-  }
-
-  export type DateTimeFieldUpdateOperationsInput = {
-    set?: Date | string
   }
 
   export type AccountUpdateManyWithoutUserNestedInput = {
@@ -33890,6 +37212,30 @@ export namespace Prisma {
     update?: XOR<XOR<SubscriptionUpdateToOneWithWhereWithoutUserInput, SubscriptionUpdateWithoutUserInput>, SubscriptionUncheckedUpdateWithoutUserInput>
   }
 
+  export type TransactionUpdateManyWithoutUserNestedInput = {
+    create?: XOR<TransactionCreateWithoutUserInput, TransactionUncheckedCreateWithoutUserInput> | TransactionCreateWithoutUserInput[] | TransactionUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: TransactionCreateOrConnectWithoutUserInput | TransactionCreateOrConnectWithoutUserInput[]
+    upsert?: TransactionUpsertWithWhereUniqueWithoutUserInput | TransactionUpsertWithWhereUniqueWithoutUserInput[]
+    createMany?: TransactionCreateManyUserInputEnvelope
+    set?: TransactionWhereUniqueInput | TransactionWhereUniqueInput[]
+    disconnect?: TransactionWhereUniqueInput | TransactionWhereUniqueInput[]
+    delete?: TransactionWhereUniqueInput | TransactionWhereUniqueInput[]
+    connect?: TransactionWhereUniqueInput | TransactionWhereUniqueInput[]
+    update?: TransactionUpdateWithWhereUniqueWithoutUserInput | TransactionUpdateWithWhereUniqueWithoutUserInput[]
+    updateMany?: TransactionUpdateManyWithWhereWithoutUserInput | TransactionUpdateManyWithWhereWithoutUserInput[]
+    deleteMany?: TransactionScalarWhereInput | TransactionScalarWhereInput[]
+  }
+
+  export type WhatsAppConfigUpdateOneWithoutUserNestedInput = {
+    create?: XOR<WhatsAppConfigCreateWithoutUserInput, WhatsAppConfigUncheckedCreateWithoutUserInput>
+    connectOrCreate?: WhatsAppConfigCreateOrConnectWithoutUserInput
+    upsert?: WhatsAppConfigUpsertWithoutUserInput
+    disconnect?: WhatsAppConfigWhereInput | boolean
+    delete?: WhatsAppConfigWhereInput | boolean
+    connect?: WhatsAppConfigWhereUniqueInput
+    update?: XOR<XOR<WhatsAppConfigUpdateToOneWithWhereWithoutUserInput, WhatsAppConfigUpdateWithoutUserInput>, WhatsAppConfigUncheckedUpdateWithoutUserInput>
+  }
+
   export type AccountUncheckedUpdateManyWithoutUserNestedInput = {
     create?: XOR<AccountCreateWithoutUserInput, AccountUncheckedCreateWithoutUserInput> | AccountCreateWithoutUserInput[] | AccountUncheckedCreateWithoutUserInput[]
     connectOrCreate?: AccountCreateOrConnectWithoutUserInput | AccountCreateOrConnectWithoutUserInput[]
@@ -34068,6 +37414,30 @@ export namespace Prisma {
     update?: XOR<XOR<SubscriptionUpdateToOneWithWhereWithoutUserInput, SubscriptionUpdateWithoutUserInput>, SubscriptionUncheckedUpdateWithoutUserInput>
   }
 
+  export type TransactionUncheckedUpdateManyWithoutUserNestedInput = {
+    create?: XOR<TransactionCreateWithoutUserInput, TransactionUncheckedCreateWithoutUserInput> | TransactionCreateWithoutUserInput[] | TransactionUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: TransactionCreateOrConnectWithoutUserInput | TransactionCreateOrConnectWithoutUserInput[]
+    upsert?: TransactionUpsertWithWhereUniqueWithoutUserInput | TransactionUpsertWithWhereUniqueWithoutUserInput[]
+    createMany?: TransactionCreateManyUserInputEnvelope
+    set?: TransactionWhereUniqueInput | TransactionWhereUniqueInput[]
+    disconnect?: TransactionWhereUniqueInput | TransactionWhereUniqueInput[]
+    delete?: TransactionWhereUniqueInput | TransactionWhereUniqueInput[]
+    connect?: TransactionWhereUniqueInput | TransactionWhereUniqueInput[]
+    update?: TransactionUpdateWithWhereUniqueWithoutUserInput | TransactionUpdateWithWhereUniqueWithoutUserInput[]
+    updateMany?: TransactionUpdateManyWithWhereWithoutUserInput | TransactionUpdateManyWithWhereWithoutUserInput[]
+    deleteMany?: TransactionScalarWhereInput | TransactionScalarWhereInput[]
+  }
+
+  export type WhatsAppConfigUncheckedUpdateOneWithoutUserNestedInput = {
+    create?: XOR<WhatsAppConfigCreateWithoutUserInput, WhatsAppConfigUncheckedCreateWithoutUserInput>
+    connectOrCreate?: WhatsAppConfigCreateOrConnectWithoutUserInput
+    upsert?: WhatsAppConfigUpsertWithoutUserInput
+    disconnect?: WhatsAppConfigWhereInput | boolean
+    delete?: WhatsAppConfigWhereInput | boolean
+    connect?: WhatsAppConfigWhereUniqueInput
+    update?: XOR<XOR<WhatsAppConfigUpdateToOneWithWhereWithoutUserInput, WhatsAppConfigUpdateWithoutUserInput>, WhatsAppConfigUncheckedUpdateWithoutUserInput>
+  }
+
   export type UserCreateNestedOneWithoutAccountsInput = {
     create?: XOR<UserCreateWithoutAccountsInput, UserUncheckedCreateWithoutAccountsInput>
     connectOrCreate?: UserCreateOrConnectWithoutAccountsInput
@@ -34201,6 +37571,20 @@ export namespace Prisma {
     upsert?: PlanUpsertWithoutSubscriptionsInput
     connect?: PlanWhereUniqueInput
     update?: XOR<XOR<PlanUpdateToOneWithWhereWithoutSubscriptionsInput, PlanUpdateWithoutSubscriptionsInput>, PlanUncheckedUpdateWithoutSubscriptionsInput>
+  }
+
+  export type UserCreateNestedOneWithoutTransactionsInput = {
+    create?: XOR<UserCreateWithoutTransactionsInput, UserUncheckedCreateWithoutTransactionsInput>
+    connectOrCreate?: UserCreateOrConnectWithoutTransactionsInput
+    connect?: UserWhereUniqueInput
+  }
+
+  export type UserUpdateOneRequiredWithoutTransactionsNestedInput = {
+    create?: XOR<UserCreateWithoutTransactionsInput, UserUncheckedCreateWithoutTransactionsInput>
+    connectOrCreate?: UserCreateOrConnectWithoutTransactionsInput
+    upsert?: UserUpsertWithoutTransactionsInput
+    connect?: UserWhereUniqueInput
+    update?: XOR<XOR<UserUpdateToOneWithWhereWithoutTransactionsInput, UserUpdateWithoutTransactionsInput>, UserUncheckedUpdateWithoutTransactionsInput>
   }
 
   export type UserCreateNestedOneWithoutSocialAccountsInput = {
@@ -34885,38 +38269,6 @@ export namespace Prisma {
     not?: NestedStringFilter<$PrismaModel> | string
   }
 
-  export type NestedStringNullableFilter<$PrismaModel = never> = {
-    equals?: string | StringFieldRefInput<$PrismaModel> | null
-    in?: string[] | ListStringFieldRefInput<$PrismaModel> | null
-    notIn?: string[] | ListStringFieldRefInput<$PrismaModel> | null
-    lt?: string | StringFieldRefInput<$PrismaModel>
-    lte?: string | StringFieldRefInput<$PrismaModel>
-    gt?: string | StringFieldRefInput<$PrismaModel>
-    gte?: string | StringFieldRefInput<$PrismaModel>
-    contains?: string | StringFieldRefInput<$PrismaModel>
-    startsWith?: string | StringFieldRefInput<$PrismaModel>
-    endsWith?: string | StringFieldRefInput<$PrismaModel>
-    not?: NestedStringNullableFilter<$PrismaModel> | string | null
-  }
-
-  export type NestedDateTimeNullableFilter<$PrismaModel = never> = {
-    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel> | null
-    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
-    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
-    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    not?: NestedDateTimeNullableFilter<$PrismaModel> | Date | string | null
-  }
-
-  export type NestedEnumRoleFilter<$PrismaModel = never> = {
-    equals?: $Enums.Role | EnumRoleFieldRefInput<$PrismaModel>
-    in?: $Enums.Role[] | ListEnumRoleFieldRefInput<$PrismaModel>
-    notIn?: $Enums.Role[] | ListEnumRoleFieldRefInput<$PrismaModel>
-    not?: NestedEnumRoleFilter<$PrismaModel> | $Enums.Role
-  }
-
   export type NestedDateTimeFilter<$PrismaModel = never> = {
     equals?: Date | string | DateTimeFieldRefInput<$PrismaModel>
     in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel>
@@ -34954,6 +38306,52 @@ export namespace Prisma {
     gt?: number | IntFieldRefInput<$PrismaModel>
     gte?: number | IntFieldRefInput<$PrismaModel>
     not?: NestedIntFilter<$PrismaModel> | number
+  }
+
+  export type NestedDateTimeWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel>
+    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel>
+    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    not?: NestedDateTimeWithAggregatesFilter<$PrismaModel> | Date | string
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedDateTimeFilter<$PrismaModel>
+    _max?: NestedDateTimeFilter<$PrismaModel>
+  }
+
+  export type NestedStringNullableFilter<$PrismaModel = never> = {
+    equals?: string | StringFieldRefInput<$PrismaModel> | null
+    in?: string[] | ListStringFieldRefInput<$PrismaModel> | null
+    notIn?: string[] | ListStringFieldRefInput<$PrismaModel> | null
+    lt?: string | StringFieldRefInput<$PrismaModel>
+    lte?: string | StringFieldRefInput<$PrismaModel>
+    gt?: string | StringFieldRefInput<$PrismaModel>
+    gte?: string | StringFieldRefInput<$PrismaModel>
+    contains?: string | StringFieldRefInput<$PrismaModel>
+    startsWith?: string | StringFieldRefInput<$PrismaModel>
+    endsWith?: string | StringFieldRefInput<$PrismaModel>
+    not?: NestedStringNullableFilter<$PrismaModel> | string | null
+  }
+
+  export type NestedDateTimeNullableFilter<$PrismaModel = never> = {
+    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel> | null
+    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
+    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
+    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    not?: NestedDateTimeNullableFilter<$PrismaModel> | Date | string | null
+  }
+
+  export type NestedEnumRoleFilter<$PrismaModel = never> = {
+    equals?: $Enums.Role | EnumRoleFieldRefInput<$PrismaModel>
+    in?: $Enums.Role[] | ListEnumRoleFieldRefInput<$PrismaModel>
+    notIn?: $Enums.Role[] | ListEnumRoleFieldRefInput<$PrismaModel>
+    not?: NestedEnumRoleFilter<$PrismaModel> | $Enums.Role
   }
 
   export type NestedStringNullableWithAggregatesFilter<$PrismaModel = never> = {
@@ -35006,20 +38404,6 @@ export namespace Prisma {
     _count?: NestedIntFilter<$PrismaModel>
     _min?: NestedEnumRoleFilter<$PrismaModel>
     _max?: NestedEnumRoleFilter<$PrismaModel>
-  }
-
-  export type NestedDateTimeWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel>
-    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel>
-    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    not?: NestedDateTimeWithAggregatesFilter<$PrismaModel> | Date | string
-    _count?: NestedIntFilter<$PrismaModel>
-    _min?: NestedDateTimeFilter<$PrismaModel>
-    _max?: NestedDateTimeFilter<$PrismaModel>
   }
 
   export type NestedIntNullableWithAggregatesFilter<$PrismaModel = never> = {
@@ -35255,6 +38639,130 @@ export namespace Prisma {
     _count?: NestedIntNullableFilter<$PrismaModel>
     _min?: NestedEnumPlatformNullableFilter<$PrismaModel>
     _max?: NestedEnumPlatformNullableFilter<$PrismaModel>
+  }
+
+  export type UserCreateWithoutWhatsappConfigInput = {
+    id?: string
+    name?: string | null
+    email: string
+    emailVerified?: Date | string | null
+    image?: string | null
+    password?: string | null
+    role?: $Enums.Role
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    zernioProfileId?: string | null
+    accounts?: AccountCreateNestedManyWithoutUserInput
+    sessions?: SessionCreateNestedManyWithoutUserInput
+    socialAccounts?: SocialAccountCreateNestedManyWithoutUserInput
+    posts?: PostCreateNestedManyWithoutUserInput
+    campaigns?: CampaignCreateNestedManyWithoutUserInput
+    audienceGroups?: AudienceGroupCreateNestedManyWithoutUserInput
+    emailCampaigns?: EmailCampaignCreateNestedManyWithoutUserInput
+    emailTemplates?: EmailTemplateCreateNestedManyWithoutUserInput
+    scheduledCampaigns?: ScheduledCampaignCreateNestedManyWithoutUserInput
+    media?: MediaCreateNestedManyWithoutUserInput
+    analytics?: AnalyticsCreateNestedManyWithoutUserInput
+    notifications?: NotificationCreateNestedManyWithoutUserInput
+    subscription?: SubscriptionCreateNestedOneWithoutUserInput
+    transactions?: TransactionCreateNestedManyWithoutUserInput
+  }
+
+  export type UserUncheckedCreateWithoutWhatsappConfigInput = {
+    id?: string
+    name?: string | null
+    email: string
+    emailVerified?: Date | string | null
+    image?: string | null
+    password?: string | null
+    role?: $Enums.Role
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    zernioProfileId?: string | null
+    accounts?: AccountUncheckedCreateNestedManyWithoutUserInput
+    sessions?: SessionUncheckedCreateNestedManyWithoutUserInput
+    socialAccounts?: SocialAccountUncheckedCreateNestedManyWithoutUserInput
+    posts?: PostUncheckedCreateNestedManyWithoutUserInput
+    campaigns?: CampaignUncheckedCreateNestedManyWithoutUserInput
+    audienceGroups?: AudienceGroupUncheckedCreateNestedManyWithoutUserInput
+    emailCampaigns?: EmailCampaignUncheckedCreateNestedManyWithoutUserInput
+    emailTemplates?: EmailTemplateUncheckedCreateNestedManyWithoutUserInput
+    scheduledCampaigns?: ScheduledCampaignUncheckedCreateNestedManyWithoutUserInput
+    media?: MediaUncheckedCreateNestedManyWithoutUserInput
+    analytics?: AnalyticsUncheckedCreateNestedManyWithoutUserInput
+    notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
+    subscription?: SubscriptionUncheckedCreateNestedOneWithoutUserInput
+    transactions?: TransactionUncheckedCreateNestedManyWithoutUserInput
+  }
+
+  export type UserCreateOrConnectWithoutWhatsappConfigInput = {
+    where: UserWhereUniqueInput
+    create: XOR<UserCreateWithoutWhatsappConfigInput, UserUncheckedCreateWithoutWhatsappConfigInput>
+  }
+
+  export type UserUpsertWithoutWhatsappConfigInput = {
+    update: XOR<UserUpdateWithoutWhatsappConfigInput, UserUncheckedUpdateWithoutWhatsappConfigInput>
+    create: XOR<UserCreateWithoutWhatsappConfigInput, UserUncheckedCreateWithoutWhatsappConfigInput>
+    where?: UserWhereInput
+  }
+
+  export type UserUpdateToOneWithWhereWithoutWhatsappConfigInput = {
+    where?: UserWhereInput
+    data: XOR<UserUpdateWithoutWhatsappConfigInput, UserUncheckedUpdateWithoutWhatsappConfigInput>
+  }
+
+  export type UserUpdateWithoutWhatsappConfigInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: NullableStringFieldUpdateOperationsInput | string | null
+    email?: StringFieldUpdateOperationsInput | string
+    emailVerified?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    image?: NullableStringFieldUpdateOperationsInput | string | null
+    password?: NullableStringFieldUpdateOperationsInput | string | null
+    role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    zernioProfileId?: NullableStringFieldUpdateOperationsInput | string | null
+    accounts?: AccountUpdateManyWithoutUserNestedInput
+    sessions?: SessionUpdateManyWithoutUserNestedInput
+    socialAccounts?: SocialAccountUpdateManyWithoutUserNestedInput
+    posts?: PostUpdateManyWithoutUserNestedInput
+    campaigns?: CampaignUpdateManyWithoutUserNestedInput
+    audienceGroups?: AudienceGroupUpdateManyWithoutUserNestedInput
+    emailCampaigns?: EmailCampaignUpdateManyWithoutUserNestedInput
+    emailTemplates?: EmailTemplateUpdateManyWithoutUserNestedInput
+    scheduledCampaigns?: ScheduledCampaignUpdateManyWithoutUserNestedInput
+    media?: MediaUpdateManyWithoutUserNestedInput
+    analytics?: AnalyticsUpdateManyWithoutUserNestedInput
+    notifications?: NotificationUpdateManyWithoutUserNestedInput
+    subscription?: SubscriptionUpdateOneWithoutUserNestedInput
+    transactions?: TransactionUpdateManyWithoutUserNestedInput
+  }
+
+  export type UserUncheckedUpdateWithoutWhatsappConfigInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: NullableStringFieldUpdateOperationsInput | string | null
+    email?: StringFieldUpdateOperationsInput | string
+    emailVerified?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    image?: NullableStringFieldUpdateOperationsInput | string | null
+    password?: NullableStringFieldUpdateOperationsInput | string | null
+    role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    zernioProfileId?: NullableStringFieldUpdateOperationsInput | string | null
+    accounts?: AccountUncheckedUpdateManyWithoutUserNestedInput
+    sessions?: SessionUncheckedUpdateManyWithoutUserNestedInput
+    socialAccounts?: SocialAccountUncheckedUpdateManyWithoutUserNestedInput
+    posts?: PostUncheckedUpdateManyWithoutUserNestedInput
+    campaigns?: CampaignUncheckedUpdateManyWithoutUserNestedInput
+    audienceGroups?: AudienceGroupUncheckedUpdateManyWithoutUserNestedInput
+    emailCampaigns?: EmailCampaignUncheckedUpdateManyWithoutUserNestedInput
+    emailTemplates?: EmailTemplateUncheckedUpdateManyWithoutUserNestedInput
+    scheduledCampaigns?: ScheduledCampaignUncheckedUpdateManyWithoutUserNestedInput
+    media?: MediaUncheckedUpdateManyWithoutUserNestedInput
+    analytics?: AnalyticsUncheckedUpdateManyWithoutUserNestedInput
+    notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
+    subscription?: SubscriptionUncheckedUpdateOneWithoutUserNestedInput
+    transactions?: TransactionUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type AccountCreateWithoutUserInput = {
@@ -35722,6 +39230,12 @@ export namespace Prisma {
     status?: $Enums.SubscriptionStatus
     startDate?: Date | string
     endDate?: Date | string | null
+    postsUsed?: number
+    aiTextUsed?: number
+    aiImageUsed?: number
+    lastResetAt?: Date | string
+    paystackSubscriptionCode?: string | null
+    paystackCustomerCode?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     plan: PlanCreateNestedOneWithoutSubscriptionsInput
@@ -35733,6 +39247,12 @@ export namespace Prisma {
     status?: $Enums.SubscriptionStatus
     startDate?: Date | string
     endDate?: Date | string | null
+    postsUsed?: number
+    aiTextUsed?: number
+    aiImageUsed?: number
+    lastResetAt?: Date | string
+    paystackSubscriptionCode?: string | null
+    paystackCustomerCode?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -35740,6 +39260,65 @@ export namespace Prisma {
   export type SubscriptionCreateOrConnectWithoutUserInput = {
     where: SubscriptionWhereUniqueInput
     create: XOR<SubscriptionCreateWithoutUserInput, SubscriptionUncheckedCreateWithoutUserInput>
+  }
+
+  export type TransactionCreateWithoutUserInput = {
+    id?: string
+    amount: number
+    currency?: string
+    status: string
+    reference: string
+    paystackId?: string | null
+    channel?: string | null
+    paidAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type TransactionUncheckedCreateWithoutUserInput = {
+    id?: string
+    amount: number
+    currency?: string
+    status: string
+    reference: string
+    paystackId?: string | null
+    channel?: string | null
+    paidAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type TransactionCreateOrConnectWithoutUserInput = {
+    where: TransactionWhereUniqueInput
+    create: XOR<TransactionCreateWithoutUserInput, TransactionUncheckedCreateWithoutUserInput>
+  }
+
+  export type TransactionCreateManyUserInputEnvelope = {
+    data: TransactionCreateManyUserInput | TransactionCreateManyUserInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type WhatsAppConfigCreateWithoutUserInput = {
+    id?: string
+    phoneNumberId: string
+    wabaId: string
+    accessToken: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type WhatsAppConfigUncheckedCreateWithoutUserInput = {
+    id?: string
+    phoneNumberId: string
+    wabaId: string
+    accessToken: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type WhatsAppConfigCreateOrConnectWithoutUserInput = {
+    where: WhatsAppConfigWhereUniqueInput
+    create: XOR<WhatsAppConfigCreateWithoutUserInput, WhatsAppConfigUncheckedCreateWithoutUserInput>
   }
 
   export type AccountUpsertWithWhereUniqueWithoutUserInput = {
@@ -36162,6 +39741,12 @@ export namespace Prisma {
     status?: EnumSubscriptionStatusFieldUpdateOperationsInput | $Enums.SubscriptionStatus
     startDate?: DateTimeFieldUpdateOperationsInput | Date | string
     endDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    postsUsed?: IntFieldUpdateOperationsInput | number
+    aiTextUsed?: IntFieldUpdateOperationsInput | number
+    aiImageUsed?: IntFieldUpdateOperationsInput | number
+    lastResetAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    paystackSubscriptionCode?: NullableStringFieldUpdateOperationsInput | string | null
+    paystackCustomerCode?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     plan?: PlanUpdateOneRequiredWithoutSubscriptionsNestedInput
@@ -36173,6 +39758,74 @@ export namespace Prisma {
     status?: EnumSubscriptionStatusFieldUpdateOperationsInput | $Enums.SubscriptionStatus
     startDate?: DateTimeFieldUpdateOperationsInput | Date | string
     endDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    postsUsed?: IntFieldUpdateOperationsInput | number
+    aiTextUsed?: IntFieldUpdateOperationsInput | number
+    aiImageUsed?: IntFieldUpdateOperationsInput | number
+    lastResetAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    paystackSubscriptionCode?: NullableStringFieldUpdateOperationsInput | string | null
+    paystackCustomerCode?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type TransactionUpsertWithWhereUniqueWithoutUserInput = {
+    where: TransactionWhereUniqueInput
+    update: XOR<TransactionUpdateWithoutUserInput, TransactionUncheckedUpdateWithoutUserInput>
+    create: XOR<TransactionCreateWithoutUserInput, TransactionUncheckedCreateWithoutUserInput>
+  }
+
+  export type TransactionUpdateWithWhereUniqueWithoutUserInput = {
+    where: TransactionWhereUniqueInput
+    data: XOR<TransactionUpdateWithoutUserInput, TransactionUncheckedUpdateWithoutUserInput>
+  }
+
+  export type TransactionUpdateManyWithWhereWithoutUserInput = {
+    where: TransactionScalarWhereInput
+    data: XOR<TransactionUpdateManyMutationInput, TransactionUncheckedUpdateManyWithoutUserInput>
+  }
+
+  export type TransactionScalarWhereInput = {
+    AND?: TransactionScalarWhereInput | TransactionScalarWhereInput[]
+    OR?: TransactionScalarWhereInput[]
+    NOT?: TransactionScalarWhereInput | TransactionScalarWhereInput[]
+    id?: StringFilter<"Transaction"> | string
+    userId?: StringFilter<"Transaction"> | string
+    amount?: FloatFilter<"Transaction"> | number
+    currency?: StringFilter<"Transaction"> | string
+    status?: StringFilter<"Transaction"> | string
+    reference?: StringFilter<"Transaction"> | string
+    paystackId?: StringNullableFilter<"Transaction"> | string | null
+    channel?: StringNullableFilter<"Transaction"> | string | null
+    paidAt?: DateTimeNullableFilter<"Transaction"> | Date | string | null
+    createdAt?: DateTimeFilter<"Transaction"> | Date | string
+    updatedAt?: DateTimeFilter<"Transaction"> | Date | string
+  }
+
+  export type WhatsAppConfigUpsertWithoutUserInput = {
+    update: XOR<WhatsAppConfigUpdateWithoutUserInput, WhatsAppConfigUncheckedUpdateWithoutUserInput>
+    create: XOR<WhatsAppConfigCreateWithoutUserInput, WhatsAppConfigUncheckedCreateWithoutUserInput>
+    where?: WhatsAppConfigWhereInput
+  }
+
+  export type WhatsAppConfigUpdateToOneWithWhereWithoutUserInput = {
+    where?: WhatsAppConfigWhereInput
+    data: XOR<WhatsAppConfigUpdateWithoutUserInput, WhatsAppConfigUncheckedUpdateWithoutUserInput>
+  }
+
+  export type WhatsAppConfigUpdateWithoutUserInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    phoneNumberId?: StringFieldUpdateOperationsInput | string
+    wabaId?: StringFieldUpdateOperationsInput | string
+    accessToken?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type WhatsAppConfigUncheckedUpdateWithoutUserInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    phoneNumberId?: StringFieldUpdateOperationsInput | string
+    wabaId?: StringFieldUpdateOperationsInput | string
+    accessToken?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -36200,6 +39853,8 @@ export namespace Prisma {
     analytics?: AnalyticsCreateNestedManyWithoutUserInput
     notifications?: NotificationCreateNestedManyWithoutUserInput
     subscription?: SubscriptionCreateNestedOneWithoutUserInput
+    transactions?: TransactionCreateNestedManyWithoutUserInput
+    whatsappConfig?: WhatsAppConfigCreateNestedOneWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutAccountsInput = {
@@ -36225,6 +39880,8 @@ export namespace Prisma {
     analytics?: AnalyticsUncheckedCreateNestedManyWithoutUserInput
     notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
     subscription?: SubscriptionUncheckedCreateNestedOneWithoutUserInput
+    transactions?: TransactionUncheckedCreateNestedManyWithoutUserInput
+    whatsappConfig?: WhatsAppConfigUncheckedCreateNestedOneWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutAccountsInput = {
@@ -36266,6 +39923,8 @@ export namespace Prisma {
     analytics?: AnalyticsUpdateManyWithoutUserNestedInput
     notifications?: NotificationUpdateManyWithoutUserNestedInput
     subscription?: SubscriptionUpdateOneWithoutUserNestedInput
+    transactions?: TransactionUpdateManyWithoutUserNestedInput
+    whatsappConfig?: WhatsAppConfigUpdateOneWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutAccountsInput = {
@@ -36291,6 +39950,8 @@ export namespace Prisma {
     analytics?: AnalyticsUncheckedUpdateManyWithoutUserNestedInput
     notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
     subscription?: SubscriptionUncheckedUpdateOneWithoutUserNestedInput
+    transactions?: TransactionUncheckedUpdateManyWithoutUserNestedInput
+    whatsappConfig?: WhatsAppConfigUncheckedUpdateOneWithoutUserNestedInput
   }
 
   export type UserCreateWithoutSessionsInput = {
@@ -36316,6 +39977,8 @@ export namespace Prisma {
     analytics?: AnalyticsCreateNestedManyWithoutUserInput
     notifications?: NotificationCreateNestedManyWithoutUserInput
     subscription?: SubscriptionCreateNestedOneWithoutUserInput
+    transactions?: TransactionCreateNestedManyWithoutUserInput
+    whatsappConfig?: WhatsAppConfigCreateNestedOneWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutSessionsInput = {
@@ -36341,6 +40004,8 @@ export namespace Prisma {
     analytics?: AnalyticsUncheckedCreateNestedManyWithoutUserInput
     notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
     subscription?: SubscriptionUncheckedCreateNestedOneWithoutUserInput
+    transactions?: TransactionUncheckedCreateNestedManyWithoutUserInput
+    whatsappConfig?: WhatsAppConfigUncheckedCreateNestedOneWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutSessionsInput = {
@@ -36382,6 +40047,8 @@ export namespace Prisma {
     analytics?: AnalyticsUpdateManyWithoutUserNestedInput
     notifications?: NotificationUpdateManyWithoutUserNestedInput
     subscription?: SubscriptionUpdateOneWithoutUserNestedInput
+    transactions?: TransactionUpdateManyWithoutUserNestedInput
+    whatsappConfig?: WhatsAppConfigUpdateOneWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutSessionsInput = {
@@ -36407,6 +40074,8 @@ export namespace Prisma {
     analytics?: AnalyticsUncheckedUpdateManyWithoutUserNestedInput
     notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
     subscription?: SubscriptionUncheckedUpdateOneWithoutUserNestedInput
+    transactions?: TransactionUncheckedUpdateManyWithoutUserNestedInput
+    whatsappConfig?: WhatsAppConfigUncheckedUpdateOneWithoutUserNestedInput
   }
 
   export type SubscriptionCreateWithoutPlanInput = {
@@ -36414,6 +40083,12 @@ export namespace Prisma {
     status?: $Enums.SubscriptionStatus
     startDate?: Date | string
     endDate?: Date | string | null
+    postsUsed?: number
+    aiTextUsed?: number
+    aiImageUsed?: number
+    lastResetAt?: Date | string
+    paystackSubscriptionCode?: string | null
+    paystackCustomerCode?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     user: UserCreateNestedOneWithoutSubscriptionInput
@@ -36425,6 +40100,12 @@ export namespace Prisma {
     status?: $Enums.SubscriptionStatus
     startDate?: Date | string
     endDate?: Date | string | null
+    postsUsed?: number
+    aiTextUsed?: number
+    aiImageUsed?: number
+    lastResetAt?: Date | string
+    paystackSubscriptionCode?: string | null
+    paystackCustomerCode?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -36465,6 +40146,12 @@ export namespace Prisma {
     status?: EnumSubscriptionStatusFilter<"Subscription"> | $Enums.SubscriptionStatus
     startDate?: DateTimeFilter<"Subscription"> | Date | string
     endDate?: DateTimeNullableFilter<"Subscription"> | Date | string | null
+    postsUsed?: IntFilter<"Subscription"> | number
+    aiTextUsed?: IntFilter<"Subscription"> | number
+    aiImageUsed?: IntFilter<"Subscription"> | number
+    lastResetAt?: DateTimeFilter<"Subscription"> | Date | string
+    paystackSubscriptionCode?: StringNullableFilter<"Subscription"> | string | null
+    paystackCustomerCode?: StringNullableFilter<"Subscription"> | string | null
     createdAt?: DateTimeFilter<"Subscription"> | Date | string
     updatedAt?: DateTimeFilter<"Subscription"> | Date | string
   }
@@ -36492,6 +40179,8 @@ export namespace Prisma {
     media?: MediaCreateNestedManyWithoutUserInput
     analytics?: AnalyticsCreateNestedManyWithoutUserInput
     notifications?: NotificationCreateNestedManyWithoutUserInput
+    transactions?: TransactionCreateNestedManyWithoutUserInput
+    whatsappConfig?: WhatsAppConfigCreateNestedOneWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutSubscriptionInput = {
@@ -36517,6 +40206,8 @@ export namespace Prisma {
     media?: MediaUncheckedCreateNestedManyWithoutUserInput
     analytics?: AnalyticsUncheckedCreateNestedManyWithoutUserInput
     notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
+    transactions?: TransactionUncheckedCreateNestedManyWithoutUserInput
+    whatsappConfig?: WhatsAppConfigUncheckedCreateNestedOneWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutSubscriptionInput = {
@@ -36532,7 +40223,10 @@ export namespace Prisma {
     features?: PlanCreatefeaturesInput | string[]
     postsPerMonth: number
     platforms: number
-    aiCredits: number
+    aiCredits?: number
+    aiTextLimit?: number
+    aiImageLimit?: number
+    paystackPlanCode?: string | null
     createdAt?: Date | string
   }
 
@@ -36544,7 +40238,10 @@ export namespace Prisma {
     features?: PlanCreatefeaturesInput | string[]
     postsPerMonth: number
     platforms: number
-    aiCredits: number
+    aiCredits?: number
+    aiTextLimit?: number
+    aiImageLimit?: number
+    paystackPlanCode?: string | null
     createdAt?: Date | string
   }
 
@@ -36587,6 +40284,8 @@ export namespace Prisma {
     media?: MediaUpdateManyWithoutUserNestedInput
     analytics?: AnalyticsUpdateManyWithoutUserNestedInput
     notifications?: NotificationUpdateManyWithoutUserNestedInput
+    transactions?: TransactionUpdateManyWithoutUserNestedInput
+    whatsappConfig?: WhatsAppConfigUpdateOneWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutSubscriptionInput = {
@@ -36612,6 +40311,8 @@ export namespace Prisma {
     media?: MediaUncheckedUpdateManyWithoutUserNestedInput
     analytics?: AnalyticsUncheckedUpdateManyWithoutUserNestedInput
     notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
+    transactions?: TransactionUncheckedUpdateManyWithoutUserNestedInput
+    whatsappConfig?: WhatsAppConfigUncheckedUpdateOneWithoutUserNestedInput
   }
 
   export type PlanUpsertWithoutSubscriptionsInput = {
@@ -36634,6 +40335,9 @@ export namespace Prisma {
     postsPerMonth?: IntFieldUpdateOperationsInput | number
     platforms?: IntFieldUpdateOperationsInput | number
     aiCredits?: IntFieldUpdateOperationsInput | number
+    aiTextLimit?: IntFieldUpdateOperationsInput | number
+    aiImageLimit?: IntFieldUpdateOperationsInput | number
+    paystackPlanCode?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
@@ -36646,7 +40350,134 @@ export namespace Prisma {
     postsPerMonth?: IntFieldUpdateOperationsInput | number
     platforms?: IntFieldUpdateOperationsInput | number
     aiCredits?: IntFieldUpdateOperationsInput | number
+    aiTextLimit?: IntFieldUpdateOperationsInput | number
+    aiImageLimit?: IntFieldUpdateOperationsInput | number
+    paystackPlanCode?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type UserCreateWithoutTransactionsInput = {
+    id?: string
+    name?: string | null
+    email: string
+    emailVerified?: Date | string | null
+    image?: string | null
+    password?: string | null
+    role?: $Enums.Role
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    zernioProfileId?: string | null
+    accounts?: AccountCreateNestedManyWithoutUserInput
+    sessions?: SessionCreateNestedManyWithoutUserInput
+    socialAccounts?: SocialAccountCreateNestedManyWithoutUserInput
+    posts?: PostCreateNestedManyWithoutUserInput
+    campaigns?: CampaignCreateNestedManyWithoutUserInput
+    audienceGroups?: AudienceGroupCreateNestedManyWithoutUserInput
+    emailCampaigns?: EmailCampaignCreateNestedManyWithoutUserInput
+    emailTemplates?: EmailTemplateCreateNestedManyWithoutUserInput
+    scheduledCampaigns?: ScheduledCampaignCreateNestedManyWithoutUserInput
+    media?: MediaCreateNestedManyWithoutUserInput
+    analytics?: AnalyticsCreateNestedManyWithoutUserInput
+    notifications?: NotificationCreateNestedManyWithoutUserInput
+    subscription?: SubscriptionCreateNestedOneWithoutUserInput
+    whatsappConfig?: WhatsAppConfigCreateNestedOneWithoutUserInput
+  }
+
+  export type UserUncheckedCreateWithoutTransactionsInput = {
+    id?: string
+    name?: string | null
+    email: string
+    emailVerified?: Date | string | null
+    image?: string | null
+    password?: string | null
+    role?: $Enums.Role
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    zernioProfileId?: string | null
+    accounts?: AccountUncheckedCreateNestedManyWithoutUserInput
+    sessions?: SessionUncheckedCreateNestedManyWithoutUserInput
+    socialAccounts?: SocialAccountUncheckedCreateNestedManyWithoutUserInput
+    posts?: PostUncheckedCreateNestedManyWithoutUserInput
+    campaigns?: CampaignUncheckedCreateNestedManyWithoutUserInput
+    audienceGroups?: AudienceGroupUncheckedCreateNestedManyWithoutUserInput
+    emailCampaigns?: EmailCampaignUncheckedCreateNestedManyWithoutUserInput
+    emailTemplates?: EmailTemplateUncheckedCreateNestedManyWithoutUserInput
+    scheduledCampaigns?: ScheduledCampaignUncheckedCreateNestedManyWithoutUserInput
+    media?: MediaUncheckedCreateNestedManyWithoutUserInput
+    analytics?: AnalyticsUncheckedCreateNestedManyWithoutUserInput
+    notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
+    subscription?: SubscriptionUncheckedCreateNestedOneWithoutUserInput
+    whatsappConfig?: WhatsAppConfigUncheckedCreateNestedOneWithoutUserInput
+  }
+
+  export type UserCreateOrConnectWithoutTransactionsInput = {
+    where: UserWhereUniqueInput
+    create: XOR<UserCreateWithoutTransactionsInput, UserUncheckedCreateWithoutTransactionsInput>
+  }
+
+  export type UserUpsertWithoutTransactionsInput = {
+    update: XOR<UserUpdateWithoutTransactionsInput, UserUncheckedUpdateWithoutTransactionsInput>
+    create: XOR<UserCreateWithoutTransactionsInput, UserUncheckedCreateWithoutTransactionsInput>
+    where?: UserWhereInput
+  }
+
+  export type UserUpdateToOneWithWhereWithoutTransactionsInput = {
+    where?: UserWhereInput
+    data: XOR<UserUpdateWithoutTransactionsInput, UserUncheckedUpdateWithoutTransactionsInput>
+  }
+
+  export type UserUpdateWithoutTransactionsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: NullableStringFieldUpdateOperationsInput | string | null
+    email?: StringFieldUpdateOperationsInput | string
+    emailVerified?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    image?: NullableStringFieldUpdateOperationsInput | string | null
+    password?: NullableStringFieldUpdateOperationsInput | string | null
+    role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    zernioProfileId?: NullableStringFieldUpdateOperationsInput | string | null
+    accounts?: AccountUpdateManyWithoutUserNestedInput
+    sessions?: SessionUpdateManyWithoutUserNestedInput
+    socialAccounts?: SocialAccountUpdateManyWithoutUserNestedInput
+    posts?: PostUpdateManyWithoutUserNestedInput
+    campaigns?: CampaignUpdateManyWithoutUserNestedInput
+    audienceGroups?: AudienceGroupUpdateManyWithoutUserNestedInput
+    emailCampaigns?: EmailCampaignUpdateManyWithoutUserNestedInput
+    emailTemplates?: EmailTemplateUpdateManyWithoutUserNestedInput
+    scheduledCampaigns?: ScheduledCampaignUpdateManyWithoutUserNestedInput
+    media?: MediaUpdateManyWithoutUserNestedInput
+    analytics?: AnalyticsUpdateManyWithoutUserNestedInput
+    notifications?: NotificationUpdateManyWithoutUserNestedInput
+    subscription?: SubscriptionUpdateOneWithoutUserNestedInput
+    whatsappConfig?: WhatsAppConfigUpdateOneWithoutUserNestedInput
+  }
+
+  export type UserUncheckedUpdateWithoutTransactionsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: NullableStringFieldUpdateOperationsInput | string | null
+    email?: StringFieldUpdateOperationsInput | string
+    emailVerified?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    image?: NullableStringFieldUpdateOperationsInput | string | null
+    password?: NullableStringFieldUpdateOperationsInput | string | null
+    role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    zernioProfileId?: NullableStringFieldUpdateOperationsInput | string | null
+    accounts?: AccountUncheckedUpdateManyWithoutUserNestedInput
+    sessions?: SessionUncheckedUpdateManyWithoutUserNestedInput
+    socialAccounts?: SocialAccountUncheckedUpdateManyWithoutUserNestedInput
+    posts?: PostUncheckedUpdateManyWithoutUserNestedInput
+    campaigns?: CampaignUncheckedUpdateManyWithoutUserNestedInput
+    audienceGroups?: AudienceGroupUncheckedUpdateManyWithoutUserNestedInput
+    emailCampaigns?: EmailCampaignUncheckedUpdateManyWithoutUserNestedInput
+    emailTemplates?: EmailTemplateUncheckedUpdateManyWithoutUserNestedInput
+    scheduledCampaigns?: ScheduledCampaignUncheckedUpdateManyWithoutUserNestedInput
+    media?: MediaUncheckedUpdateManyWithoutUserNestedInput
+    analytics?: AnalyticsUncheckedUpdateManyWithoutUserNestedInput
+    notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
+    subscription?: SubscriptionUncheckedUpdateOneWithoutUserNestedInput
+    whatsappConfig?: WhatsAppConfigUncheckedUpdateOneWithoutUserNestedInput
   }
 
   export type UserCreateWithoutSocialAccountsInput = {
@@ -36672,6 +40503,8 @@ export namespace Prisma {
     analytics?: AnalyticsCreateNestedManyWithoutUserInput
     notifications?: NotificationCreateNestedManyWithoutUserInput
     subscription?: SubscriptionCreateNestedOneWithoutUserInput
+    transactions?: TransactionCreateNestedManyWithoutUserInput
+    whatsappConfig?: WhatsAppConfigCreateNestedOneWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutSocialAccountsInput = {
@@ -36697,6 +40530,8 @@ export namespace Prisma {
     analytics?: AnalyticsUncheckedCreateNestedManyWithoutUserInput
     notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
     subscription?: SubscriptionUncheckedCreateNestedOneWithoutUserInput
+    transactions?: TransactionUncheckedCreateNestedManyWithoutUserInput
+    whatsappConfig?: WhatsAppConfigUncheckedCreateNestedOneWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutSocialAccountsInput = {
@@ -36780,6 +40615,8 @@ export namespace Prisma {
     analytics?: AnalyticsUpdateManyWithoutUserNestedInput
     notifications?: NotificationUpdateManyWithoutUserNestedInput
     subscription?: SubscriptionUpdateOneWithoutUserNestedInput
+    transactions?: TransactionUpdateManyWithoutUserNestedInput
+    whatsappConfig?: WhatsAppConfigUpdateOneWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutSocialAccountsInput = {
@@ -36805,6 +40642,8 @@ export namespace Prisma {
     analytics?: AnalyticsUncheckedUpdateManyWithoutUserNestedInput
     notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
     subscription?: SubscriptionUncheckedUpdateOneWithoutUserNestedInput
+    transactions?: TransactionUncheckedUpdateManyWithoutUserNestedInput
+    whatsappConfig?: WhatsAppConfigUncheckedUpdateOneWithoutUserNestedInput
   }
 
   export type PlatformPostUpsertWithWhereUniqueWithoutSocialAccountInput = {
@@ -36866,6 +40705,8 @@ export namespace Prisma {
     analytics?: AnalyticsCreateNestedManyWithoutUserInput
     notifications?: NotificationCreateNestedManyWithoutUserInput
     subscription?: SubscriptionCreateNestedOneWithoutUserInput
+    transactions?: TransactionCreateNestedManyWithoutUserInput
+    whatsappConfig?: WhatsAppConfigCreateNestedOneWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutPostsInput = {
@@ -36891,6 +40732,8 @@ export namespace Prisma {
     analytics?: AnalyticsUncheckedCreateNestedManyWithoutUserInput
     notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
     subscription?: SubscriptionUncheckedCreateNestedOneWithoutUserInput
+    transactions?: TransactionUncheckedCreateNestedManyWithoutUserInput
+    whatsappConfig?: WhatsAppConfigUncheckedCreateNestedOneWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutPostsInput = {
@@ -37007,6 +40850,8 @@ export namespace Prisma {
     analytics?: AnalyticsUpdateManyWithoutUserNestedInput
     notifications?: NotificationUpdateManyWithoutUserNestedInput
     subscription?: SubscriptionUpdateOneWithoutUserNestedInput
+    transactions?: TransactionUpdateManyWithoutUserNestedInput
+    whatsappConfig?: WhatsAppConfigUpdateOneWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutPostsInput = {
@@ -37032,6 +40877,8 @@ export namespace Prisma {
     analytics?: AnalyticsUncheckedUpdateManyWithoutUserNestedInput
     notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
     subscription?: SubscriptionUncheckedUpdateOneWithoutUserNestedInput
+    transactions?: TransactionUncheckedUpdateManyWithoutUserNestedInput
+    whatsappConfig?: WhatsAppConfigUncheckedUpdateOneWithoutUserNestedInput
   }
 
   export type CampaignUpsertWithoutPostsInput = {
@@ -37272,6 +41119,8 @@ export namespace Prisma {
     analytics?: AnalyticsCreateNestedManyWithoutUserInput
     notifications?: NotificationCreateNestedManyWithoutUserInput
     subscription?: SubscriptionCreateNestedOneWithoutUserInput
+    transactions?: TransactionCreateNestedManyWithoutUserInput
+    whatsappConfig?: WhatsAppConfigCreateNestedOneWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutCampaignsInput = {
@@ -37297,6 +41146,8 @@ export namespace Prisma {
     analytics?: AnalyticsUncheckedCreateNestedManyWithoutUserInput
     notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
     subscription?: SubscriptionUncheckedCreateNestedOneWithoutUserInput
+    transactions?: TransactionUncheckedCreateNestedManyWithoutUserInput
+    whatsappConfig?: WhatsAppConfigUncheckedCreateNestedOneWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutCampaignsInput = {
@@ -37380,6 +41231,8 @@ export namespace Prisma {
     analytics?: AnalyticsUpdateManyWithoutUserNestedInput
     notifications?: NotificationUpdateManyWithoutUserNestedInput
     subscription?: SubscriptionUpdateOneWithoutUserNestedInput
+    transactions?: TransactionUpdateManyWithoutUserNestedInput
+    whatsappConfig?: WhatsAppConfigUpdateOneWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutCampaignsInput = {
@@ -37405,6 +41258,8 @@ export namespace Prisma {
     analytics?: AnalyticsUncheckedUpdateManyWithoutUserNestedInput
     notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
     subscription?: SubscriptionUncheckedUpdateOneWithoutUserNestedInput
+    transactions?: TransactionUncheckedUpdateManyWithoutUserNestedInput
+    whatsappConfig?: WhatsAppConfigUncheckedUpdateOneWithoutUserNestedInput
   }
 
   export type PostUpsertWithWhereUniqueWithoutCampaignInput = {
@@ -37446,6 +41301,8 @@ export namespace Prisma {
     analytics?: AnalyticsCreateNestedManyWithoutUserInput
     notifications?: NotificationCreateNestedManyWithoutUserInput
     subscription?: SubscriptionCreateNestedOneWithoutUserInput
+    transactions?: TransactionCreateNestedManyWithoutUserInput
+    whatsappConfig?: WhatsAppConfigCreateNestedOneWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutAudienceGroupsInput = {
@@ -37471,6 +41328,8 @@ export namespace Prisma {
     analytics?: AnalyticsUncheckedCreateNestedManyWithoutUserInput
     notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
     subscription?: SubscriptionUncheckedCreateNestedOneWithoutUserInput
+    transactions?: TransactionUncheckedCreateNestedManyWithoutUserInput
+    whatsappConfig?: WhatsAppConfigUncheckedCreateNestedOneWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutAudienceGroupsInput = {
@@ -37530,6 +41389,8 @@ export namespace Prisma {
     analytics?: AnalyticsUpdateManyWithoutUserNestedInput
     notifications?: NotificationUpdateManyWithoutUserNestedInput
     subscription?: SubscriptionUpdateOneWithoutUserNestedInput
+    transactions?: TransactionUpdateManyWithoutUserNestedInput
+    whatsappConfig?: WhatsAppConfigUpdateOneWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutAudienceGroupsInput = {
@@ -37555,6 +41416,8 @@ export namespace Prisma {
     analytics?: AnalyticsUncheckedUpdateManyWithoutUserNestedInput
     notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
     subscription?: SubscriptionUncheckedUpdateOneWithoutUserNestedInput
+    transactions?: TransactionUncheckedUpdateManyWithoutUserNestedInput
+    whatsappConfig?: WhatsAppConfigUncheckedUpdateOneWithoutUserNestedInput
   }
 
   export type ContactGroupUpsertWithWhereUniqueWithoutGroupInput = {
@@ -37819,6 +41682,8 @@ export namespace Prisma {
     analytics?: AnalyticsCreateNestedManyWithoutUserInput
     notifications?: NotificationCreateNestedManyWithoutUserInput
     subscription?: SubscriptionCreateNestedOneWithoutUserInput
+    transactions?: TransactionCreateNestedManyWithoutUserInput
+    whatsappConfig?: WhatsAppConfigCreateNestedOneWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutEmailTemplatesInput = {
@@ -37844,6 +41709,8 @@ export namespace Prisma {
     analytics?: AnalyticsUncheckedCreateNestedManyWithoutUserInput
     notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
     subscription?: SubscriptionUncheckedCreateNestedOneWithoutUserInput
+    transactions?: TransactionUncheckedCreateNestedManyWithoutUserInput
+    whatsappConfig?: WhatsAppConfigUncheckedCreateNestedOneWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutEmailTemplatesInput = {
@@ -37941,6 +41808,8 @@ export namespace Prisma {
     analytics?: AnalyticsUpdateManyWithoutUserNestedInput
     notifications?: NotificationUpdateManyWithoutUserNestedInput
     subscription?: SubscriptionUpdateOneWithoutUserNestedInput
+    transactions?: TransactionUpdateManyWithoutUserNestedInput
+    whatsappConfig?: WhatsAppConfigUpdateOneWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutEmailTemplatesInput = {
@@ -37966,6 +41835,8 @@ export namespace Prisma {
     analytics?: AnalyticsUncheckedUpdateManyWithoutUserNestedInput
     notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
     subscription?: SubscriptionUncheckedUpdateOneWithoutUserNestedInput
+    transactions?: TransactionUncheckedUpdateManyWithoutUserNestedInput
+    whatsappConfig?: WhatsAppConfigUncheckedUpdateOneWithoutUserNestedInput
   }
 
   export type EmailCampaignUpsertWithWhereUniqueWithoutTemplateInput = {
@@ -38007,6 +41878,8 @@ export namespace Prisma {
     analytics?: AnalyticsCreateNestedManyWithoutUserInput
     notifications?: NotificationCreateNestedManyWithoutUserInput
     subscription?: SubscriptionCreateNestedOneWithoutUserInput
+    transactions?: TransactionCreateNestedManyWithoutUserInput
+    whatsappConfig?: WhatsAppConfigCreateNestedOneWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutScheduledCampaignsInput = {
@@ -38032,6 +41905,8 @@ export namespace Prisma {
     analytics?: AnalyticsUncheckedCreateNestedManyWithoutUserInput
     notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
     subscription?: SubscriptionUncheckedCreateNestedOneWithoutUserInput
+    transactions?: TransactionUncheckedCreateNestedManyWithoutUserInput
+    whatsappConfig?: WhatsAppConfigUncheckedCreateNestedOneWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutScheduledCampaignsInput = {
@@ -38073,6 +41948,8 @@ export namespace Prisma {
     analytics?: AnalyticsUpdateManyWithoutUserNestedInput
     notifications?: NotificationUpdateManyWithoutUserNestedInput
     subscription?: SubscriptionUpdateOneWithoutUserNestedInput
+    transactions?: TransactionUpdateManyWithoutUserNestedInput
+    whatsappConfig?: WhatsAppConfigUpdateOneWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutScheduledCampaignsInput = {
@@ -38098,6 +41975,8 @@ export namespace Prisma {
     analytics?: AnalyticsUncheckedUpdateManyWithoutUserNestedInput
     notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
     subscription?: SubscriptionUncheckedUpdateOneWithoutUserNestedInput
+    transactions?: TransactionUncheckedUpdateManyWithoutUserNestedInput
+    whatsappConfig?: WhatsAppConfigUncheckedUpdateOneWithoutUserNestedInput
   }
 
   export type UserCreateWithoutEmailCampaignsInput = {
@@ -38123,6 +42002,8 @@ export namespace Prisma {
     analytics?: AnalyticsCreateNestedManyWithoutUserInput
     notifications?: NotificationCreateNestedManyWithoutUserInput
     subscription?: SubscriptionCreateNestedOneWithoutUserInput
+    transactions?: TransactionCreateNestedManyWithoutUserInput
+    whatsappConfig?: WhatsAppConfigCreateNestedOneWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutEmailCampaignsInput = {
@@ -38148,6 +42029,8 @@ export namespace Prisma {
     analytics?: AnalyticsUncheckedCreateNestedManyWithoutUserInput
     notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
     subscription?: SubscriptionUncheckedCreateNestedOneWithoutUserInput
+    transactions?: TransactionUncheckedCreateNestedManyWithoutUserInput
+    whatsappConfig?: WhatsAppConfigUncheckedCreateNestedOneWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutEmailCampaignsInput = {
@@ -38250,6 +42133,8 @@ export namespace Prisma {
     analytics?: AnalyticsUpdateManyWithoutUserNestedInput
     notifications?: NotificationUpdateManyWithoutUserNestedInput
     subscription?: SubscriptionUpdateOneWithoutUserNestedInput
+    transactions?: TransactionUpdateManyWithoutUserNestedInput
+    whatsappConfig?: WhatsAppConfigUpdateOneWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutEmailCampaignsInput = {
@@ -38275,6 +42160,8 @@ export namespace Prisma {
     analytics?: AnalyticsUncheckedUpdateManyWithoutUserNestedInput
     notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
     subscription?: SubscriptionUncheckedUpdateOneWithoutUserNestedInput
+    transactions?: TransactionUncheckedUpdateManyWithoutUserNestedInput
+    whatsappConfig?: WhatsAppConfigUncheckedUpdateOneWithoutUserNestedInput
   }
 
   export type EmailTemplateUpsertWithoutCampaignsInput = {
@@ -38531,6 +42418,8 @@ export namespace Prisma {
     analytics?: AnalyticsCreateNestedManyWithoutUserInput
     notifications?: NotificationCreateNestedManyWithoutUserInput
     subscription?: SubscriptionCreateNestedOneWithoutUserInput
+    transactions?: TransactionCreateNestedManyWithoutUserInput
+    whatsappConfig?: WhatsAppConfigCreateNestedOneWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutMediaInput = {
@@ -38556,6 +42445,8 @@ export namespace Prisma {
     analytics?: AnalyticsUncheckedCreateNestedManyWithoutUserInput
     notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
     subscription?: SubscriptionUncheckedCreateNestedOneWithoutUserInput
+    transactions?: TransactionUncheckedCreateNestedManyWithoutUserInput
+    whatsappConfig?: WhatsAppConfigUncheckedCreateNestedOneWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutMediaInput = {
@@ -38597,6 +42488,8 @@ export namespace Prisma {
     analytics?: AnalyticsUpdateManyWithoutUserNestedInput
     notifications?: NotificationUpdateManyWithoutUserNestedInput
     subscription?: SubscriptionUpdateOneWithoutUserNestedInput
+    transactions?: TransactionUpdateManyWithoutUserNestedInput
+    whatsappConfig?: WhatsAppConfigUpdateOneWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutMediaInput = {
@@ -38622,6 +42515,8 @@ export namespace Prisma {
     analytics?: AnalyticsUncheckedUpdateManyWithoutUserNestedInput
     notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
     subscription?: SubscriptionUncheckedUpdateOneWithoutUserNestedInput
+    transactions?: TransactionUncheckedUpdateManyWithoutUserNestedInput
+    whatsappConfig?: WhatsAppConfigUncheckedUpdateOneWithoutUserNestedInput
   }
 
   export type UserCreateWithoutAnalyticsInput = {
@@ -38647,6 +42542,8 @@ export namespace Prisma {
     media?: MediaCreateNestedManyWithoutUserInput
     notifications?: NotificationCreateNestedManyWithoutUserInput
     subscription?: SubscriptionCreateNestedOneWithoutUserInput
+    transactions?: TransactionCreateNestedManyWithoutUserInput
+    whatsappConfig?: WhatsAppConfigCreateNestedOneWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutAnalyticsInput = {
@@ -38672,6 +42569,8 @@ export namespace Prisma {
     media?: MediaUncheckedCreateNestedManyWithoutUserInput
     notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
     subscription?: SubscriptionUncheckedCreateNestedOneWithoutUserInput
+    transactions?: TransactionUncheckedCreateNestedManyWithoutUserInput
+    whatsappConfig?: WhatsAppConfigUncheckedCreateNestedOneWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutAnalyticsInput = {
@@ -38713,6 +42612,8 @@ export namespace Prisma {
     media?: MediaUpdateManyWithoutUserNestedInput
     notifications?: NotificationUpdateManyWithoutUserNestedInput
     subscription?: SubscriptionUpdateOneWithoutUserNestedInput
+    transactions?: TransactionUpdateManyWithoutUserNestedInput
+    whatsappConfig?: WhatsAppConfigUpdateOneWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutAnalyticsInput = {
@@ -38738,6 +42639,8 @@ export namespace Prisma {
     media?: MediaUncheckedUpdateManyWithoutUserNestedInput
     notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
     subscription?: SubscriptionUncheckedUpdateOneWithoutUserNestedInput
+    transactions?: TransactionUncheckedUpdateManyWithoutUserNestedInput
+    whatsappConfig?: WhatsAppConfigUncheckedUpdateOneWithoutUserNestedInput
   }
 
   export type UserCreateWithoutNotificationsInput = {
@@ -38763,6 +42666,8 @@ export namespace Prisma {
     media?: MediaCreateNestedManyWithoutUserInput
     analytics?: AnalyticsCreateNestedManyWithoutUserInput
     subscription?: SubscriptionCreateNestedOneWithoutUserInput
+    transactions?: TransactionCreateNestedManyWithoutUserInput
+    whatsappConfig?: WhatsAppConfigCreateNestedOneWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutNotificationsInput = {
@@ -38788,6 +42693,8 @@ export namespace Prisma {
     media?: MediaUncheckedCreateNestedManyWithoutUserInput
     analytics?: AnalyticsUncheckedCreateNestedManyWithoutUserInput
     subscription?: SubscriptionUncheckedCreateNestedOneWithoutUserInput
+    transactions?: TransactionUncheckedCreateNestedManyWithoutUserInput
+    whatsappConfig?: WhatsAppConfigUncheckedCreateNestedOneWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutNotificationsInput = {
@@ -38829,6 +42736,8 @@ export namespace Prisma {
     media?: MediaUpdateManyWithoutUserNestedInput
     analytics?: AnalyticsUpdateManyWithoutUserNestedInput
     subscription?: SubscriptionUpdateOneWithoutUserNestedInput
+    transactions?: TransactionUpdateManyWithoutUserNestedInput
+    whatsappConfig?: WhatsAppConfigUpdateOneWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutNotificationsInput = {
@@ -38854,6 +42763,8 @@ export namespace Prisma {
     media?: MediaUncheckedUpdateManyWithoutUserNestedInput
     analytics?: AnalyticsUncheckedUpdateManyWithoutUserNestedInput
     subscription?: SubscriptionUncheckedUpdateOneWithoutUserNestedInput
+    transactions?: TransactionUncheckedUpdateManyWithoutUserNestedInput
+    whatsappConfig?: WhatsAppConfigUncheckedUpdateOneWithoutUserNestedInput
   }
 
   export type AccountCreateManyUserInput = {
@@ -39018,6 +42929,19 @@ export namespace Prisma {
     read?: boolean
     link?: string | null
     createdAt?: Date | string
+  }
+
+  export type TransactionCreateManyUserInput = {
+    id?: string
+    amount: number
+    currency?: string
+    status: string
+    reference: string
+    paystackId?: string | null
+    channel?: string | null
+    paidAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
   }
 
   export type AccountUpdateWithoutUserInput = {
@@ -39524,12 +43448,57 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
+  export type TransactionUpdateWithoutUserInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    amount?: FloatFieldUpdateOperationsInput | number
+    currency?: StringFieldUpdateOperationsInput | string
+    status?: StringFieldUpdateOperationsInput | string
+    reference?: StringFieldUpdateOperationsInput | string
+    paystackId?: NullableStringFieldUpdateOperationsInput | string | null
+    channel?: NullableStringFieldUpdateOperationsInput | string | null
+    paidAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type TransactionUncheckedUpdateWithoutUserInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    amount?: FloatFieldUpdateOperationsInput | number
+    currency?: StringFieldUpdateOperationsInput | string
+    status?: StringFieldUpdateOperationsInput | string
+    reference?: StringFieldUpdateOperationsInput | string
+    paystackId?: NullableStringFieldUpdateOperationsInput | string | null
+    channel?: NullableStringFieldUpdateOperationsInput | string | null
+    paidAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type TransactionUncheckedUpdateManyWithoutUserInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    amount?: FloatFieldUpdateOperationsInput | number
+    currency?: StringFieldUpdateOperationsInput | string
+    status?: StringFieldUpdateOperationsInput | string
+    reference?: StringFieldUpdateOperationsInput | string
+    paystackId?: NullableStringFieldUpdateOperationsInput | string | null
+    channel?: NullableStringFieldUpdateOperationsInput | string | null
+    paidAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
   export type SubscriptionCreateManyPlanInput = {
     id?: string
     userId: string
     status?: $Enums.SubscriptionStatus
     startDate?: Date | string
     endDate?: Date | string | null
+    postsUsed?: number
+    aiTextUsed?: number
+    aiImageUsed?: number
+    lastResetAt?: Date | string
+    paystackSubscriptionCode?: string | null
+    paystackCustomerCode?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -39539,6 +43508,12 @@ export namespace Prisma {
     status?: EnumSubscriptionStatusFieldUpdateOperationsInput | $Enums.SubscriptionStatus
     startDate?: DateTimeFieldUpdateOperationsInput | Date | string
     endDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    postsUsed?: IntFieldUpdateOperationsInput | number
+    aiTextUsed?: IntFieldUpdateOperationsInput | number
+    aiImageUsed?: IntFieldUpdateOperationsInput | number
+    lastResetAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    paystackSubscriptionCode?: NullableStringFieldUpdateOperationsInput | string | null
+    paystackCustomerCode?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     user?: UserUpdateOneRequiredWithoutSubscriptionNestedInput
@@ -39550,6 +43525,12 @@ export namespace Prisma {
     status?: EnumSubscriptionStatusFieldUpdateOperationsInput | $Enums.SubscriptionStatus
     startDate?: DateTimeFieldUpdateOperationsInput | Date | string
     endDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    postsUsed?: IntFieldUpdateOperationsInput | number
+    aiTextUsed?: IntFieldUpdateOperationsInput | number
+    aiImageUsed?: IntFieldUpdateOperationsInput | number
+    lastResetAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    paystackSubscriptionCode?: NullableStringFieldUpdateOperationsInput | string | null
+    paystackCustomerCode?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -39560,6 +43541,12 @@ export namespace Prisma {
     status?: EnumSubscriptionStatusFieldUpdateOperationsInput | $Enums.SubscriptionStatus
     startDate?: DateTimeFieldUpdateOperationsInput | Date | string
     endDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    postsUsed?: IntFieldUpdateOperationsInput | number
+    aiTextUsed?: IntFieldUpdateOperationsInput | number
+    aiImageUsed?: IntFieldUpdateOperationsInput | number
+    lastResetAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    paystackSubscriptionCode?: NullableStringFieldUpdateOperationsInput | string | null
+    paystackCustomerCode?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }

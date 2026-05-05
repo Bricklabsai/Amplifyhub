@@ -11,7 +11,8 @@ export type ZernioPlatform =
   | "linkedin"
   | "twitter"
   | "tiktok"
-  | "youtube";
+  | "youtube"
+  | "whatsapp";
 
 const PRISMA_TO_ZERNIO: Partial<Record<Platform, ZernioPlatform>> = {
   FACEBOOK: "facebook",
@@ -20,6 +21,7 @@ const PRISMA_TO_ZERNIO: Partial<Record<Platform, ZernioPlatform>> = {
   TWITTER: "twitter",
   TIKTOK: "tiktok",
   YOUTUBE: "youtube",
+  WHATSAPP: "whatsapp",
 };
 
 const ZERNIO_TO_PRISMA: Record<ZernioPlatform, Platform> = {
@@ -29,6 +31,7 @@ const ZERNIO_TO_PRISMA: Record<ZernioPlatform, Platform> = {
   twitter: "TWITTER",
   tiktok: "TIKTOK",
   youtube: "YOUTUBE",
+  whatsapp: "WHATSAPP",
 };
 
 let _client: Zernio | null = null;
@@ -75,8 +78,7 @@ export function getAppBaseUrl(): string {
 /**
  * Normalises an arbitrary platform string (e.g. "twitter", "TWITTER",
  * "Twitter") into the lowercase identifier expected by Zernio. Returns
- * null for platforms Zernio cannot handle (e.g. WhatsApp uses a
- * different connect flow).
+ * null for platforms Zernio cannot handle.
  */
 export function toZernioPlatform(value: string): ZernioPlatform | null {
   if (!value) return null;
