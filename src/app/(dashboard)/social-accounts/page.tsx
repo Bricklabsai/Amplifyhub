@@ -17,7 +17,7 @@ type PlatformConfig = {
   bg: string;
   provider: string;
   /** Lowercase identifier consumed by the Zernio Connect API. */
-  zernioPlatform?: "facebook" | "twitter" | "instagram" | "linkedin" | "tiktok" | "youtube";
+  zernioPlatform?: "facebook" | "twitter" | "instagram" | "linkedin" | "tiktok" | "youtube" | "whatsapp";
 };
 
 const PLATFORM_CONFIG: PlatformConfig[] = [
@@ -27,8 +27,8 @@ const PLATFORM_CONFIG: PlatformConfig[] = [
   { id: "LINKEDIN", label: "LinkedIn", Icon: FaLinkedin, color: "#0A66C2", bg: "#0A66C215", provider: "linkedin", zernioPlatform: "linkedin" },
   { id: "TIKTOK", label: "TikTok", Icon: FaTiktok, color: "#000000", bg: "#00000015", provider: "tiktok", zernioPlatform: "tiktok" },
   { id: "YOUTUBE", label: "YouTube", Icon: FaYoutube, color: "#FF0000", bg: "#FF000015", provider: "google", zernioPlatform: "youtube" },
-  // WhatsApp uses Zernio's separate `connectWhatsAppCredentials` flow, not OAuth.
-  { id: "WHATSAPP", label: "WhatsApp", Icon: FaWhatsapp, color: "#25D366", bg: "#25D36615", provider: "whatsapp" },
+  // WhatsApp now uses Zernio's OAuth connect flow, same as other platforms
+  { id: "WHATSAPP", label: "WhatsApp", Icon: FaWhatsapp, color: "#25D366", bg: "#25D36615", provider: "whatsapp", zernioPlatform: "whatsapp" },
 ];
 
 export default function SocialAccountsPage() {

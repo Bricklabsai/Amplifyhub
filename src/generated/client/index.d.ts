@@ -14,6 +14,11 @@ export type PrismaPromise<T> = $Public.PrismaPromise<T>
 
 
 /**
+ * Model WhatsAppConfig
+ * 
+ */
+export type WhatsAppConfig = $Result.DefaultSelection<Prisma.$WhatsAppConfigPayload>
+/**
  * Model User
  * 
  */
@@ -43,6 +48,11 @@ export type Plan = $Result.DefaultSelection<Prisma.$PlanPayload>
  * 
  */
 export type Subscription = $Result.DefaultSelection<Prisma.$SubscriptionPayload>
+/**
+ * Model Transaction
+ * 
+ */
+export type Transaction = $Result.DefaultSelection<Prisma.$TransactionPayload>
 /**
  * Model SocialAccount
  * 
@@ -78,6 +88,16 @@ export type Contact = $Result.DefaultSelection<Prisma.$ContactPayload>
  * 
  */
 export type ContactGroup = $Result.DefaultSelection<Prisma.$ContactGroupPayload>
+/**
+ * Model EmailTemplate
+ * 
+ */
+export type EmailTemplate = $Result.DefaultSelection<Prisma.$EmailTemplatePayload>
+/**
+ * Model ScheduledCampaign
+ * 
+ */
+export type ScheduledCampaign = $Result.DefaultSelection<Prisma.$ScheduledCampaignPayload>
 /**
  * Model EmailCampaign
  * 
@@ -157,7 +177,9 @@ export type CampaignStatus = (typeof CampaignStatus)[keyof typeof CampaignStatus
 export const EmailCampaignStatus: {
   DRAFT: 'DRAFT',
   SENT: 'SENT',
-  SCHEDULED: 'SCHEDULED'
+  SCHEDULED: 'SCHEDULED',
+  PARTIAL_SUCCESS: 'PARTIAL_SUCCESS',
+  FAILED: 'FAILED'
 };
 
 export type EmailCampaignStatus = (typeof EmailCampaignStatus)[keyof typeof EmailCampaignStatus]
@@ -170,6 +192,27 @@ export const SubscriptionStatus: {
 };
 
 export type SubscriptionStatus = (typeof SubscriptionStatus)[keyof typeof SubscriptionStatus]
+
+
+export const TemplateCategory: {
+  NEWSLETTER: 'NEWSLETTER',
+  EVENT: 'EVENT',
+  TRANSACTIONAL: 'TRANSACTIONAL',
+  PROMOTIONAL: 'PROMOTIONAL',
+  CUSTOM: 'CUSTOM'
+};
+
+export type TemplateCategory = (typeof TemplateCategory)[keyof typeof TemplateCategory]
+
+
+export const AutomationFrequency: {
+  DAILY: 'DAILY',
+  WEEKLY: 'WEEKLY',
+  MONTHLY: 'MONTHLY',
+  CUSTOM: 'CUSTOM'
+};
+
+export type AutomationFrequency = (typeof AutomationFrequency)[keyof typeof AutomationFrequency]
 
 }
 
@@ -197,6 +240,14 @@ export type SubscriptionStatus = $Enums.SubscriptionStatus
 
 export const SubscriptionStatus: typeof $Enums.SubscriptionStatus
 
+export type TemplateCategory = $Enums.TemplateCategory
+
+export const TemplateCategory: typeof $Enums.TemplateCategory
+
+export type AutomationFrequency = $Enums.AutomationFrequency
+
+export const AutomationFrequency: typeof $Enums.AutomationFrequency
+
 /**
  * ##  Prisma Client ʲˢ
  *
@@ -204,8 +255,8 @@ export const SubscriptionStatus: typeof $Enums.SubscriptionStatus
  * @example
  * ```
  * const prisma = new PrismaClient()
- * // Fetch zero or more Users
- * const users = await prisma.user.findMany()
+ * // Fetch zero or more WhatsAppConfigs
+ * const whatsAppConfigs = await prisma.whatsAppConfig.findMany()
  * ```
  *
  *
@@ -225,8 +276,8 @@ export class PrismaClient<
    * @example
    * ```
    * const prisma = new PrismaClient()
-   * // Fetch zero or more Users
-   * const users = await prisma.user.findMany()
+   * // Fetch zero or more WhatsAppConfigs
+   * const whatsAppConfigs = await prisma.whatsAppConfig.findMany()
    * ```
    *
    *
@@ -316,6 +367,16 @@ export class PrismaClient<
   }>>
 
       /**
+   * `prisma.whatsAppConfig`: Exposes CRUD operations for the **WhatsAppConfig** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more WhatsAppConfigs
+    * const whatsAppConfigs = await prisma.whatsAppConfig.findMany()
+    * ```
+    */
+  get whatsAppConfig(): Prisma.WhatsAppConfigDelegate<ExtArgs, ClientOptions>;
+
+  /**
    * `prisma.user`: Exposes CRUD operations for the **User** model.
     * Example usage:
     * ```ts
@@ -374,6 +435,16 @@ export class PrismaClient<
     * ```
     */
   get subscription(): Prisma.SubscriptionDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.transaction`: Exposes CRUD operations for the **Transaction** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more Transactions
+    * const transactions = await prisma.transaction.findMany()
+    * ```
+    */
+  get transaction(): Prisma.TransactionDelegate<ExtArgs, ClientOptions>;
 
   /**
    * `prisma.socialAccount`: Exposes CRUD operations for the **SocialAccount** model.
@@ -444,6 +515,26 @@ export class PrismaClient<
     * ```
     */
   get contactGroup(): Prisma.ContactGroupDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.emailTemplate`: Exposes CRUD operations for the **EmailTemplate** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more EmailTemplates
+    * const emailTemplates = await prisma.emailTemplate.findMany()
+    * ```
+    */
+  get emailTemplate(): Prisma.EmailTemplateDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.scheduledCampaign`: Exposes CRUD operations for the **ScheduledCampaign** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more ScheduledCampaigns
+    * const scheduledCampaigns = await prisma.scheduledCampaign.findMany()
+    * ```
+    */
+  get scheduledCampaign(): Prisma.ScheduledCampaignDelegate<ExtArgs, ClientOptions>;
 
   /**
    * `prisma.emailCampaign`: Exposes CRUD operations for the **EmailCampaign** model.
@@ -945,12 +1036,14 @@ export namespace Prisma {
 
 
   export const ModelName: {
+    WhatsAppConfig: 'WhatsAppConfig',
     User: 'User',
     Account: 'Account',
     Session: 'Session',
     VerificationToken: 'VerificationToken',
     Plan: 'Plan',
     Subscription: 'Subscription',
+    Transaction: 'Transaction',
     SocialAccount: 'SocialAccount',
     Post: 'Post',
     PlatformPost: 'PlatformPost',
@@ -958,6 +1051,8 @@ export namespace Prisma {
     AudienceGroup: 'AudienceGroup',
     Contact: 'Contact',
     ContactGroup: 'ContactGroup',
+    EmailTemplate: 'EmailTemplate',
+    ScheduledCampaign: 'ScheduledCampaign',
     EmailCampaign: 'EmailCampaign',
     EmailCampaignRecipient: 'EmailCampaignRecipient',
     Media: 'Media',
@@ -982,10 +1077,84 @@ export namespace Prisma {
       omit: GlobalOmitOptions
     }
     meta: {
-      modelProps: "user" | "account" | "session" | "verificationToken" | "plan" | "subscription" | "socialAccount" | "post" | "platformPost" | "campaign" | "audienceGroup" | "contact" | "contactGroup" | "emailCampaign" | "emailCampaignRecipient" | "media" | "analytics" | "notification" | "rateLimit"
+      modelProps: "whatsAppConfig" | "user" | "account" | "session" | "verificationToken" | "plan" | "subscription" | "transaction" | "socialAccount" | "post" | "platformPost" | "campaign" | "audienceGroup" | "contact" | "contactGroup" | "emailTemplate" | "scheduledCampaign" | "emailCampaign" | "emailCampaignRecipient" | "media" | "analytics" | "notification" | "rateLimit"
       txIsolationLevel: Prisma.TransactionIsolationLevel
     }
     model: {
+      WhatsAppConfig: {
+        payload: Prisma.$WhatsAppConfigPayload<ExtArgs>
+        fields: Prisma.WhatsAppConfigFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.WhatsAppConfigFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$WhatsAppConfigPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.WhatsAppConfigFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$WhatsAppConfigPayload>
+          }
+          findFirst: {
+            args: Prisma.WhatsAppConfigFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$WhatsAppConfigPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.WhatsAppConfigFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$WhatsAppConfigPayload>
+          }
+          findMany: {
+            args: Prisma.WhatsAppConfigFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$WhatsAppConfigPayload>[]
+          }
+          create: {
+            args: Prisma.WhatsAppConfigCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$WhatsAppConfigPayload>
+          }
+          createMany: {
+            args: Prisma.WhatsAppConfigCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.WhatsAppConfigCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$WhatsAppConfigPayload>[]
+          }
+          delete: {
+            args: Prisma.WhatsAppConfigDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$WhatsAppConfigPayload>
+          }
+          update: {
+            args: Prisma.WhatsAppConfigUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$WhatsAppConfigPayload>
+          }
+          deleteMany: {
+            args: Prisma.WhatsAppConfigDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.WhatsAppConfigUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.WhatsAppConfigUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$WhatsAppConfigPayload>[]
+          }
+          upsert: {
+            args: Prisma.WhatsAppConfigUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$WhatsAppConfigPayload>
+          }
+          aggregate: {
+            args: Prisma.WhatsAppConfigAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateWhatsAppConfig>
+          }
+          groupBy: {
+            args: Prisma.WhatsAppConfigGroupByArgs<ExtArgs>
+            result: $Utils.Optional<WhatsAppConfigGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.WhatsAppConfigCountArgs<ExtArgs>
+            result: $Utils.Optional<WhatsAppConfigCountAggregateOutputType> | number
+          }
+        }
+      }
       User: {
         payload: Prisma.$UserPayload<ExtArgs>
         fields: Prisma.UserFieldRefs
@@ -1427,6 +1596,80 @@ export namespace Prisma {
           count: {
             args: Prisma.SubscriptionCountArgs<ExtArgs>
             result: $Utils.Optional<SubscriptionCountAggregateOutputType> | number
+          }
+        }
+      }
+      Transaction: {
+        payload: Prisma.$TransactionPayload<ExtArgs>
+        fields: Prisma.TransactionFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.TransactionFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$TransactionPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.TransactionFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$TransactionPayload>
+          }
+          findFirst: {
+            args: Prisma.TransactionFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$TransactionPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.TransactionFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$TransactionPayload>
+          }
+          findMany: {
+            args: Prisma.TransactionFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$TransactionPayload>[]
+          }
+          create: {
+            args: Prisma.TransactionCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$TransactionPayload>
+          }
+          createMany: {
+            args: Prisma.TransactionCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.TransactionCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$TransactionPayload>[]
+          }
+          delete: {
+            args: Prisma.TransactionDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$TransactionPayload>
+          }
+          update: {
+            args: Prisma.TransactionUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$TransactionPayload>
+          }
+          deleteMany: {
+            args: Prisma.TransactionDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.TransactionUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.TransactionUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$TransactionPayload>[]
+          }
+          upsert: {
+            args: Prisma.TransactionUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$TransactionPayload>
+          }
+          aggregate: {
+            args: Prisma.TransactionAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateTransaction>
+          }
+          groupBy: {
+            args: Prisma.TransactionGroupByArgs<ExtArgs>
+            result: $Utils.Optional<TransactionGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.TransactionCountArgs<ExtArgs>
+            result: $Utils.Optional<TransactionCountAggregateOutputType> | number
           }
         }
       }
@@ -1945,6 +2188,154 @@ export namespace Prisma {
           count: {
             args: Prisma.ContactGroupCountArgs<ExtArgs>
             result: $Utils.Optional<ContactGroupCountAggregateOutputType> | number
+          }
+        }
+      }
+      EmailTemplate: {
+        payload: Prisma.$EmailTemplatePayload<ExtArgs>
+        fields: Prisma.EmailTemplateFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.EmailTemplateFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$EmailTemplatePayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.EmailTemplateFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$EmailTemplatePayload>
+          }
+          findFirst: {
+            args: Prisma.EmailTemplateFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$EmailTemplatePayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.EmailTemplateFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$EmailTemplatePayload>
+          }
+          findMany: {
+            args: Prisma.EmailTemplateFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$EmailTemplatePayload>[]
+          }
+          create: {
+            args: Prisma.EmailTemplateCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$EmailTemplatePayload>
+          }
+          createMany: {
+            args: Prisma.EmailTemplateCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.EmailTemplateCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$EmailTemplatePayload>[]
+          }
+          delete: {
+            args: Prisma.EmailTemplateDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$EmailTemplatePayload>
+          }
+          update: {
+            args: Prisma.EmailTemplateUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$EmailTemplatePayload>
+          }
+          deleteMany: {
+            args: Prisma.EmailTemplateDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.EmailTemplateUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.EmailTemplateUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$EmailTemplatePayload>[]
+          }
+          upsert: {
+            args: Prisma.EmailTemplateUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$EmailTemplatePayload>
+          }
+          aggregate: {
+            args: Prisma.EmailTemplateAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateEmailTemplate>
+          }
+          groupBy: {
+            args: Prisma.EmailTemplateGroupByArgs<ExtArgs>
+            result: $Utils.Optional<EmailTemplateGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.EmailTemplateCountArgs<ExtArgs>
+            result: $Utils.Optional<EmailTemplateCountAggregateOutputType> | number
+          }
+        }
+      }
+      ScheduledCampaign: {
+        payload: Prisma.$ScheduledCampaignPayload<ExtArgs>
+        fields: Prisma.ScheduledCampaignFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.ScheduledCampaignFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ScheduledCampaignPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.ScheduledCampaignFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ScheduledCampaignPayload>
+          }
+          findFirst: {
+            args: Prisma.ScheduledCampaignFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ScheduledCampaignPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.ScheduledCampaignFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ScheduledCampaignPayload>
+          }
+          findMany: {
+            args: Prisma.ScheduledCampaignFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ScheduledCampaignPayload>[]
+          }
+          create: {
+            args: Prisma.ScheduledCampaignCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ScheduledCampaignPayload>
+          }
+          createMany: {
+            args: Prisma.ScheduledCampaignCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.ScheduledCampaignCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ScheduledCampaignPayload>[]
+          }
+          delete: {
+            args: Prisma.ScheduledCampaignDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ScheduledCampaignPayload>
+          }
+          update: {
+            args: Prisma.ScheduledCampaignUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ScheduledCampaignPayload>
+          }
+          deleteMany: {
+            args: Prisma.ScheduledCampaignDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.ScheduledCampaignUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.ScheduledCampaignUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ScheduledCampaignPayload>[]
+          }
+          upsert: {
+            args: Prisma.ScheduledCampaignUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ScheduledCampaignPayload>
+          }
+          aggregate: {
+            args: Prisma.ScheduledCampaignAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateScheduledCampaign>
+          }
+          groupBy: {
+            args: Prisma.ScheduledCampaignGroupByArgs<ExtArgs>
+            result: $Utils.Optional<ScheduledCampaignGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.ScheduledCampaignCountArgs<ExtArgs>
+            result: $Utils.Optional<ScheduledCampaignCountAggregateOutputType> | number
           }
         }
       }
@@ -2488,12 +2879,14 @@ export namespace Prisma {
     omit?: Prisma.GlobalOmitConfig
   }
   export type GlobalOmitConfig = {
+    whatsAppConfig?: WhatsAppConfigOmit
     user?: UserOmit
     account?: AccountOmit
     session?: SessionOmit
     verificationToken?: VerificationTokenOmit
     plan?: PlanOmit
     subscription?: SubscriptionOmit
+    transaction?: TransactionOmit
     socialAccount?: SocialAccountOmit
     post?: PostOmit
     platformPost?: PlatformPostOmit
@@ -2501,6 +2894,8 @@ export namespace Prisma {
     audienceGroup?: AudienceGroupOmit
     contact?: ContactOmit
     contactGroup?: ContactGroupOmit
+    emailTemplate?: EmailTemplateOmit
+    scheduledCampaign?: ScheduledCampaignOmit
     emailCampaign?: EmailCampaignOmit
     emailCampaignRecipient?: EmailCampaignRecipientOmit
     media?: MediaOmit
@@ -2594,9 +2989,12 @@ export namespace Prisma {
     campaigns: number
     audienceGroups: number
     emailCampaigns: number
+    emailTemplates: number
+    scheduledCampaigns: number
     media: number
     analytics: number
     notifications: number
+    transactions: number
   }
 
   export type UserCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -2607,9 +3005,12 @@ export namespace Prisma {
     campaigns?: boolean | UserCountOutputTypeCountCampaignsArgs
     audienceGroups?: boolean | UserCountOutputTypeCountAudienceGroupsArgs
     emailCampaigns?: boolean | UserCountOutputTypeCountEmailCampaignsArgs
+    emailTemplates?: boolean | UserCountOutputTypeCountEmailTemplatesArgs
+    scheduledCampaigns?: boolean | UserCountOutputTypeCountScheduledCampaignsArgs
     media?: boolean | UserCountOutputTypeCountMediaArgs
     analytics?: boolean | UserCountOutputTypeCountAnalyticsArgs
     notifications?: boolean | UserCountOutputTypeCountNotificationsArgs
+    transactions?: boolean | UserCountOutputTypeCountTransactionsArgs
   }
 
   // Custom InputTypes
@@ -2675,6 +3076,20 @@ export namespace Prisma {
   /**
    * UserCountOutputType without action
    */
+  export type UserCountOutputTypeCountEmailTemplatesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: EmailTemplateWhereInput
+  }
+
+  /**
+   * UserCountOutputType without action
+   */
+  export type UserCountOutputTypeCountScheduledCampaignsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: ScheduledCampaignWhereInput
+  }
+
+  /**
+   * UserCountOutputType without action
+   */
   export type UserCountOutputTypeCountMediaArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: MediaWhereInput
   }
@@ -2691,6 +3106,13 @@ export namespace Prisma {
    */
   export type UserCountOutputTypeCountNotificationsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: NotificationWhereInput
+  }
+
+  /**
+   * UserCountOutputType without action
+   */
+  export type UserCountOutputTypeCountTransactionsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: TransactionWhereInput
   }
 
 
@@ -2890,6 +3312,37 @@ export namespace Prisma {
 
 
   /**
+   * Count Type EmailTemplateCountOutputType
+   */
+
+  export type EmailTemplateCountOutputType = {
+    campaigns: number
+  }
+
+  export type EmailTemplateCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    campaigns?: boolean | EmailTemplateCountOutputTypeCountCampaignsArgs
+  }
+
+  // Custom InputTypes
+  /**
+   * EmailTemplateCountOutputType without action
+   */
+  export type EmailTemplateCountOutputTypeDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the EmailTemplateCountOutputType
+     */
+    select?: EmailTemplateCountOutputTypeSelect<ExtArgs> | null
+  }
+
+  /**
+   * EmailTemplateCountOutputType without action
+   */
+  export type EmailTemplateCountOutputTypeCountCampaignsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: EmailCampaignWhereInput
+  }
+
+
+  /**
    * Count Type EmailCampaignCountOutputType
    */
 
@@ -2925,6 +3378,1090 @@ export namespace Prisma {
    */
 
   /**
+   * Model WhatsAppConfig
+   */
+
+  export type AggregateWhatsAppConfig = {
+    _count: WhatsAppConfigCountAggregateOutputType | null
+    _min: WhatsAppConfigMinAggregateOutputType | null
+    _max: WhatsAppConfigMaxAggregateOutputType | null
+  }
+
+  export type WhatsAppConfigMinAggregateOutputType = {
+    id: string | null
+    userId: string | null
+    phoneNumberId: string | null
+    wabaId: string | null
+    accessToken: string | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type WhatsAppConfigMaxAggregateOutputType = {
+    id: string | null
+    userId: string | null
+    phoneNumberId: string | null
+    wabaId: string | null
+    accessToken: string | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type WhatsAppConfigCountAggregateOutputType = {
+    id: number
+    userId: number
+    phoneNumberId: number
+    wabaId: number
+    accessToken: number
+    createdAt: number
+    updatedAt: number
+    _all: number
+  }
+
+
+  export type WhatsAppConfigMinAggregateInputType = {
+    id?: true
+    userId?: true
+    phoneNumberId?: true
+    wabaId?: true
+    accessToken?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type WhatsAppConfigMaxAggregateInputType = {
+    id?: true
+    userId?: true
+    phoneNumberId?: true
+    wabaId?: true
+    accessToken?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type WhatsAppConfigCountAggregateInputType = {
+    id?: true
+    userId?: true
+    phoneNumberId?: true
+    wabaId?: true
+    accessToken?: true
+    createdAt?: true
+    updatedAt?: true
+    _all?: true
+  }
+
+  export type WhatsAppConfigAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which WhatsAppConfig to aggregate.
+     */
+    where?: WhatsAppConfigWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of WhatsAppConfigs to fetch.
+     */
+    orderBy?: WhatsAppConfigOrderByWithRelationInput | WhatsAppConfigOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: WhatsAppConfigWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` WhatsAppConfigs from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` WhatsAppConfigs.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned WhatsAppConfigs
+    **/
+    _count?: true | WhatsAppConfigCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: WhatsAppConfigMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: WhatsAppConfigMaxAggregateInputType
+  }
+
+  export type GetWhatsAppConfigAggregateType<T extends WhatsAppConfigAggregateArgs> = {
+        [P in keyof T & keyof AggregateWhatsAppConfig]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateWhatsAppConfig[P]>
+      : GetScalarType<T[P], AggregateWhatsAppConfig[P]>
+  }
+
+
+
+
+  export type WhatsAppConfigGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: WhatsAppConfigWhereInput
+    orderBy?: WhatsAppConfigOrderByWithAggregationInput | WhatsAppConfigOrderByWithAggregationInput[]
+    by: WhatsAppConfigScalarFieldEnum[] | WhatsAppConfigScalarFieldEnum
+    having?: WhatsAppConfigScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: WhatsAppConfigCountAggregateInputType | true
+    _min?: WhatsAppConfigMinAggregateInputType
+    _max?: WhatsAppConfigMaxAggregateInputType
+  }
+
+  export type WhatsAppConfigGroupByOutputType = {
+    id: string
+    userId: string
+    phoneNumberId: string
+    wabaId: string
+    accessToken: string
+    createdAt: Date
+    updatedAt: Date
+    _count: WhatsAppConfigCountAggregateOutputType | null
+    _min: WhatsAppConfigMinAggregateOutputType | null
+    _max: WhatsAppConfigMaxAggregateOutputType | null
+  }
+
+  type GetWhatsAppConfigGroupByPayload<T extends WhatsAppConfigGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<WhatsAppConfigGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof WhatsAppConfigGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], WhatsAppConfigGroupByOutputType[P]>
+            : GetScalarType<T[P], WhatsAppConfigGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type WhatsAppConfigSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    userId?: boolean
+    phoneNumberId?: boolean
+    wabaId?: boolean
+    accessToken?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    user?: boolean | UserDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["whatsAppConfig"]>
+
+  export type WhatsAppConfigSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    userId?: boolean
+    phoneNumberId?: boolean
+    wabaId?: boolean
+    accessToken?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    user?: boolean | UserDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["whatsAppConfig"]>
+
+  export type WhatsAppConfigSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    userId?: boolean
+    phoneNumberId?: boolean
+    wabaId?: boolean
+    accessToken?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    user?: boolean | UserDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["whatsAppConfig"]>
+
+  export type WhatsAppConfigSelectScalar = {
+    id?: boolean
+    userId?: boolean
+    phoneNumberId?: boolean
+    wabaId?: boolean
+    accessToken?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }
+
+  export type WhatsAppConfigOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "userId" | "phoneNumberId" | "wabaId" | "accessToken" | "createdAt" | "updatedAt", ExtArgs["result"]["whatsAppConfig"]>
+  export type WhatsAppConfigInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    user?: boolean | UserDefaultArgs<ExtArgs>
+  }
+  export type WhatsAppConfigIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    user?: boolean | UserDefaultArgs<ExtArgs>
+  }
+  export type WhatsAppConfigIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    user?: boolean | UserDefaultArgs<ExtArgs>
+  }
+
+  export type $WhatsAppConfigPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "WhatsAppConfig"
+    objects: {
+      user: Prisma.$UserPayload<ExtArgs>
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      userId: string
+      phoneNumberId: string
+      wabaId: string
+      accessToken: string
+      createdAt: Date
+      updatedAt: Date
+    }, ExtArgs["result"]["whatsAppConfig"]>
+    composites: {}
+  }
+
+  type WhatsAppConfigGetPayload<S extends boolean | null | undefined | WhatsAppConfigDefaultArgs> = $Result.GetResult<Prisma.$WhatsAppConfigPayload, S>
+
+  type WhatsAppConfigCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<WhatsAppConfigFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: WhatsAppConfigCountAggregateInputType | true
+    }
+
+  export interface WhatsAppConfigDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['WhatsAppConfig'], meta: { name: 'WhatsAppConfig' } }
+    /**
+     * Find zero or one WhatsAppConfig that matches the filter.
+     * @param {WhatsAppConfigFindUniqueArgs} args - Arguments to find a WhatsAppConfig
+     * @example
+     * // Get one WhatsAppConfig
+     * const whatsAppConfig = await prisma.whatsAppConfig.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends WhatsAppConfigFindUniqueArgs>(args: SelectSubset<T, WhatsAppConfigFindUniqueArgs<ExtArgs>>): Prisma__WhatsAppConfigClient<$Result.GetResult<Prisma.$WhatsAppConfigPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one WhatsAppConfig that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {WhatsAppConfigFindUniqueOrThrowArgs} args - Arguments to find a WhatsAppConfig
+     * @example
+     * // Get one WhatsAppConfig
+     * const whatsAppConfig = await prisma.whatsAppConfig.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends WhatsAppConfigFindUniqueOrThrowArgs>(args: SelectSubset<T, WhatsAppConfigFindUniqueOrThrowArgs<ExtArgs>>): Prisma__WhatsAppConfigClient<$Result.GetResult<Prisma.$WhatsAppConfigPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first WhatsAppConfig that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {WhatsAppConfigFindFirstArgs} args - Arguments to find a WhatsAppConfig
+     * @example
+     * // Get one WhatsAppConfig
+     * const whatsAppConfig = await prisma.whatsAppConfig.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends WhatsAppConfigFindFirstArgs>(args?: SelectSubset<T, WhatsAppConfigFindFirstArgs<ExtArgs>>): Prisma__WhatsAppConfigClient<$Result.GetResult<Prisma.$WhatsAppConfigPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first WhatsAppConfig that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {WhatsAppConfigFindFirstOrThrowArgs} args - Arguments to find a WhatsAppConfig
+     * @example
+     * // Get one WhatsAppConfig
+     * const whatsAppConfig = await prisma.whatsAppConfig.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends WhatsAppConfigFindFirstOrThrowArgs>(args?: SelectSubset<T, WhatsAppConfigFindFirstOrThrowArgs<ExtArgs>>): Prisma__WhatsAppConfigClient<$Result.GetResult<Prisma.$WhatsAppConfigPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more WhatsAppConfigs that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {WhatsAppConfigFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all WhatsAppConfigs
+     * const whatsAppConfigs = await prisma.whatsAppConfig.findMany()
+     * 
+     * // Get first 10 WhatsAppConfigs
+     * const whatsAppConfigs = await prisma.whatsAppConfig.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const whatsAppConfigWithIdOnly = await prisma.whatsAppConfig.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends WhatsAppConfigFindManyArgs>(args?: SelectSubset<T, WhatsAppConfigFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$WhatsAppConfigPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a WhatsAppConfig.
+     * @param {WhatsAppConfigCreateArgs} args - Arguments to create a WhatsAppConfig.
+     * @example
+     * // Create one WhatsAppConfig
+     * const WhatsAppConfig = await prisma.whatsAppConfig.create({
+     *   data: {
+     *     // ... data to create a WhatsAppConfig
+     *   }
+     * })
+     * 
+     */
+    create<T extends WhatsAppConfigCreateArgs>(args: SelectSubset<T, WhatsAppConfigCreateArgs<ExtArgs>>): Prisma__WhatsAppConfigClient<$Result.GetResult<Prisma.$WhatsAppConfigPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many WhatsAppConfigs.
+     * @param {WhatsAppConfigCreateManyArgs} args - Arguments to create many WhatsAppConfigs.
+     * @example
+     * // Create many WhatsAppConfigs
+     * const whatsAppConfig = await prisma.whatsAppConfig.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends WhatsAppConfigCreateManyArgs>(args?: SelectSubset<T, WhatsAppConfigCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many WhatsAppConfigs and returns the data saved in the database.
+     * @param {WhatsAppConfigCreateManyAndReturnArgs} args - Arguments to create many WhatsAppConfigs.
+     * @example
+     * // Create many WhatsAppConfigs
+     * const whatsAppConfig = await prisma.whatsAppConfig.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many WhatsAppConfigs and only return the `id`
+     * const whatsAppConfigWithIdOnly = await prisma.whatsAppConfig.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends WhatsAppConfigCreateManyAndReturnArgs>(args?: SelectSubset<T, WhatsAppConfigCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$WhatsAppConfigPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a WhatsAppConfig.
+     * @param {WhatsAppConfigDeleteArgs} args - Arguments to delete one WhatsAppConfig.
+     * @example
+     * // Delete one WhatsAppConfig
+     * const WhatsAppConfig = await prisma.whatsAppConfig.delete({
+     *   where: {
+     *     // ... filter to delete one WhatsAppConfig
+     *   }
+     * })
+     * 
+     */
+    delete<T extends WhatsAppConfigDeleteArgs>(args: SelectSubset<T, WhatsAppConfigDeleteArgs<ExtArgs>>): Prisma__WhatsAppConfigClient<$Result.GetResult<Prisma.$WhatsAppConfigPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one WhatsAppConfig.
+     * @param {WhatsAppConfigUpdateArgs} args - Arguments to update one WhatsAppConfig.
+     * @example
+     * // Update one WhatsAppConfig
+     * const whatsAppConfig = await prisma.whatsAppConfig.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends WhatsAppConfigUpdateArgs>(args: SelectSubset<T, WhatsAppConfigUpdateArgs<ExtArgs>>): Prisma__WhatsAppConfigClient<$Result.GetResult<Prisma.$WhatsAppConfigPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more WhatsAppConfigs.
+     * @param {WhatsAppConfigDeleteManyArgs} args - Arguments to filter WhatsAppConfigs to delete.
+     * @example
+     * // Delete a few WhatsAppConfigs
+     * const { count } = await prisma.whatsAppConfig.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends WhatsAppConfigDeleteManyArgs>(args?: SelectSubset<T, WhatsAppConfigDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more WhatsAppConfigs.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {WhatsAppConfigUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many WhatsAppConfigs
+     * const whatsAppConfig = await prisma.whatsAppConfig.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends WhatsAppConfigUpdateManyArgs>(args: SelectSubset<T, WhatsAppConfigUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more WhatsAppConfigs and returns the data updated in the database.
+     * @param {WhatsAppConfigUpdateManyAndReturnArgs} args - Arguments to update many WhatsAppConfigs.
+     * @example
+     * // Update many WhatsAppConfigs
+     * const whatsAppConfig = await prisma.whatsAppConfig.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more WhatsAppConfigs and only return the `id`
+     * const whatsAppConfigWithIdOnly = await prisma.whatsAppConfig.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends WhatsAppConfigUpdateManyAndReturnArgs>(args: SelectSubset<T, WhatsAppConfigUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$WhatsAppConfigPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one WhatsAppConfig.
+     * @param {WhatsAppConfigUpsertArgs} args - Arguments to update or create a WhatsAppConfig.
+     * @example
+     * // Update or create a WhatsAppConfig
+     * const whatsAppConfig = await prisma.whatsAppConfig.upsert({
+     *   create: {
+     *     // ... data to create a WhatsAppConfig
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the WhatsAppConfig we want to update
+     *   }
+     * })
+     */
+    upsert<T extends WhatsAppConfigUpsertArgs>(args: SelectSubset<T, WhatsAppConfigUpsertArgs<ExtArgs>>): Prisma__WhatsAppConfigClient<$Result.GetResult<Prisma.$WhatsAppConfigPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of WhatsAppConfigs.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {WhatsAppConfigCountArgs} args - Arguments to filter WhatsAppConfigs to count.
+     * @example
+     * // Count the number of WhatsAppConfigs
+     * const count = await prisma.whatsAppConfig.count({
+     *   where: {
+     *     // ... the filter for the WhatsAppConfigs we want to count
+     *   }
+     * })
+    **/
+    count<T extends WhatsAppConfigCountArgs>(
+      args?: Subset<T, WhatsAppConfigCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], WhatsAppConfigCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a WhatsAppConfig.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {WhatsAppConfigAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends WhatsAppConfigAggregateArgs>(args: Subset<T, WhatsAppConfigAggregateArgs>): Prisma.PrismaPromise<GetWhatsAppConfigAggregateType<T>>
+
+    /**
+     * Group by WhatsAppConfig.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {WhatsAppConfigGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends WhatsAppConfigGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: WhatsAppConfigGroupByArgs['orderBy'] }
+        : { orderBy?: WhatsAppConfigGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, WhatsAppConfigGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetWhatsAppConfigGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the WhatsAppConfig model
+   */
+  readonly fields: WhatsAppConfigFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for WhatsAppConfig.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__WhatsAppConfigClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    user<T extends UserDefaultArgs<ExtArgs> = {}>(args?: Subset<T, UserDefaultArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the WhatsAppConfig model
+   */
+  interface WhatsAppConfigFieldRefs {
+    readonly id: FieldRef<"WhatsAppConfig", 'String'>
+    readonly userId: FieldRef<"WhatsAppConfig", 'String'>
+    readonly phoneNumberId: FieldRef<"WhatsAppConfig", 'String'>
+    readonly wabaId: FieldRef<"WhatsAppConfig", 'String'>
+    readonly accessToken: FieldRef<"WhatsAppConfig", 'String'>
+    readonly createdAt: FieldRef<"WhatsAppConfig", 'DateTime'>
+    readonly updatedAt: FieldRef<"WhatsAppConfig", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * WhatsAppConfig findUnique
+   */
+  export type WhatsAppConfigFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the WhatsAppConfig
+     */
+    select?: WhatsAppConfigSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the WhatsAppConfig
+     */
+    omit?: WhatsAppConfigOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: WhatsAppConfigInclude<ExtArgs> | null
+    /**
+     * Filter, which WhatsAppConfig to fetch.
+     */
+    where: WhatsAppConfigWhereUniqueInput
+  }
+
+  /**
+   * WhatsAppConfig findUniqueOrThrow
+   */
+  export type WhatsAppConfigFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the WhatsAppConfig
+     */
+    select?: WhatsAppConfigSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the WhatsAppConfig
+     */
+    omit?: WhatsAppConfigOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: WhatsAppConfigInclude<ExtArgs> | null
+    /**
+     * Filter, which WhatsAppConfig to fetch.
+     */
+    where: WhatsAppConfigWhereUniqueInput
+  }
+
+  /**
+   * WhatsAppConfig findFirst
+   */
+  export type WhatsAppConfigFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the WhatsAppConfig
+     */
+    select?: WhatsAppConfigSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the WhatsAppConfig
+     */
+    omit?: WhatsAppConfigOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: WhatsAppConfigInclude<ExtArgs> | null
+    /**
+     * Filter, which WhatsAppConfig to fetch.
+     */
+    where?: WhatsAppConfigWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of WhatsAppConfigs to fetch.
+     */
+    orderBy?: WhatsAppConfigOrderByWithRelationInput | WhatsAppConfigOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for WhatsAppConfigs.
+     */
+    cursor?: WhatsAppConfigWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` WhatsAppConfigs from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` WhatsAppConfigs.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of WhatsAppConfigs.
+     */
+    distinct?: WhatsAppConfigScalarFieldEnum | WhatsAppConfigScalarFieldEnum[]
+  }
+
+  /**
+   * WhatsAppConfig findFirstOrThrow
+   */
+  export type WhatsAppConfigFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the WhatsAppConfig
+     */
+    select?: WhatsAppConfigSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the WhatsAppConfig
+     */
+    omit?: WhatsAppConfigOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: WhatsAppConfigInclude<ExtArgs> | null
+    /**
+     * Filter, which WhatsAppConfig to fetch.
+     */
+    where?: WhatsAppConfigWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of WhatsAppConfigs to fetch.
+     */
+    orderBy?: WhatsAppConfigOrderByWithRelationInput | WhatsAppConfigOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for WhatsAppConfigs.
+     */
+    cursor?: WhatsAppConfigWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` WhatsAppConfigs from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` WhatsAppConfigs.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of WhatsAppConfigs.
+     */
+    distinct?: WhatsAppConfigScalarFieldEnum | WhatsAppConfigScalarFieldEnum[]
+  }
+
+  /**
+   * WhatsAppConfig findMany
+   */
+  export type WhatsAppConfigFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the WhatsAppConfig
+     */
+    select?: WhatsAppConfigSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the WhatsAppConfig
+     */
+    omit?: WhatsAppConfigOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: WhatsAppConfigInclude<ExtArgs> | null
+    /**
+     * Filter, which WhatsAppConfigs to fetch.
+     */
+    where?: WhatsAppConfigWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of WhatsAppConfigs to fetch.
+     */
+    orderBy?: WhatsAppConfigOrderByWithRelationInput | WhatsAppConfigOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing WhatsAppConfigs.
+     */
+    cursor?: WhatsAppConfigWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` WhatsAppConfigs from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` WhatsAppConfigs.
+     */
+    skip?: number
+    distinct?: WhatsAppConfigScalarFieldEnum | WhatsAppConfigScalarFieldEnum[]
+  }
+
+  /**
+   * WhatsAppConfig create
+   */
+  export type WhatsAppConfigCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the WhatsAppConfig
+     */
+    select?: WhatsAppConfigSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the WhatsAppConfig
+     */
+    omit?: WhatsAppConfigOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: WhatsAppConfigInclude<ExtArgs> | null
+    /**
+     * The data needed to create a WhatsAppConfig.
+     */
+    data: XOR<WhatsAppConfigCreateInput, WhatsAppConfigUncheckedCreateInput>
+  }
+
+  /**
+   * WhatsAppConfig createMany
+   */
+  export type WhatsAppConfigCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many WhatsAppConfigs.
+     */
+    data: WhatsAppConfigCreateManyInput | WhatsAppConfigCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * WhatsAppConfig createManyAndReturn
+   */
+  export type WhatsAppConfigCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the WhatsAppConfig
+     */
+    select?: WhatsAppConfigSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the WhatsAppConfig
+     */
+    omit?: WhatsAppConfigOmit<ExtArgs> | null
+    /**
+     * The data used to create many WhatsAppConfigs.
+     */
+    data: WhatsAppConfigCreateManyInput | WhatsAppConfigCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: WhatsAppConfigIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * WhatsAppConfig update
+   */
+  export type WhatsAppConfigUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the WhatsAppConfig
+     */
+    select?: WhatsAppConfigSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the WhatsAppConfig
+     */
+    omit?: WhatsAppConfigOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: WhatsAppConfigInclude<ExtArgs> | null
+    /**
+     * The data needed to update a WhatsAppConfig.
+     */
+    data: XOR<WhatsAppConfigUpdateInput, WhatsAppConfigUncheckedUpdateInput>
+    /**
+     * Choose, which WhatsAppConfig to update.
+     */
+    where: WhatsAppConfigWhereUniqueInput
+  }
+
+  /**
+   * WhatsAppConfig updateMany
+   */
+  export type WhatsAppConfigUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update WhatsAppConfigs.
+     */
+    data: XOR<WhatsAppConfigUpdateManyMutationInput, WhatsAppConfigUncheckedUpdateManyInput>
+    /**
+     * Filter which WhatsAppConfigs to update
+     */
+    where?: WhatsAppConfigWhereInput
+    /**
+     * Limit how many WhatsAppConfigs to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * WhatsAppConfig updateManyAndReturn
+   */
+  export type WhatsAppConfigUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the WhatsAppConfig
+     */
+    select?: WhatsAppConfigSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the WhatsAppConfig
+     */
+    omit?: WhatsAppConfigOmit<ExtArgs> | null
+    /**
+     * The data used to update WhatsAppConfigs.
+     */
+    data: XOR<WhatsAppConfigUpdateManyMutationInput, WhatsAppConfigUncheckedUpdateManyInput>
+    /**
+     * Filter which WhatsAppConfigs to update
+     */
+    where?: WhatsAppConfigWhereInput
+    /**
+     * Limit how many WhatsAppConfigs to update.
+     */
+    limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: WhatsAppConfigIncludeUpdateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * WhatsAppConfig upsert
+   */
+  export type WhatsAppConfigUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the WhatsAppConfig
+     */
+    select?: WhatsAppConfigSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the WhatsAppConfig
+     */
+    omit?: WhatsAppConfigOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: WhatsAppConfigInclude<ExtArgs> | null
+    /**
+     * The filter to search for the WhatsAppConfig to update in case it exists.
+     */
+    where: WhatsAppConfigWhereUniqueInput
+    /**
+     * In case the WhatsAppConfig found by the `where` argument doesn't exist, create a new WhatsAppConfig with this data.
+     */
+    create: XOR<WhatsAppConfigCreateInput, WhatsAppConfigUncheckedCreateInput>
+    /**
+     * In case the WhatsAppConfig was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<WhatsAppConfigUpdateInput, WhatsAppConfigUncheckedUpdateInput>
+  }
+
+  /**
+   * WhatsAppConfig delete
+   */
+  export type WhatsAppConfigDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the WhatsAppConfig
+     */
+    select?: WhatsAppConfigSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the WhatsAppConfig
+     */
+    omit?: WhatsAppConfigOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: WhatsAppConfigInclude<ExtArgs> | null
+    /**
+     * Filter which WhatsAppConfig to delete.
+     */
+    where: WhatsAppConfigWhereUniqueInput
+  }
+
+  /**
+   * WhatsAppConfig deleteMany
+   */
+  export type WhatsAppConfigDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which WhatsAppConfigs to delete
+     */
+    where?: WhatsAppConfigWhereInput
+    /**
+     * Limit how many WhatsAppConfigs to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * WhatsAppConfig without action
+   */
+  export type WhatsAppConfigDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the WhatsAppConfig
+     */
+    select?: WhatsAppConfigSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the WhatsAppConfig
+     */
+    omit?: WhatsAppConfigOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: WhatsAppConfigInclude<ExtArgs> | null
+  }
+
+
+  /**
    * Model User
    */
 
@@ -2944,6 +4481,7 @@ export namespace Prisma {
     role: $Enums.Role | null
     createdAt: Date | null
     updatedAt: Date | null
+    zernioProfileId: string | null
   }
 
   export type UserMaxAggregateOutputType = {
@@ -2956,6 +4494,7 @@ export namespace Prisma {
     role: $Enums.Role | null
     createdAt: Date | null
     updatedAt: Date | null
+    zernioProfileId: string | null
   }
 
   export type UserCountAggregateOutputType = {
@@ -2968,6 +4507,7 @@ export namespace Prisma {
     role: number
     createdAt: number
     updatedAt: number
+    zernioProfileId: number
     _all: number
   }
 
@@ -2982,6 +4522,7 @@ export namespace Prisma {
     role?: true
     createdAt?: true
     updatedAt?: true
+    zernioProfileId?: true
   }
 
   export type UserMaxAggregateInputType = {
@@ -2994,6 +4535,7 @@ export namespace Prisma {
     role?: true
     createdAt?: true
     updatedAt?: true
+    zernioProfileId?: true
   }
 
   export type UserCountAggregateInputType = {
@@ -3006,6 +4548,7 @@ export namespace Prisma {
     role?: true
     createdAt?: true
     updatedAt?: true
+    zernioProfileId?: true
     _all?: true
   }
 
@@ -3091,6 +4634,7 @@ export namespace Prisma {
     role: $Enums.Role
     createdAt: Date
     updatedAt: Date
+    zernioProfileId: string | null
     _count: UserCountAggregateOutputType | null
     _min: UserMinAggregateOutputType | null
     _max: UserMaxAggregateOutputType | null
@@ -3120,6 +4664,7 @@ export namespace Prisma {
     role?: boolean
     createdAt?: boolean
     updatedAt?: boolean
+    zernioProfileId?: boolean
     accounts?: boolean | User$accountsArgs<ExtArgs>
     sessions?: boolean | User$sessionsArgs<ExtArgs>
     socialAccounts?: boolean | User$socialAccountsArgs<ExtArgs>
@@ -3127,10 +4672,14 @@ export namespace Prisma {
     campaigns?: boolean | User$campaignsArgs<ExtArgs>
     audienceGroups?: boolean | User$audienceGroupsArgs<ExtArgs>
     emailCampaigns?: boolean | User$emailCampaignsArgs<ExtArgs>
+    emailTemplates?: boolean | User$emailTemplatesArgs<ExtArgs>
+    scheduledCampaigns?: boolean | User$scheduledCampaignsArgs<ExtArgs>
     media?: boolean | User$mediaArgs<ExtArgs>
     analytics?: boolean | User$analyticsArgs<ExtArgs>
     notifications?: boolean | User$notificationsArgs<ExtArgs>
     subscription?: boolean | User$subscriptionArgs<ExtArgs>
+    transactions?: boolean | User$transactionsArgs<ExtArgs>
+    whatsappConfig?: boolean | User$whatsappConfigArgs<ExtArgs>
     _count?: boolean | UserCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["user"]>
 
@@ -3144,6 +4693,7 @@ export namespace Prisma {
     role?: boolean
     createdAt?: boolean
     updatedAt?: boolean
+    zernioProfileId?: boolean
   }, ExtArgs["result"]["user"]>
 
   export type UserSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
@@ -3156,6 +4706,7 @@ export namespace Prisma {
     role?: boolean
     createdAt?: boolean
     updatedAt?: boolean
+    zernioProfileId?: boolean
   }, ExtArgs["result"]["user"]>
 
   export type UserSelectScalar = {
@@ -3168,9 +4719,10 @@ export namespace Prisma {
     role?: boolean
     createdAt?: boolean
     updatedAt?: boolean
+    zernioProfileId?: boolean
   }
 
-  export type UserOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "email" | "emailVerified" | "image" | "password" | "role" | "createdAt" | "updatedAt", ExtArgs["result"]["user"]>
+  export type UserOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "email" | "emailVerified" | "image" | "password" | "role" | "createdAt" | "updatedAt" | "zernioProfileId", ExtArgs["result"]["user"]>
   export type UserInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     accounts?: boolean | User$accountsArgs<ExtArgs>
     sessions?: boolean | User$sessionsArgs<ExtArgs>
@@ -3179,10 +4731,14 @@ export namespace Prisma {
     campaigns?: boolean | User$campaignsArgs<ExtArgs>
     audienceGroups?: boolean | User$audienceGroupsArgs<ExtArgs>
     emailCampaigns?: boolean | User$emailCampaignsArgs<ExtArgs>
+    emailTemplates?: boolean | User$emailTemplatesArgs<ExtArgs>
+    scheduledCampaigns?: boolean | User$scheduledCampaignsArgs<ExtArgs>
     media?: boolean | User$mediaArgs<ExtArgs>
     analytics?: boolean | User$analyticsArgs<ExtArgs>
     notifications?: boolean | User$notificationsArgs<ExtArgs>
     subscription?: boolean | User$subscriptionArgs<ExtArgs>
+    transactions?: boolean | User$transactionsArgs<ExtArgs>
+    whatsappConfig?: boolean | User$whatsappConfigArgs<ExtArgs>
     _count?: boolean | UserCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type UserIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
@@ -3198,10 +4754,14 @@ export namespace Prisma {
       campaigns: Prisma.$CampaignPayload<ExtArgs>[]
       audienceGroups: Prisma.$AudienceGroupPayload<ExtArgs>[]
       emailCampaigns: Prisma.$EmailCampaignPayload<ExtArgs>[]
+      emailTemplates: Prisma.$EmailTemplatePayload<ExtArgs>[]
+      scheduledCampaigns: Prisma.$ScheduledCampaignPayload<ExtArgs>[]
       media: Prisma.$MediaPayload<ExtArgs>[]
       analytics: Prisma.$AnalyticsPayload<ExtArgs>[]
       notifications: Prisma.$NotificationPayload<ExtArgs>[]
       subscription: Prisma.$SubscriptionPayload<ExtArgs> | null
+      transactions: Prisma.$TransactionPayload<ExtArgs>[]
+      whatsappConfig: Prisma.$WhatsAppConfigPayload<ExtArgs> | null
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
@@ -3213,6 +4773,7 @@ export namespace Prisma {
       role: $Enums.Role
       createdAt: Date
       updatedAt: Date
+      zernioProfileId: string | null
     }, ExtArgs["result"]["user"]>
     composites: {}
   }
@@ -3614,10 +5175,14 @@ export namespace Prisma {
     campaigns<T extends User$campaignsArgs<ExtArgs> = {}>(args?: Subset<T, User$campaignsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CampaignPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     audienceGroups<T extends User$audienceGroupsArgs<ExtArgs> = {}>(args?: Subset<T, User$audienceGroupsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$AudienceGroupPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     emailCampaigns<T extends User$emailCampaignsArgs<ExtArgs> = {}>(args?: Subset<T, User$emailCampaignsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$EmailCampaignPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    emailTemplates<T extends User$emailTemplatesArgs<ExtArgs> = {}>(args?: Subset<T, User$emailTemplatesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$EmailTemplatePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    scheduledCampaigns<T extends User$scheduledCampaignsArgs<ExtArgs> = {}>(args?: Subset<T, User$scheduledCampaignsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ScheduledCampaignPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     media<T extends User$mediaArgs<ExtArgs> = {}>(args?: Subset<T, User$mediaArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$MediaPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     analytics<T extends User$analyticsArgs<ExtArgs> = {}>(args?: Subset<T, User$analyticsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$AnalyticsPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     notifications<T extends User$notificationsArgs<ExtArgs> = {}>(args?: Subset<T, User$notificationsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$NotificationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     subscription<T extends User$subscriptionArgs<ExtArgs> = {}>(args?: Subset<T, User$subscriptionArgs<ExtArgs>>): Prisma__SubscriptionClient<$Result.GetResult<Prisma.$SubscriptionPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+    transactions<T extends User$transactionsArgs<ExtArgs> = {}>(args?: Subset<T, User$transactionsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$TransactionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    whatsappConfig<T extends User$whatsappConfigArgs<ExtArgs> = {}>(args?: Subset<T, User$whatsappConfigArgs<ExtArgs>>): Prisma__WhatsAppConfigClient<$Result.GetResult<Prisma.$WhatsAppConfigPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -3656,6 +5221,7 @@ export namespace Prisma {
     readonly role: FieldRef<"User", 'Role'>
     readonly createdAt: FieldRef<"User", 'DateTime'>
     readonly updatedAt: FieldRef<"User", 'DateTime'>
+    readonly zernioProfileId: FieldRef<"User", 'String'>
   }
     
 
@@ -4212,6 +5778,54 @@ export namespace Prisma {
   }
 
   /**
+   * User.emailTemplates
+   */
+  export type User$emailTemplatesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the EmailTemplate
+     */
+    select?: EmailTemplateSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the EmailTemplate
+     */
+    omit?: EmailTemplateOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: EmailTemplateInclude<ExtArgs> | null
+    where?: EmailTemplateWhereInput
+    orderBy?: EmailTemplateOrderByWithRelationInput | EmailTemplateOrderByWithRelationInput[]
+    cursor?: EmailTemplateWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: EmailTemplateScalarFieldEnum | EmailTemplateScalarFieldEnum[]
+  }
+
+  /**
+   * User.scheduledCampaigns
+   */
+  export type User$scheduledCampaignsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ScheduledCampaign
+     */
+    select?: ScheduledCampaignSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ScheduledCampaign
+     */
+    omit?: ScheduledCampaignOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ScheduledCampaignInclude<ExtArgs> | null
+    where?: ScheduledCampaignWhereInput
+    orderBy?: ScheduledCampaignOrderByWithRelationInput | ScheduledCampaignOrderByWithRelationInput[]
+    cursor?: ScheduledCampaignWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: ScheduledCampaignScalarFieldEnum | ScheduledCampaignScalarFieldEnum[]
+  }
+
+  /**
    * User.media
    */
   export type User$mediaArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -4300,6 +5914,49 @@ export namespace Prisma {
      */
     include?: SubscriptionInclude<ExtArgs> | null
     where?: SubscriptionWhereInput
+  }
+
+  /**
+   * User.transactions
+   */
+  export type User$transactionsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Transaction
+     */
+    select?: TransactionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Transaction
+     */
+    omit?: TransactionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TransactionInclude<ExtArgs> | null
+    where?: TransactionWhereInput
+    orderBy?: TransactionOrderByWithRelationInput | TransactionOrderByWithRelationInput[]
+    cursor?: TransactionWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: TransactionScalarFieldEnum | TransactionScalarFieldEnum[]
+  }
+
+  /**
+   * User.whatsappConfig
+   */
+  export type User$whatsappConfigArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the WhatsAppConfig
+     */
+    select?: WhatsAppConfigSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the WhatsAppConfig
+     */
+    omit?: WhatsAppConfigOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: WhatsAppConfigInclude<ExtArgs> | null
+    where?: WhatsAppConfigWhereInput
   }
 
   /**
@@ -7552,6 +9209,8 @@ export namespace Prisma {
     postsPerMonth: number | null
     platforms: number | null
     aiCredits: number | null
+    aiTextLimit: number | null
+    aiImageLimit: number | null
   }
 
   export type PlanSumAggregateOutputType = {
@@ -7559,6 +9218,8 @@ export namespace Prisma {
     postsPerMonth: number | null
     platforms: number | null
     aiCredits: number | null
+    aiTextLimit: number | null
+    aiImageLimit: number | null
   }
 
   export type PlanMinAggregateOutputType = {
@@ -7569,6 +9230,9 @@ export namespace Prisma {
     postsPerMonth: number | null
     platforms: number | null
     aiCredits: number | null
+    aiTextLimit: number | null
+    aiImageLimit: number | null
+    paystackPlanCode: string | null
     createdAt: Date | null
   }
 
@@ -7580,6 +9244,9 @@ export namespace Prisma {
     postsPerMonth: number | null
     platforms: number | null
     aiCredits: number | null
+    aiTextLimit: number | null
+    aiImageLimit: number | null
+    paystackPlanCode: string | null
     createdAt: Date | null
   }
 
@@ -7592,6 +9259,9 @@ export namespace Prisma {
     postsPerMonth: number
     platforms: number
     aiCredits: number
+    aiTextLimit: number
+    aiImageLimit: number
+    paystackPlanCode: number
     createdAt: number
     _all: number
   }
@@ -7602,6 +9272,8 @@ export namespace Prisma {
     postsPerMonth?: true
     platforms?: true
     aiCredits?: true
+    aiTextLimit?: true
+    aiImageLimit?: true
   }
 
   export type PlanSumAggregateInputType = {
@@ -7609,6 +9281,8 @@ export namespace Prisma {
     postsPerMonth?: true
     platforms?: true
     aiCredits?: true
+    aiTextLimit?: true
+    aiImageLimit?: true
   }
 
   export type PlanMinAggregateInputType = {
@@ -7619,6 +9293,9 @@ export namespace Prisma {
     postsPerMonth?: true
     platforms?: true
     aiCredits?: true
+    aiTextLimit?: true
+    aiImageLimit?: true
+    paystackPlanCode?: true
     createdAt?: true
   }
 
@@ -7630,6 +9307,9 @@ export namespace Prisma {
     postsPerMonth?: true
     platforms?: true
     aiCredits?: true
+    aiTextLimit?: true
+    aiImageLimit?: true
+    paystackPlanCode?: true
     createdAt?: true
   }
 
@@ -7642,6 +9322,9 @@ export namespace Prisma {
     postsPerMonth?: true
     platforms?: true
     aiCredits?: true
+    aiTextLimit?: true
+    aiImageLimit?: true
+    paystackPlanCode?: true
     createdAt?: true
     _all?: true
   }
@@ -7741,6 +9424,9 @@ export namespace Prisma {
     postsPerMonth: number
     platforms: number
     aiCredits: number
+    aiTextLimit: number
+    aiImageLimit: number
+    paystackPlanCode: string | null
     createdAt: Date
     _count: PlanCountAggregateOutputType | null
     _avg: PlanAvgAggregateOutputType | null
@@ -7772,6 +9458,9 @@ export namespace Prisma {
     postsPerMonth?: boolean
     platforms?: boolean
     aiCredits?: boolean
+    aiTextLimit?: boolean
+    aiImageLimit?: boolean
+    paystackPlanCode?: boolean
     createdAt?: boolean
     subscriptions?: boolean | Plan$subscriptionsArgs<ExtArgs>
     _count?: boolean | PlanCountOutputTypeDefaultArgs<ExtArgs>
@@ -7786,6 +9475,9 @@ export namespace Prisma {
     postsPerMonth?: boolean
     platforms?: boolean
     aiCredits?: boolean
+    aiTextLimit?: boolean
+    aiImageLimit?: boolean
+    paystackPlanCode?: boolean
     createdAt?: boolean
   }, ExtArgs["result"]["plan"]>
 
@@ -7798,6 +9490,9 @@ export namespace Prisma {
     postsPerMonth?: boolean
     platforms?: boolean
     aiCredits?: boolean
+    aiTextLimit?: boolean
+    aiImageLimit?: boolean
+    paystackPlanCode?: boolean
     createdAt?: boolean
   }, ExtArgs["result"]["plan"]>
 
@@ -7810,10 +9505,13 @@ export namespace Prisma {
     postsPerMonth?: boolean
     platforms?: boolean
     aiCredits?: boolean
+    aiTextLimit?: boolean
+    aiImageLimit?: boolean
+    paystackPlanCode?: boolean
     createdAt?: boolean
   }
 
-  export type PlanOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "price" | "description" | "features" | "postsPerMonth" | "platforms" | "aiCredits" | "createdAt", ExtArgs["result"]["plan"]>
+  export type PlanOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "price" | "description" | "features" | "postsPerMonth" | "platforms" | "aiCredits" | "aiTextLimit" | "aiImageLimit" | "paystackPlanCode" | "createdAt", ExtArgs["result"]["plan"]>
   export type PlanInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     subscriptions?: boolean | Plan$subscriptionsArgs<ExtArgs>
     _count?: boolean | PlanCountOutputTypeDefaultArgs<ExtArgs>
@@ -7835,6 +9533,9 @@ export namespace Prisma {
       postsPerMonth: number
       platforms: number
       aiCredits: number
+      aiTextLimit: number
+      aiImageLimit: number
+      paystackPlanCode: string | null
       createdAt: Date
     }, ExtArgs["result"]["plan"]>
     composites: {}
@@ -8268,6 +9969,9 @@ export namespace Prisma {
     readonly postsPerMonth: FieldRef<"Plan", 'Int'>
     readonly platforms: FieldRef<"Plan", 'Int'>
     readonly aiCredits: FieldRef<"Plan", 'Int'>
+    readonly aiTextLimit: FieldRef<"Plan", 'Int'>
+    readonly aiImageLimit: FieldRef<"Plan", 'Int'>
+    readonly paystackPlanCode: FieldRef<"Plan", 'String'>
     readonly createdAt: FieldRef<"Plan", 'DateTime'>
   }
     
@@ -8705,8 +10409,22 @@ export namespace Prisma {
 
   export type AggregateSubscription = {
     _count: SubscriptionCountAggregateOutputType | null
+    _avg: SubscriptionAvgAggregateOutputType | null
+    _sum: SubscriptionSumAggregateOutputType | null
     _min: SubscriptionMinAggregateOutputType | null
     _max: SubscriptionMaxAggregateOutputType | null
+  }
+
+  export type SubscriptionAvgAggregateOutputType = {
+    postsUsed: number | null
+    aiTextUsed: number | null
+    aiImageUsed: number | null
+  }
+
+  export type SubscriptionSumAggregateOutputType = {
+    postsUsed: number | null
+    aiTextUsed: number | null
+    aiImageUsed: number | null
   }
 
   export type SubscriptionMinAggregateOutputType = {
@@ -8716,6 +10434,12 @@ export namespace Prisma {
     status: $Enums.SubscriptionStatus | null
     startDate: Date | null
     endDate: Date | null
+    postsUsed: number | null
+    aiTextUsed: number | null
+    aiImageUsed: number | null
+    lastResetAt: Date | null
+    paystackSubscriptionCode: string | null
+    paystackCustomerCode: string | null
     createdAt: Date | null
     updatedAt: Date | null
   }
@@ -8727,6 +10451,12 @@ export namespace Prisma {
     status: $Enums.SubscriptionStatus | null
     startDate: Date | null
     endDate: Date | null
+    postsUsed: number | null
+    aiTextUsed: number | null
+    aiImageUsed: number | null
+    lastResetAt: Date | null
+    paystackSubscriptionCode: string | null
+    paystackCustomerCode: string | null
     createdAt: Date | null
     updatedAt: Date | null
   }
@@ -8738,11 +10468,29 @@ export namespace Prisma {
     status: number
     startDate: number
     endDate: number
+    postsUsed: number
+    aiTextUsed: number
+    aiImageUsed: number
+    lastResetAt: number
+    paystackSubscriptionCode: number
+    paystackCustomerCode: number
     createdAt: number
     updatedAt: number
     _all: number
   }
 
+
+  export type SubscriptionAvgAggregateInputType = {
+    postsUsed?: true
+    aiTextUsed?: true
+    aiImageUsed?: true
+  }
+
+  export type SubscriptionSumAggregateInputType = {
+    postsUsed?: true
+    aiTextUsed?: true
+    aiImageUsed?: true
+  }
 
   export type SubscriptionMinAggregateInputType = {
     id?: true
@@ -8751,6 +10499,12 @@ export namespace Prisma {
     status?: true
     startDate?: true
     endDate?: true
+    postsUsed?: true
+    aiTextUsed?: true
+    aiImageUsed?: true
+    lastResetAt?: true
+    paystackSubscriptionCode?: true
+    paystackCustomerCode?: true
     createdAt?: true
     updatedAt?: true
   }
@@ -8762,6 +10516,12 @@ export namespace Prisma {
     status?: true
     startDate?: true
     endDate?: true
+    postsUsed?: true
+    aiTextUsed?: true
+    aiImageUsed?: true
+    lastResetAt?: true
+    paystackSubscriptionCode?: true
+    paystackCustomerCode?: true
     createdAt?: true
     updatedAt?: true
   }
@@ -8773,6 +10533,12 @@ export namespace Prisma {
     status?: true
     startDate?: true
     endDate?: true
+    postsUsed?: true
+    aiTextUsed?: true
+    aiImageUsed?: true
+    lastResetAt?: true
+    paystackSubscriptionCode?: true
+    paystackCustomerCode?: true
     createdAt?: true
     updatedAt?: true
     _all?: true
@@ -8816,6 +10582,18 @@ export namespace Prisma {
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
      * 
+     * Select which fields to average
+    **/
+    _avg?: SubscriptionAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: SubscriptionSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
      * Select which fields to find the minimum value
     **/
     _min?: SubscriptionMinAggregateInputType
@@ -8846,6 +10624,8 @@ export namespace Prisma {
     take?: number
     skip?: number
     _count?: SubscriptionCountAggregateInputType | true
+    _avg?: SubscriptionAvgAggregateInputType
+    _sum?: SubscriptionSumAggregateInputType
     _min?: SubscriptionMinAggregateInputType
     _max?: SubscriptionMaxAggregateInputType
   }
@@ -8857,9 +10637,17 @@ export namespace Prisma {
     status: $Enums.SubscriptionStatus
     startDate: Date
     endDate: Date | null
+    postsUsed: number
+    aiTextUsed: number
+    aiImageUsed: number
+    lastResetAt: Date
+    paystackSubscriptionCode: string | null
+    paystackCustomerCode: string | null
     createdAt: Date
     updatedAt: Date
     _count: SubscriptionCountAggregateOutputType | null
+    _avg: SubscriptionAvgAggregateOutputType | null
+    _sum: SubscriptionSumAggregateOutputType | null
     _min: SubscriptionMinAggregateOutputType | null
     _max: SubscriptionMaxAggregateOutputType | null
   }
@@ -8885,6 +10673,12 @@ export namespace Prisma {
     status?: boolean
     startDate?: boolean
     endDate?: boolean
+    postsUsed?: boolean
+    aiTextUsed?: boolean
+    aiImageUsed?: boolean
+    lastResetAt?: boolean
+    paystackSubscriptionCode?: boolean
+    paystackCustomerCode?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     user?: boolean | UserDefaultArgs<ExtArgs>
@@ -8898,6 +10692,12 @@ export namespace Prisma {
     status?: boolean
     startDate?: boolean
     endDate?: boolean
+    postsUsed?: boolean
+    aiTextUsed?: boolean
+    aiImageUsed?: boolean
+    lastResetAt?: boolean
+    paystackSubscriptionCode?: boolean
+    paystackCustomerCode?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     user?: boolean | UserDefaultArgs<ExtArgs>
@@ -8911,6 +10711,12 @@ export namespace Prisma {
     status?: boolean
     startDate?: boolean
     endDate?: boolean
+    postsUsed?: boolean
+    aiTextUsed?: boolean
+    aiImageUsed?: boolean
+    lastResetAt?: boolean
+    paystackSubscriptionCode?: boolean
+    paystackCustomerCode?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     user?: boolean | UserDefaultArgs<ExtArgs>
@@ -8924,11 +10730,17 @@ export namespace Prisma {
     status?: boolean
     startDate?: boolean
     endDate?: boolean
+    postsUsed?: boolean
+    aiTextUsed?: boolean
+    aiImageUsed?: boolean
+    lastResetAt?: boolean
+    paystackSubscriptionCode?: boolean
+    paystackCustomerCode?: boolean
     createdAt?: boolean
     updatedAt?: boolean
   }
 
-  export type SubscriptionOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "userId" | "planId" | "status" | "startDate" | "endDate" | "createdAt" | "updatedAt", ExtArgs["result"]["subscription"]>
+  export type SubscriptionOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "userId" | "planId" | "status" | "startDate" | "endDate" | "postsUsed" | "aiTextUsed" | "aiImageUsed" | "lastResetAt" | "paystackSubscriptionCode" | "paystackCustomerCode" | "createdAt" | "updatedAt", ExtArgs["result"]["subscription"]>
   export type SubscriptionInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     user?: boolean | UserDefaultArgs<ExtArgs>
     plan?: boolean | PlanDefaultArgs<ExtArgs>
@@ -8955,6 +10767,12 @@ export namespace Prisma {
       status: $Enums.SubscriptionStatus
       startDate: Date
       endDate: Date | null
+      postsUsed: number
+      aiTextUsed: number
+      aiImageUsed: number
+      lastResetAt: Date
+      paystackSubscriptionCode: string | null
+      paystackCustomerCode: string | null
       createdAt: Date
       updatedAt: Date
     }, ExtArgs["result"]["subscription"]>
@@ -9388,6 +11206,12 @@ export namespace Prisma {
     readonly status: FieldRef<"Subscription", 'SubscriptionStatus'>
     readonly startDate: FieldRef<"Subscription", 'DateTime'>
     readonly endDate: FieldRef<"Subscription", 'DateTime'>
+    readonly postsUsed: FieldRef<"Subscription", 'Int'>
+    readonly aiTextUsed: FieldRef<"Subscription", 'Int'>
+    readonly aiImageUsed: FieldRef<"Subscription", 'Int'>
+    readonly lastResetAt: FieldRef<"Subscription", 'DateTime'>
+    readonly paystackSubscriptionCode: FieldRef<"Subscription", 'String'>
+    readonly paystackCustomerCode: FieldRef<"Subscription", 'String'>
     readonly createdAt: FieldRef<"Subscription", 'DateTime'>
     readonly updatedAt: FieldRef<"Subscription", 'DateTime'>
   }
@@ -9801,6 +11625,1176 @@ export namespace Prisma {
      * Choose, which related nodes to fetch as well
      */
     include?: SubscriptionInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model Transaction
+   */
+
+  export type AggregateTransaction = {
+    _count: TransactionCountAggregateOutputType | null
+    _avg: TransactionAvgAggregateOutputType | null
+    _sum: TransactionSumAggregateOutputType | null
+    _min: TransactionMinAggregateOutputType | null
+    _max: TransactionMaxAggregateOutputType | null
+  }
+
+  export type TransactionAvgAggregateOutputType = {
+    amount: number | null
+  }
+
+  export type TransactionSumAggregateOutputType = {
+    amount: number | null
+  }
+
+  export type TransactionMinAggregateOutputType = {
+    id: string | null
+    userId: string | null
+    amount: number | null
+    currency: string | null
+    status: string | null
+    reference: string | null
+    paystackId: string | null
+    channel: string | null
+    paidAt: Date | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type TransactionMaxAggregateOutputType = {
+    id: string | null
+    userId: string | null
+    amount: number | null
+    currency: string | null
+    status: string | null
+    reference: string | null
+    paystackId: string | null
+    channel: string | null
+    paidAt: Date | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type TransactionCountAggregateOutputType = {
+    id: number
+    userId: number
+    amount: number
+    currency: number
+    status: number
+    reference: number
+    paystackId: number
+    channel: number
+    paidAt: number
+    createdAt: number
+    updatedAt: number
+    _all: number
+  }
+
+
+  export type TransactionAvgAggregateInputType = {
+    amount?: true
+  }
+
+  export type TransactionSumAggregateInputType = {
+    amount?: true
+  }
+
+  export type TransactionMinAggregateInputType = {
+    id?: true
+    userId?: true
+    amount?: true
+    currency?: true
+    status?: true
+    reference?: true
+    paystackId?: true
+    channel?: true
+    paidAt?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type TransactionMaxAggregateInputType = {
+    id?: true
+    userId?: true
+    amount?: true
+    currency?: true
+    status?: true
+    reference?: true
+    paystackId?: true
+    channel?: true
+    paidAt?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type TransactionCountAggregateInputType = {
+    id?: true
+    userId?: true
+    amount?: true
+    currency?: true
+    status?: true
+    reference?: true
+    paystackId?: true
+    channel?: true
+    paidAt?: true
+    createdAt?: true
+    updatedAt?: true
+    _all?: true
+  }
+
+  export type TransactionAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which Transaction to aggregate.
+     */
+    where?: TransactionWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Transactions to fetch.
+     */
+    orderBy?: TransactionOrderByWithRelationInput | TransactionOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: TransactionWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Transactions from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Transactions.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned Transactions
+    **/
+    _count?: true | TransactionCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: TransactionAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: TransactionSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: TransactionMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: TransactionMaxAggregateInputType
+  }
+
+  export type GetTransactionAggregateType<T extends TransactionAggregateArgs> = {
+        [P in keyof T & keyof AggregateTransaction]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateTransaction[P]>
+      : GetScalarType<T[P], AggregateTransaction[P]>
+  }
+
+
+
+
+  export type TransactionGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: TransactionWhereInput
+    orderBy?: TransactionOrderByWithAggregationInput | TransactionOrderByWithAggregationInput[]
+    by: TransactionScalarFieldEnum[] | TransactionScalarFieldEnum
+    having?: TransactionScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: TransactionCountAggregateInputType | true
+    _avg?: TransactionAvgAggregateInputType
+    _sum?: TransactionSumAggregateInputType
+    _min?: TransactionMinAggregateInputType
+    _max?: TransactionMaxAggregateInputType
+  }
+
+  export type TransactionGroupByOutputType = {
+    id: string
+    userId: string
+    amount: number
+    currency: string
+    status: string
+    reference: string
+    paystackId: string | null
+    channel: string | null
+    paidAt: Date | null
+    createdAt: Date
+    updatedAt: Date
+    _count: TransactionCountAggregateOutputType | null
+    _avg: TransactionAvgAggregateOutputType | null
+    _sum: TransactionSumAggregateOutputType | null
+    _min: TransactionMinAggregateOutputType | null
+    _max: TransactionMaxAggregateOutputType | null
+  }
+
+  type GetTransactionGroupByPayload<T extends TransactionGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<TransactionGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof TransactionGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], TransactionGroupByOutputType[P]>
+            : GetScalarType<T[P], TransactionGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type TransactionSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    userId?: boolean
+    amount?: boolean
+    currency?: boolean
+    status?: boolean
+    reference?: boolean
+    paystackId?: boolean
+    channel?: boolean
+    paidAt?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    user?: boolean | UserDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["transaction"]>
+
+  export type TransactionSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    userId?: boolean
+    amount?: boolean
+    currency?: boolean
+    status?: boolean
+    reference?: boolean
+    paystackId?: boolean
+    channel?: boolean
+    paidAt?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    user?: boolean | UserDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["transaction"]>
+
+  export type TransactionSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    userId?: boolean
+    amount?: boolean
+    currency?: boolean
+    status?: boolean
+    reference?: boolean
+    paystackId?: boolean
+    channel?: boolean
+    paidAt?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    user?: boolean | UserDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["transaction"]>
+
+  export type TransactionSelectScalar = {
+    id?: boolean
+    userId?: boolean
+    amount?: boolean
+    currency?: boolean
+    status?: boolean
+    reference?: boolean
+    paystackId?: boolean
+    channel?: boolean
+    paidAt?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }
+
+  export type TransactionOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "userId" | "amount" | "currency" | "status" | "reference" | "paystackId" | "channel" | "paidAt" | "createdAt" | "updatedAt", ExtArgs["result"]["transaction"]>
+  export type TransactionInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    user?: boolean | UserDefaultArgs<ExtArgs>
+  }
+  export type TransactionIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    user?: boolean | UserDefaultArgs<ExtArgs>
+  }
+  export type TransactionIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    user?: boolean | UserDefaultArgs<ExtArgs>
+  }
+
+  export type $TransactionPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "Transaction"
+    objects: {
+      user: Prisma.$UserPayload<ExtArgs>
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      userId: string
+      amount: number
+      currency: string
+      status: string
+      reference: string
+      paystackId: string | null
+      channel: string | null
+      paidAt: Date | null
+      createdAt: Date
+      updatedAt: Date
+    }, ExtArgs["result"]["transaction"]>
+    composites: {}
+  }
+
+  type TransactionGetPayload<S extends boolean | null | undefined | TransactionDefaultArgs> = $Result.GetResult<Prisma.$TransactionPayload, S>
+
+  type TransactionCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<TransactionFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: TransactionCountAggregateInputType | true
+    }
+
+  export interface TransactionDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['Transaction'], meta: { name: 'Transaction' } }
+    /**
+     * Find zero or one Transaction that matches the filter.
+     * @param {TransactionFindUniqueArgs} args - Arguments to find a Transaction
+     * @example
+     * // Get one Transaction
+     * const transaction = await prisma.transaction.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends TransactionFindUniqueArgs>(args: SelectSubset<T, TransactionFindUniqueArgs<ExtArgs>>): Prisma__TransactionClient<$Result.GetResult<Prisma.$TransactionPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one Transaction that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {TransactionFindUniqueOrThrowArgs} args - Arguments to find a Transaction
+     * @example
+     * // Get one Transaction
+     * const transaction = await prisma.transaction.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends TransactionFindUniqueOrThrowArgs>(args: SelectSubset<T, TransactionFindUniqueOrThrowArgs<ExtArgs>>): Prisma__TransactionClient<$Result.GetResult<Prisma.$TransactionPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first Transaction that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {TransactionFindFirstArgs} args - Arguments to find a Transaction
+     * @example
+     * // Get one Transaction
+     * const transaction = await prisma.transaction.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends TransactionFindFirstArgs>(args?: SelectSubset<T, TransactionFindFirstArgs<ExtArgs>>): Prisma__TransactionClient<$Result.GetResult<Prisma.$TransactionPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first Transaction that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {TransactionFindFirstOrThrowArgs} args - Arguments to find a Transaction
+     * @example
+     * // Get one Transaction
+     * const transaction = await prisma.transaction.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends TransactionFindFirstOrThrowArgs>(args?: SelectSubset<T, TransactionFindFirstOrThrowArgs<ExtArgs>>): Prisma__TransactionClient<$Result.GetResult<Prisma.$TransactionPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more Transactions that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {TransactionFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all Transactions
+     * const transactions = await prisma.transaction.findMany()
+     * 
+     * // Get first 10 Transactions
+     * const transactions = await prisma.transaction.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const transactionWithIdOnly = await prisma.transaction.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends TransactionFindManyArgs>(args?: SelectSubset<T, TransactionFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$TransactionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a Transaction.
+     * @param {TransactionCreateArgs} args - Arguments to create a Transaction.
+     * @example
+     * // Create one Transaction
+     * const Transaction = await prisma.transaction.create({
+     *   data: {
+     *     // ... data to create a Transaction
+     *   }
+     * })
+     * 
+     */
+    create<T extends TransactionCreateArgs>(args: SelectSubset<T, TransactionCreateArgs<ExtArgs>>): Prisma__TransactionClient<$Result.GetResult<Prisma.$TransactionPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many Transactions.
+     * @param {TransactionCreateManyArgs} args - Arguments to create many Transactions.
+     * @example
+     * // Create many Transactions
+     * const transaction = await prisma.transaction.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends TransactionCreateManyArgs>(args?: SelectSubset<T, TransactionCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many Transactions and returns the data saved in the database.
+     * @param {TransactionCreateManyAndReturnArgs} args - Arguments to create many Transactions.
+     * @example
+     * // Create many Transactions
+     * const transaction = await prisma.transaction.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many Transactions and only return the `id`
+     * const transactionWithIdOnly = await prisma.transaction.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends TransactionCreateManyAndReturnArgs>(args?: SelectSubset<T, TransactionCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$TransactionPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a Transaction.
+     * @param {TransactionDeleteArgs} args - Arguments to delete one Transaction.
+     * @example
+     * // Delete one Transaction
+     * const Transaction = await prisma.transaction.delete({
+     *   where: {
+     *     // ... filter to delete one Transaction
+     *   }
+     * })
+     * 
+     */
+    delete<T extends TransactionDeleteArgs>(args: SelectSubset<T, TransactionDeleteArgs<ExtArgs>>): Prisma__TransactionClient<$Result.GetResult<Prisma.$TransactionPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one Transaction.
+     * @param {TransactionUpdateArgs} args - Arguments to update one Transaction.
+     * @example
+     * // Update one Transaction
+     * const transaction = await prisma.transaction.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends TransactionUpdateArgs>(args: SelectSubset<T, TransactionUpdateArgs<ExtArgs>>): Prisma__TransactionClient<$Result.GetResult<Prisma.$TransactionPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more Transactions.
+     * @param {TransactionDeleteManyArgs} args - Arguments to filter Transactions to delete.
+     * @example
+     * // Delete a few Transactions
+     * const { count } = await prisma.transaction.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends TransactionDeleteManyArgs>(args?: SelectSubset<T, TransactionDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more Transactions.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {TransactionUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many Transactions
+     * const transaction = await prisma.transaction.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends TransactionUpdateManyArgs>(args: SelectSubset<T, TransactionUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more Transactions and returns the data updated in the database.
+     * @param {TransactionUpdateManyAndReturnArgs} args - Arguments to update many Transactions.
+     * @example
+     * // Update many Transactions
+     * const transaction = await prisma.transaction.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more Transactions and only return the `id`
+     * const transactionWithIdOnly = await prisma.transaction.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends TransactionUpdateManyAndReturnArgs>(args: SelectSubset<T, TransactionUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$TransactionPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one Transaction.
+     * @param {TransactionUpsertArgs} args - Arguments to update or create a Transaction.
+     * @example
+     * // Update or create a Transaction
+     * const transaction = await prisma.transaction.upsert({
+     *   create: {
+     *     // ... data to create a Transaction
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the Transaction we want to update
+     *   }
+     * })
+     */
+    upsert<T extends TransactionUpsertArgs>(args: SelectSubset<T, TransactionUpsertArgs<ExtArgs>>): Prisma__TransactionClient<$Result.GetResult<Prisma.$TransactionPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of Transactions.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {TransactionCountArgs} args - Arguments to filter Transactions to count.
+     * @example
+     * // Count the number of Transactions
+     * const count = await prisma.transaction.count({
+     *   where: {
+     *     // ... the filter for the Transactions we want to count
+     *   }
+     * })
+    **/
+    count<T extends TransactionCountArgs>(
+      args?: Subset<T, TransactionCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], TransactionCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a Transaction.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {TransactionAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends TransactionAggregateArgs>(args: Subset<T, TransactionAggregateArgs>): Prisma.PrismaPromise<GetTransactionAggregateType<T>>
+
+    /**
+     * Group by Transaction.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {TransactionGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends TransactionGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: TransactionGroupByArgs['orderBy'] }
+        : { orderBy?: TransactionGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, TransactionGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetTransactionGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the Transaction model
+   */
+  readonly fields: TransactionFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for Transaction.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__TransactionClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    user<T extends UserDefaultArgs<ExtArgs> = {}>(args?: Subset<T, UserDefaultArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the Transaction model
+   */
+  interface TransactionFieldRefs {
+    readonly id: FieldRef<"Transaction", 'String'>
+    readonly userId: FieldRef<"Transaction", 'String'>
+    readonly amount: FieldRef<"Transaction", 'Float'>
+    readonly currency: FieldRef<"Transaction", 'String'>
+    readonly status: FieldRef<"Transaction", 'String'>
+    readonly reference: FieldRef<"Transaction", 'String'>
+    readonly paystackId: FieldRef<"Transaction", 'String'>
+    readonly channel: FieldRef<"Transaction", 'String'>
+    readonly paidAt: FieldRef<"Transaction", 'DateTime'>
+    readonly createdAt: FieldRef<"Transaction", 'DateTime'>
+    readonly updatedAt: FieldRef<"Transaction", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * Transaction findUnique
+   */
+  export type TransactionFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Transaction
+     */
+    select?: TransactionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Transaction
+     */
+    omit?: TransactionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TransactionInclude<ExtArgs> | null
+    /**
+     * Filter, which Transaction to fetch.
+     */
+    where: TransactionWhereUniqueInput
+  }
+
+  /**
+   * Transaction findUniqueOrThrow
+   */
+  export type TransactionFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Transaction
+     */
+    select?: TransactionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Transaction
+     */
+    omit?: TransactionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TransactionInclude<ExtArgs> | null
+    /**
+     * Filter, which Transaction to fetch.
+     */
+    where: TransactionWhereUniqueInput
+  }
+
+  /**
+   * Transaction findFirst
+   */
+  export type TransactionFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Transaction
+     */
+    select?: TransactionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Transaction
+     */
+    omit?: TransactionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TransactionInclude<ExtArgs> | null
+    /**
+     * Filter, which Transaction to fetch.
+     */
+    where?: TransactionWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Transactions to fetch.
+     */
+    orderBy?: TransactionOrderByWithRelationInput | TransactionOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for Transactions.
+     */
+    cursor?: TransactionWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Transactions from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Transactions.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of Transactions.
+     */
+    distinct?: TransactionScalarFieldEnum | TransactionScalarFieldEnum[]
+  }
+
+  /**
+   * Transaction findFirstOrThrow
+   */
+  export type TransactionFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Transaction
+     */
+    select?: TransactionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Transaction
+     */
+    omit?: TransactionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TransactionInclude<ExtArgs> | null
+    /**
+     * Filter, which Transaction to fetch.
+     */
+    where?: TransactionWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Transactions to fetch.
+     */
+    orderBy?: TransactionOrderByWithRelationInput | TransactionOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for Transactions.
+     */
+    cursor?: TransactionWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Transactions from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Transactions.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of Transactions.
+     */
+    distinct?: TransactionScalarFieldEnum | TransactionScalarFieldEnum[]
+  }
+
+  /**
+   * Transaction findMany
+   */
+  export type TransactionFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Transaction
+     */
+    select?: TransactionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Transaction
+     */
+    omit?: TransactionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TransactionInclude<ExtArgs> | null
+    /**
+     * Filter, which Transactions to fetch.
+     */
+    where?: TransactionWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Transactions to fetch.
+     */
+    orderBy?: TransactionOrderByWithRelationInput | TransactionOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing Transactions.
+     */
+    cursor?: TransactionWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Transactions from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Transactions.
+     */
+    skip?: number
+    distinct?: TransactionScalarFieldEnum | TransactionScalarFieldEnum[]
+  }
+
+  /**
+   * Transaction create
+   */
+  export type TransactionCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Transaction
+     */
+    select?: TransactionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Transaction
+     */
+    omit?: TransactionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TransactionInclude<ExtArgs> | null
+    /**
+     * The data needed to create a Transaction.
+     */
+    data: XOR<TransactionCreateInput, TransactionUncheckedCreateInput>
+  }
+
+  /**
+   * Transaction createMany
+   */
+  export type TransactionCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many Transactions.
+     */
+    data: TransactionCreateManyInput | TransactionCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * Transaction createManyAndReturn
+   */
+  export type TransactionCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Transaction
+     */
+    select?: TransactionSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the Transaction
+     */
+    omit?: TransactionOmit<ExtArgs> | null
+    /**
+     * The data used to create many Transactions.
+     */
+    data: TransactionCreateManyInput | TransactionCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TransactionIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * Transaction update
+   */
+  export type TransactionUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Transaction
+     */
+    select?: TransactionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Transaction
+     */
+    omit?: TransactionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TransactionInclude<ExtArgs> | null
+    /**
+     * The data needed to update a Transaction.
+     */
+    data: XOR<TransactionUpdateInput, TransactionUncheckedUpdateInput>
+    /**
+     * Choose, which Transaction to update.
+     */
+    where: TransactionWhereUniqueInput
+  }
+
+  /**
+   * Transaction updateMany
+   */
+  export type TransactionUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update Transactions.
+     */
+    data: XOR<TransactionUpdateManyMutationInput, TransactionUncheckedUpdateManyInput>
+    /**
+     * Filter which Transactions to update
+     */
+    where?: TransactionWhereInput
+    /**
+     * Limit how many Transactions to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * Transaction updateManyAndReturn
+   */
+  export type TransactionUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Transaction
+     */
+    select?: TransactionSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the Transaction
+     */
+    omit?: TransactionOmit<ExtArgs> | null
+    /**
+     * The data used to update Transactions.
+     */
+    data: XOR<TransactionUpdateManyMutationInput, TransactionUncheckedUpdateManyInput>
+    /**
+     * Filter which Transactions to update
+     */
+    where?: TransactionWhereInput
+    /**
+     * Limit how many Transactions to update.
+     */
+    limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TransactionIncludeUpdateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * Transaction upsert
+   */
+  export type TransactionUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Transaction
+     */
+    select?: TransactionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Transaction
+     */
+    omit?: TransactionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TransactionInclude<ExtArgs> | null
+    /**
+     * The filter to search for the Transaction to update in case it exists.
+     */
+    where: TransactionWhereUniqueInput
+    /**
+     * In case the Transaction found by the `where` argument doesn't exist, create a new Transaction with this data.
+     */
+    create: XOR<TransactionCreateInput, TransactionUncheckedCreateInput>
+    /**
+     * In case the Transaction was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<TransactionUpdateInput, TransactionUncheckedUpdateInput>
+  }
+
+  /**
+   * Transaction delete
+   */
+  export type TransactionDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Transaction
+     */
+    select?: TransactionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Transaction
+     */
+    omit?: TransactionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TransactionInclude<ExtArgs> | null
+    /**
+     * Filter which Transaction to delete.
+     */
+    where: TransactionWhereUniqueInput
+  }
+
+  /**
+   * Transaction deleteMany
+   */
+  export type TransactionDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which Transactions to delete
+     */
+    where?: TransactionWhereInput
+    /**
+     * Limit how many Transactions to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * Transaction without action
+   */
+  export type TransactionDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Transaction
+     */
+    select?: TransactionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Transaction
+     */
+    omit?: TransactionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TransactionInclude<ExtArgs> | null
   }
 
 
@@ -17954,6 +20948,2420 @@ export namespace Prisma {
 
 
   /**
+   * Model EmailTemplate
+   */
+
+  export type AggregateEmailTemplate = {
+    _count: EmailTemplateCountAggregateOutputType | null
+    _min: EmailTemplateMinAggregateOutputType | null
+    _max: EmailTemplateMaxAggregateOutputType | null
+  }
+
+  export type EmailTemplateMinAggregateOutputType = {
+    id: string | null
+    userId: string | null
+    name: string | null
+    description: string | null
+    htmlContent: string | null
+    designJSON: string | null
+    category: $Enums.TemplateCategory | null
+    thumbnailUrl: string | null
+    isPublic: boolean | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type EmailTemplateMaxAggregateOutputType = {
+    id: string | null
+    userId: string | null
+    name: string | null
+    description: string | null
+    htmlContent: string | null
+    designJSON: string | null
+    category: $Enums.TemplateCategory | null
+    thumbnailUrl: string | null
+    isPublic: boolean | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type EmailTemplateCountAggregateOutputType = {
+    id: number
+    userId: number
+    name: number
+    description: number
+    htmlContent: number
+    designJSON: number
+    category: number
+    thumbnailUrl: number
+    isPublic: number
+    createdAt: number
+    updatedAt: number
+    _all: number
+  }
+
+
+  export type EmailTemplateMinAggregateInputType = {
+    id?: true
+    userId?: true
+    name?: true
+    description?: true
+    htmlContent?: true
+    designJSON?: true
+    category?: true
+    thumbnailUrl?: true
+    isPublic?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type EmailTemplateMaxAggregateInputType = {
+    id?: true
+    userId?: true
+    name?: true
+    description?: true
+    htmlContent?: true
+    designJSON?: true
+    category?: true
+    thumbnailUrl?: true
+    isPublic?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type EmailTemplateCountAggregateInputType = {
+    id?: true
+    userId?: true
+    name?: true
+    description?: true
+    htmlContent?: true
+    designJSON?: true
+    category?: true
+    thumbnailUrl?: true
+    isPublic?: true
+    createdAt?: true
+    updatedAt?: true
+    _all?: true
+  }
+
+  export type EmailTemplateAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which EmailTemplate to aggregate.
+     */
+    where?: EmailTemplateWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of EmailTemplates to fetch.
+     */
+    orderBy?: EmailTemplateOrderByWithRelationInput | EmailTemplateOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: EmailTemplateWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` EmailTemplates from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` EmailTemplates.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned EmailTemplates
+    **/
+    _count?: true | EmailTemplateCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: EmailTemplateMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: EmailTemplateMaxAggregateInputType
+  }
+
+  export type GetEmailTemplateAggregateType<T extends EmailTemplateAggregateArgs> = {
+        [P in keyof T & keyof AggregateEmailTemplate]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateEmailTemplate[P]>
+      : GetScalarType<T[P], AggregateEmailTemplate[P]>
+  }
+
+
+
+
+  export type EmailTemplateGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: EmailTemplateWhereInput
+    orderBy?: EmailTemplateOrderByWithAggregationInput | EmailTemplateOrderByWithAggregationInput[]
+    by: EmailTemplateScalarFieldEnum[] | EmailTemplateScalarFieldEnum
+    having?: EmailTemplateScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: EmailTemplateCountAggregateInputType | true
+    _min?: EmailTemplateMinAggregateInputType
+    _max?: EmailTemplateMaxAggregateInputType
+  }
+
+  export type EmailTemplateGroupByOutputType = {
+    id: string
+    userId: string
+    name: string
+    description: string | null
+    htmlContent: string
+    designJSON: string | null
+    category: $Enums.TemplateCategory
+    thumbnailUrl: string | null
+    isPublic: boolean
+    createdAt: Date
+    updatedAt: Date
+    _count: EmailTemplateCountAggregateOutputType | null
+    _min: EmailTemplateMinAggregateOutputType | null
+    _max: EmailTemplateMaxAggregateOutputType | null
+  }
+
+  type GetEmailTemplateGroupByPayload<T extends EmailTemplateGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<EmailTemplateGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof EmailTemplateGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], EmailTemplateGroupByOutputType[P]>
+            : GetScalarType<T[P], EmailTemplateGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type EmailTemplateSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    userId?: boolean
+    name?: boolean
+    description?: boolean
+    htmlContent?: boolean
+    designJSON?: boolean
+    category?: boolean
+    thumbnailUrl?: boolean
+    isPublic?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    user?: boolean | UserDefaultArgs<ExtArgs>
+    campaigns?: boolean | EmailTemplate$campaignsArgs<ExtArgs>
+    _count?: boolean | EmailTemplateCountOutputTypeDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["emailTemplate"]>
+
+  export type EmailTemplateSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    userId?: boolean
+    name?: boolean
+    description?: boolean
+    htmlContent?: boolean
+    designJSON?: boolean
+    category?: boolean
+    thumbnailUrl?: boolean
+    isPublic?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    user?: boolean | UserDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["emailTemplate"]>
+
+  export type EmailTemplateSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    userId?: boolean
+    name?: boolean
+    description?: boolean
+    htmlContent?: boolean
+    designJSON?: boolean
+    category?: boolean
+    thumbnailUrl?: boolean
+    isPublic?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    user?: boolean | UserDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["emailTemplate"]>
+
+  export type EmailTemplateSelectScalar = {
+    id?: boolean
+    userId?: boolean
+    name?: boolean
+    description?: boolean
+    htmlContent?: boolean
+    designJSON?: boolean
+    category?: boolean
+    thumbnailUrl?: boolean
+    isPublic?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }
+
+  export type EmailTemplateOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "userId" | "name" | "description" | "htmlContent" | "designJSON" | "category" | "thumbnailUrl" | "isPublic" | "createdAt" | "updatedAt", ExtArgs["result"]["emailTemplate"]>
+  export type EmailTemplateInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    user?: boolean | UserDefaultArgs<ExtArgs>
+    campaigns?: boolean | EmailTemplate$campaignsArgs<ExtArgs>
+    _count?: boolean | EmailTemplateCountOutputTypeDefaultArgs<ExtArgs>
+  }
+  export type EmailTemplateIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    user?: boolean | UserDefaultArgs<ExtArgs>
+  }
+  export type EmailTemplateIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    user?: boolean | UserDefaultArgs<ExtArgs>
+  }
+
+  export type $EmailTemplatePayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "EmailTemplate"
+    objects: {
+      user: Prisma.$UserPayload<ExtArgs>
+      campaigns: Prisma.$EmailCampaignPayload<ExtArgs>[]
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      userId: string
+      name: string
+      description: string | null
+      htmlContent: string
+      designJSON: string | null
+      category: $Enums.TemplateCategory
+      thumbnailUrl: string | null
+      isPublic: boolean
+      createdAt: Date
+      updatedAt: Date
+    }, ExtArgs["result"]["emailTemplate"]>
+    composites: {}
+  }
+
+  type EmailTemplateGetPayload<S extends boolean | null | undefined | EmailTemplateDefaultArgs> = $Result.GetResult<Prisma.$EmailTemplatePayload, S>
+
+  type EmailTemplateCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<EmailTemplateFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: EmailTemplateCountAggregateInputType | true
+    }
+
+  export interface EmailTemplateDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['EmailTemplate'], meta: { name: 'EmailTemplate' } }
+    /**
+     * Find zero or one EmailTemplate that matches the filter.
+     * @param {EmailTemplateFindUniqueArgs} args - Arguments to find a EmailTemplate
+     * @example
+     * // Get one EmailTemplate
+     * const emailTemplate = await prisma.emailTemplate.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends EmailTemplateFindUniqueArgs>(args: SelectSubset<T, EmailTemplateFindUniqueArgs<ExtArgs>>): Prisma__EmailTemplateClient<$Result.GetResult<Prisma.$EmailTemplatePayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one EmailTemplate that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {EmailTemplateFindUniqueOrThrowArgs} args - Arguments to find a EmailTemplate
+     * @example
+     * // Get one EmailTemplate
+     * const emailTemplate = await prisma.emailTemplate.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends EmailTemplateFindUniqueOrThrowArgs>(args: SelectSubset<T, EmailTemplateFindUniqueOrThrowArgs<ExtArgs>>): Prisma__EmailTemplateClient<$Result.GetResult<Prisma.$EmailTemplatePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first EmailTemplate that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {EmailTemplateFindFirstArgs} args - Arguments to find a EmailTemplate
+     * @example
+     * // Get one EmailTemplate
+     * const emailTemplate = await prisma.emailTemplate.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends EmailTemplateFindFirstArgs>(args?: SelectSubset<T, EmailTemplateFindFirstArgs<ExtArgs>>): Prisma__EmailTemplateClient<$Result.GetResult<Prisma.$EmailTemplatePayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first EmailTemplate that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {EmailTemplateFindFirstOrThrowArgs} args - Arguments to find a EmailTemplate
+     * @example
+     * // Get one EmailTemplate
+     * const emailTemplate = await prisma.emailTemplate.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends EmailTemplateFindFirstOrThrowArgs>(args?: SelectSubset<T, EmailTemplateFindFirstOrThrowArgs<ExtArgs>>): Prisma__EmailTemplateClient<$Result.GetResult<Prisma.$EmailTemplatePayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more EmailTemplates that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {EmailTemplateFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all EmailTemplates
+     * const emailTemplates = await prisma.emailTemplate.findMany()
+     * 
+     * // Get first 10 EmailTemplates
+     * const emailTemplates = await prisma.emailTemplate.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const emailTemplateWithIdOnly = await prisma.emailTemplate.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends EmailTemplateFindManyArgs>(args?: SelectSubset<T, EmailTemplateFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$EmailTemplatePayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a EmailTemplate.
+     * @param {EmailTemplateCreateArgs} args - Arguments to create a EmailTemplate.
+     * @example
+     * // Create one EmailTemplate
+     * const EmailTemplate = await prisma.emailTemplate.create({
+     *   data: {
+     *     // ... data to create a EmailTemplate
+     *   }
+     * })
+     * 
+     */
+    create<T extends EmailTemplateCreateArgs>(args: SelectSubset<T, EmailTemplateCreateArgs<ExtArgs>>): Prisma__EmailTemplateClient<$Result.GetResult<Prisma.$EmailTemplatePayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many EmailTemplates.
+     * @param {EmailTemplateCreateManyArgs} args - Arguments to create many EmailTemplates.
+     * @example
+     * // Create many EmailTemplates
+     * const emailTemplate = await prisma.emailTemplate.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends EmailTemplateCreateManyArgs>(args?: SelectSubset<T, EmailTemplateCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many EmailTemplates and returns the data saved in the database.
+     * @param {EmailTemplateCreateManyAndReturnArgs} args - Arguments to create many EmailTemplates.
+     * @example
+     * // Create many EmailTemplates
+     * const emailTemplate = await prisma.emailTemplate.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many EmailTemplates and only return the `id`
+     * const emailTemplateWithIdOnly = await prisma.emailTemplate.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends EmailTemplateCreateManyAndReturnArgs>(args?: SelectSubset<T, EmailTemplateCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$EmailTemplatePayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a EmailTemplate.
+     * @param {EmailTemplateDeleteArgs} args - Arguments to delete one EmailTemplate.
+     * @example
+     * // Delete one EmailTemplate
+     * const EmailTemplate = await prisma.emailTemplate.delete({
+     *   where: {
+     *     // ... filter to delete one EmailTemplate
+     *   }
+     * })
+     * 
+     */
+    delete<T extends EmailTemplateDeleteArgs>(args: SelectSubset<T, EmailTemplateDeleteArgs<ExtArgs>>): Prisma__EmailTemplateClient<$Result.GetResult<Prisma.$EmailTemplatePayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one EmailTemplate.
+     * @param {EmailTemplateUpdateArgs} args - Arguments to update one EmailTemplate.
+     * @example
+     * // Update one EmailTemplate
+     * const emailTemplate = await prisma.emailTemplate.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends EmailTemplateUpdateArgs>(args: SelectSubset<T, EmailTemplateUpdateArgs<ExtArgs>>): Prisma__EmailTemplateClient<$Result.GetResult<Prisma.$EmailTemplatePayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more EmailTemplates.
+     * @param {EmailTemplateDeleteManyArgs} args - Arguments to filter EmailTemplates to delete.
+     * @example
+     * // Delete a few EmailTemplates
+     * const { count } = await prisma.emailTemplate.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends EmailTemplateDeleteManyArgs>(args?: SelectSubset<T, EmailTemplateDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more EmailTemplates.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {EmailTemplateUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many EmailTemplates
+     * const emailTemplate = await prisma.emailTemplate.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends EmailTemplateUpdateManyArgs>(args: SelectSubset<T, EmailTemplateUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more EmailTemplates and returns the data updated in the database.
+     * @param {EmailTemplateUpdateManyAndReturnArgs} args - Arguments to update many EmailTemplates.
+     * @example
+     * // Update many EmailTemplates
+     * const emailTemplate = await prisma.emailTemplate.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more EmailTemplates and only return the `id`
+     * const emailTemplateWithIdOnly = await prisma.emailTemplate.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends EmailTemplateUpdateManyAndReturnArgs>(args: SelectSubset<T, EmailTemplateUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$EmailTemplatePayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one EmailTemplate.
+     * @param {EmailTemplateUpsertArgs} args - Arguments to update or create a EmailTemplate.
+     * @example
+     * // Update or create a EmailTemplate
+     * const emailTemplate = await prisma.emailTemplate.upsert({
+     *   create: {
+     *     // ... data to create a EmailTemplate
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the EmailTemplate we want to update
+     *   }
+     * })
+     */
+    upsert<T extends EmailTemplateUpsertArgs>(args: SelectSubset<T, EmailTemplateUpsertArgs<ExtArgs>>): Prisma__EmailTemplateClient<$Result.GetResult<Prisma.$EmailTemplatePayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of EmailTemplates.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {EmailTemplateCountArgs} args - Arguments to filter EmailTemplates to count.
+     * @example
+     * // Count the number of EmailTemplates
+     * const count = await prisma.emailTemplate.count({
+     *   where: {
+     *     // ... the filter for the EmailTemplates we want to count
+     *   }
+     * })
+    **/
+    count<T extends EmailTemplateCountArgs>(
+      args?: Subset<T, EmailTemplateCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], EmailTemplateCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a EmailTemplate.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {EmailTemplateAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends EmailTemplateAggregateArgs>(args: Subset<T, EmailTemplateAggregateArgs>): Prisma.PrismaPromise<GetEmailTemplateAggregateType<T>>
+
+    /**
+     * Group by EmailTemplate.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {EmailTemplateGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends EmailTemplateGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: EmailTemplateGroupByArgs['orderBy'] }
+        : { orderBy?: EmailTemplateGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, EmailTemplateGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetEmailTemplateGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the EmailTemplate model
+   */
+  readonly fields: EmailTemplateFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for EmailTemplate.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__EmailTemplateClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    user<T extends UserDefaultArgs<ExtArgs> = {}>(args?: Subset<T, UserDefaultArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    campaigns<T extends EmailTemplate$campaignsArgs<ExtArgs> = {}>(args?: Subset<T, EmailTemplate$campaignsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$EmailCampaignPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the EmailTemplate model
+   */
+  interface EmailTemplateFieldRefs {
+    readonly id: FieldRef<"EmailTemplate", 'String'>
+    readonly userId: FieldRef<"EmailTemplate", 'String'>
+    readonly name: FieldRef<"EmailTemplate", 'String'>
+    readonly description: FieldRef<"EmailTemplate", 'String'>
+    readonly htmlContent: FieldRef<"EmailTemplate", 'String'>
+    readonly designJSON: FieldRef<"EmailTemplate", 'String'>
+    readonly category: FieldRef<"EmailTemplate", 'TemplateCategory'>
+    readonly thumbnailUrl: FieldRef<"EmailTemplate", 'String'>
+    readonly isPublic: FieldRef<"EmailTemplate", 'Boolean'>
+    readonly createdAt: FieldRef<"EmailTemplate", 'DateTime'>
+    readonly updatedAt: FieldRef<"EmailTemplate", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * EmailTemplate findUnique
+   */
+  export type EmailTemplateFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the EmailTemplate
+     */
+    select?: EmailTemplateSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the EmailTemplate
+     */
+    omit?: EmailTemplateOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: EmailTemplateInclude<ExtArgs> | null
+    /**
+     * Filter, which EmailTemplate to fetch.
+     */
+    where: EmailTemplateWhereUniqueInput
+  }
+
+  /**
+   * EmailTemplate findUniqueOrThrow
+   */
+  export type EmailTemplateFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the EmailTemplate
+     */
+    select?: EmailTemplateSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the EmailTemplate
+     */
+    omit?: EmailTemplateOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: EmailTemplateInclude<ExtArgs> | null
+    /**
+     * Filter, which EmailTemplate to fetch.
+     */
+    where: EmailTemplateWhereUniqueInput
+  }
+
+  /**
+   * EmailTemplate findFirst
+   */
+  export type EmailTemplateFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the EmailTemplate
+     */
+    select?: EmailTemplateSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the EmailTemplate
+     */
+    omit?: EmailTemplateOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: EmailTemplateInclude<ExtArgs> | null
+    /**
+     * Filter, which EmailTemplate to fetch.
+     */
+    where?: EmailTemplateWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of EmailTemplates to fetch.
+     */
+    orderBy?: EmailTemplateOrderByWithRelationInput | EmailTemplateOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for EmailTemplates.
+     */
+    cursor?: EmailTemplateWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` EmailTemplates from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` EmailTemplates.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of EmailTemplates.
+     */
+    distinct?: EmailTemplateScalarFieldEnum | EmailTemplateScalarFieldEnum[]
+  }
+
+  /**
+   * EmailTemplate findFirstOrThrow
+   */
+  export type EmailTemplateFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the EmailTemplate
+     */
+    select?: EmailTemplateSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the EmailTemplate
+     */
+    omit?: EmailTemplateOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: EmailTemplateInclude<ExtArgs> | null
+    /**
+     * Filter, which EmailTemplate to fetch.
+     */
+    where?: EmailTemplateWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of EmailTemplates to fetch.
+     */
+    orderBy?: EmailTemplateOrderByWithRelationInput | EmailTemplateOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for EmailTemplates.
+     */
+    cursor?: EmailTemplateWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` EmailTemplates from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` EmailTemplates.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of EmailTemplates.
+     */
+    distinct?: EmailTemplateScalarFieldEnum | EmailTemplateScalarFieldEnum[]
+  }
+
+  /**
+   * EmailTemplate findMany
+   */
+  export type EmailTemplateFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the EmailTemplate
+     */
+    select?: EmailTemplateSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the EmailTemplate
+     */
+    omit?: EmailTemplateOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: EmailTemplateInclude<ExtArgs> | null
+    /**
+     * Filter, which EmailTemplates to fetch.
+     */
+    where?: EmailTemplateWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of EmailTemplates to fetch.
+     */
+    orderBy?: EmailTemplateOrderByWithRelationInput | EmailTemplateOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing EmailTemplates.
+     */
+    cursor?: EmailTemplateWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` EmailTemplates from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` EmailTemplates.
+     */
+    skip?: number
+    distinct?: EmailTemplateScalarFieldEnum | EmailTemplateScalarFieldEnum[]
+  }
+
+  /**
+   * EmailTemplate create
+   */
+  export type EmailTemplateCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the EmailTemplate
+     */
+    select?: EmailTemplateSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the EmailTemplate
+     */
+    omit?: EmailTemplateOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: EmailTemplateInclude<ExtArgs> | null
+    /**
+     * The data needed to create a EmailTemplate.
+     */
+    data: XOR<EmailTemplateCreateInput, EmailTemplateUncheckedCreateInput>
+  }
+
+  /**
+   * EmailTemplate createMany
+   */
+  export type EmailTemplateCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many EmailTemplates.
+     */
+    data: EmailTemplateCreateManyInput | EmailTemplateCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * EmailTemplate createManyAndReturn
+   */
+  export type EmailTemplateCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the EmailTemplate
+     */
+    select?: EmailTemplateSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the EmailTemplate
+     */
+    omit?: EmailTemplateOmit<ExtArgs> | null
+    /**
+     * The data used to create many EmailTemplates.
+     */
+    data: EmailTemplateCreateManyInput | EmailTemplateCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: EmailTemplateIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * EmailTemplate update
+   */
+  export type EmailTemplateUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the EmailTemplate
+     */
+    select?: EmailTemplateSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the EmailTemplate
+     */
+    omit?: EmailTemplateOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: EmailTemplateInclude<ExtArgs> | null
+    /**
+     * The data needed to update a EmailTemplate.
+     */
+    data: XOR<EmailTemplateUpdateInput, EmailTemplateUncheckedUpdateInput>
+    /**
+     * Choose, which EmailTemplate to update.
+     */
+    where: EmailTemplateWhereUniqueInput
+  }
+
+  /**
+   * EmailTemplate updateMany
+   */
+  export type EmailTemplateUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update EmailTemplates.
+     */
+    data: XOR<EmailTemplateUpdateManyMutationInput, EmailTemplateUncheckedUpdateManyInput>
+    /**
+     * Filter which EmailTemplates to update
+     */
+    where?: EmailTemplateWhereInput
+    /**
+     * Limit how many EmailTemplates to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * EmailTemplate updateManyAndReturn
+   */
+  export type EmailTemplateUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the EmailTemplate
+     */
+    select?: EmailTemplateSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the EmailTemplate
+     */
+    omit?: EmailTemplateOmit<ExtArgs> | null
+    /**
+     * The data used to update EmailTemplates.
+     */
+    data: XOR<EmailTemplateUpdateManyMutationInput, EmailTemplateUncheckedUpdateManyInput>
+    /**
+     * Filter which EmailTemplates to update
+     */
+    where?: EmailTemplateWhereInput
+    /**
+     * Limit how many EmailTemplates to update.
+     */
+    limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: EmailTemplateIncludeUpdateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * EmailTemplate upsert
+   */
+  export type EmailTemplateUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the EmailTemplate
+     */
+    select?: EmailTemplateSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the EmailTemplate
+     */
+    omit?: EmailTemplateOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: EmailTemplateInclude<ExtArgs> | null
+    /**
+     * The filter to search for the EmailTemplate to update in case it exists.
+     */
+    where: EmailTemplateWhereUniqueInput
+    /**
+     * In case the EmailTemplate found by the `where` argument doesn't exist, create a new EmailTemplate with this data.
+     */
+    create: XOR<EmailTemplateCreateInput, EmailTemplateUncheckedCreateInput>
+    /**
+     * In case the EmailTemplate was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<EmailTemplateUpdateInput, EmailTemplateUncheckedUpdateInput>
+  }
+
+  /**
+   * EmailTemplate delete
+   */
+  export type EmailTemplateDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the EmailTemplate
+     */
+    select?: EmailTemplateSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the EmailTemplate
+     */
+    omit?: EmailTemplateOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: EmailTemplateInclude<ExtArgs> | null
+    /**
+     * Filter which EmailTemplate to delete.
+     */
+    where: EmailTemplateWhereUniqueInput
+  }
+
+  /**
+   * EmailTemplate deleteMany
+   */
+  export type EmailTemplateDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which EmailTemplates to delete
+     */
+    where?: EmailTemplateWhereInput
+    /**
+     * Limit how many EmailTemplates to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * EmailTemplate.campaigns
+   */
+  export type EmailTemplate$campaignsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the EmailCampaign
+     */
+    select?: EmailCampaignSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the EmailCampaign
+     */
+    omit?: EmailCampaignOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: EmailCampaignInclude<ExtArgs> | null
+    where?: EmailCampaignWhereInput
+    orderBy?: EmailCampaignOrderByWithRelationInput | EmailCampaignOrderByWithRelationInput[]
+    cursor?: EmailCampaignWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: EmailCampaignScalarFieldEnum | EmailCampaignScalarFieldEnum[]
+  }
+
+  /**
+   * EmailTemplate without action
+   */
+  export type EmailTemplateDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the EmailTemplate
+     */
+    select?: EmailTemplateSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the EmailTemplate
+     */
+    omit?: EmailTemplateOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: EmailTemplateInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model ScheduledCampaign
+   */
+
+  export type AggregateScheduledCampaign = {
+    _count: ScheduledCampaignCountAggregateOutputType | null
+    _avg: ScheduledCampaignAvgAggregateOutputType | null
+    _sum: ScheduledCampaignSumAggregateOutputType | null
+    _min: ScheduledCampaignMinAggregateOutputType | null
+    _max: ScheduledCampaignMaxAggregateOutputType | null
+  }
+
+  export type ScheduledCampaignAvgAggregateOutputType = {
+    failureCount: number | null
+  }
+
+  export type ScheduledCampaignSumAggregateOutputType = {
+    failureCount: number | null
+  }
+
+  export type ScheduledCampaignMinAggregateOutputType = {
+    id: string | null
+    userId: string | null
+    campaignId: string | null
+    templateId: string | null
+    name: string | null
+    subject: string | null
+    htmlContent: string | null
+    frequency: $Enums.AutomationFrequency | null
+    nextRunAt: Date | null
+    lastRunAt: Date | null
+    sourceType: string | null
+    sourceData: string | null
+    isActive: boolean | null
+    failureCount: number | null
+    lastError: string | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type ScheduledCampaignMaxAggregateOutputType = {
+    id: string | null
+    userId: string | null
+    campaignId: string | null
+    templateId: string | null
+    name: string | null
+    subject: string | null
+    htmlContent: string | null
+    frequency: $Enums.AutomationFrequency | null
+    nextRunAt: Date | null
+    lastRunAt: Date | null
+    sourceType: string | null
+    sourceData: string | null
+    isActive: boolean | null
+    failureCount: number | null
+    lastError: string | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type ScheduledCampaignCountAggregateOutputType = {
+    id: number
+    userId: number
+    campaignId: number
+    templateId: number
+    name: number
+    subject: number
+    htmlContent: number
+    frequency: number
+    nextRunAt: number
+    lastRunAt: number
+    sourceType: number
+    sourceData: number
+    isActive: number
+    failureCount: number
+    lastError: number
+    createdAt: number
+    updatedAt: number
+    _all: number
+  }
+
+
+  export type ScheduledCampaignAvgAggregateInputType = {
+    failureCount?: true
+  }
+
+  export type ScheduledCampaignSumAggregateInputType = {
+    failureCount?: true
+  }
+
+  export type ScheduledCampaignMinAggregateInputType = {
+    id?: true
+    userId?: true
+    campaignId?: true
+    templateId?: true
+    name?: true
+    subject?: true
+    htmlContent?: true
+    frequency?: true
+    nextRunAt?: true
+    lastRunAt?: true
+    sourceType?: true
+    sourceData?: true
+    isActive?: true
+    failureCount?: true
+    lastError?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type ScheduledCampaignMaxAggregateInputType = {
+    id?: true
+    userId?: true
+    campaignId?: true
+    templateId?: true
+    name?: true
+    subject?: true
+    htmlContent?: true
+    frequency?: true
+    nextRunAt?: true
+    lastRunAt?: true
+    sourceType?: true
+    sourceData?: true
+    isActive?: true
+    failureCount?: true
+    lastError?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type ScheduledCampaignCountAggregateInputType = {
+    id?: true
+    userId?: true
+    campaignId?: true
+    templateId?: true
+    name?: true
+    subject?: true
+    htmlContent?: true
+    frequency?: true
+    nextRunAt?: true
+    lastRunAt?: true
+    sourceType?: true
+    sourceData?: true
+    isActive?: true
+    failureCount?: true
+    lastError?: true
+    createdAt?: true
+    updatedAt?: true
+    _all?: true
+  }
+
+  export type ScheduledCampaignAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which ScheduledCampaign to aggregate.
+     */
+    where?: ScheduledCampaignWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of ScheduledCampaigns to fetch.
+     */
+    orderBy?: ScheduledCampaignOrderByWithRelationInput | ScheduledCampaignOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: ScheduledCampaignWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` ScheduledCampaigns from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` ScheduledCampaigns.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned ScheduledCampaigns
+    **/
+    _count?: true | ScheduledCampaignCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: ScheduledCampaignAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: ScheduledCampaignSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: ScheduledCampaignMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: ScheduledCampaignMaxAggregateInputType
+  }
+
+  export type GetScheduledCampaignAggregateType<T extends ScheduledCampaignAggregateArgs> = {
+        [P in keyof T & keyof AggregateScheduledCampaign]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateScheduledCampaign[P]>
+      : GetScalarType<T[P], AggregateScheduledCampaign[P]>
+  }
+
+
+
+
+  export type ScheduledCampaignGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: ScheduledCampaignWhereInput
+    orderBy?: ScheduledCampaignOrderByWithAggregationInput | ScheduledCampaignOrderByWithAggregationInput[]
+    by: ScheduledCampaignScalarFieldEnum[] | ScheduledCampaignScalarFieldEnum
+    having?: ScheduledCampaignScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: ScheduledCampaignCountAggregateInputType | true
+    _avg?: ScheduledCampaignAvgAggregateInputType
+    _sum?: ScheduledCampaignSumAggregateInputType
+    _min?: ScheduledCampaignMinAggregateInputType
+    _max?: ScheduledCampaignMaxAggregateInputType
+  }
+
+  export type ScheduledCampaignGroupByOutputType = {
+    id: string
+    userId: string
+    campaignId: string | null
+    templateId: string | null
+    name: string
+    subject: string
+    htmlContent: string
+    frequency: $Enums.AutomationFrequency
+    nextRunAt: Date
+    lastRunAt: Date | null
+    sourceType: string
+    sourceData: string | null
+    isActive: boolean
+    failureCount: number
+    lastError: string | null
+    createdAt: Date
+    updatedAt: Date
+    _count: ScheduledCampaignCountAggregateOutputType | null
+    _avg: ScheduledCampaignAvgAggregateOutputType | null
+    _sum: ScheduledCampaignSumAggregateOutputType | null
+    _min: ScheduledCampaignMinAggregateOutputType | null
+    _max: ScheduledCampaignMaxAggregateOutputType | null
+  }
+
+  type GetScheduledCampaignGroupByPayload<T extends ScheduledCampaignGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<ScheduledCampaignGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof ScheduledCampaignGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], ScheduledCampaignGroupByOutputType[P]>
+            : GetScalarType<T[P], ScheduledCampaignGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type ScheduledCampaignSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    userId?: boolean
+    campaignId?: boolean
+    templateId?: boolean
+    name?: boolean
+    subject?: boolean
+    htmlContent?: boolean
+    frequency?: boolean
+    nextRunAt?: boolean
+    lastRunAt?: boolean
+    sourceType?: boolean
+    sourceData?: boolean
+    isActive?: boolean
+    failureCount?: boolean
+    lastError?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    user?: boolean | UserDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["scheduledCampaign"]>
+
+  export type ScheduledCampaignSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    userId?: boolean
+    campaignId?: boolean
+    templateId?: boolean
+    name?: boolean
+    subject?: boolean
+    htmlContent?: boolean
+    frequency?: boolean
+    nextRunAt?: boolean
+    lastRunAt?: boolean
+    sourceType?: boolean
+    sourceData?: boolean
+    isActive?: boolean
+    failureCount?: boolean
+    lastError?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    user?: boolean | UserDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["scheduledCampaign"]>
+
+  export type ScheduledCampaignSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    userId?: boolean
+    campaignId?: boolean
+    templateId?: boolean
+    name?: boolean
+    subject?: boolean
+    htmlContent?: boolean
+    frequency?: boolean
+    nextRunAt?: boolean
+    lastRunAt?: boolean
+    sourceType?: boolean
+    sourceData?: boolean
+    isActive?: boolean
+    failureCount?: boolean
+    lastError?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    user?: boolean | UserDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["scheduledCampaign"]>
+
+  export type ScheduledCampaignSelectScalar = {
+    id?: boolean
+    userId?: boolean
+    campaignId?: boolean
+    templateId?: boolean
+    name?: boolean
+    subject?: boolean
+    htmlContent?: boolean
+    frequency?: boolean
+    nextRunAt?: boolean
+    lastRunAt?: boolean
+    sourceType?: boolean
+    sourceData?: boolean
+    isActive?: boolean
+    failureCount?: boolean
+    lastError?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }
+
+  export type ScheduledCampaignOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "userId" | "campaignId" | "templateId" | "name" | "subject" | "htmlContent" | "frequency" | "nextRunAt" | "lastRunAt" | "sourceType" | "sourceData" | "isActive" | "failureCount" | "lastError" | "createdAt" | "updatedAt", ExtArgs["result"]["scheduledCampaign"]>
+  export type ScheduledCampaignInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    user?: boolean | UserDefaultArgs<ExtArgs>
+  }
+  export type ScheduledCampaignIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    user?: boolean | UserDefaultArgs<ExtArgs>
+  }
+  export type ScheduledCampaignIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    user?: boolean | UserDefaultArgs<ExtArgs>
+  }
+
+  export type $ScheduledCampaignPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "ScheduledCampaign"
+    objects: {
+      user: Prisma.$UserPayload<ExtArgs>
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      userId: string
+      campaignId: string | null
+      templateId: string | null
+      name: string
+      subject: string
+      htmlContent: string
+      frequency: $Enums.AutomationFrequency
+      nextRunAt: Date
+      lastRunAt: Date | null
+      sourceType: string
+      sourceData: string | null
+      isActive: boolean
+      failureCount: number
+      lastError: string | null
+      createdAt: Date
+      updatedAt: Date
+    }, ExtArgs["result"]["scheduledCampaign"]>
+    composites: {}
+  }
+
+  type ScheduledCampaignGetPayload<S extends boolean | null | undefined | ScheduledCampaignDefaultArgs> = $Result.GetResult<Prisma.$ScheduledCampaignPayload, S>
+
+  type ScheduledCampaignCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<ScheduledCampaignFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: ScheduledCampaignCountAggregateInputType | true
+    }
+
+  export interface ScheduledCampaignDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['ScheduledCampaign'], meta: { name: 'ScheduledCampaign' } }
+    /**
+     * Find zero or one ScheduledCampaign that matches the filter.
+     * @param {ScheduledCampaignFindUniqueArgs} args - Arguments to find a ScheduledCampaign
+     * @example
+     * // Get one ScheduledCampaign
+     * const scheduledCampaign = await prisma.scheduledCampaign.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends ScheduledCampaignFindUniqueArgs>(args: SelectSubset<T, ScheduledCampaignFindUniqueArgs<ExtArgs>>): Prisma__ScheduledCampaignClient<$Result.GetResult<Prisma.$ScheduledCampaignPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one ScheduledCampaign that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {ScheduledCampaignFindUniqueOrThrowArgs} args - Arguments to find a ScheduledCampaign
+     * @example
+     * // Get one ScheduledCampaign
+     * const scheduledCampaign = await prisma.scheduledCampaign.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends ScheduledCampaignFindUniqueOrThrowArgs>(args: SelectSubset<T, ScheduledCampaignFindUniqueOrThrowArgs<ExtArgs>>): Prisma__ScheduledCampaignClient<$Result.GetResult<Prisma.$ScheduledCampaignPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first ScheduledCampaign that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ScheduledCampaignFindFirstArgs} args - Arguments to find a ScheduledCampaign
+     * @example
+     * // Get one ScheduledCampaign
+     * const scheduledCampaign = await prisma.scheduledCampaign.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends ScheduledCampaignFindFirstArgs>(args?: SelectSubset<T, ScheduledCampaignFindFirstArgs<ExtArgs>>): Prisma__ScheduledCampaignClient<$Result.GetResult<Prisma.$ScheduledCampaignPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first ScheduledCampaign that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ScheduledCampaignFindFirstOrThrowArgs} args - Arguments to find a ScheduledCampaign
+     * @example
+     * // Get one ScheduledCampaign
+     * const scheduledCampaign = await prisma.scheduledCampaign.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends ScheduledCampaignFindFirstOrThrowArgs>(args?: SelectSubset<T, ScheduledCampaignFindFirstOrThrowArgs<ExtArgs>>): Prisma__ScheduledCampaignClient<$Result.GetResult<Prisma.$ScheduledCampaignPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more ScheduledCampaigns that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ScheduledCampaignFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all ScheduledCampaigns
+     * const scheduledCampaigns = await prisma.scheduledCampaign.findMany()
+     * 
+     * // Get first 10 ScheduledCampaigns
+     * const scheduledCampaigns = await prisma.scheduledCampaign.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const scheduledCampaignWithIdOnly = await prisma.scheduledCampaign.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends ScheduledCampaignFindManyArgs>(args?: SelectSubset<T, ScheduledCampaignFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ScheduledCampaignPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a ScheduledCampaign.
+     * @param {ScheduledCampaignCreateArgs} args - Arguments to create a ScheduledCampaign.
+     * @example
+     * // Create one ScheduledCampaign
+     * const ScheduledCampaign = await prisma.scheduledCampaign.create({
+     *   data: {
+     *     // ... data to create a ScheduledCampaign
+     *   }
+     * })
+     * 
+     */
+    create<T extends ScheduledCampaignCreateArgs>(args: SelectSubset<T, ScheduledCampaignCreateArgs<ExtArgs>>): Prisma__ScheduledCampaignClient<$Result.GetResult<Prisma.$ScheduledCampaignPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many ScheduledCampaigns.
+     * @param {ScheduledCampaignCreateManyArgs} args - Arguments to create many ScheduledCampaigns.
+     * @example
+     * // Create many ScheduledCampaigns
+     * const scheduledCampaign = await prisma.scheduledCampaign.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends ScheduledCampaignCreateManyArgs>(args?: SelectSubset<T, ScheduledCampaignCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many ScheduledCampaigns and returns the data saved in the database.
+     * @param {ScheduledCampaignCreateManyAndReturnArgs} args - Arguments to create many ScheduledCampaigns.
+     * @example
+     * // Create many ScheduledCampaigns
+     * const scheduledCampaign = await prisma.scheduledCampaign.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many ScheduledCampaigns and only return the `id`
+     * const scheduledCampaignWithIdOnly = await prisma.scheduledCampaign.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends ScheduledCampaignCreateManyAndReturnArgs>(args?: SelectSubset<T, ScheduledCampaignCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ScheduledCampaignPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a ScheduledCampaign.
+     * @param {ScheduledCampaignDeleteArgs} args - Arguments to delete one ScheduledCampaign.
+     * @example
+     * // Delete one ScheduledCampaign
+     * const ScheduledCampaign = await prisma.scheduledCampaign.delete({
+     *   where: {
+     *     // ... filter to delete one ScheduledCampaign
+     *   }
+     * })
+     * 
+     */
+    delete<T extends ScheduledCampaignDeleteArgs>(args: SelectSubset<T, ScheduledCampaignDeleteArgs<ExtArgs>>): Prisma__ScheduledCampaignClient<$Result.GetResult<Prisma.$ScheduledCampaignPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one ScheduledCampaign.
+     * @param {ScheduledCampaignUpdateArgs} args - Arguments to update one ScheduledCampaign.
+     * @example
+     * // Update one ScheduledCampaign
+     * const scheduledCampaign = await prisma.scheduledCampaign.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends ScheduledCampaignUpdateArgs>(args: SelectSubset<T, ScheduledCampaignUpdateArgs<ExtArgs>>): Prisma__ScheduledCampaignClient<$Result.GetResult<Prisma.$ScheduledCampaignPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more ScheduledCampaigns.
+     * @param {ScheduledCampaignDeleteManyArgs} args - Arguments to filter ScheduledCampaigns to delete.
+     * @example
+     * // Delete a few ScheduledCampaigns
+     * const { count } = await prisma.scheduledCampaign.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends ScheduledCampaignDeleteManyArgs>(args?: SelectSubset<T, ScheduledCampaignDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more ScheduledCampaigns.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ScheduledCampaignUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many ScheduledCampaigns
+     * const scheduledCampaign = await prisma.scheduledCampaign.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends ScheduledCampaignUpdateManyArgs>(args: SelectSubset<T, ScheduledCampaignUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more ScheduledCampaigns and returns the data updated in the database.
+     * @param {ScheduledCampaignUpdateManyAndReturnArgs} args - Arguments to update many ScheduledCampaigns.
+     * @example
+     * // Update many ScheduledCampaigns
+     * const scheduledCampaign = await prisma.scheduledCampaign.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more ScheduledCampaigns and only return the `id`
+     * const scheduledCampaignWithIdOnly = await prisma.scheduledCampaign.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends ScheduledCampaignUpdateManyAndReturnArgs>(args: SelectSubset<T, ScheduledCampaignUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ScheduledCampaignPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one ScheduledCampaign.
+     * @param {ScheduledCampaignUpsertArgs} args - Arguments to update or create a ScheduledCampaign.
+     * @example
+     * // Update or create a ScheduledCampaign
+     * const scheduledCampaign = await prisma.scheduledCampaign.upsert({
+     *   create: {
+     *     // ... data to create a ScheduledCampaign
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the ScheduledCampaign we want to update
+     *   }
+     * })
+     */
+    upsert<T extends ScheduledCampaignUpsertArgs>(args: SelectSubset<T, ScheduledCampaignUpsertArgs<ExtArgs>>): Prisma__ScheduledCampaignClient<$Result.GetResult<Prisma.$ScheduledCampaignPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of ScheduledCampaigns.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ScheduledCampaignCountArgs} args - Arguments to filter ScheduledCampaigns to count.
+     * @example
+     * // Count the number of ScheduledCampaigns
+     * const count = await prisma.scheduledCampaign.count({
+     *   where: {
+     *     // ... the filter for the ScheduledCampaigns we want to count
+     *   }
+     * })
+    **/
+    count<T extends ScheduledCampaignCountArgs>(
+      args?: Subset<T, ScheduledCampaignCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], ScheduledCampaignCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a ScheduledCampaign.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ScheduledCampaignAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends ScheduledCampaignAggregateArgs>(args: Subset<T, ScheduledCampaignAggregateArgs>): Prisma.PrismaPromise<GetScheduledCampaignAggregateType<T>>
+
+    /**
+     * Group by ScheduledCampaign.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ScheduledCampaignGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends ScheduledCampaignGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: ScheduledCampaignGroupByArgs['orderBy'] }
+        : { orderBy?: ScheduledCampaignGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, ScheduledCampaignGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetScheduledCampaignGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the ScheduledCampaign model
+   */
+  readonly fields: ScheduledCampaignFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for ScheduledCampaign.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__ScheduledCampaignClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    user<T extends UserDefaultArgs<ExtArgs> = {}>(args?: Subset<T, UserDefaultArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the ScheduledCampaign model
+   */
+  interface ScheduledCampaignFieldRefs {
+    readonly id: FieldRef<"ScheduledCampaign", 'String'>
+    readonly userId: FieldRef<"ScheduledCampaign", 'String'>
+    readonly campaignId: FieldRef<"ScheduledCampaign", 'String'>
+    readonly templateId: FieldRef<"ScheduledCampaign", 'String'>
+    readonly name: FieldRef<"ScheduledCampaign", 'String'>
+    readonly subject: FieldRef<"ScheduledCampaign", 'String'>
+    readonly htmlContent: FieldRef<"ScheduledCampaign", 'String'>
+    readonly frequency: FieldRef<"ScheduledCampaign", 'AutomationFrequency'>
+    readonly nextRunAt: FieldRef<"ScheduledCampaign", 'DateTime'>
+    readonly lastRunAt: FieldRef<"ScheduledCampaign", 'DateTime'>
+    readonly sourceType: FieldRef<"ScheduledCampaign", 'String'>
+    readonly sourceData: FieldRef<"ScheduledCampaign", 'String'>
+    readonly isActive: FieldRef<"ScheduledCampaign", 'Boolean'>
+    readonly failureCount: FieldRef<"ScheduledCampaign", 'Int'>
+    readonly lastError: FieldRef<"ScheduledCampaign", 'String'>
+    readonly createdAt: FieldRef<"ScheduledCampaign", 'DateTime'>
+    readonly updatedAt: FieldRef<"ScheduledCampaign", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * ScheduledCampaign findUnique
+   */
+  export type ScheduledCampaignFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ScheduledCampaign
+     */
+    select?: ScheduledCampaignSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ScheduledCampaign
+     */
+    omit?: ScheduledCampaignOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ScheduledCampaignInclude<ExtArgs> | null
+    /**
+     * Filter, which ScheduledCampaign to fetch.
+     */
+    where: ScheduledCampaignWhereUniqueInput
+  }
+
+  /**
+   * ScheduledCampaign findUniqueOrThrow
+   */
+  export type ScheduledCampaignFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ScheduledCampaign
+     */
+    select?: ScheduledCampaignSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ScheduledCampaign
+     */
+    omit?: ScheduledCampaignOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ScheduledCampaignInclude<ExtArgs> | null
+    /**
+     * Filter, which ScheduledCampaign to fetch.
+     */
+    where: ScheduledCampaignWhereUniqueInput
+  }
+
+  /**
+   * ScheduledCampaign findFirst
+   */
+  export type ScheduledCampaignFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ScheduledCampaign
+     */
+    select?: ScheduledCampaignSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ScheduledCampaign
+     */
+    omit?: ScheduledCampaignOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ScheduledCampaignInclude<ExtArgs> | null
+    /**
+     * Filter, which ScheduledCampaign to fetch.
+     */
+    where?: ScheduledCampaignWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of ScheduledCampaigns to fetch.
+     */
+    orderBy?: ScheduledCampaignOrderByWithRelationInput | ScheduledCampaignOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for ScheduledCampaigns.
+     */
+    cursor?: ScheduledCampaignWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` ScheduledCampaigns from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` ScheduledCampaigns.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of ScheduledCampaigns.
+     */
+    distinct?: ScheduledCampaignScalarFieldEnum | ScheduledCampaignScalarFieldEnum[]
+  }
+
+  /**
+   * ScheduledCampaign findFirstOrThrow
+   */
+  export type ScheduledCampaignFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ScheduledCampaign
+     */
+    select?: ScheduledCampaignSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ScheduledCampaign
+     */
+    omit?: ScheduledCampaignOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ScheduledCampaignInclude<ExtArgs> | null
+    /**
+     * Filter, which ScheduledCampaign to fetch.
+     */
+    where?: ScheduledCampaignWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of ScheduledCampaigns to fetch.
+     */
+    orderBy?: ScheduledCampaignOrderByWithRelationInput | ScheduledCampaignOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for ScheduledCampaigns.
+     */
+    cursor?: ScheduledCampaignWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` ScheduledCampaigns from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` ScheduledCampaigns.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of ScheduledCampaigns.
+     */
+    distinct?: ScheduledCampaignScalarFieldEnum | ScheduledCampaignScalarFieldEnum[]
+  }
+
+  /**
+   * ScheduledCampaign findMany
+   */
+  export type ScheduledCampaignFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ScheduledCampaign
+     */
+    select?: ScheduledCampaignSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ScheduledCampaign
+     */
+    omit?: ScheduledCampaignOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ScheduledCampaignInclude<ExtArgs> | null
+    /**
+     * Filter, which ScheduledCampaigns to fetch.
+     */
+    where?: ScheduledCampaignWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of ScheduledCampaigns to fetch.
+     */
+    orderBy?: ScheduledCampaignOrderByWithRelationInput | ScheduledCampaignOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing ScheduledCampaigns.
+     */
+    cursor?: ScheduledCampaignWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` ScheduledCampaigns from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` ScheduledCampaigns.
+     */
+    skip?: number
+    distinct?: ScheduledCampaignScalarFieldEnum | ScheduledCampaignScalarFieldEnum[]
+  }
+
+  /**
+   * ScheduledCampaign create
+   */
+  export type ScheduledCampaignCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ScheduledCampaign
+     */
+    select?: ScheduledCampaignSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ScheduledCampaign
+     */
+    omit?: ScheduledCampaignOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ScheduledCampaignInclude<ExtArgs> | null
+    /**
+     * The data needed to create a ScheduledCampaign.
+     */
+    data: XOR<ScheduledCampaignCreateInput, ScheduledCampaignUncheckedCreateInput>
+  }
+
+  /**
+   * ScheduledCampaign createMany
+   */
+  export type ScheduledCampaignCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many ScheduledCampaigns.
+     */
+    data: ScheduledCampaignCreateManyInput | ScheduledCampaignCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * ScheduledCampaign createManyAndReturn
+   */
+  export type ScheduledCampaignCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ScheduledCampaign
+     */
+    select?: ScheduledCampaignSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the ScheduledCampaign
+     */
+    omit?: ScheduledCampaignOmit<ExtArgs> | null
+    /**
+     * The data used to create many ScheduledCampaigns.
+     */
+    data: ScheduledCampaignCreateManyInput | ScheduledCampaignCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ScheduledCampaignIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * ScheduledCampaign update
+   */
+  export type ScheduledCampaignUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ScheduledCampaign
+     */
+    select?: ScheduledCampaignSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ScheduledCampaign
+     */
+    omit?: ScheduledCampaignOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ScheduledCampaignInclude<ExtArgs> | null
+    /**
+     * The data needed to update a ScheduledCampaign.
+     */
+    data: XOR<ScheduledCampaignUpdateInput, ScheduledCampaignUncheckedUpdateInput>
+    /**
+     * Choose, which ScheduledCampaign to update.
+     */
+    where: ScheduledCampaignWhereUniqueInput
+  }
+
+  /**
+   * ScheduledCampaign updateMany
+   */
+  export type ScheduledCampaignUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update ScheduledCampaigns.
+     */
+    data: XOR<ScheduledCampaignUpdateManyMutationInput, ScheduledCampaignUncheckedUpdateManyInput>
+    /**
+     * Filter which ScheduledCampaigns to update
+     */
+    where?: ScheduledCampaignWhereInput
+    /**
+     * Limit how many ScheduledCampaigns to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * ScheduledCampaign updateManyAndReturn
+   */
+  export type ScheduledCampaignUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ScheduledCampaign
+     */
+    select?: ScheduledCampaignSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the ScheduledCampaign
+     */
+    omit?: ScheduledCampaignOmit<ExtArgs> | null
+    /**
+     * The data used to update ScheduledCampaigns.
+     */
+    data: XOR<ScheduledCampaignUpdateManyMutationInput, ScheduledCampaignUncheckedUpdateManyInput>
+    /**
+     * Filter which ScheduledCampaigns to update
+     */
+    where?: ScheduledCampaignWhereInput
+    /**
+     * Limit how many ScheduledCampaigns to update.
+     */
+    limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ScheduledCampaignIncludeUpdateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * ScheduledCampaign upsert
+   */
+  export type ScheduledCampaignUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ScheduledCampaign
+     */
+    select?: ScheduledCampaignSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ScheduledCampaign
+     */
+    omit?: ScheduledCampaignOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ScheduledCampaignInclude<ExtArgs> | null
+    /**
+     * The filter to search for the ScheduledCampaign to update in case it exists.
+     */
+    where: ScheduledCampaignWhereUniqueInput
+    /**
+     * In case the ScheduledCampaign found by the `where` argument doesn't exist, create a new ScheduledCampaign with this data.
+     */
+    create: XOR<ScheduledCampaignCreateInput, ScheduledCampaignUncheckedCreateInput>
+    /**
+     * In case the ScheduledCampaign was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<ScheduledCampaignUpdateInput, ScheduledCampaignUncheckedUpdateInput>
+  }
+
+  /**
+   * ScheduledCampaign delete
+   */
+  export type ScheduledCampaignDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ScheduledCampaign
+     */
+    select?: ScheduledCampaignSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ScheduledCampaign
+     */
+    omit?: ScheduledCampaignOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ScheduledCampaignInclude<ExtArgs> | null
+    /**
+     * Filter which ScheduledCampaign to delete.
+     */
+    where: ScheduledCampaignWhereUniqueInput
+  }
+
+  /**
+   * ScheduledCampaign deleteMany
+   */
+  export type ScheduledCampaignDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which ScheduledCampaigns to delete
+     */
+    where?: ScheduledCampaignWhereInput
+    /**
+     * Limit how many ScheduledCampaigns to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * ScheduledCampaign without action
+   */
+  export type ScheduledCampaignDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ScheduledCampaign
+     */
+    select?: ScheduledCampaignSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ScheduledCampaign
+     */
+    omit?: ScheduledCampaignOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ScheduledCampaignInclude<ExtArgs> | null
+  }
+
+
+  /**
    * Model EmailCampaign
    */
 
@@ -17968,16 +23376,23 @@ export namespace Prisma {
   export type EmailCampaignAvgAggregateOutputType = {
     openRate: number | null
     clickRate: number | null
+    bounceRate: number | null
+    retryCount: number | null
+    maxRetries: number | null
   }
 
   export type EmailCampaignSumAggregateOutputType = {
     openRate: number | null
     clickRate: number | null
+    bounceRate: number | null
+    retryCount: number | null
+    maxRetries: number | null
   }
 
   export type EmailCampaignMinAggregateOutputType = {
     id: string | null
     userId: string | null
+    templateId: string | null
     name: string | null
     subject: string | null
     previewText: string | null
@@ -17986,8 +23401,13 @@ export namespace Prisma {
     status: $Enums.EmailCampaignStatus | null
     scheduledAt: Date | null
     sentAt: Date | null
+    failedAt: Date | null
     openRate: number | null
     clickRate: number | null
+    bounceRate: number | null
+    retryCount: number | null
+    maxRetries: number | null
+    errorMessage: string | null
     createdAt: Date | null
     updatedAt: Date | null
   }
@@ -17995,6 +23415,7 @@ export namespace Prisma {
   export type EmailCampaignMaxAggregateOutputType = {
     id: string | null
     userId: string | null
+    templateId: string | null
     name: string | null
     subject: string | null
     previewText: string | null
@@ -18003,8 +23424,13 @@ export namespace Prisma {
     status: $Enums.EmailCampaignStatus | null
     scheduledAt: Date | null
     sentAt: Date | null
+    failedAt: Date | null
     openRate: number | null
     clickRate: number | null
+    bounceRate: number | null
+    retryCount: number | null
+    maxRetries: number | null
+    errorMessage: string | null
     createdAt: Date | null
     updatedAt: Date | null
   }
@@ -18012,6 +23438,7 @@ export namespace Prisma {
   export type EmailCampaignCountAggregateOutputType = {
     id: number
     userId: number
+    templateId: number
     name: number
     subject: number
     previewText: number
@@ -18020,8 +23447,13 @@ export namespace Prisma {
     status: number
     scheduledAt: number
     sentAt: number
+    failedAt: number
     openRate: number
     clickRate: number
+    bounceRate: number
+    retryCount: number
+    maxRetries: number
+    errorMessage: number
     createdAt: number
     updatedAt: number
     _all: number
@@ -18031,16 +23463,23 @@ export namespace Prisma {
   export type EmailCampaignAvgAggregateInputType = {
     openRate?: true
     clickRate?: true
+    bounceRate?: true
+    retryCount?: true
+    maxRetries?: true
   }
 
   export type EmailCampaignSumAggregateInputType = {
     openRate?: true
     clickRate?: true
+    bounceRate?: true
+    retryCount?: true
+    maxRetries?: true
   }
 
   export type EmailCampaignMinAggregateInputType = {
     id?: true
     userId?: true
+    templateId?: true
     name?: true
     subject?: true
     previewText?: true
@@ -18049,8 +23488,13 @@ export namespace Prisma {
     status?: true
     scheduledAt?: true
     sentAt?: true
+    failedAt?: true
     openRate?: true
     clickRate?: true
+    bounceRate?: true
+    retryCount?: true
+    maxRetries?: true
+    errorMessage?: true
     createdAt?: true
     updatedAt?: true
   }
@@ -18058,6 +23502,7 @@ export namespace Prisma {
   export type EmailCampaignMaxAggregateInputType = {
     id?: true
     userId?: true
+    templateId?: true
     name?: true
     subject?: true
     previewText?: true
@@ -18066,8 +23511,13 @@ export namespace Prisma {
     status?: true
     scheduledAt?: true
     sentAt?: true
+    failedAt?: true
     openRate?: true
     clickRate?: true
+    bounceRate?: true
+    retryCount?: true
+    maxRetries?: true
+    errorMessage?: true
     createdAt?: true
     updatedAt?: true
   }
@@ -18075,6 +23525,7 @@ export namespace Prisma {
   export type EmailCampaignCountAggregateInputType = {
     id?: true
     userId?: true
+    templateId?: true
     name?: true
     subject?: true
     previewText?: true
@@ -18083,8 +23534,13 @@ export namespace Prisma {
     status?: true
     scheduledAt?: true
     sentAt?: true
+    failedAt?: true
     openRate?: true
     clickRate?: true
+    bounceRate?: true
+    retryCount?: true
+    maxRetries?: true
+    errorMessage?: true
     createdAt?: true
     updatedAt?: true
     _all?: true
@@ -18179,6 +23635,7 @@ export namespace Prisma {
   export type EmailCampaignGroupByOutputType = {
     id: string
     userId: string
+    templateId: string | null
     name: string
     subject: string
     previewText: string | null
@@ -18187,8 +23644,13 @@ export namespace Prisma {
     status: $Enums.EmailCampaignStatus
     scheduledAt: Date | null
     sentAt: Date | null
+    failedAt: Date | null
     openRate: number
     clickRate: number
+    bounceRate: number
+    retryCount: number
+    maxRetries: number
+    errorMessage: string | null
     createdAt: Date
     updatedAt: Date
     _count: EmailCampaignCountAggregateOutputType | null
@@ -18215,6 +23677,7 @@ export namespace Prisma {
   export type EmailCampaignSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
     userId?: boolean
+    templateId?: boolean
     name?: boolean
     subject?: boolean
     previewText?: boolean
@@ -18223,11 +23686,17 @@ export namespace Prisma {
     status?: boolean
     scheduledAt?: boolean
     sentAt?: boolean
+    failedAt?: boolean
     openRate?: boolean
     clickRate?: boolean
+    bounceRate?: boolean
+    retryCount?: boolean
+    maxRetries?: boolean
+    errorMessage?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     user?: boolean | UserDefaultArgs<ExtArgs>
+    template?: boolean | EmailCampaign$templateArgs<ExtArgs>
     recipients?: boolean | EmailCampaign$recipientsArgs<ExtArgs>
     _count?: boolean | EmailCampaignCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["emailCampaign"]>
@@ -18235,6 +23704,7 @@ export namespace Prisma {
   export type EmailCampaignSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
     userId?: boolean
+    templateId?: boolean
     name?: boolean
     subject?: boolean
     previewText?: boolean
@@ -18243,16 +23713,23 @@ export namespace Prisma {
     status?: boolean
     scheduledAt?: boolean
     sentAt?: boolean
+    failedAt?: boolean
     openRate?: boolean
     clickRate?: boolean
+    bounceRate?: boolean
+    retryCount?: boolean
+    maxRetries?: boolean
+    errorMessage?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     user?: boolean | UserDefaultArgs<ExtArgs>
+    template?: boolean | EmailCampaign$templateArgs<ExtArgs>
   }, ExtArgs["result"]["emailCampaign"]>
 
   export type EmailCampaignSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
     userId?: boolean
+    templateId?: boolean
     name?: boolean
     subject?: boolean
     previewText?: boolean
@@ -18261,16 +23738,23 @@ export namespace Prisma {
     status?: boolean
     scheduledAt?: boolean
     sentAt?: boolean
+    failedAt?: boolean
     openRate?: boolean
     clickRate?: boolean
+    bounceRate?: boolean
+    retryCount?: boolean
+    maxRetries?: boolean
+    errorMessage?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     user?: boolean | UserDefaultArgs<ExtArgs>
+    template?: boolean | EmailCampaign$templateArgs<ExtArgs>
   }, ExtArgs["result"]["emailCampaign"]>
 
   export type EmailCampaignSelectScalar = {
     id?: boolean
     userId?: boolean
+    templateId?: boolean
     name?: boolean
     subject?: boolean
     previewText?: boolean
@@ -18279,34 +23763,44 @@ export namespace Prisma {
     status?: boolean
     scheduledAt?: boolean
     sentAt?: boolean
+    failedAt?: boolean
     openRate?: boolean
     clickRate?: boolean
+    bounceRate?: boolean
+    retryCount?: boolean
+    maxRetries?: boolean
+    errorMessage?: boolean
     createdAt?: boolean
     updatedAt?: boolean
   }
 
-  export type EmailCampaignOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "userId" | "name" | "subject" | "previewText" | "htmlContent" | "textContent" | "status" | "scheduledAt" | "sentAt" | "openRate" | "clickRate" | "createdAt" | "updatedAt", ExtArgs["result"]["emailCampaign"]>
+  export type EmailCampaignOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "userId" | "templateId" | "name" | "subject" | "previewText" | "htmlContent" | "textContent" | "status" | "scheduledAt" | "sentAt" | "failedAt" | "openRate" | "clickRate" | "bounceRate" | "retryCount" | "maxRetries" | "errorMessage" | "createdAt" | "updatedAt", ExtArgs["result"]["emailCampaign"]>
   export type EmailCampaignInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     user?: boolean | UserDefaultArgs<ExtArgs>
+    template?: boolean | EmailCampaign$templateArgs<ExtArgs>
     recipients?: boolean | EmailCampaign$recipientsArgs<ExtArgs>
     _count?: boolean | EmailCampaignCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type EmailCampaignIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     user?: boolean | UserDefaultArgs<ExtArgs>
+    template?: boolean | EmailCampaign$templateArgs<ExtArgs>
   }
   export type EmailCampaignIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     user?: boolean | UserDefaultArgs<ExtArgs>
+    template?: boolean | EmailCampaign$templateArgs<ExtArgs>
   }
 
   export type $EmailCampaignPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "EmailCampaign"
     objects: {
       user: Prisma.$UserPayload<ExtArgs>
+      template: Prisma.$EmailTemplatePayload<ExtArgs> | null
       recipients: Prisma.$EmailCampaignRecipientPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
       userId: string
+      templateId: string | null
       name: string
       subject: string
       previewText: string | null
@@ -18315,8 +23809,13 @@ export namespace Prisma {
       status: $Enums.EmailCampaignStatus
       scheduledAt: Date | null
       sentAt: Date | null
+      failedAt: Date | null
       openRate: number
       clickRate: number
+      bounceRate: number
+      retryCount: number
+      maxRetries: number
+      errorMessage: string | null
       createdAt: Date
       updatedAt: Date
     }, ExtArgs["result"]["emailCampaign"]>
@@ -18714,6 +24213,7 @@ export namespace Prisma {
   export interface Prisma__EmailCampaignClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
     user<T extends UserDefaultArgs<ExtArgs> = {}>(args?: Subset<T, UserDefaultArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    template<T extends EmailCampaign$templateArgs<ExtArgs> = {}>(args?: Subset<T, EmailCampaign$templateArgs<ExtArgs>>): Prisma__EmailTemplateClient<$Result.GetResult<Prisma.$EmailTemplatePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     recipients<T extends EmailCampaign$recipientsArgs<ExtArgs> = {}>(args?: Subset<T, EmailCampaign$recipientsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$EmailCampaignRecipientPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
@@ -18746,6 +24246,7 @@ export namespace Prisma {
   interface EmailCampaignFieldRefs {
     readonly id: FieldRef<"EmailCampaign", 'String'>
     readonly userId: FieldRef<"EmailCampaign", 'String'>
+    readonly templateId: FieldRef<"EmailCampaign", 'String'>
     readonly name: FieldRef<"EmailCampaign", 'String'>
     readonly subject: FieldRef<"EmailCampaign", 'String'>
     readonly previewText: FieldRef<"EmailCampaign", 'String'>
@@ -18754,8 +24255,13 @@ export namespace Prisma {
     readonly status: FieldRef<"EmailCampaign", 'EmailCampaignStatus'>
     readonly scheduledAt: FieldRef<"EmailCampaign", 'DateTime'>
     readonly sentAt: FieldRef<"EmailCampaign", 'DateTime'>
+    readonly failedAt: FieldRef<"EmailCampaign", 'DateTime'>
     readonly openRate: FieldRef<"EmailCampaign", 'Float'>
     readonly clickRate: FieldRef<"EmailCampaign", 'Float'>
+    readonly bounceRate: FieldRef<"EmailCampaign", 'Float'>
+    readonly retryCount: FieldRef<"EmailCampaign", 'Int'>
+    readonly maxRetries: FieldRef<"EmailCampaign", 'Int'>
+    readonly errorMessage: FieldRef<"EmailCampaign", 'String'>
     readonly createdAt: FieldRef<"EmailCampaign", 'DateTime'>
     readonly updatedAt: FieldRef<"EmailCampaign", 'DateTime'>
   }
@@ -19151,6 +24657,25 @@ export namespace Prisma {
      * Limit how many EmailCampaigns to delete.
      */
     limit?: number
+  }
+
+  /**
+   * EmailCampaign.template
+   */
+  export type EmailCampaign$templateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the EmailTemplate
+     */
+    select?: EmailTemplateSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the EmailTemplate
+     */
+    omit?: EmailTemplateOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: EmailTemplateInclude<ExtArgs> | null
+    where?: EmailTemplateWhereInput
   }
 
   /**
@@ -24822,6 +30347,19 @@ export namespace Prisma {
   export type TransactionIsolationLevel = (typeof TransactionIsolationLevel)[keyof typeof TransactionIsolationLevel]
 
 
+  export const WhatsAppConfigScalarFieldEnum: {
+    id: 'id',
+    userId: 'userId',
+    phoneNumberId: 'phoneNumberId',
+    wabaId: 'wabaId',
+    accessToken: 'accessToken',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt'
+  };
+
+  export type WhatsAppConfigScalarFieldEnum = (typeof WhatsAppConfigScalarFieldEnum)[keyof typeof WhatsAppConfigScalarFieldEnum]
+
+
   export const UserScalarFieldEnum: {
     id: 'id',
     name: 'name',
@@ -24831,7 +30369,8 @@ export namespace Prisma {
     password: 'password',
     role: 'role',
     createdAt: 'createdAt',
-    updatedAt: 'updatedAt'
+    updatedAt: 'updatedAt',
+    zernioProfileId: 'zernioProfileId'
   };
 
   export type UserScalarFieldEnum = (typeof UserScalarFieldEnum)[keyof typeof UserScalarFieldEnum]
@@ -24884,6 +30423,9 @@ export namespace Prisma {
     postsPerMonth: 'postsPerMonth',
     platforms: 'platforms',
     aiCredits: 'aiCredits',
+    aiTextLimit: 'aiTextLimit',
+    aiImageLimit: 'aiImageLimit',
+    paystackPlanCode: 'paystackPlanCode',
     createdAt: 'createdAt'
   };
 
@@ -24897,11 +30439,34 @@ export namespace Prisma {
     status: 'status',
     startDate: 'startDate',
     endDate: 'endDate',
+    postsUsed: 'postsUsed',
+    aiTextUsed: 'aiTextUsed',
+    aiImageUsed: 'aiImageUsed',
+    lastResetAt: 'lastResetAt',
+    paystackSubscriptionCode: 'paystackSubscriptionCode',
+    paystackCustomerCode: 'paystackCustomerCode',
     createdAt: 'createdAt',
     updatedAt: 'updatedAt'
   };
 
   export type SubscriptionScalarFieldEnum = (typeof SubscriptionScalarFieldEnum)[keyof typeof SubscriptionScalarFieldEnum]
+
+
+  export const TransactionScalarFieldEnum: {
+    id: 'id',
+    userId: 'userId',
+    amount: 'amount',
+    currency: 'currency',
+    status: 'status',
+    reference: 'reference',
+    paystackId: 'paystackId',
+    channel: 'channel',
+    paidAt: 'paidAt',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt'
+  };
+
+  export type TransactionScalarFieldEnum = (typeof TransactionScalarFieldEnum)[keyof typeof TransactionScalarFieldEnum]
 
 
   export const SocialAccountScalarFieldEnum: {
@@ -25015,9 +30580,50 @@ export namespace Prisma {
   export type ContactGroupScalarFieldEnum = (typeof ContactGroupScalarFieldEnum)[keyof typeof ContactGroupScalarFieldEnum]
 
 
+  export const EmailTemplateScalarFieldEnum: {
+    id: 'id',
+    userId: 'userId',
+    name: 'name',
+    description: 'description',
+    htmlContent: 'htmlContent',
+    designJSON: 'designJSON',
+    category: 'category',
+    thumbnailUrl: 'thumbnailUrl',
+    isPublic: 'isPublic',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt'
+  };
+
+  export type EmailTemplateScalarFieldEnum = (typeof EmailTemplateScalarFieldEnum)[keyof typeof EmailTemplateScalarFieldEnum]
+
+
+  export const ScheduledCampaignScalarFieldEnum: {
+    id: 'id',
+    userId: 'userId',
+    campaignId: 'campaignId',
+    templateId: 'templateId',
+    name: 'name',
+    subject: 'subject',
+    htmlContent: 'htmlContent',
+    frequency: 'frequency',
+    nextRunAt: 'nextRunAt',
+    lastRunAt: 'lastRunAt',
+    sourceType: 'sourceType',
+    sourceData: 'sourceData',
+    isActive: 'isActive',
+    failureCount: 'failureCount',
+    lastError: 'lastError',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt'
+  };
+
+  export type ScheduledCampaignScalarFieldEnum = (typeof ScheduledCampaignScalarFieldEnum)[keyof typeof ScheduledCampaignScalarFieldEnum]
+
+
   export const EmailCampaignScalarFieldEnum: {
     id: 'id',
     userId: 'userId',
+    templateId: 'templateId',
     name: 'name',
     subject: 'subject',
     previewText: 'previewText',
@@ -25026,8 +30632,13 @@ export namespace Prisma {
     status: 'status',
     scheduledAt: 'scheduledAt',
     sentAt: 'sentAt',
+    failedAt: 'failedAt',
     openRate: 'openRate',
     clickRate: 'clickRate',
+    bounceRate: 'bounceRate',
+    retryCount: 'retryCount',
+    maxRetries: 'maxRetries',
+    errorMessage: 'errorMessage',
     createdAt: 'createdAt',
     updatedAt: 'updatedAt'
   };
@@ -25272,6 +30883,34 @@ export namespace Prisma {
 
 
   /**
+   * Reference to a field of type 'TemplateCategory'
+   */
+  export type EnumTemplateCategoryFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'TemplateCategory'>
+    
+
+
+  /**
+   * Reference to a field of type 'TemplateCategory[]'
+   */
+  export type ListEnumTemplateCategoryFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'TemplateCategory[]'>
+    
+
+
+  /**
+   * Reference to a field of type 'AutomationFrequency'
+   */
+  export type EnumAutomationFrequencyFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'AutomationFrequency'>
+    
+
+
+  /**
+   * Reference to a field of type 'AutomationFrequency[]'
+   */
+  export type ListEnumAutomationFrequencyFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'AutomationFrequency[]'>
+    
+
+
+  /**
    * Reference to a field of type 'EmailCampaignStatus'
    */
   export type EnumEmailCampaignStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'EmailCampaignStatus'>
@@ -25288,6 +30927,71 @@ export namespace Prisma {
    */
 
 
+  export type WhatsAppConfigWhereInput = {
+    AND?: WhatsAppConfigWhereInput | WhatsAppConfigWhereInput[]
+    OR?: WhatsAppConfigWhereInput[]
+    NOT?: WhatsAppConfigWhereInput | WhatsAppConfigWhereInput[]
+    id?: StringFilter<"WhatsAppConfig"> | string
+    userId?: StringFilter<"WhatsAppConfig"> | string
+    phoneNumberId?: StringFilter<"WhatsAppConfig"> | string
+    wabaId?: StringFilter<"WhatsAppConfig"> | string
+    accessToken?: StringFilter<"WhatsAppConfig"> | string
+    createdAt?: DateTimeFilter<"WhatsAppConfig"> | Date | string
+    updatedAt?: DateTimeFilter<"WhatsAppConfig"> | Date | string
+    user?: XOR<UserScalarRelationFilter, UserWhereInput>
+  }
+
+  export type WhatsAppConfigOrderByWithRelationInput = {
+    id?: SortOrder
+    userId?: SortOrder
+    phoneNumberId?: SortOrder
+    wabaId?: SortOrder
+    accessToken?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    user?: UserOrderByWithRelationInput
+  }
+
+  export type WhatsAppConfigWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    userId?: string
+    AND?: WhatsAppConfigWhereInput | WhatsAppConfigWhereInput[]
+    OR?: WhatsAppConfigWhereInput[]
+    NOT?: WhatsAppConfigWhereInput | WhatsAppConfigWhereInput[]
+    phoneNumberId?: StringFilter<"WhatsAppConfig"> | string
+    wabaId?: StringFilter<"WhatsAppConfig"> | string
+    accessToken?: StringFilter<"WhatsAppConfig"> | string
+    createdAt?: DateTimeFilter<"WhatsAppConfig"> | Date | string
+    updatedAt?: DateTimeFilter<"WhatsAppConfig"> | Date | string
+    user?: XOR<UserScalarRelationFilter, UserWhereInput>
+  }, "id" | "userId">
+
+  export type WhatsAppConfigOrderByWithAggregationInput = {
+    id?: SortOrder
+    userId?: SortOrder
+    phoneNumberId?: SortOrder
+    wabaId?: SortOrder
+    accessToken?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    _count?: WhatsAppConfigCountOrderByAggregateInput
+    _max?: WhatsAppConfigMaxOrderByAggregateInput
+    _min?: WhatsAppConfigMinOrderByAggregateInput
+  }
+
+  export type WhatsAppConfigScalarWhereWithAggregatesInput = {
+    AND?: WhatsAppConfigScalarWhereWithAggregatesInput | WhatsAppConfigScalarWhereWithAggregatesInput[]
+    OR?: WhatsAppConfigScalarWhereWithAggregatesInput[]
+    NOT?: WhatsAppConfigScalarWhereWithAggregatesInput | WhatsAppConfigScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"WhatsAppConfig"> | string
+    userId?: StringWithAggregatesFilter<"WhatsAppConfig"> | string
+    phoneNumberId?: StringWithAggregatesFilter<"WhatsAppConfig"> | string
+    wabaId?: StringWithAggregatesFilter<"WhatsAppConfig"> | string
+    accessToken?: StringWithAggregatesFilter<"WhatsAppConfig"> | string
+    createdAt?: DateTimeWithAggregatesFilter<"WhatsAppConfig"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"WhatsAppConfig"> | Date | string
+  }
+
   export type UserWhereInput = {
     AND?: UserWhereInput | UserWhereInput[]
     OR?: UserWhereInput[]
@@ -25301,6 +31005,7 @@ export namespace Prisma {
     role?: EnumRoleFilter<"User"> | $Enums.Role
     createdAt?: DateTimeFilter<"User"> | Date | string
     updatedAt?: DateTimeFilter<"User"> | Date | string
+    zernioProfileId?: StringNullableFilter<"User"> | string | null
     accounts?: AccountListRelationFilter
     sessions?: SessionListRelationFilter
     socialAccounts?: SocialAccountListRelationFilter
@@ -25308,10 +31013,14 @@ export namespace Prisma {
     campaigns?: CampaignListRelationFilter
     audienceGroups?: AudienceGroupListRelationFilter
     emailCampaigns?: EmailCampaignListRelationFilter
+    emailTemplates?: EmailTemplateListRelationFilter
+    scheduledCampaigns?: ScheduledCampaignListRelationFilter
     media?: MediaListRelationFilter
     analytics?: AnalyticsListRelationFilter
     notifications?: NotificationListRelationFilter
     subscription?: XOR<SubscriptionNullableScalarRelationFilter, SubscriptionWhereInput> | null
+    transactions?: TransactionListRelationFilter
+    whatsappConfig?: XOR<WhatsAppConfigNullableScalarRelationFilter, WhatsAppConfigWhereInput> | null
   }
 
   export type UserOrderByWithRelationInput = {
@@ -25324,6 +31033,7 @@ export namespace Prisma {
     role?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
+    zernioProfileId?: SortOrderInput | SortOrder
     accounts?: AccountOrderByRelationAggregateInput
     sessions?: SessionOrderByRelationAggregateInput
     socialAccounts?: SocialAccountOrderByRelationAggregateInput
@@ -25331,15 +31041,20 @@ export namespace Prisma {
     campaigns?: CampaignOrderByRelationAggregateInput
     audienceGroups?: AudienceGroupOrderByRelationAggregateInput
     emailCampaigns?: EmailCampaignOrderByRelationAggregateInput
+    emailTemplates?: EmailTemplateOrderByRelationAggregateInput
+    scheduledCampaigns?: ScheduledCampaignOrderByRelationAggregateInput
     media?: MediaOrderByRelationAggregateInput
     analytics?: AnalyticsOrderByRelationAggregateInput
     notifications?: NotificationOrderByRelationAggregateInput
     subscription?: SubscriptionOrderByWithRelationInput
+    transactions?: TransactionOrderByRelationAggregateInput
+    whatsappConfig?: WhatsAppConfigOrderByWithRelationInput
   }
 
   export type UserWhereUniqueInput = Prisma.AtLeast<{
     id?: string
     email?: string
+    zernioProfileId?: string
     AND?: UserWhereInput | UserWhereInput[]
     OR?: UserWhereInput[]
     NOT?: UserWhereInput | UserWhereInput[]
@@ -25357,11 +31072,15 @@ export namespace Prisma {
     campaigns?: CampaignListRelationFilter
     audienceGroups?: AudienceGroupListRelationFilter
     emailCampaigns?: EmailCampaignListRelationFilter
+    emailTemplates?: EmailTemplateListRelationFilter
+    scheduledCampaigns?: ScheduledCampaignListRelationFilter
     media?: MediaListRelationFilter
     analytics?: AnalyticsListRelationFilter
     notifications?: NotificationListRelationFilter
     subscription?: XOR<SubscriptionNullableScalarRelationFilter, SubscriptionWhereInput> | null
-  }, "id" | "email">
+    transactions?: TransactionListRelationFilter
+    whatsappConfig?: XOR<WhatsAppConfigNullableScalarRelationFilter, WhatsAppConfigWhereInput> | null
+  }, "id" | "email" | "zernioProfileId">
 
   export type UserOrderByWithAggregationInput = {
     id?: SortOrder
@@ -25373,6 +31092,7 @@ export namespace Prisma {
     role?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
+    zernioProfileId?: SortOrderInput | SortOrder
     _count?: UserCountOrderByAggregateInput
     _max?: UserMaxOrderByAggregateInput
     _min?: UserMinOrderByAggregateInput
@@ -25391,6 +31111,7 @@ export namespace Prisma {
     role?: EnumRoleWithAggregatesFilter<"User"> | $Enums.Role
     createdAt?: DateTimeWithAggregatesFilter<"User"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"User"> | Date | string
+    zernioProfileId?: StringNullableWithAggregatesFilter<"User"> | string | null
   }
 
   export type AccountWhereInput = {
@@ -25596,6 +31317,9 @@ export namespace Prisma {
     postsPerMonth?: IntFilter<"Plan"> | number
     platforms?: IntFilter<"Plan"> | number
     aiCredits?: IntFilter<"Plan"> | number
+    aiTextLimit?: IntFilter<"Plan"> | number
+    aiImageLimit?: IntFilter<"Plan"> | number
+    paystackPlanCode?: StringNullableFilter<"Plan"> | string | null
     createdAt?: DateTimeFilter<"Plan"> | Date | string
     subscriptions?: SubscriptionListRelationFilter
   }
@@ -25609,6 +31333,9 @@ export namespace Prisma {
     postsPerMonth?: SortOrder
     platforms?: SortOrder
     aiCredits?: SortOrder
+    aiTextLimit?: SortOrder
+    aiImageLimit?: SortOrder
+    paystackPlanCode?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     subscriptions?: SubscriptionOrderByRelationAggregateInput
   }
@@ -25625,6 +31352,9 @@ export namespace Prisma {
     postsPerMonth?: IntFilter<"Plan"> | number
     platforms?: IntFilter<"Plan"> | number
     aiCredits?: IntFilter<"Plan"> | number
+    aiTextLimit?: IntFilter<"Plan"> | number
+    aiImageLimit?: IntFilter<"Plan"> | number
+    paystackPlanCode?: StringNullableFilter<"Plan"> | string | null
     createdAt?: DateTimeFilter<"Plan"> | Date | string
     subscriptions?: SubscriptionListRelationFilter
   }, "id" | "name">
@@ -25638,6 +31368,9 @@ export namespace Prisma {
     postsPerMonth?: SortOrder
     platforms?: SortOrder
     aiCredits?: SortOrder
+    aiTextLimit?: SortOrder
+    aiImageLimit?: SortOrder
+    paystackPlanCode?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     _count?: PlanCountOrderByAggregateInput
     _avg?: PlanAvgOrderByAggregateInput
@@ -25658,6 +31391,9 @@ export namespace Prisma {
     postsPerMonth?: IntWithAggregatesFilter<"Plan"> | number
     platforms?: IntWithAggregatesFilter<"Plan"> | number
     aiCredits?: IntWithAggregatesFilter<"Plan"> | number
+    aiTextLimit?: IntWithAggregatesFilter<"Plan"> | number
+    aiImageLimit?: IntWithAggregatesFilter<"Plan"> | number
+    paystackPlanCode?: StringNullableWithAggregatesFilter<"Plan"> | string | null
     createdAt?: DateTimeWithAggregatesFilter<"Plan"> | Date | string
   }
 
@@ -25671,6 +31407,12 @@ export namespace Prisma {
     status?: EnumSubscriptionStatusFilter<"Subscription"> | $Enums.SubscriptionStatus
     startDate?: DateTimeFilter<"Subscription"> | Date | string
     endDate?: DateTimeNullableFilter<"Subscription"> | Date | string | null
+    postsUsed?: IntFilter<"Subscription"> | number
+    aiTextUsed?: IntFilter<"Subscription"> | number
+    aiImageUsed?: IntFilter<"Subscription"> | number
+    lastResetAt?: DateTimeFilter<"Subscription"> | Date | string
+    paystackSubscriptionCode?: StringNullableFilter<"Subscription"> | string | null
+    paystackCustomerCode?: StringNullableFilter<"Subscription"> | string | null
     createdAt?: DateTimeFilter<"Subscription"> | Date | string
     updatedAt?: DateTimeFilter<"Subscription"> | Date | string
     user?: XOR<UserScalarRelationFilter, UserWhereInput>
@@ -25684,6 +31426,12 @@ export namespace Prisma {
     status?: SortOrder
     startDate?: SortOrder
     endDate?: SortOrderInput | SortOrder
+    postsUsed?: SortOrder
+    aiTextUsed?: SortOrder
+    aiImageUsed?: SortOrder
+    lastResetAt?: SortOrder
+    paystackSubscriptionCode?: SortOrderInput | SortOrder
+    paystackCustomerCode?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     user?: UserOrderByWithRelationInput
@@ -25700,6 +31448,12 @@ export namespace Prisma {
     status?: EnumSubscriptionStatusFilter<"Subscription"> | $Enums.SubscriptionStatus
     startDate?: DateTimeFilter<"Subscription"> | Date | string
     endDate?: DateTimeNullableFilter<"Subscription"> | Date | string | null
+    postsUsed?: IntFilter<"Subscription"> | number
+    aiTextUsed?: IntFilter<"Subscription"> | number
+    aiImageUsed?: IntFilter<"Subscription"> | number
+    lastResetAt?: DateTimeFilter<"Subscription"> | Date | string
+    paystackSubscriptionCode?: StringNullableFilter<"Subscription"> | string | null
+    paystackCustomerCode?: StringNullableFilter<"Subscription"> | string | null
     createdAt?: DateTimeFilter<"Subscription"> | Date | string
     updatedAt?: DateTimeFilter<"Subscription"> | Date | string
     user?: XOR<UserScalarRelationFilter, UserWhereInput>
@@ -25713,11 +31467,19 @@ export namespace Prisma {
     status?: SortOrder
     startDate?: SortOrder
     endDate?: SortOrderInput | SortOrder
+    postsUsed?: SortOrder
+    aiTextUsed?: SortOrder
+    aiImageUsed?: SortOrder
+    lastResetAt?: SortOrder
+    paystackSubscriptionCode?: SortOrderInput | SortOrder
+    paystackCustomerCode?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     _count?: SubscriptionCountOrderByAggregateInput
+    _avg?: SubscriptionAvgOrderByAggregateInput
     _max?: SubscriptionMaxOrderByAggregateInput
     _min?: SubscriptionMinOrderByAggregateInput
+    _sum?: SubscriptionSumOrderByAggregateInput
   }
 
   export type SubscriptionScalarWhereWithAggregatesInput = {
@@ -25730,8 +31492,101 @@ export namespace Prisma {
     status?: EnumSubscriptionStatusWithAggregatesFilter<"Subscription"> | $Enums.SubscriptionStatus
     startDate?: DateTimeWithAggregatesFilter<"Subscription"> | Date | string
     endDate?: DateTimeNullableWithAggregatesFilter<"Subscription"> | Date | string | null
+    postsUsed?: IntWithAggregatesFilter<"Subscription"> | number
+    aiTextUsed?: IntWithAggregatesFilter<"Subscription"> | number
+    aiImageUsed?: IntWithAggregatesFilter<"Subscription"> | number
+    lastResetAt?: DateTimeWithAggregatesFilter<"Subscription"> | Date | string
+    paystackSubscriptionCode?: StringNullableWithAggregatesFilter<"Subscription"> | string | null
+    paystackCustomerCode?: StringNullableWithAggregatesFilter<"Subscription"> | string | null
     createdAt?: DateTimeWithAggregatesFilter<"Subscription"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"Subscription"> | Date | string
+  }
+
+  export type TransactionWhereInput = {
+    AND?: TransactionWhereInput | TransactionWhereInput[]
+    OR?: TransactionWhereInput[]
+    NOT?: TransactionWhereInput | TransactionWhereInput[]
+    id?: StringFilter<"Transaction"> | string
+    userId?: StringFilter<"Transaction"> | string
+    amount?: FloatFilter<"Transaction"> | number
+    currency?: StringFilter<"Transaction"> | string
+    status?: StringFilter<"Transaction"> | string
+    reference?: StringFilter<"Transaction"> | string
+    paystackId?: StringNullableFilter<"Transaction"> | string | null
+    channel?: StringNullableFilter<"Transaction"> | string | null
+    paidAt?: DateTimeNullableFilter<"Transaction"> | Date | string | null
+    createdAt?: DateTimeFilter<"Transaction"> | Date | string
+    updatedAt?: DateTimeFilter<"Transaction"> | Date | string
+    user?: XOR<UserScalarRelationFilter, UserWhereInput>
+  }
+
+  export type TransactionOrderByWithRelationInput = {
+    id?: SortOrder
+    userId?: SortOrder
+    amount?: SortOrder
+    currency?: SortOrder
+    status?: SortOrder
+    reference?: SortOrder
+    paystackId?: SortOrderInput | SortOrder
+    channel?: SortOrderInput | SortOrder
+    paidAt?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    user?: UserOrderByWithRelationInput
+  }
+
+  export type TransactionWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    reference?: string
+    AND?: TransactionWhereInput | TransactionWhereInput[]
+    OR?: TransactionWhereInput[]
+    NOT?: TransactionWhereInput | TransactionWhereInput[]
+    userId?: StringFilter<"Transaction"> | string
+    amount?: FloatFilter<"Transaction"> | number
+    currency?: StringFilter<"Transaction"> | string
+    status?: StringFilter<"Transaction"> | string
+    paystackId?: StringNullableFilter<"Transaction"> | string | null
+    channel?: StringNullableFilter<"Transaction"> | string | null
+    paidAt?: DateTimeNullableFilter<"Transaction"> | Date | string | null
+    createdAt?: DateTimeFilter<"Transaction"> | Date | string
+    updatedAt?: DateTimeFilter<"Transaction"> | Date | string
+    user?: XOR<UserScalarRelationFilter, UserWhereInput>
+  }, "id" | "reference">
+
+  export type TransactionOrderByWithAggregationInput = {
+    id?: SortOrder
+    userId?: SortOrder
+    amount?: SortOrder
+    currency?: SortOrder
+    status?: SortOrder
+    reference?: SortOrder
+    paystackId?: SortOrderInput | SortOrder
+    channel?: SortOrderInput | SortOrder
+    paidAt?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    _count?: TransactionCountOrderByAggregateInput
+    _avg?: TransactionAvgOrderByAggregateInput
+    _max?: TransactionMaxOrderByAggregateInput
+    _min?: TransactionMinOrderByAggregateInput
+    _sum?: TransactionSumOrderByAggregateInput
+  }
+
+  export type TransactionScalarWhereWithAggregatesInput = {
+    AND?: TransactionScalarWhereWithAggregatesInput | TransactionScalarWhereWithAggregatesInput[]
+    OR?: TransactionScalarWhereWithAggregatesInput[]
+    NOT?: TransactionScalarWhereWithAggregatesInput | TransactionScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"Transaction"> | string
+    userId?: StringWithAggregatesFilter<"Transaction"> | string
+    amount?: FloatWithAggregatesFilter<"Transaction"> | number
+    currency?: StringWithAggregatesFilter<"Transaction"> | string
+    status?: StringWithAggregatesFilter<"Transaction"> | string
+    reference?: StringWithAggregatesFilter<"Transaction"> | string
+    paystackId?: StringNullableWithAggregatesFilter<"Transaction"> | string | null
+    channel?: StringNullableWithAggregatesFilter<"Transaction"> | string | null
+    paidAt?: DateTimeNullableWithAggregatesFilter<"Transaction"> | Date | string | null
+    createdAt?: DateTimeWithAggregatesFilter<"Transaction"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"Transaction"> | Date | string
   }
 
   export type SocialAccountWhereInput = {
@@ -26321,12 +32176,218 @@ export namespace Prisma {
     groupId?: StringWithAggregatesFilter<"ContactGroup"> | string
   }
 
+  export type EmailTemplateWhereInput = {
+    AND?: EmailTemplateWhereInput | EmailTemplateWhereInput[]
+    OR?: EmailTemplateWhereInput[]
+    NOT?: EmailTemplateWhereInput | EmailTemplateWhereInput[]
+    id?: StringFilter<"EmailTemplate"> | string
+    userId?: StringFilter<"EmailTemplate"> | string
+    name?: StringFilter<"EmailTemplate"> | string
+    description?: StringNullableFilter<"EmailTemplate"> | string | null
+    htmlContent?: StringFilter<"EmailTemplate"> | string
+    designJSON?: StringNullableFilter<"EmailTemplate"> | string | null
+    category?: EnumTemplateCategoryFilter<"EmailTemplate"> | $Enums.TemplateCategory
+    thumbnailUrl?: StringNullableFilter<"EmailTemplate"> | string | null
+    isPublic?: BoolFilter<"EmailTemplate"> | boolean
+    createdAt?: DateTimeFilter<"EmailTemplate"> | Date | string
+    updatedAt?: DateTimeFilter<"EmailTemplate"> | Date | string
+    user?: XOR<UserScalarRelationFilter, UserWhereInput>
+    campaigns?: EmailCampaignListRelationFilter
+  }
+
+  export type EmailTemplateOrderByWithRelationInput = {
+    id?: SortOrder
+    userId?: SortOrder
+    name?: SortOrder
+    description?: SortOrderInput | SortOrder
+    htmlContent?: SortOrder
+    designJSON?: SortOrderInput | SortOrder
+    category?: SortOrder
+    thumbnailUrl?: SortOrderInput | SortOrder
+    isPublic?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    user?: UserOrderByWithRelationInput
+    campaigns?: EmailCampaignOrderByRelationAggregateInput
+  }
+
+  export type EmailTemplateWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    AND?: EmailTemplateWhereInput | EmailTemplateWhereInput[]
+    OR?: EmailTemplateWhereInput[]
+    NOT?: EmailTemplateWhereInput | EmailTemplateWhereInput[]
+    userId?: StringFilter<"EmailTemplate"> | string
+    name?: StringFilter<"EmailTemplate"> | string
+    description?: StringNullableFilter<"EmailTemplate"> | string | null
+    htmlContent?: StringFilter<"EmailTemplate"> | string
+    designJSON?: StringNullableFilter<"EmailTemplate"> | string | null
+    category?: EnumTemplateCategoryFilter<"EmailTemplate"> | $Enums.TemplateCategory
+    thumbnailUrl?: StringNullableFilter<"EmailTemplate"> | string | null
+    isPublic?: BoolFilter<"EmailTemplate"> | boolean
+    createdAt?: DateTimeFilter<"EmailTemplate"> | Date | string
+    updatedAt?: DateTimeFilter<"EmailTemplate"> | Date | string
+    user?: XOR<UserScalarRelationFilter, UserWhereInput>
+    campaigns?: EmailCampaignListRelationFilter
+  }, "id">
+
+  export type EmailTemplateOrderByWithAggregationInput = {
+    id?: SortOrder
+    userId?: SortOrder
+    name?: SortOrder
+    description?: SortOrderInput | SortOrder
+    htmlContent?: SortOrder
+    designJSON?: SortOrderInput | SortOrder
+    category?: SortOrder
+    thumbnailUrl?: SortOrderInput | SortOrder
+    isPublic?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    _count?: EmailTemplateCountOrderByAggregateInput
+    _max?: EmailTemplateMaxOrderByAggregateInput
+    _min?: EmailTemplateMinOrderByAggregateInput
+  }
+
+  export type EmailTemplateScalarWhereWithAggregatesInput = {
+    AND?: EmailTemplateScalarWhereWithAggregatesInput | EmailTemplateScalarWhereWithAggregatesInput[]
+    OR?: EmailTemplateScalarWhereWithAggregatesInput[]
+    NOT?: EmailTemplateScalarWhereWithAggregatesInput | EmailTemplateScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"EmailTemplate"> | string
+    userId?: StringWithAggregatesFilter<"EmailTemplate"> | string
+    name?: StringWithAggregatesFilter<"EmailTemplate"> | string
+    description?: StringNullableWithAggregatesFilter<"EmailTemplate"> | string | null
+    htmlContent?: StringWithAggregatesFilter<"EmailTemplate"> | string
+    designJSON?: StringNullableWithAggregatesFilter<"EmailTemplate"> | string | null
+    category?: EnumTemplateCategoryWithAggregatesFilter<"EmailTemplate"> | $Enums.TemplateCategory
+    thumbnailUrl?: StringNullableWithAggregatesFilter<"EmailTemplate"> | string | null
+    isPublic?: BoolWithAggregatesFilter<"EmailTemplate"> | boolean
+    createdAt?: DateTimeWithAggregatesFilter<"EmailTemplate"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"EmailTemplate"> | Date | string
+  }
+
+  export type ScheduledCampaignWhereInput = {
+    AND?: ScheduledCampaignWhereInput | ScheduledCampaignWhereInput[]
+    OR?: ScheduledCampaignWhereInput[]
+    NOT?: ScheduledCampaignWhereInput | ScheduledCampaignWhereInput[]
+    id?: StringFilter<"ScheduledCampaign"> | string
+    userId?: StringFilter<"ScheduledCampaign"> | string
+    campaignId?: StringNullableFilter<"ScheduledCampaign"> | string | null
+    templateId?: StringNullableFilter<"ScheduledCampaign"> | string | null
+    name?: StringFilter<"ScheduledCampaign"> | string
+    subject?: StringFilter<"ScheduledCampaign"> | string
+    htmlContent?: StringFilter<"ScheduledCampaign"> | string
+    frequency?: EnumAutomationFrequencyFilter<"ScheduledCampaign"> | $Enums.AutomationFrequency
+    nextRunAt?: DateTimeFilter<"ScheduledCampaign"> | Date | string
+    lastRunAt?: DateTimeNullableFilter<"ScheduledCampaign"> | Date | string | null
+    sourceType?: StringFilter<"ScheduledCampaign"> | string
+    sourceData?: StringNullableFilter<"ScheduledCampaign"> | string | null
+    isActive?: BoolFilter<"ScheduledCampaign"> | boolean
+    failureCount?: IntFilter<"ScheduledCampaign"> | number
+    lastError?: StringNullableFilter<"ScheduledCampaign"> | string | null
+    createdAt?: DateTimeFilter<"ScheduledCampaign"> | Date | string
+    updatedAt?: DateTimeFilter<"ScheduledCampaign"> | Date | string
+    user?: XOR<UserScalarRelationFilter, UserWhereInput>
+  }
+
+  export type ScheduledCampaignOrderByWithRelationInput = {
+    id?: SortOrder
+    userId?: SortOrder
+    campaignId?: SortOrderInput | SortOrder
+    templateId?: SortOrderInput | SortOrder
+    name?: SortOrder
+    subject?: SortOrder
+    htmlContent?: SortOrder
+    frequency?: SortOrder
+    nextRunAt?: SortOrder
+    lastRunAt?: SortOrderInput | SortOrder
+    sourceType?: SortOrder
+    sourceData?: SortOrderInput | SortOrder
+    isActive?: SortOrder
+    failureCount?: SortOrder
+    lastError?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    user?: UserOrderByWithRelationInput
+  }
+
+  export type ScheduledCampaignWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    AND?: ScheduledCampaignWhereInput | ScheduledCampaignWhereInput[]
+    OR?: ScheduledCampaignWhereInput[]
+    NOT?: ScheduledCampaignWhereInput | ScheduledCampaignWhereInput[]
+    userId?: StringFilter<"ScheduledCampaign"> | string
+    campaignId?: StringNullableFilter<"ScheduledCampaign"> | string | null
+    templateId?: StringNullableFilter<"ScheduledCampaign"> | string | null
+    name?: StringFilter<"ScheduledCampaign"> | string
+    subject?: StringFilter<"ScheduledCampaign"> | string
+    htmlContent?: StringFilter<"ScheduledCampaign"> | string
+    frequency?: EnumAutomationFrequencyFilter<"ScheduledCampaign"> | $Enums.AutomationFrequency
+    nextRunAt?: DateTimeFilter<"ScheduledCampaign"> | Date | string
+    lastRunAt?: DateTimeNullableFilter<"ScheduledCampaign"> | Date | string | null
+    sourceType?: StringFilter<"ScheduledCampaign"> | string
+    sourceData?: StringNullableFilter<"ScheduledCampaign"> | string | null
+    isActive?: BoolFilter<"ScheduledCampaign"> | boolean
+    failureCount?: IntFilter<"ScheduledCampaign"> | number
+    lastError?: StringNullableFilter<"ScheduledCampaign"> | string | null
+    createdAt?: DateTimeFilter<"ScheduledCampaign"> | Date | string
+    updatedAt?: DateTimeFilter<"ScheduledCampaign"> | Date | string
+    user?: XOR<UserScalarRelationFilter, UserWhereInput>
+  }, "id">
+
+  export type ScheduledCampaignOrderByWithAggregationInput = {
+    id?: SortOrder
+    userId?: SortOrder
+    campaignId?: SortOrderInput | SortOrder
+    templateId?: SortOrderInput | SortOrder
+    name?: SortOrder
+    subject?: SortOrder
+    htmlContent?: SortOrder
+    frequency?: SortOrder
+    nextRunAt?: SortOrder
+    lastRunAt?: SortOrderInput | SortOrder
+    sourceType?: SortOrder
+    sourceData?: SortOrderInput | SortOrder
+    isActive?: SortOrder
+    failureCount?: SortOrder
+    lastError?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    _count?: ScheduledCampaignCountOrderByAggregateInput
+    _avg?: ScheduledCampaignAvgOrderByAggregateInput
+    _max?: ScheduledCampaignMaxOrderByAggregateInput
+    _min?: ScheduledCampaignMinOrderByAggregateInput
+    _sum?: ScheduledCampaignSumOrderByAggregateInput
+  }
+
+  export type ScheduledCampaignScalarWhereWithAggregatesInput = {
+    AND?: ScheduledCampaignScalarWhereWithAggregatesInput | ScheduledCampaignScalarWhereWithAggregatesInput[]
+    OR?: ScheduledCampaignScalarWhereWithAggregatesInput[]
+    NOT?: ScheduledCampaignScalarWhereWithAggregatesInput | ScheduledCampaignScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"ScheduledCampaign"> | string
+    userId?: StringWithAggregatesFilter<"ScheduledCampaign"> | string
+    campaignId?: StringNullableWithAggregatesFilter<"ScheduledCampaign"> | string | null
+    templateId?: StringNullableWithAggregatesFilter<"ScheduledCampaign"> | string | null
+    name?: StringWithAggregatesFilter<"ScheduledCampaign"> | string
+    subject?: StringWithAggregatesFilter<"ScheduledCampaign"> | string
+    htmlContent?: StringWithAggregatesFilter<"ScheduledCampaign"> | string
+    frequency?: EnumAutomationFrequencyWithAggregatesFilter<"ScheduledCampaign"> | $Enums.AutomationFrequency
+    nextRunAt?: DateTimeWithAggregatesFilter<"ScheduledCampaign"> | Date | string
+    lastRunAt?: DateTimeNullableWithAggregatesFilter<"ScheduledCampaign"> | Date | string | null
+    sourceType?: StringWithAggregatesFilter<"ScheduledCampaign"> | string
+    sourceData?: StringNullableWithAggregatesFilter<"ScheduledCampaign"> | string | null
+    isActive?: BoolWithAggregatesFilter<"ScheduledCampaign"> | boolean
+    failureCount?: IntWithAggregatesFilter<"ScheduledCampaign"> | number
+    lastError?: StringNullableWithAggregatesFilter<"ScheduledCampaign"> | string | null
+    createdAt?: DateTimeWithAggregatesFilter<"ScheduledCampaign"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"ScheduledCampaign"> | Date | string
+  }
+
   export type EmailCampaignWhereInput = {
     AND?: EmailCampaignWhereInput | EmailCampaignWhereInput[]
     OR?: EmailCampaignWhereInput[]
     NOT?: EmailCampaignWhereInput | EmailCampaignWhereInput[]
     id?: StringFilter<"EmailCampaign"> | string
     userId?: StringFilter<"EmailCampaign"> | string
+    templateId?: StringNullableFilter<"EmailCampaign"> | string | null
     name?: StringFilter<"EmailCampaign"> | string
     subject?: StringFilter<"EmailCampaign"> | string
     previewText?: StringNullableFilter<"EmailCampaign"> | string | null
@@ -26335,17 +32396,24 @@ export namespace Prisma {
     status?: EnumEmailCampaignStatusFilter<"EmailCampaign"> | $Enums.EmailCampaignStatus
     scheduledAt?: DateTimeNullableFilter<"EmailCampaign"> | Date | string | null
     sentAt?: DateTimeNullableFilter<"EmailCampaign"> | Date | string | null
+    failedAt?: DateTimeNullableFilter<"EmailCampaign"> | Date | string | null
     openRate?: FloatFilter<"EmailCampaign"> | number
     clickRate?: FloatFilter<"EmailCampaign"> | number
+    bounceRate?: FloatFilter<"EmailCampaign"> | number
+    retryCount?: IntFilter<"EmailCampaign"> | number
+    maxRetries?: IntFilter<"EmailCampaign"> | number
+    errorMessage?: StringNullableFilter<"EmailCampaign"> | string | null
     createdAt?: DateTimeFilter<"EmailCampaign"> | Date | string
     updatedAt?: DateTimeFilter<"EmailCampaign"> | Date | string
     user?: XOR<UserScalarRelationFilter, UserWhereInput>
+    template?: XOR<EmailTemplateNullableScalarRelationFilter, EmailTemplateWhereInput> | null
     recipients?: EmailCampaignRecipientListRelationFilter
   }
 
   export type EmailCampaignOrderByWithRelationInput = {
     id?: SortOrder
     userId?: SortOrder
+    templateId?: SortOrderInput | SortOrder
     name?: SortOrder
     subject?: SortOrder
     previewText?: SortOrderInput | SortOrder
@@ -26354,11 +32422,17 @@ export namespace Prisma {
     status?: SortOrder
     scheduledAt?: SortOrderInput | SortOrder
     sentAt?: SortOrderInput | SortOrder
+    failedAt?: SortOrderInput | SortOrder
     openRate?: SortOrder
     clickRate?: SortOrder
+    bounceRate?: SortOrder
+    retryCount?: SortOrder
+    maxRetries?: SortOrder
+    errorMessage?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     user?: UserOrderByWithRelationInput
+    template?: EmailTemplateOrderByWithRelationInput
     recipients?: EmailCampaignRecipientOrderByRelationAggregateInput
   }
 
@@ -26368,6 +32442,7 @@ export namespace Prisma {
     OR?: EmailCampaignWhereInput[]
     NOT?: EmailCampaignWhereInput | EmailCampaignWhereInput[]
     userId?: StringFilter<"EmailCampaign"> | string
+    templateId?: StringNullableFilter<"EmailCampaign"> | string | null
     name?: StringFilter<"EmailCampaign"> | string
     subject?: StringFilter<"EmailCampaign"> | string
     previewText?: StringNullableFilter<"EmailCampaign"> | string | null
@@ -26376,17 +32451,24 @@ export namespace Prisma {
     status?: EnumEmailCampaignStatusFilter<"EmailCampaign"> | $Enums.EmailCampaignStatus
     scheduledAt?: DateTimeNullableFilter<"EmailCampaign"> | Date | string | null
     sentAt?: DateTimeNullableFilter<"EmailCampaign"> | Date | string | null
+    failedAt?: DateTimeNullableFilter<"EmailCampaign"> | Date | string | null
     openRate?: FloatFilter<"EmailCampaign"> | number
     clickRate?: FloatFilter<"EmailCampaign"> | number
+    bounceRate?: FloatFilter<"EmailCampaign"> | number
+    retryCount?: IntFilter<"EmailCampaign"> | number
+    maxRetries?: IntFilter<"EmailCampaign"> | number
+    errorMessage?: StringNullableFilter<"EmailCampaign"> | string | null
     createdAt?: DateTimeFilter<"EmailCampaign"> | Date | string
     updatedAt?: DateTimeFilter<"EmailCampaign"> | Date | string
     user?: XOR<UserScalarRelationFilter, UserWhereInput>
+    template?: XOR<EmailTemplateNullableScalarRelationFilter, EmailTemplateWhereInput> | null
     recipients?: EmailCampaignRecipientListRelationFilter
   }, "id">
 
   export type EmailCampaignOrderByWithAggregationInput = {
     id?: SortOrder
     userId?: SortOrder
+    templateId?: SortOrderInput | SortOrder
     name?: SortOrder
     subject?: SortOrder
     previewText?: SortOrderInput | SortOrder
@@ -26395,8 +32477,13 @@ export namespace Prisma {
     status?: SortOrder
     scheduledAt?: SortOrderInput | SortOrder
     sentAt?: SortOrderInput | SortOrder
+    failedAt?: SortOrderInput | SortOrder
     openRate?: SortOrder
     clickRate?: SortOrder
+    bounceRate?: SortOrder
+    retryCount?: SortOrder
+    maxRetries?: SortOrder
+    errorMessage?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     _count?: EmailCampaignCountOrderByAggregateInput
@@ -26412,6 +32499,7 @@ export namespace Prisma {
     NOT?: EmailCampaignScalarWhereWithAggregatesInput | EmailCampaignScalarWhereWithAggregatesInput[]
     id?: StringWithAggregatesFilter<"EmailCampaign"> | string
     userId?: StringWithAggregatesFilter<"EmailCampaign"> | string
+    templateId?: StringNullableWithAggregatesFilter<"EmailCampaign"> | string | null
     name?: StringWithAggregatesFilter<"EmailCampaign"> | string
     subject?: StringWithAggregatesFilter<"EmailCampaign"> | string
     previewText?: StringNullableWithAggregatesFilter<"EmailCampaign"> | string | null
@@ -26420,8 +32508,13 @@ export namespace Prisma {
     status?: EnumEmailCampaignStatusWithAggregatesFilter<"EmailCampaign"> | $Enums.EmailCampaignStatus
     scheduledAt?: DateTimeNullableWithAggregatesFilter<"EmailCampaign"> | Date | string | null
     sentAt?: DateTimeNullableWithAggregatesFilter<"EmailCampaign"> | Date | string | null
+    failedAt?: DateTimeNullableWithAggregatesFilter<"EmailCampaign"> | Date | string | null
     openRate?: FloatWithAggregatesFilter<"EmailCampaign"> | number
     clickRate?: FloatWithAggregatesFilter<"EmailCampaign"> | number
+    bounceRate?: FloatWithAggregatesFilter<"EmailCampaign"> | number
+    retryCount?: IntWithAggregatesFilter<"EmailCampaign"> | number
+    maxRetries?: IntWithAggregatesFilter<"EmailCampaign"> | number
+    errorMessage?: StringNullableWithAggregatesFilter<"EmailCampaign"> | string | null
     createdAt?: DateTimeWithAggregatesFilter<"EmailCampaign"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"EmailCampaign"> | Date | string
   }
@@ -26802,6 +32895,75 @@ export namespace Prisma {
     updatedAt?: DateTimeWithAggregatesFilter<"RateLimit"> | Date | string
   }
 
+  export type WhatsAppConfigCreateInput = {
+    id?: string
+    phoneNumberId: string
+    wabaId: string
+    accessToken: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    user: UserCreateNestedOneWithoutWhatsappConfigInput
+  }
+
+  export type WhatsAppConfigUncheckedCreateInput = {
+    id?: string
+    userId: string
+    phoneNumberId: string
+    wabaId: string
+    accessToken: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type WhatsAppConfigUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    phoneNumberId?: StringFieldUpdateOperationsInput | string
+    wabaId?: StringFieldUpdateOperationsInput | string
+    accessToken?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    user?: UserUpdateOneRequiredWithoutWhatsappConfigNestedInput
+  }
+
+  export type WhatsAppConfigUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    userId?: StringFieldUpdateOperationsInput | string
+    phoneNumberId?: StringFieldUpdateOperationsInput | string
+    wabaId?: StringFieldUpdateOperationsInput | string
+    accessToken?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type WhatsAppConfigCreateManyInput = {
+    id?: string
+    userId: string
+    phoneNumberId: string
+    wabaId: string
+    accessToken: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type WhatsAppConfigUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    phoneNumberId?: StringFieldUpdateOperationsInput | string
+    wabaId?: StringFieldUpdateOperationsInput | string
+    accessToken?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type WhatsAppConfigUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    userId?: StringFieldUpdateOperationsInput | string
+    phoneNumberId?: StringFieldUpdateOperationsInput | string
+    wabaId?: StringFieldUpdateOperationsInput | string
+    accessToken?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
   export type UserCreateInput = {
     id?: string
     name?: string | null
@@ -26812,6 +32974,7 @@ export namespace Prisma {
     role?: $Enums.Role
     createdAt?: Date | string
     updatedAt?: Date | string
+    zernioProfileId?: string | null
     accounts?: AccountCreateNestedManyWithoutUserInput
     sessions?: SessionCreateNestedManyWithoutUserInput
     socialAccounts?: SocialAccountCreateNestedManyWithoutUserInput
@@ -26819,10 +32982,14 @@ export namespace Prisma {
     campaigns?: CampaignCreateNestedManyWithoutUserInput
     audienceGroups?: AudienceGroupCreateNestedManyWithoutUserInput
     emailCampaigns?: EmailCampaignCreateNestedManyWithoutUserInput
+    emailTemplates?: EmailTemplateCreateNestedManyWithoutUserInput
+    scheduledCampaigns?: ScheduledCampaignCreateNestedManyWithoutUserInput
     media?: MediaCreateNestedManyWithoutUserInput
     analytics?: AnalyticsCreateNestedManyWithoutUserInput
     notifications?: NotificationCreateNestedManyWithoutUserInput
     subscription?: SubscriptionCreateNestedOneWithoutUserInput
+    transactions?: TransactionCreateNestedManyWithoutUserInput
+    whatsappConfig?: WhatsAppConfigCreateNestedOneWithoutUserInput
   }
 
   export type UserUncheckedCreateInput = {
@@ -26835,6 +33002,7 @@ export namespace Prisma {
     role?: $Enums.Role
     createdAt?: Date | string
     updatedAt?: Date | string
+    zernioProfileId?: string | null
     accounts?: AccountUncheckedCreateNestedManyWithoutUserInput
     sessions?: SessionUncheckedCreateNestedManyWithoutUserInput
     socialAccounts?: SocialAccountUncheckedCreateNestedManyWithoutUserInput
@@ -26842,10 +33010,14 @@ export namespace Prisma {
     campaigns?: CampaignUncheckedCreateNestedManyWithoutUserInput
     audienceGroups?: AudienceGroupUncheckedCreateNestedManyWithoutUserInput
     emailCampaigns?: EmailCampaignUncheckedCreateNestedManyWithoutUserInput
+    emailTemplates?: EmailTemplateUncheckedCreateNestedManyWithoutUserInput
+    scheduledCampaigns?: ScheduledCampaignUncheckedCreateNestedManyWithoutUserInput
     media?: MediaUncheckedCreateNestedManyWithoutUserInput
     analytics?: AnalyticsUncheckedCreateNestedManyWithoutUserInput
     notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
     subscription?: SubscriptionUncheckedCreateNestedOneWithoutUserInput
+    transactions?: TransactionUncheckedCreateNestedManyWithoutUserInput
+    whatsappConfig?: WhatsAppConfigUncheckedCreateNestedOneWithoutUserInput
   }
 
   export type UserUpdateInput = {
@@ -26858,6 +33030,7 @@ export namespace Prisma {
     role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    zernioProfileId?: NullableStringFieldUpdateOperationsInput | string | null
     accounts?: AccountUpdateManyWithoutUserNestedInput
     sessions?: SessionUpdateManyWithoutUserNestedInput
     socialAccounts?: SocialAccountUpdateManyWithoutUserNestedInput
@@ -26865,10 +33038,14 @@ export namespace Prisma {
     campaigns?: CampaignUpdateManyWithoutUserNestedInput
     audienceGroups?: AudienceGroupUpdateManyWithoutUserNestedInput
     emailCampaigns?: EmailCampaignUpdateManyWithoutUserNestedInput
+    emailTemplates?: EmailTemplateUpdateManyWithoutUserNestedInput
+    scheduledCampaigns?: ScheduledCampaignUpdateManyWithoutUserNestedInput
     media?: MediaUpdateManyWithoutUserNestedInput
     analytics?: AnalyticsUpdateManyWithoutUserNestedInput
     notifications?: NotificationUpdateManyWithoutUserNestedInput
     subscription?: SubscriptionUpdateOneWithoutUserNestedInput
+    transactions?: TransactionUpdateManyWithoutUserNestedInput
+    whatsappConfig?: WhatsAppConfigUpdateOneWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateInput = {
@@ -26881,6 +33058,7 @@ export namespace Prisma {
     role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    zernioProfileId?: NullableStringFieldUpdateOperationsInput | string | null
     accounts?: AccountUncheckedUpdateManyWithoutUserNestedInput
     sessions?: SessionUncheckedUpdateManyWithoutUserNestedInput
     socialAccounts?: SocialAccountUncheckedUpdateManyWithoutUserNestedInput
@@ -26888,10 +33066,14 @@ export namespace Prisma {
     campaigns?: CampaignUncheckedUpdateManyWithoutUserNestedInput
     audienceGroups?: AudienceGroupUncheckedUpdateManyWithoutUserNestedInput
     emailCampaigns?: EmailCampaignUncheckedUpdateManyWithoutUserNestedInput
+    emailTemplates?: EmailTemplateUncheckedUpdateManyWithoutUserNestedInput
+    scheduledCampaigns?: ScheduledCampaignUncheckedUpdateManyWithoutUserNestedInput
     media?: MediaUncheckedUpdateManyWithoutUserNestedInput
     analytics?: AnalyticsUncheckedUpdateManyWithoutUserNestedInput
     notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
     subscription?: SubscriptionUncheckedUpdateOneWithoutUserNestedInput
+    transactions?: TransactionUncheckedUpdateManyWithoutUserNestedInput
+    whatsappConfig?: WhatsAppConfigUncheckedUpdateOneWithoutUserNestedInput
   }
 
   export type UserCreateManyInput = {
@@ -26904,6 +33086,7 @@ export namespace Prisma {
     role?: $Enums.Role
     createdAt?: Date | string
     updatedAt?: Date | string
+    zernioProfileId?: string | null
   }
 
   export type UserUpdateManyMutationInput = {
@@ -26916,6 +33099,7 @@ export namespace Prisma {
     role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    zernioProfileId?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type UserUncheckedUpdateManyInput = {
@@ -26928,6 +33112,7 @@ export namespace Prisma {
     role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    zernioProfileId?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type AccountCreateInput = {
@@ -27139,7 +33324,10 @@ export namespace Prisma {
     features?: PlanCreatefeaturesInput | string[]
     postsPerMonth: number
     platforms: number
-    aiCredits: number
+    aiCredits?: number
+    aiTextLimit?: number
+    aiImageLimit?: number
+    paystackPlanCode?: string | null
     createdAt?: Date | string
     subscriptions?: SubscriptionCreateNestedManyWithoutPlanInput
   }
@@ -27152,7 +33340,10 @@ export namespace Prisma {
     features?: PlanCreatefeaturesInput | string[]
     postsPerMonth: number
     platforms: number
-    aiCredits: number
+    aiCredits?: number
+    aiTextLimit?: number
+    aiImageLimit?: number
+    paystackPlanCode?: string | null
     createdAt?: Date | string
     subscriptions?: SubscriptionUncheckedCreateNestedManyWithoutPlanInput
   }
@@ -27166,6 +33357,9 @@ export namespace Prisma {
     postsPerMonth?: IntFieldUpdateOperationsInput | number
     platforms?: IntFieldUpdateOperationsInput | number
     aiCredits?: IntFieldUpdateOperationsInput | number
+    aiTextLimit?: IntFieldUpdateOperationsInput | number
+    aiImageLimit?: IntFieldUpdateOperationsInput | number
+    paystackPlanCode?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     subscriptions?: SubscriptionUpdateManyWithoutPlanNestedInput
   }
@@ -27179,6 +33373,9 @@ export namespace Prisma {
     postsPerMonth?: IntFieldUpdateOperationsInput | number
     platforms?: IntFieldUpdateOperationsInput | number
     aiCredits?: IntFieldUpdateOperationsInput | number
+    aiTextLimit?: IntFieldUpdateOperationsInput | number
+    aiImageLimit?: IntFieldUpdateOperationsInput | number
+    paystackPlanCode?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     subscriptions?: SubscriptionUncheckedUpdateManyWithoutPlanNestedInput
   }
@@ -27191,7 +33388,10 @@ export namespace Prisma {
     features?: PlanCreatefeaturesInput | string[]
     postsPerMonth: number
     platforms: number
-    aiCredits: number
+    aiCredits?: number
+    aiTextLimit?: number
+    aiImageLimit?: number
+    paystackPlanCode?: string | null
     createdAt?: Date | string
   }
 
@@ -27204,6 +33404,9 @@ export namespace Prisma {
     postsPerMonth?: IntFieldUpdateOperationsInput | number
     platforms?: IntFieldUpdateOperationsInput | number
     aiCredits?: IntFieldUpdateOperationsInput | number
+    aiTextLimit?: IntFieldUpdateOperationsInput | number
+    aiImageLimit?: IntFieldUpdateOperationsInput | number
+    paystackPlanCode?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
@@ -27216,6 +33419,9 @@ export namespace Prisma {
     postsPerMonth?: IntFieldUpdateOperationsInput | number
     platforms?: IntFieldUpdateOperationsInput | number
     aiCredits?: IntFieldUpdateOperationsInput | number
+    aiTextLimit?: IntFieldUpdateOperationsInput | number
+    aiImageLimit?: IntFieldUpdateOperationsInput | number
+    paystackPlanCode?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
@@ -27224,6 +33430,12 @@ export namespace Prisma {
     status?: $Enums.SubscriptionStatus
     startDate?: Date | string
     endDate?: Date | string | null
+    postsUsed?: number
+    aiTextUsed?: number
+    aiImageUsed?: number
+    lastResetAt?: Date | string
+    paystackSubscriptionCode?: string | null
+    paystackCustomerCode?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     user: UserCreateNestedOneWithoutSubscriptionInput
@@ -27237,6 +33449,12 @@ export namespace Prisma {
     status?: $Enums.SubscriptionStatus
     startDate?: Date | string
     endDate?: Date | string | null
+    postsUsed?: number
+    aiTextUsed?: number
+    aiImageUsed?: number
+    lastResetAt?: Date | string
+    paystackSubscriptionCode?: string | null
+    paystackCustomerCode?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -27246,6 +33464,12 @@ export namespace Prisma {
     status?: EnumSubscriptionStatusFieldUpdateOperationsInput | $Enums.SubscriptionStatus
     startDate?: DateTimeFieldUpdateOperationsInput | Date | string
     endDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    postsUsed?: IntFieldUpdateOperationsInput | number
+    aiTextUsed?: IntFieldUpdateOperationsInput | number
+    aiImageUsed?: IntFieldUpdateOperationsInput | number
+    lastResetAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    paystackSubscriptionCode?: NullableStringFieldUpdateOperationsInput | string | null
+    paystackCustomerCode?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     user?: UserUpdateOneRequiredWithoutSubscriptionNestedInput
@@ -27259,6 +33483,12 @@ export namespace Prisma {
     status?: EnumSubscriptionStatusFieldUpdateOperationsInput | $Enums.SubscriptionStatus
     startDate?: DateTimeFieldUpdateOperationsInput | Date | string
     endDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    postsUsed?: IntFieldUpdateOperationsInput | number
+    aiTextUsed?: IntFieldUpdateOperationsInput | number
+    aiImageUsed?: IntFieldUpdateOperationsInput | number
+    lastResetAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    paystackSubscriptionCode?: NullableStringFieldUpdateOperationsInput | string | null
+    paystackCustomerCode?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -27270,6 +33500,12 @@ export namespace Prisma {
     status?: $Enums.SubscriptionStatus
     startDate?: Date | string
     endDate?: Date | string | null
+    postsUsed?: number
+    aiTextUsed?: number
+    aiImageUsed?: number
+    lastResetAt?: Date | string
+    paystackSubscriptionCode?: string | null
+    paystackCustomerCode?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -27279,6 +33515,12 @@ export namespace Prisma {
     status?: EnumSubscriptionStatusFieldUpdateOperationsInput | $Enums.SubscriptionStatus
     startDate?: DateTimeFieldUpdateOperationsInput | Date | string
     endDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    postsUsed?: IntFieldUpdateOperationsInput | number
+    aiTextUsed?: IntFieldUpdateOperationsInput | number
+    aiImageUsed?: IntFieldUpdateOperationsInput | number
+    lastResetAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    paystackSubscriptionCode?: NullableStringFieldUpdateOperationsInput | string | null
+    paystackCustomerCode?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -27290,6 +33532,109 @@ export namespace Prisma {
     status?: EnumSubscriptionStatusFieldUpdateOperationsInput | $Enums.SubscriptionStatus
     startDate?: DateTimeFieldUpdateOperationsInput | Date | string
     endDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    postsUsed?: IntFieldUpdateOperationsInput | number
+    aiTextUsed?: IntFieldUpdateOperationsInput | number
+    aiImageUsed?: IntFieldUpdateOperationsInput | number
+    lastResetAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    paystackSubscriptionCode?: NullableStringFieldUpdateOperationsInput | string | null
+    paystackCustomerCode?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type TransactionCreateInput = {
+    id?: string
+    amount: number
+    currency?: string
+    status: string
+    reference: string
+    paystackId?: string | null
+    channel?: string | null
+    paidAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    user: UserCreateNestedOneWithoutTransactionsInput
+  }
+
+  export type TransactionUncheckedCreateInput = {
+    id?: string
+    userId: string
+    amount: number
+    currency?: string
+    status: string
+    reference: string
+    paystackId?: string | null
+    channel?: string | null
+    paidAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type TransactionUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    amount?: FloatFieldUpdateOperationsInput | number
+    currency?: StringFieldUpdateOperationsInput | string
+    status?: StringFieldUpdateOperationsInput | string
+    reference?: StringFieldUpdateOperationsInput | string
+    paystackId?: NullableStringFieldUpdateOperationsInput | string | null
+    channel?: NullableStringFieldUpdateOperationsInput | string | null
+    paidAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    user?: UserUpdateOneRequiredWithoutTransactionsNestedInput
+  }
+
+  export type TransactionUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    userId?: StringFieldUpdateOperationsInput | string
+    amount?: FloatFieldUpdateOperationsInput | number
+    currency?: StringFieldUpdateOperationsInput | string
+    status?: StringFieldUpdateOperationsInput | string
+    reference?: StringFieldUpdateOperationsInput | string
+    paystackId?: NullableStringFieldUpdateOperationsInput | string | null
+    channel?: NullableStringFieldUpdateOperationsInput | string | null
+    paidAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type TransactionCreateManyInput = {
+    id?: string
+    userId: string
+    amount: number
+    currency?: string
+    status: string
+    reference: string
+    paystackId?: string | null
+    channel?: string | null
+    paidAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type TransactionUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    amount?: FloatFieldUpdateOperationsInput | number
+    currency?: StringFieldUpdateOperationsInput | string
+    status?: StringFieldUpdateOperationsInput | string
+    reference?: StringFieldUpdateOperationsInput | string
+    paystackId?: NullableStringFieldUpdateOperationsInput | string | null
+    channel?: NullableStringFieldUpdateOperationsInput | string | null
+    paidAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type TransactionUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    userId?: StringFieldUpdateOperationsInput | string
+    amount?: FloatFieldUpdateOperationsInput | number
+    currency?: StringFieldUpdateOperationsInput | string
+    status?: StringFieldUpdateOperationsInput | string
+    reference?: StringFieldUpdateOperationsInput | string
+    paystackId?: NullableStringFieldUpdateOperationsInput | string | null
+    channel?: NullableStringFieldUpdateOperationsInput | string | null
+    paidAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -27940,6 +34285,246 @@ export namespace Prisma {
     groupId?: StringFieldUpdateOperationsInput | string
   }
 
+  export type EmailTemplateCreateInput = {
+    id?: string
+    name: string
+    description?: string | null
+    htmlContent: string
+    designJSON?: string | null
+    category?: $Enums.TemplateCategory
+    thumbnailUrl?: string | null
+    isPublic?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    user: UserCreateNestedOneWithoutEmailTemplatesInput
+    campaigns?: EmailCampaignCreateNestedManyWithoutTemplateInput
+  }
+
+  export type EmailTemplateUncheckedCreateInput = {
+    id?: string
+    userId: string
+    name: string
+    description?: string | null
+    htmlContent: string
+    designJSON?: string | null
+    category?: $Enums.TemplateCategory
+    thumbnailUrl?: string | null
+    isPublic?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    campaigns?: EmailCampaignUncheckedCreateNestedManyWithoutTemplateInput
+  }
+
+  export type EmailTemplateUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    htmlContent?: StringFieldUpdateOperationsInput | string
+    designJSON?: NullableStringFieldUpdateOperationsInput | string | null
+    category?: EnumTemplateCategoryFieldUpdateOperationsInput | $Enums.TemplateCategory
+    thumbnailUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    isPublic?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    user?: UserUpdateOneRequiredWithoutEmailTemplatesNestedInput
+    campaigns?: EmailCampaignUpdateManyWithoutTemplateNestedInput
+  }
+
+  export type EmailTemplateUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    userId?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    htmlContent?: StringFieldUpdateOperationsInput | string
+    designJSON?: NullableStringFieldUpdateOperationsInput | string | null
+    category?: EnumTemplateCategoryFieldUpdateOperationsInput | $Enums.TemplateCategory
+    thumbnailUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    isPublic?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    campaigns?: EmailCampaignUncheckedUpdateManyWithoutTemplateNestedInput
+  }
+
+  export type EmailTemplateCreateManyInput = {
+    id?: string
+    userId: string
+    name: string
+    description?: string | null
+    htmlContent: string
+    designJSON?: string | null
+    category?: $Enums.TemplateCategory
+    thumbnailUrl?: string | null
+    isPublic?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type EmailTemplateUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    htmlContent?: StringFieldUpdateOperationsInput | string
+    designJSON?: NullableStringFieldUpdateOperationsInput | string | null
+    category?: EnumTemplateCategoryFieldUpdateOperationsInput | $Enums.TemplateCategory
+    thumbnailUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    isPublic?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type EmailTemplateUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    userId?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    htmlContent?: StringFieldUpdateOperationsInput | string
+    designJSON?: NullableStringFieldUpdateOperationsInput | string | null
+    category?: EnumTemplateCategoryFieldUpdateOperationsInput | $Enums.TemplateCategory
+    thumbnailUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    isPublic?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ScheduledCampaignCreateInput = {
+    id?: string
+    campaignId?: string | null
+    templateId?: string | null
+    name: string
+    subject: string
+    htmlContent: string
+    frequency?: $Enums.AutomationFrequency
+    nextRunAt: Date | string
+    lastRunAt?: Date | string | null
+    sourceType: string
+    sourceData?: string | null
+    isActive?: boolean
+    failureCount?: number
+    lastError?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    user: UserCreateNestedOneWithoutScheduledCampaignsInput
+  }
+
+  export type ScheduledCampaignUncheckedCreateInput = {
+    id?: string
+    userId: string
+    campaignId?: string | null
+    templateId?: string | null
+    name: string
+    subject: string
+    htmlContent: string
+    frequency?: $Enums.AutomationFrequency
+    nextRunAt: Date | string
+    lastRunAt?: Date | string | null
+    sourceType: string
+    sourceData?: string | null
+    isActive?: boolean
+    failureCount?: number
+    lastError?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type ScheduledCampaignUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    campaignId?: NullableStringFieldUpdateOperationsInput | string | null
+    templateId?: NullableStringFieldUpdateOperationsInput | string | null
+    name?: StringFieldUpdateOperationsInput | string
+    subject?: StringFieldUpdateOperationsInput | string
+    htmlContent?: StringFieldUpdateOperationsInput | string
+    frequency?: EnumAutomationFrequencyFieldUpdateOperationsInput | $Enums.AutomationFrequency
+    nextRunAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    lastRunAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    sourceType?: StringFieldUpdateOperationsInput | string
+    sourceData?: NullableStringFieldUpdateOperationsInput | string | null
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    failureCount?: IntFieldUpdateOperationsInput | number
+    lastError?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    user?: UserUpdateOneRequiredWithoutScheduledCampaignsNestedInput
+  }
+
+  export type ScheduledCampaignUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    userId?: StringFieldUpdateOperationsInput | string
+    campaignId?: NullableStringFieldUpdateOperationsInput | string | null
+    templateId?: NullableStringFieldUpdateOperationsInput | string | null
+    name?: StringFieldUpdateOperationsInput | string
+    subject?: StringFieldUpdateOperationsInput | string
+    htmlContent?: StringFieldUpdateOperationsInput | string
+    frequency?: EnumAutomationFrequencyFieldUpdateOperationsInput | $Enums.AutomationFrequency
+    nextRunAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    lastRunAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    sourceType?: StringFieldUpdateOperationsInput | string
+    sourceData?: NullableStringFieldUpdateOperationsInput | string | null
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    failureCount?: IntFieldUpdateOperationsInput | number
+    lastError?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ScheduledCampaignCreateManyInput = {
+    id?: string
+    userId: string
+    campaignId?: string | null
+    templateId?: string | null
+    name: string
+    subject: string
+    htmlContent: string
+    frequency?: $Enums.AutomationFrequency
+    nextRunAt: Date | string
+    lastRunAt?: Date | string | null
+    sourceType: string
+    sourceData?: string | null
+    isActive?: boolean
+    failureCount?: number
+    lastError?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type ScheduledCampaignUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    campaignId?: NullableStringFieldUpdateOperationsInput | string | null
+    templateId?: NullableStringFieldUpdateOperationsInput | string | null
+    name?: StringFieldUpdateOperationsInput | string
+    subject?: StringFieldUpdateOperationsInput | string
+    htmlContent?: StringFieldUpdateOperationsInput | string
+    frequency?: EnumAutomationFrequencyFieldUpdateOperationsInput | $Enums.AutomationFrequency
+    nextRunAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    lastRunAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    sourceType?: StringFieldUpdateOperationsInput | string
+    sourceData?: NullableStringFieldUpdateOperationsInput | string | null
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    failureCount?: IntFieldUpdateOperationsInput | number
+    lastError?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ScheduledCampaignUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    userId?: StringFieldUpdateOperationsInput | string
+    campaignId?: NullableStringFieldUpdateOperationsInput | string | null
+    templateId?: NullableStringFieldUpdateOperationsInput | string | null
+    name?: StringFieldUpdateOperationsInput | string
+    subject?: StringFieldUpdateOperationsInput | string
+    htmlContent?: StringFieldUpdateOperationsInput | string
+    frequency?: EnumAutomationFrequencyFieldUpdateOperationsInput | $Enums.AutomationFrequency
+    nextRunAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    lastRunAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    sourceType?: StringFieldUpdateOperationsInput | string
+    sourceData?: NullableStringFieldUpdateOperationsInput | string | null
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    failureCount?: IntFieldUpdateOperationsInput | number
+    lastError?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
   export type EmailCampaignCreateInput = {
     id?: string
     name: string
@@ -27950,17 +34535,24 @@ export namespace Prisma {
     status?: $Enums.EmailCampaignStatus
     scheduledAt?: Date | string | null
     sentAt?: Date | string | null
+    failedAt?: Date | string | null
     openRate?: number
     clickRate?: number
+    bounceRate?: number
+    retryCount?: number
+    maxRetries?: number
+    errorMessage?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     user: UserCreateNestedOneWithoutEmailCampaignsInput
+    template?: EmailTemplateCreateNestedOneWithoutCampaignsInput
     recipients?: EmailCampaignRecipientCreateNestedManyWithoutCampaignInput
   }
 
   export type EmailCampaignUncheckedCreateInput = {
     id?: string
     userId: string
+    templateId?: string | null
     name: string
     subject: string
     previewText?: string | null
@@ -27969,8 +34561,13 @@ export namespace Prisma {
     status?: $Enums.EmailCampaignStatus
     scheduledAt?: Date | string | null
     sentAt?: Date | string | null
+    failedAt?: Date | string | null
     openRate?: number
     clickRate?: number
+    bounceRate?: number
+    retryCount?: number
+    maxRetries?: number
+    errorMessage?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     recipients?: EmailCampaignRecipientUncheckedCreateNestedManyWithoutCampaignInput
@@ -27986,17 +34583,24 @@ export namespace Prisma {
     status?: EnumEmailCampaignStatusFieldUpdateOperationsInput | $Enums.EmailCampaignStatus
     scheduledAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     sentAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    failedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     openRate?: FloatFieldUpdateOperationsInput | number
     clickRate?: FloatFieldUpdateOperationsInput | number
+    bounceRate?: FloatFieldUpdateOperationsInput | number
+    retryCount?: IntFieldUpdateOperationsInput | number
+    maxRetries?: IntFieldUpdateOperationsInput | number
+    errorMessage?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     user?: UserUpdateOneRequiredWithoutEmailCampaignsNestedInput
+    template?: EmailTemplateUpdateOneWithoutCampaignsNestedInput
     recipients?: EmailCampaignRecipientUpdateManyWithoutCampaignNestedInput
   }
 
   export type EmailCampaignUncheckedUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
     userId?: StringFieldUpdateOperationsInput | string
+    templateId?: NullableStringFieldUpdateOperationsInput | string | null
     name?: StringFieldUpdateOperationsInput | string
     subject?: StringFieldUpdateOperationsInput | string
     previewText?: NullableStringFieldUpdateOperationsInput | string | null
@@ -28005,8 +34609,13 @@ export namespace Prisma {
     status?: EnumEmailCampaignStatusFieldUpdateOperationsInput | $Enums.EmailCampaignStatus
     scheduledAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     sentAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    failedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     openRate?: FloatFieldUpdateOperationsInput | number
     clickRate?: FloatFieldUpdateOperationsInput | number
+    bounceRate?: FloatFieldUpdateOperationsInput | number
+    retryCount?: IntFieldUpdateOperationsInput | number
+    maxRetries?: IntFieldUpdateOperationsInput | number
+    errorMessage?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     recipients?: EmailCampaignRecipientUncheckedUpdateManyWithoutCampaignNestedInput
@@ -28015,6 +34624,7 @@ export namespace Prisma {
   export type EmailCampaignCreateManyInput = {
     id?: string
     userId: string
+    templateId?: string | null
     name: string
     subject: string
     previewText?: string | null
@@ -28023,8 +34633,13 @@ export namespace Prisma {
     status?: $Enums.EmailCampaignStatus
     scheduledAt?: Date | string | null
     sentAt?: Date | string | null
+    failedAt?: Date | string | null
     openRate?: number
     clickRate?: number
+    bounceRate?: number
+    retryCount?: number
+    maxRetries?: number
+    errorMessage?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -28039,8 +34654,13 @@ export namespace Prisma {
     status?: EnumEmailCampaignStatusFieldUpdateOperationsInput | $Enums.EmailCampaignStatus
     scheduledAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     sentAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    failedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     openRate?: FloatFieldUpdateOperationsInput | number
     clickRate?: FloatFieldUpdateOperationsInput | number
+    bounceRate?: FloatFieldUpdateOperationsInput | number
+    retryCount?: IntFieldUpdateOperationsInput | number
+    maxRetries?: IntFieldUpdateOperationsInput | number
+    errorMessage?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -28048,6 +34668,7 @@ export namespace Prisma {
   export type EmailCampaignUncheckedUpdateManyInput = {
     id?: StringFieldUpdateOperationsInput | string
     userId?: StringFieldUpdateOperationsInput | string
+    templateId?: NullableStringFieldUpdateOperationsInput | string | null
     name?: StringFieldUpdateOperationsInput | string
     subject?: StringFieldUpdateOperationsInput | string
     previewText?: NullableStringFieldUpdateOperationsInput | string | null
@@ -28056,8 +34677,13 @@ export namespace Prisma {
     status?: EnumEmailCampaignStatusFieldUpdateOperationsInput | $Enums.EmailCampaignStatus
     scheduledAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     sentAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    failedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     openRate?: FloatFieldUpdateOperationsInput | number
     clickRate?: FloatFieldUpdateOperationsInput | number
+    bounceRate?: FloatFieldUpdateOperationsInput | number
+    retryCount?: IntFieldUpdateOperationsInput | number
+    maxRetries?: IntFieldUpdateOperationsInput | number
+    errorMessage?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -28485,6 +35111,84 @@ export namespace Prisma {
     not?: NestedStringFilter<$PrismaModel> | string
   }
 
+  export type DateTimeFilter<$PrismaModel = never> = {
+    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel>
+    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel>
+    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    not?: NestedDateTimeFilter<$PrismaModel> | Date | string
+  }
+
+  export type UserScalarRelationFilter = {
+    is?: UserWhereInput
+    isNot?: UserWhereInput
+  }
+
+  export type WhatsAppConfigCountOrderByAggregateInput = {
+    id?: SortOrder
+    userId?: SortOrder
+    phoneNumberId?: SortOrder
+    wabaId?: SortOrder
+    accessToken?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type WhatsAppConfigMaxOrderByAggregateInput = {
+    id?: SortOrder
+    userId?: SortOrder
+    phoneNumberId?: SortOrder
+    wabaId?: SortOrder
+    accessToken?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type WhatsAppConfigMinOrderByAggregateInput = {
+    id?: SortOrder
+    userId?: SortOrder
+    phoneNumberId?: SortOrder
+    wabaId?: SortOrder
+    accessToken?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type StringWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: string | StringFieldRefInput<$PrismaModel>
+    in?: string[] | ListStringFieldRefInput<$PrismaModel>
+    notIn?: string[] | ListStringFieldRefInput<$PrismaModel>
+    lt?: string | StringFieldRefInput<$PrismaModel>
+    lte?: string | StringFieldRefInput<$PrismaModel>
+    gt?: string | StringFieldRefInput<$PrismaModel>
+    gte?: string | StringFieldRefInput<$PrismaModel>
+    contains?: string | StringFieldRefInput<$PrismaModel>
+    startsWith?: string | StringFieldRefInput<$PrismaModel>
+    endsWith?: string | StringFieldRefInput<$PrismaModel>
+    mode?: QueryMode
+    not?: NestedStringWithAggregatesFilter<$PrismaModel> | string
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedStringFilter<$PrismaModel>
+    _max?: NestedStringFilter<$PrismaModel>
+  }
+
+  export type DateTimeWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel>
+    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel>
+    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    not?: NestedDateTimeWithAggregatesFilter<$PrismaModel> | Date | string
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedDateTimeFilter<$PrismaModel>
+    _max?: NestedDateTimeFilter<$PrismaModel>
+  }
+
   export type StringNullableFilter<$PrismaModel = never> = {
     equals?: string | StringFieldRefInput<$PrismaModel> | null
     in?: string[] | ListStringFieldRefInput<$PrismaModel> | null
@@ -28516,17 +35220,6 @@ export namespace Prisma {
     in?: $Enums.Role[] | ListEnumRoleFieldRefInput<$PrismaModel>
     notIn?: $Enums.Role[] | ListEnumRoleFieldRefInput<$PrismaModel>
     not?: NestedEnumRoleFilter<$PrismaModel> | $Enums.Role
-  }
-
-  export type DateTimeFilter<$PrismaModel = never> = {
-    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel>
-    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel>
-    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    not?: NestedDateTimeFilter<$PrismaModel> | Date | string
   }
 
   export type AccountListRelationFilter = {
@@ -28571,6 +35264,18 @@ export namespace Prisma {
     none?: EmailCampaignWhereInput
   }
 
+  export type EmailTemplateListRelationFilter = {
+    every?: EmailTemplateWhereInput
+    some?: EmailTemplateWhereInput
+    none?: EmailTemplateWhereInput
+  }
+
+  export type ScheduledCampaignListRelationFilter = {
+    every?: ScheduledCampaignWhereInput
+    some?: ScheduledCampaignWhereInput
+    none?: ScheduledCampaignWhereInput
+  }
+
   export type MediaListRelationFilter = {
     every?: MediaWhereInput
     some?: MediaWhereInput
@@ -28592,6 +35297,17 @@ export namespace Prisma {
   export type SubscriptionNullableScalarRelationFilter = {
     is?: SubscriptionWhereInput | null
     isNot?: SubscriptionWhereInput | null
+  }
+
+  export type TransactionListRelationFilter = {
+    every?: TransactionWhereInput
+    some?: TransactionWhereInput
+    none?: TransactionWhereInput
+  }
+
+  export type WhatsAppConfigNullableScalarRelationFilter = {
+    is?: WhatsAppConfigWhereInput | null
+    isNot?: WhatsAppConfigWhereInput | null
   }
 
   export type SortOrderInput = {
@@ -28627,6 +35343,14 @@ export namespace Prisma {
     _count?: SortOrder
   }
 
+  export type EmailTemplateOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type ScheduledCampaignOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
   export type MediaOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
@@ -28636,6 +35360,10 @@ export namespace Prisma {
   }
 
   export type NotificationOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type TransactionOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
 
@@ -28649,6 +35377,7 @@ export namespace Prisma {
     role?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
+    zernioProfileId?: SortOrder
   }
 
   export type UserMaxOrderByAggregateInput = {
@@ -28661,6 +35390,7 @@ export namespace Prisma {
     role?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
+    zernioProfileId?: SortOrder
   }
 
   export type UserMinOrderByAggregateInput = {
@@ -28673,24 +35403,7 @@ export namespace Prisma {
     role?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
-  }
-
-  export type StringWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: string | StringFieldRefInput<$PrismaModel>
-    in?: string[] | ListStringFieldRefInput<$PrismaModel>
-    notIn?: string[] | ListStringFieldRefInput<$PrismaModel>
-    lt?: string | StringFieldRefInput<$PrismaModel>
-    lte?: string | StringFieldRefInput<$PrismaModel>
-    gt?: string | StringFieldRefInput<$PrismaModel>
-    gte?: string | StringFieldRefInput<$PrismaModel>
-    contains?: string | StringFieldRefInput<$PrismaModel>
-    startsWith?: string | StringFieldRefInput<$PrismaModel>
-    endsWith?: string | StringFieldRefInput<$PrismaModel>
-    mode?: QueryMode
-    not?: NestedStringWithAggregatesFilter<$PrismaModel> | string
-    _count?: NestedIntFilter<$PrismaModel>
-    _min?: NestedStringFilter<$PrismaModel>
-    _max?: NestedStringFilter<$PrismaModel>
+    zernioProfileId?: SortOrder
   }
 
   export type StringNullableWithAggregatesFilter<$PrismaModel = never> = {
@@ -28735,20 +35448,6 @@ export namespace Prisma {
     _max?: NestedEnumRoleFilter<$PrismaModel>
   }
 
-  export type DateTimeWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel>
-    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel>
-    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    not?: NestedDateTimeWithAggregatesFilter<$PrismaModel> | Date | string
-    _count?: NestedIntFilter<$PrismaModel>
-    _min?: NestedDateTimeFilter<$PrismaModel>
-    _max?: NestedDateTimeFilter<$PrismaModel>
-  }
-
   export type IntNullableFilter<$PrismaModel = never> = {
     equals?: number | IntFieldRefInput<$PrismaModel> | null
     in?: number[] | ListIntFieldRefInput<$PrismaModel> | null
@@ -28758,11 +35457,6 @@ export namespace Prisma {
     gt?: number | IntFieldRefInput<$PrismaModel>
     gte?: number | IntFieldRefInput<$PrismaModel>
     not?: NestedIntNullableFilter<$PrismaModel> | number | null
-  }
-
-  export type UserScalarRelationFilter = {
-    is?: UserWhereInput
-    isNot?: UserWhereInput
   }
 
   export type AccountProviderProviderAccountIdCompoundUniqueInput = {
@@ -28937,6 +35631,9 @@ export namespace Prisma {
     postsPerMonth?: SortOrder
     platforms?: SortOrder
     aiCredits?: SortOrder
+    aiTextLimit?: SortOrder
+    aiImageLimit?: SortOrder
+    paystackPlanCode?: SortOrder
     createdAt?: SortOrder
   }
 
@@ -28945,6 +35642,8 @@ export namespace Prisma {
     postsPerMonth?: SortOrder
     platforms?: SortOrder
     aiCredits?: SortOrder
+    aiTextLimit?: SortOrder
+    aiImageLimit?: SortOrder
   }
 
   export type PlanMaxOrderByAggregateInput = {
@@ -28955,6 +35654,9 @@ export namespace Prisma {
     postsPerMonth?: SortOrder
     platforms?: SortOrder
     aiCredits?: SortOrder
+    aiTextLimit?: SortOrder
+    aiImageLimit?: SortOrder
+    paystackPlanCode?: SortOrder
     createdAt?: SortOrder
   }
 
@@ -28966,6 +35668,9 @@ export namespace Prisma {
     postsPerMonth?: SortOrder
     platforms?: SortOrder
     aiCredits?: SortOrder
+    aiTextLimit?: SortOrder
+    aiImageLimit?: SortOrder
+    paystackPlanCode?: SortOrder
     createdAt?: SortOrder
   }
 
@@ -28974,6 +35679,8 @@ export namespace Prisma {
     postsPerMonth?: SortOrder
     platforms?: SortOrder
     aiCredits?: SortOrder
+    aiTextLimit?: SortOrder
+    aiImageLimit?: SortOrder
   }
 
   export type FloatWithAggregatesFilter<$PrismaModel = never> = {
@@ -29027,8 +35734,20 @@ export namespace Prisma {
     status?: SortOrder
     startDate?: SortOrder
     endDate?: SortOrder
+    postsUsed?: SortOrder
+    aiTextUsed?: SortOrder
+    aiImageUsed?: SortOrder
+    lastResetAt?: SortOrder
+    paystackSubscriptionCode?: SortOrder
+    paystackCustomerCode?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
+  }
+
+  export type SubscriptionAvgOrderByAggregateInput = {
+    postsUsed?: SortOrder
+    aiTextUsed?: SortOrder
+    aiImageUsed?: SortOrder
   }
 
   export type SubscriptionMaxOrderByAggregateInput = {
@@ -29038,6 +35757,12 @@ export namespace Prisma {
     status?: SortOrder
     startDate?: SortOrder
     endDate?: SortOrder
+    postsUsed?: SortOrder
+    aiTextUsed?: SortOrder
+    aiImageUsed?: SortOrder
+    lastResetAt?: SortOrder
+    paystackSubscriptionCode?: SortOrder
+    paystackCustomerCode?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -29049,8 +35774,20 @@ export namespace Prisma {
     status?: SortOrder
     startDate?: SortOrder
     endDate?: SortOrder
+    postsUsed?: SortOrder
+    aiTextUsed?: SortOrder
+    aiImageUsed?: SortOrder
+    lastResetAt?: SortOrder
+    paystackSubscriptionCode?: SortOrder
+    paystackCustomerCode?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
+  }
+
+  export type SubscriptionSumOrderByAggregateInput = {
+    postsUsed?: SortOrder
+    aiTextUsed?: SortOrder
+    aiImageUsed?: SortOrder
   }
 
   export type EnumSubscriptionStatusWithAggregatesFilter<$PrismaModel = never> = {
@@ -29061,6 +35798,56 @@ export namespace Prisma {
     _count?: NestedIntFilter<$PrismaModel>
     _min?: NestedEnumSubscriptionStatusFilter<$PrismaModel>
     _max?: NestedEnumSubscriptionStatusFilter<$PrismaModel>
+  }
+
+  export type TransactionCountOrderByAggregateInput = {
+    id?: SortOrder
+    userId?: SortOrder
+    amount?: SortOrder
+    currency?: SortOrder
+    status?: SortOrder
+    reference?: SortOrder
+    paystackId?: SortOrder
+    channel?: SortOrder
+    paidAt?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type TransactionAvgOrderByAggregateInput = {
+    amount?: SortOrder
+  }
+
+  export type TransactionMaxOrderByAggregateInput = {
+    id?: SortOrder
+    userId?: SortOrder
+    amount?: SortOrder
+    currency?: SortOrder
+    status?: SortOrder
+    reference?: SortOrder
+    paystackId?: SortOrder
+    channel?: SortOrder
+    paidAt?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type TransactionMinOrderByAggregateInput = {
+    id?: SortOrder
+    userId?: SortOrder
+    amount?: SortOrder
+    currency?: SortOrder
+    status?: SortOrder
+    reference?: SortOrder
+    paystackId?: SortOrder
+    channel?: SortOrder
+    paidAt?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type TransactionSumOrderByAggregateInput = {
+    amount?: SortOrder
   }
 
   export type EnumPlatformFilter<$PrismaModel = never> = {
@@ -29519,6 +36306,150 @@ export namespace Prisma {
     groupId?: SortOrder
   }
 
+  export type EnumTemplateCategoryFilter<$PrismaModel = never> = {
+    equals?: $Enums.TemplateCategory | EnumTemplateCategoryFieldRefInput<$PrismaModel>
+    in?: $Enums.TemplateCategory[] | ListEnumTemplateCategoryFieldRefInput<$PrismaModel>
+    notIn?: $Enums.TemplateCategory[] | ListEnumTemplateCategoryFieldRefInput<$PrismaModel>
+    not?: NestedEnumTemplateCategoryFilter<$PrismaModel> | $Enums.TemplateCategory
+  }
+
+  export type EmailTemplateCountOrderByAggregateInput = {
+    id?: SortOrder
+    userId?: SortOrder
+    name?: SortOrder
+    description?: SortOrder
+    htmlContent?: SortOrder
+    designJSON?: SortOrder
+    category?: SortOrder
+    thumbnailUrl?: SortOrder
+    isPublic?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type EmailTemplateMaxOrderByAggregateInput = {
+    id?: SortOrder
+    userId?: SortOrder
+    name?: SortOrder
+    description?: SortOrder
+    htmlContent?: SortOrder
+    designJSON?: SortOrder
+    category?: SortOrder
+    thumbnailUrl?: SortOrder
+    isPublic?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type EmailTemplateMinOrderByAggregateInput = {
+    id?: SortOrder
+    userId?: SortOrder
+    name?: SortOrder
+    description?: SortOrder
+    htmlContent?: SortOrder
+    designJSON?: SortOrder
+    category?: SortOrder
+    thumbnailUrl?: SortOrder
+    isPublic?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type EnumTemplateCategoryWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.TemplateCategory | EnumTemplateCategoryFieldRefInput<$PrismaModel>
+    in?: $Enums.TemplateCategory[] | ListEnumTemplateCategoryFieldRefInput<$PrismaModel>
+    notIn?: $Enums.TemplateCategory[] | ListEnumTemplateCategoryFieldRefInput<$PrismaModel>
+    not?: NestedEnumTemplateCategoryWithAggregatesFilter<$PrismaModel> | $Enums.TemplateCategory
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumTemplateCategoryFilter<$PrismaModel>
+    _max?: NestedEnumTemplateCategoryFilter<$PrismaModel>
+  }
+
+  export type EnumAutomationFrequencyFilter<$PrismaModel = never> = {
+    equals?: $Enums.AutomationFrequency | EnumAutomationFrequencyFieldRefInput<$PrismaModel>
+    in?: $Enums.AutomationFrequency[] | ListEnumAutomationFrequencyFieldRefInput<$PrismaModel>
+    notIn?: $Enums.AutomationFrequency[] | ListEnumAutomationFrequencyFieldRefInput<$PrismaModel>
+    not?: NestedEnumAutomationFrequencyFilter<$PrismaModel> | $Enums.AutomationFrequency
+  }
+
+  export type ScheduledCampaignCountOrderByAggregateInput = {
+    id?: SortOrder
+    userId?: SortOrder
+    campaignId?: SortOrder
+    templateId?: SortOrder
+    name?: SortOrder
+    subject?: SortOrder
+    htmlContent?: SortOrder
+    frequency?: SortOrder
+    nextRunAt?: SortOrder
+    lastRunAt?: SortOrder
+    sourceType?: SortOrder
+    sourceData?: SortOrder
+    isActive?: SortOrder
+    failureCount?: SortOrder
+    lastError?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type ScheduledCampaignAvgOrderByAggregateInput = {
+    failureCount?: SortOrder
+  }
+
+  export type ScheduledCampaignMaxOrderByAggregateInput = {
+    id?: SortOrder
+    userId?: SortOrder
+    campaignId?: SortOrder
+    templateId?: SortOrder
+    name?: SortOrder
+    subject?: SortOrder
+    htmlContent?: SortOrder
+    frequency?: SortOrder
+    nextRunAt?: SortOrder
+    lastRunAt?: SortOrder
+    sourceType?: SortOrder
+    sourceData?: SortOrder
+    isActive?: SortOrder
+    failureCount?: SortOrder
+    lastError?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type ScheduledCampaignMinOrderByAggregateInput = {
+    id?: SortOrder
+    userId?: SortOrder
+    campaignId?: SortOrder
+    templateId?: SortOrder
+    name?: SortOrder
+    subject?: SortOrder
+    htmlContent?: SortOrder
+    frequency?: SortOrder
+    nextRunAt?: SortOrder
+    lastRunAt?: SortOrder
+    sourceType?: SortOrder
+    sourceData?: SortOrder
+    isActive?: SortOrder
+    failureCount?: SortOrder
+    lastError?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type ScheduledCampaignSumOrderByAggregateInput = {
+    failureCount?: SortOrder
+  }
+
+  export type EnumAutomationFrequencyWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.AutomationFrequency | EnumAutomationFrequencyFieldRefInput<$PrismaModel>
+    in?: $Enums.AutomationFrequency[] | ListEnumAutomationFrequencyFieldRefInput<$PrismaModel>
+    notIn?: $Enums.AutomationFrequency[] | ListEnumAutomationFrequencyFieldRefInput<$PrismaModel>
+    not?: NestedEnumAutomationFrequencyWithAggregatesFilter<$PrismaModel> | $Enums.AutomationFrequency
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumAutomationFrequencyFilter<$PrismaModel>
+    _max?: NestedEnumAutomationFrequencyFilter<$PrismaModel>
+  }
+
   export type EnumEmailCampaignStatusFilter<$PrismaModel = never> = {
     equals?: $Enums.EmailCampaignStatus | EnumEmailCampaignStatusFieldRefInput<$PrismaModel>
     in?: $Enums.EmailCampaignStatus[] | ListEnumEmailCampaignStatusFieldRefInput<$PrismaModel>
@@ -29526,9 +36457,15 @@ export namespace Prisma {
     not?: NestedEnumEmailCampaignStatusFilter<$PrismaModel> | $Enums.EmailCampaignStatus
   }
 
+  export type EmailTemplateNullableScalarRelationFilter = {
+    is?: EmailTemplateWhereInput | null
+    isNot?: EmailTemplateWhereInput | null
+  }
+
   export type EmailCampaignCountOrderByAggregateInput = {
     id?: SortOrder
     userId?: SortOrder
+    templateId?: SortOrder
     name?: SortOrder
     subject?: SortOrder
     previewText?: SortOrder
@@ -29537,8 +36474,13 @@ export namespace Prisma {
     status?: SortOrder
     scheduledAt?: SortOrder
     sentAt?: SortOrder
+    failedAt?: SortOrder
     openRate?: SortOrder
     clickRate?: SortOrder
+    bounceRate?: SortOrder
+    retryCount?: SortOrder
+    maxRetries?: SortOrder
+    errorMessage?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -29546,11 +36488,15 @@ export namespace Prisma {
   export type EmailCampaignAvgOrderByAggregateInput = {
     openRate?: SortOrder
     clickRate?: SortOrder
+    bounceRate?: SortOrder
+    retryCount?: SortOrder
+    maxRetries?: SortOrder
   }
 
   export type EmailCampaignMaxOrderByAggregateInput = {
     id?: SortOrder
     userId?: SortOrder
+    templateId?: SortOrder
     name?: SortOrder
     subject?: SortOrder
     previewText?: SortOrder
@@ -29559,8 +36505,13 @@ export namespace Prisma {
     status?: SortOrder
     scheduledAt?: SortOrder
     sentAt?: SortOrder
+    failedAt?: SortOrder
     openRate?: SortOrder
     clickRate?: SortOrder
+    bounceRate?: SortOrder
+    retryCount?: SortOrder
+    maxRetries?: SortOrder
+    errorMessage?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -29568,6 +36519,7 @@ export namespace Prisma {
   export type EmailCampaignMinOrderByAggregateInput = {
     id?: SortOrder
     userId?: SortOrder
+    templateId?: SortOrder
     name?: SortOrder
     subject?: SortOrder
     previewText?: SortOrder
@@ -29576,8 +36528,13 @@ export namespace Prisma {
     status?: SortOrder
     scheduledAt?: SortOrder
     sentAt?: SortOrder
+    failedAt?: SortOrder
     openRate?: SortOrder
     clickRate?: SortOrder
+    bounceRate?: SortOrder
+    retryCount?: SortOrder
+    maxRetries?: SortOrder
+    errorMessage?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -29585,6 +36542,9 @@ export namespace Prisma {
   export type EmailCampaignSumOrderByAggregateInput = {
     openRate?: SortOrder
     clickRate?: SortOrder
+    bounceRate?: SortOrder
+    retryCount?: SortOrder
+    maxRetries?: SortOrder
   }
 
   export type EnumEmailCampaignStatusWithAggregatesFilter<$PrismaModel = never> = {
@@ -29834,6 +36794,28 @@ export namespace Prisma {
     count?: SortOrder
   }
 
+  export type UserCreateNestedOneWithoutWhatsappConfigInput = {
+    create?: XOR<UserCreateWithoutWhatsappConfigInput, UserUncheckedCreateWithoutWhatsappConfigInput>
+    connectOrCreate?: UserCreateOrConnectWithoutWhatsappConfigInput
+    connect?: UserWhereUniqueInput
+  }
+
+  export type StringFieldUpdateOperationsInput = {
+    set?: string
+  }
+
+  export type DateTimeFieldUpdateOperationsInput = {
+    set?: Date | string
+  }
+
+  export type UserUpdateOneRequiredWithoutWhatsappConfigNestedInput = {
+    create?: XOR<UserCreateWithoutWhatsappConfigInput, UserUncheckedCreateWithoutWhatsappConfigInput>
+    connectOrCreate?: UserCreateOrConnectWithoutWhatsappConfigInput
+    upsert?: UserUpsertWithoutWhatsappConfigInput
+    connect?: UserWhereUniqueInput
+    update?: XOR<XOR<UserUpdateToOneWithWhereWithoutWhatsappConfigInput, UserUpdateWithoutWhatsappConfigInput>, UserUncheckedUpdateWithoutWhatsappConfigInput>
+  }
+
   export type AccountCreateNestedManyWithoutUserInput = {
     create?: XOR<AccountCreateWithoutUserInput, AccountUncheckedCreateWithoutUserInput> | AccountCreateWithoutUserInput[] | AccountUncheckedCreateWithoutUserInput[]
     connectOrCreate?: AccountCreateOrConnectWithoutUserInput | AccountCreateOrConnectWithoutUserInput[]
@@ -29883,6 +36865,20 @@ export namespace Prisma {
     connect?: EmailCampaignWhereUniqueInput | EmailCampaignWhereUniqueInput[]
   }
 
+  export type EmailTemplateCreateNestedManyWithoutUserInput = {
+    create?: XOR<EmailTemplateCreateWithoutUserInput, EmailTemplateUncheckedCreateWithoutUserInput> | EmailTemplateCreateWithoutUserInput[] | EmailTemplateUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: EmailTemplateCreateOrConnectWithoutUserInput | EmailTemplateCreateOrConnectWithoutUserInput[]
+    createMany?: EmailTemplateCreateManyUserInputEnvelope
+    connect?: EmailTemplateWhereUniqueInput | EmailTemplateWhereUniqueInput[]
+  }
+
+  export type ScheduledCampaignCreateNestedManyWithoutUserInput = {
+    create?: XOR<ScheduledCampaignCreateWithoutUserInput, ScheduledCampaignUncheckedCreateWithoutUserInput> | ScheduledCampaignCreateWithoutUserInput[] | ScheduledCampaignUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: ScheduledCampaignCreateOrConnectWithoutUserInput | ScheduledCampaignCreateOrConnectWithoutUserInput[]
+    createMany?: ScheduledCampaignCreateManyUserInputEnvelope
+    connect?: ScheduledCampaignWhereUniqueInput | ScheduledCampaignWhereUniqueInput[]
+  }
+
   export type MediaCreateNestedManyWithoutUserInput = {
     create?: XOR<MediaCreateWithoutUserInput, MediaUncheckedCreateWithoutUserInput> | MediaCreateWithoutUserInput[] | MediaUncheckedCreateWithoutUserInput[]
     connectOrCreate?: MediaCreateOrConnectWithoutUserInput | MediaCreateOrConnectWithoutUserInput[]
@@ -29908,6 +36904,19 @@ export namespace Prisma {
     create?: XOR<SubscriptionCreateWithoutUserInput, SubscriptionUncheckedCreateWithoutUserInput>
     connectOrCreate?: SubscriptionCreateOrConnectWithoutUserInput
     connect?: SubscriptionWhereUniqueInput
+  }
+
+  export type TransactionCreateNestedManyWithoutUserInput = {
+    create?: XOR<TransactionCreateWithoutUserInput, TransactionUncheckedCreateWithoutUserInput> | TransactionCreateWithoutUserInput[] | TransactionUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: TransactionCreateOrConnectWithoutUserInput | TransactionCreateOrConnectWithoutUserInput[]
+    createMany?: TransactionCreateManyUserInputEnvelope
+    connect?: TransactionWhereUniqueInput | TransactionWhereUniqueInput[]
+  }
+
+  export type WhatsAppConfigCreateNestedOneWithoutUserInput = {
+    create?: XOR<WhatsAppConfigCreateWithoutUserInput, WhatsAppConfigUncheckedCreateWithoutUserInput>
+    connectOrCreate?: WhatsAppConfigCreateOrConnectWithoutUserInput
+    connect?: WhatsAppConfigWhereUniqueInput
   }
 
   export type AccountUncheckedCreateNestedManyWithoutUserInput = {
@@ -29959,6 +36968,20 @@ export namespace Prisma {
     connect?: EmailCampaignWhereUniqueInput | EmailCampaignWhereUniqueInput[]
   }
 
+  export type EmailTemplateUncheckedCreateNestedManyWithoutUserInput = {
+    create?: XOR<EmailTemplateCreateWithoutUserInput, EmailTemplateUncheckedCreateWithoutUserInput> | EmailTemplateCreateWithoutUserInput[] | EmailTemplateUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: EmailTemplateCreateOrConnectWithoutUserInput | EmailTemplateCreateOrConnectWithoutUserInput[]
+    createMany?: EmailTemplateCreateManyUserInputEnvelope
+    connect?: EmailTemplateWhereUniqueInput | EmailTemplateWhereUniqueInput[]
+  }
+
+  export type ScheduledCampaignUncheckedCreateNestedManyWithoutUserInput = {
+    create?: XOR<ScheduledCampaignCreateWithoutUserInput, ScheduledCampaignUncheckedCreateWithoutUserInput> | ScheduledCampaignCreateWithoutUserInput[] | ScheduledCampaignUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: ScheduledCampaignCreateOrConnectWithoutUserInput | ScheduledCampaignCreateOrConnectWithoutUserInput[]
+    createMany?: ScheduledCampaignCreateManyUserInputEnvelope
+    connect?: ScheduledCampaignWhereUniqueInput | ScheduledCampaignWhereUniqueInput[]
+  }
+
   export type MediaUncheckedCreateNestedManyWithoutUserInput = {
     create?: XOR<MediaCreateWithoutUserInput, MediaUncheckedCreateWithoutUserInput> | MediaCreateWithoutUserInput[] | MediaUncheckedCreateWithoutUserInput[]
     connectOrCreate?: MediaCreateOrConnectWithoutUserInput | MediaCreateOrConnectWithoutUserInput[]
@@ -29986,8 +37009,17 @@ export namespace Prisma {
     connect?: SubscriptionWhereUniqueInput
   }
 
-  export type StringFieldUpdateOperationsInput = {
-    set?: string
+  export type TransactionUncheckedCreateNestedManyWithoutUserInput = {
+    create?: XOR<TransactionCreateWithoutUserInput, TransactionUncheckedCreateWithoutUserInput> | TransactionCreateWithoutUserInput[] | TransactionUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: TransactionCreateOrConnectWithoutUserInput | TransactionCreateOrConnectWithoutUserInput[]
+    createMany?: TransactionCreateManyUserInputEnvelope
+    connect?: TransactionWhereUniqueInput | TransactionWhereUniqueInput[]
+  }
+
+  export type WhatsAppConfigUncheckedCreateNestedOneWithoutUserInput = {
+    create?: XOR<WhatsAppConfigCreateWithoutUserInput, WhatsAppConfigUncheckedCreateWithoutUserInput>
+    connectOrCreate?: WhatsAppConfigCreateOrConnectWithoutUserInput
+    connect?: WhatsAppConfigWhereUniqueInput
   }
 
   export type NullableStringFieldUpdateOperationsInput = {
@@ -30000,10 +37032,6 @@ export namespace Prisma {
 
   export type EnumRoleFieldUpdateOperationsInput = {
     set?: $Enums.Role
-  }
-
-  export type DateTimeFieldUpdateOperationsInput = {
-    set?: Date | string
   }
 
   export type AccountUpdateManyWithoutUserNestedInput = {
@@ -30104,6 +37132,34 @@ export namespace Prisma {
     deleteMany?: EmailCampaignScalarWhereInput | EmailCampaignScalarWhereInput[]
   }
 
+  export type EmailTemplateUpdateManyWithoutUserNestedInput = {
+    create?: XOR<EmailTemplateCreateWithoutUserInput, EmailTemplateUncheckedCreateWithoutUserInput> | EmailTemplateCreateWithoutUserInput[] | EmailTemplateUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: EmailTemplateCreateOrConnectWithoutUserInput | EmailTemplateCreateOrConnectWithoutUserInput[]
+    upsert?: EmailTemplateUpsertWithWhereUniqueWithoutUserInput | EmailTemplateUpsertWithWhereUniqueWithoutUserInput[]
+    createMany?: EmailTemplateCreateManyUserInputEnvelope
+    set?: EmailTemplateWhereUniqueInput | EmailTemplateWhereUniqueInput[]
+    disconnect?: EmailTemplateWhereUniqueInput | EmailTemplateWhereUniqueInput[]
+    delete?: EmailTemplateWhereUniqueInput | EmailTemplateWhereUniqueInput[]
+    connect?: EmailTemplateWhereUniqueInput | EmailTemplateWhereUniqueInput[]
+    update?: EmailTemplateUpdateWithWhereUniqueWithoutUserInput | EmailTemplateUpdateWithWhereUniqueWithoutUserInput[]
+    updateMany?: EmailTemplateUpdateManyWithWhereWithoutUserInput | EmailTemplateUpdateManyWithWhereWithoutUserInput[]
+    deleteMany?: EmailTemplateScalarWhereInput | EmailTemplateScalarWhereInput[]
+  }
+
+  export type ScheduledCampaignUpdateManyWithoutUserNestedInput = {
+    create?: XOR<ScheduledCampaignCreateWithoutUserInput, ScheduledCampaignUncheckedCreateWithoutUserInput> | ScheduledCampaignCreateWithoutUserInput[] | ScheduledCampaignUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: ScheduledCampaignCreateOrConnectWithoutUserInput | ScheduledCampaignCreateOrConnectWithoutUserInput[]
+    upsert?: ScheduledCampaignUpsertWithWhereUniqueWithoutUserInput | ScheduledCampaignUpsertWithWhereUniqueWithoutUserInput[]
+    createMany?: ScheduledCampaignCreateManyUserInputEnvelope
+    set?: ScheduledCampaignWhereUniqueInput | ScheduledCampaignWhereUniqueInput[]
+    disconnect?: ScheduledCampaignWhereUniqueInput | ScheduledCampaignWhereUniqueInput[]
+    delete?: ScheduledCampaignWhereUniqueInput | ScheduledCampaignWhereUniqueInput[]
+    connect?: ScheduledCampaignWhereUniqueInput | ScheduledCampaignWhereUniqueInput[]
+    update?: ScheduledCampaignUpdateWithWhereUniqueWithoutUserInput | ScheduledCampaignUpdateWithWhereUniqueWithoutUserInput[]
+    updateMany?: ScheduledCampaignUpdateManyWithWhereWithoutUserInput | ScheduledCampaignUpdateManyWithWhereWithoutUserInput[]
+    deleteMany?: ScheduledCampaignScalarWhereInput | ScheduledCampaignScalarWhereInput[]
+  }
+
   export type MediaUpdateManyWithoutUserNestedInput = {
     create?: XOR<MediaCreateWithoutUserInput, MediaUncheckedCreateWithoutUserInput> | MediaCreateWithoutUserInput[] | MediaUncheckedCreateWithoutUserInput[]
     connectOrCreate?: MediaCreateOrConnectWithoutUserInput | MediaCreateOrConnectWithoutUserInput[]
@@ -30154,6 +37210,30 @@ export namespace Prisma {
     delete?: SubscriptionWhereInput | boolean
     connect?: SubscriptionWhereUniqueInput
     update?: XOR<XOR<SubscriptionUpdateToOneWithWhereWithoutUserInput, SubscriptionUpdateWithoutUserInput>, SubscriptionUncheckedUpdateWithoutUserInput>
+  }
+
+  export type TransactionUpdateManyWithoutUserNestedInput = {
+    create?: XOR<TransactionCreateWithoutUserInput, TransactionUncheckedCreateWithoutUserInput> | TransactionCreateWithoutUserInput[] | TransactionUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: TransactionCreateOrConnectWithoutUserInput | TransactionCreateOrConnectWithoutUserInput[]
+    upsert?: TransactionUpsertWithWhereUniqueWithoutUserInput | TransactionUpsertWithWhereUniqueWithoutUserInput[]
+    createMany?: TransactionCreateManyUserInputEnvelope
+    set?: TransactionWhereUniqueInput | TransactionWhereUniqueInput[]
+    disconnect?: TransactionWhereUniqueInput | TransactionWhereUniqueInput[]
+    delete?: TransactionWhereUniqueInput | TransactionWhereUniqueInput[]
+    connect?: TransactionWhereUniqueInput | TransactionWhereUniqueInput[]
+    update?: TransactionUpdateWithWhereUniqueWithoutUserInput | TransactionUpdateWithWhereUniqueWithoutUserInput[]
+    updateMany?: TransactionUpdateManyWithWhereWithoutUserInput | TransactionUpdateManyWithWhereWithoutUserInput[]
+    deleteMany?: TransactionScalarWhereInput | TransactionScalarWhereInput[]
+  }
+
+  export type WhatsAppConfigUpdateOneWithoutUserNestedInput = {
+    create?: XOR<WhatsAppConfigCreateWithoutUserInput, WhatsAppConfigUncheckedCreateWithoutUserInput>
+    connectOrCreate?: WhatsAppConfigCreateOrConnectWithoutUserInput
+    upsert?: WhatsAppConfigUpsertWithoutUserInput
+    disconnect?: WhatsAppConfigWhereInput | boolean
+    delete?: WhatsAppConfigWhereInput | boolean
+    connect?: WhatsAppConfigWhereUniqueInput
+    update?: XOR<XOR<WhatsAppConfigUpdateToOneWithWhereWithoutUserInput, WhatsAppConfigUpdateWithoutUserInput>, WhatsAppConfigUncheckedUpdateWithoutUserInput>
   }
 
   export type AccountUncheckedUpdateManyWithoutUserNestedInput = {
@@ -30254,6 +37334,34 @@ export namespace Prisma {
     deleteMany?: EmailCampaignScalarWhereInput | EmailCampaignScalarWhereInput[]
   }
 
+  export type EmailTemplateUncheckedUpdateManyWithoutUserNestedInput = {
+    create?: XOR<EmailTemplateCreateWithoutUserInput, EmailTemplateUncheckedCreateWithoutUserInput> | EmailTemplateCreateWithoutUserInput[] | EmailTemplateUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: EmailTemplateCreateOrConnectWithoutUserInput | EmailTemplateCreateOrConnectWithoutUserInput[]
+    upsert?: EmailTemplateUpsertWithWhereUniqueWithoutUserInput | EmailTemplateUpsertWithWhereUniqueWithoutUserInput[]
+    createMany?: EmailTemplateCreateManyUserInputEnvelope
+    set?: EmailTemplateWhereUniqueInput | EmailTemplateWhereUniqueInput[]
+    disconnect?: EmailTemplateWhereUniqueInput | EmailTemplateWhereUniqueInput[]
+    delete?: EmailTemplateWhereUniqueInput | EmailTemplateWhereUniqueInput[]
+    connect?: EmailTemplateWhereUniqueInput | EmailTemplateWhereUniqueInput[]
+    update?: EmailTemplateUpdateWithWhereUniqueWithoutUserInput | EmailTemplateUpdateWithWhereUniqueWithoutUserInput[]
+    updateMany?: EmailTemplateUpdateManyWithWhereWithoutUserInput | EmailTemplateUpdateManyWithWhereWithoutUserInput[]
+    deleteMany?: EmailTemplateScalarWhereInput | EmailTemplateScalarWhereInput[]
+  }
+
+  export type ScheduledCampaignUncheckedUpdateManyWithoutUserNestedInput = {
+    create?: XOR<ScheduledCampaignCreateWithoutUserInput, ScheduledCampaignUncheckedCreateWithoutUserInput> | ScheduledCampaignCreateWithoutUserInput[] | ScheduledCampaignUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: ScheduledCampaignCreateOrConnectWithoutUserInput | ScheduledCampaignCreateOrConnectWithoutUserInput[]
+    upsert?: ScheduledCampaignUpsertWithWhereUniqueWithoutUserInput | ScheduledCampaignUpsertWithWhereUniqueWithoutUserInput[]
+    createMany?: ScheduledCampaignCreateManyUserInputEnvelope
+    set?: ScheduledCampaignWhereUniqueInput | ScheduledCampaignWhereUniqueInput[]
+    disconnect?: ScheduledCampaignWhereUniqueInput | ScheduledCampaignWhereUniqueInput[]
+    delete?: ScheduledCampaignWhereUniqueInput | ScheduledCampaignWhereUniqueInput[]
+    connect?: ScheduledCampaignWhereUniqueInput | ScheduledCampaignWhereUniqueInput[]
+    update?: ScheduledCampaignUpdateWithWhereUniqueWithoutUserInput | ScheduledCampaignUpdateWithWhereUniqueWithoutUserInput[]
+    updateMany?: ScheduledCampaignUpdateManyWithWhereWithoutUserInput | ScheduledCampaignUpdateManyWithWhereWithoutUserInput[]
+    deleteMany?: ScheduledCampaignScalarWhereInput | ScheduledCampaignScalarWhereInput[]
+  }
+
   export type MediaUncheckedUpdateManyWithoutUserNestedInput = {
     create?: XOR<MediaCreateWithoutUserInput, MediaUncheckedCreateWithoutUserInput> | MediaCreateWithoutUserInput[] | MediaUncheckedCreateWithoutUserInput[]
     connectOrCreate?: MediaCreateOrConnectWithoutUserInput | MediaCreateOrConnectWithoutUserInput[]
@@ -30304,6 +37412,30 @@ export namespace Prisma {
     delete?: SubscriptionWhereInput | boolean
     connect?: SubscriptionWhereUniqueInput
     update?: XOR<XOR<SubscriptionUpdateToOneWithWhereWithoutUserInput, SubscriptionUpdateWithoutUserInput>, SubscriptionUncheckedUpdateWithoutUserInput>
+  }
+
+  export type TransactionUncheckedUpdateManyWithoutUserNestedInput = {
+    create?: XOR<TransactionCreateWithoutUserInput, TransactionUncheckedCreateWithoutUserInput> | TransactionCreateWithoutUserInput[] | TransactionUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: TransactionCreateOrConnectWithoutUserInput | TransactionCreateOrConnectWithoutUserInput[]
+    upsert?: TransactionUpsertWithWhereUniqueWithoutUserInput | TransactionUpsertWithWhereUniqueWithoutUserInput[]
+    createMany?: TransactionCreateManyUserInputEnvelope
+    set?: TransactionWhereUniqueInput | TransactionWhereUniqueInput[]
+    disconnect?: TransactionWhereUniqueInput | TransactionWhereUniqueInput[]
+    delete?: TransactionWhereUniqueInput | TransactionWhereUniqueInput[]
+    connect?: TransactionWhereUniqueInput | TransactionWhereUniqueInput[]
+    update?: TransactionUpdateWithWhereUniqueWithoutUserInput | TransactionUpdateWithWhereUniqueWithoutUserInput[]
+    updateMany?: TransactionUpdateManyWithWhereWithoutUserInput | TransactionUpdateManyWithWhereWithoutUserInput[]
+    deleteMany?: TransactionScalarWhereInput | TransactionScalarWhereInput[]
+  }
+
+  export type WhatsAppConfigUncheckedUpdateOneWithoutUserNestedInput = {
+    create?: XOR<WhatsAppConfigCreateWithoutUserInput, WhatsAppConfigUncheckedCreateWithoutUserInput>
+    connectOrCreate?: WhatsAppConfigCreateOrConnectWithoutUserInput
+    upsert?: WhatsAppConfigUpsertWithoutUserInput
+    disconnect?: WhatsAppConfigWhereInput | boolean
+    delete?: WhatsAppConfigWhereInput | boolean
+    connect?: WhatsAppConfigWhereUniqueInput
+    update?: XOR<XOR<WhatsAppConfigUpdateToOneWithWhereWithoutUserInput, WhatsAppConfigUpdateWithoutUserInput>, WhatsAppConfigUncheckedUpdateWithoutUserInput>
   }
 
   export type UserCreateNestedOneWithoutAccountsInput = {
@@ -30439,6 +37571,20 @@ export namespace Prisma {
     upsert?: PlanUpsertWithoutSubscriptionsInput
     connect?: PlanWhereUniqueInput
     update?: XOR<XOR<PlanUpdateToOneWithWhereWithoutSubscriptionsInput, PlanUpdateWithoutSubscriptionsInput>, PlanUncheckedUpdateWithoutSubscriptionsInput>
+  }
+
+  export type UserCreateNestedOneWithoutTransactionsInput = {
+    create?: XOR<UserCreateWithoutTransactionsInput, UserUncheckedCreateWithoutTransactionsInput>
+    connectOrCreate?: UserCreateOrConnectWithoutTransactionsInput
+    connect?: UserWhereUniqueInput
+  }
+
+  export type UserUpdateOneRequiredWithoutTransactionsNestedInput = {
+    create?: XOR<UserCreateWithoutTransactionsInput, UserUncheckedCreateWithoutTransactionsInput>
+    connectOrCreate?: UserCreateOrConnectWithoutTransactionsInput
+    upsert?: UserUpsertWithoutTransactionsInput
+    connect?: UserWhereUniqueInput
+    update?: XOR<XOR<UserUpdateToOneWithWhereWithoutTransactionsInput, UserUpdateWithoutTransactionsInput>, UserUncheckedUpdateWithoutTransactionsInput>
   }
 
   export type UserCreateNestedOneWithoutSocialAccountsInput = {
@@ -30881,10 +38027,94 @@ export namespace Prisma {
     update?: XOR<XOR<AudienceGroupUpdateToOneWithWhereWithoutContactsInput, AudienceGroupUpdateWithoutContactsInput>, AudienceGroupUncheckedUpdateWithoutContactsInput>
   }
 
+  export type UserCreateNestedOneWithoutEmailTemplatesInput = {
+    create?: XOR<UserCreateWithoutEmailTemplatesInput, UserUncheckedCreateWithoutEmailTemplatesInput>
+    connectOrCreate?: UserCreateOrConnectWithoutEmailTemplatesInput
+    connect?: UserWhereUniqueInput
+  }
+
+  export type EmailCampaignCreateNestedManyWithoutTemplateInput = {
+    create?: XOR<EmailCampaignCreateWithoutTemplateInput, EmailCampaignUncheckedCreateWithoutTemplateInput> | EmailCampaignCreateWithoutTemplateInput[] | EmailCampaignUncheckedCreateWithoutTemplateInput[]
+    connectOrCreate?: EmailCampaignCreateOrConnectWithoutTemplateInput | EmailCampaignCreateOrConnectWithoutTemplateInput[]
+    createMany?: EmailCampaignCreateManyTemplateInputEnvelope
+    connect?: EmailCampaignWhereUniqueInput | EmailCampaignWhereUniqueInput[]
+  }
+
+  export type EmailCampaignUncheckedCreateNestedManyWithoutTemplateInput = {
+    create?: XOR<EmailCampaignCreateWithoutTemplateInput, EmailCampaignUncheckedCreateWithoutTemplateInput> | EmailCampaignCreateWithoutTemplateInput[] | EmailCampaignUncheckedCreateWithoutTemplateInput[]
+    connectOrCreate?: EmailCampaignCreateOrConnectWithoutTemplateInput | EmailCampaignCreateOrConnectWithoutTemplateInput[]
+    createMany?: EmailCampaignCreateManyTemplateInputEnvelope
+    connect?: EmailCampaignWhereUniqueInput | EmailCampaignWhereUniqueInput[]
+  }
+
+  export type EnumTemplateCategoryFieldUpdateOperationsInput = {
+    set?: $Enums.TemplateCategory
+  }
+
+  export type UserUpdateOneRequiredWithoutEmailTemplatesNestedInput = {
+    create?: XOR<UserCreateWithoutEmailTemplatesInput, UserUncheckedCreateWithoutEmailTemplatesInput>
+    connectOrCreate?: UserCreateOrConnectWithoutEmailTemplatesInput
+    upsert?: UserUpsertWithoutEmailTemplatesInput
+    connect?: UserWhereUniqueInput
+    update?: XOR<XOR<UserUpdateToOneWithWhereWithoutEmailTemplatesInput, UserUpdateWithoutEmailTemplatesInput>, UserUncheckedUpdateWithoutEmailTemplatesInput>
+  }
+
+  export type EmailCampaignUpdateManyWithoutTemplateNestedInput = {
+    create?: XOR<EmailCampaignCreateWithoutTemplateInput, EmailCampaignUncheckedCreateWithoutTemplateInput> | EmailCampaignCreateWithoutTemplateInput[] | EmailCampaignUncheckedCreateWithoutTemplateInput[]
+    connectOrCreate?: EmailCampaignCreateOrConnectWithoutTemplateInput | EmailCampaignCreateOrConnectWithoutTemplateInput[]
+    upsert?: EmailCampaignUpsertWithWhereUniqueWithoutTemplateInput | EmailCampaignUpsertWithWhereUniqueWithoutTemplateInput[]
+    createMany?: EmailCampaignCreateManyTemplateInputEnvelope
+    set?: EmailCampaignWhereUniqueInput | EmailCampaignWhereUniqueInput[]
+    disconnect?: EmailCampaignWhereUniqueInput | EmailCampaignWhereUniqueInput[]
+    delete?: EmailCampaignWhereUniqueInput | EmailCampaignWhereUniqueInput[]
+    connect?: EmailCampaignWhereUniqueInput | EmailCampaignWhereUniqueInput[]
+    update?: EmailCampaignUpdateWithWhereUniqueWithoutTemplateInput | EmailCampaignUpdateWithWhereUniqueWithoutTemplateInput[]
+    updateMany?: EmailCampaignUpdateManyWithWhereWithoutTemplateInput | EmailCampaignUpdateManyWithWhereWithoutTemplateInput[]
+    deleteMany?: EmailCampaignScalarWhereInput | EmailCampaignScalarWhereInput[]
+  }
+
+  export type EmailCampaignUncheckedUpdateManyWithoutTemplateNestedInput = {
+    create?: XOR<EmailCampaignCreateWithoutTemplateInput, EmailCampaignUncheckedCreateWithoutTemplateInput> | EmailCampaignCreateWithoutTemplateInput[] | EmailCampaignUncheckedCreateWithoutTemplateInput[]
+    connectOrCreate?: EmailCampaignCreateOrConnectWithoutTemplateInput | EmailCampaignCreateOrConnectWithoutTemplateInput[]
+    upsert?: EmailCampaignUpsertWithWhereUniqueWithoutTemplateInput | EmailCampaignUpsertWithWhereUniqueWithoutTemplateInput[]
+    createMany?: EmailCampaignCreateManyTemplateInputEnvelope
+    set?: EmailCampaignWhereUniqueInput | EmailCampaignWhereUniqueInput[]
+    disconnect?: EmailCampaignWhereUniqueInput | EmailCampaignWhereUniqueInput[]
+    delete?: EmailCampaignWhereUniqueInput | EmailCampaignWhereUniqueInput[]
+    connect?: EmailCampaignWhereUniqueInput | EmailCampaignWhereUniqueInput[]
+    update?: EmailCampaignUpdateWithWhereUniqueWithoutTemplateInput | EmailCampaignUpdateWithWhereUniqueWithoutTemplateInput[]
+    updateMany?: EmailCampaignUpdateManyWithWhereWithoutTemplateInput | EmailCampaignUpdateManyWithWhereWithoutTemplateInput[]
+    deleteMany?: EmailCampaignScalarWhereInput | EmailCampaignScalarWhereInput[]
+  }
+
+  export type UserCreateNestedOneWithoutScheduledCampaignsInput = {
+    create?: XOR<UserCreateWithoutScheduledCampaignsInput, UserUncheckedCreateWithoutScheduledCampaignsInput>
+    connectOrCreate?: UserCreateOrConnectWithoutScheduledCampaignsInput
+    connect?: UserWhereUniqueInput
+  }
+
+  export type EnumAutomationFrequencyFieldUpdateOperationsInput = {
+    set?: $Enums.AutomationFrequency
+  }
+
+  export type UserUpdateOneRequiredWithoutScheduledCampaignsNestedInput = {
+    create?: XOR<UserCreateWithoutScheduledCampaignsInput, UserUncheckedCreateWithoutScheduledCampaignsInput>
+    connectOrCreate?: UserCreateOrConnectWithoutScheduledCampaignsInput
+    upsert?: UserUpsertWithoutScheduledCampaignsInput
+    connect?: UserWhereUniqueInput
+    update?: XOR<XOR<UserUpdateToOneWithWhereWithoutScheduledCampaignsInput, UserUpdateWithoutScheduledCampaignsInput>, UserUncheckedUpdateWithoutScheduledCampaignsInput>
+  }
+
   export type UserCreateNestedOneWithoutEmailCampaignsInput = {
     create?: XOR<UserCreateWithoutEmailCampaignsInput, UserUncheckedCreateWithoutEmailCampaignsInput>
     connectOrCreate?: UserCreateOrConnectWithoutEmailCampaignsInput
     connect?: UserWhereUniqueInput
+  }
+
+  export type EmailTemplateCreateNestedOneWithoutCampaignsInput = {
+    create?: XOR<EmailTemplateCreateWithoutCampaignsInput, EmailTemplateUncheckedCreateWithoutCampaignsInput>
+    connectOrCreate?: EmailTemplateCreateOrConnectWithoutCampaignsInput
+    connect?: EmailTemplateWhereUniqueInput
   }
 
   export type EmailCampaignRecipientCreateNestedManyWithoutCampaignInput = {
@@ -30911,6 +38141,16 @@ export namespace Prisma {
     upsert?: UserUpsertWithoutEmailCampaignsInput
     connect?: UserWhereUniqueInput
     update?: XOR<XOR<UserUpdateToOneWithWhereWithoutEmailCampaignsInput, UserUpdateWithoutEmailCampaignsInput>, UserUncheckedUpdateWithoutEmailCampaignsInput>
+  }
+
+  export type EmailTemplateUpdateOneWithoutCampaignsNestedInput = {
+    create?: XOR<EmailTemplateCreateWithoutCampaignsInput, EmailTemplateUncheckedCreateWithoutCampaignsInput>
+    connectOrCreate?: EmailTemplateCreateOrConnectWithoutCampaignsInput
+    upsert?: EmailTemplateUpsertWithoutCampaignsInput
+    disconnect?: EmailTemplateWhereInput | boolean
+    delete?: EmailTemplateWhereInput | boolean
+    connect?: EmailTemplateWhereUniqueInput
+    update?: XOR<XOR<EmailTemplateUpdateToOneWithWhereWithoutCampaignsInput, EmailTemplateUpdateWithoutCampaignsInput>, EmailTemplateUncheckedUpdateWithoutCampaignsInput>
   }
 
   export type EmailCampaignRecipientUpdateManyWithoutCampaignNestedInput = {
@@ -31029,38 +38269,6 @@ export namespace Prisma {
     not?: NestedStringFilter<$PrismaModel> | string
   }
 
-  export type NestedStringNullableFilter<$PrismaModel = never> = {
-    equals?: string | StringFieldRefInput<$PrismaModel> | null
-    in?: string[] | ListStringFieldRefInput<$PrismaModel> | null
-    notIn?: string[] | ListStringFieldRefInput<$PrismaModel> | null
-    lt?: string | StringFieldRefInput<$PrismaModel>
-    lte?: string | StringFieldRefInput<$PrismaModel>
-    gt?: string | StringFieldRefInput<$PrismaModel>
-    gte?: string | StringFieldRefInput<$PrismaModel>
-    contains?: string | StringFieldRefInput<$PrismaModel>
-    startsWith?: string | StringFieldRefInput<$PrismaModel>
-    endsWith?: string | StringFieldRefInput<$PrismaModel>
-    not?: NestedStringNullableFilter<$PrismaModel> | string | null
-  }
-
-  export type NestedDateTimeNullableFilter<$PrismaModel = never> = {
-    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel> | null
-    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
-    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
-    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    not?: NestedDateTimeNullableFilter<$PrismaModel> | Date | string | null
-  }
-
-  export type NestedEnumRoleFilter<$PrismaModel = never> = {
-    equals?: $Enums.Role | EnumRoleFieldRefInput<$PrismaModel>
-    in?: $Enums.Role[] | ListEnumRoleFieldRefInput<$PrismaModel>
-    notIn?: $Enums.Role[] | ListEnumRoleFieldRefInput<$PrismaModel>
-    not?: NestedEnumRoleFilter<$PrismaModel> | $Enums.Role
-  }
-
   export type NestedDateTimeFilter<$PrismaModel = never> = {
     equals?: Date | string | DateTimeFieldRefInput<$PrismaModel>
     in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel>
@@ -31098,6 +38306,52 @@ export namespace Prisma {
     gt?: number | IntFieldRefInput<$PrismaModel>
     gte?: number | IntFieldRefInput<$PrismaModel>
     not?: NestedIntFilter<$PrismaModel> | number
+  }
+
+  export type NestedDateTimeWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel>
+    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel>
+    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    not?: NestedDateTimeWithAggregatesFilter<$PrismaModel> | Date | string
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedDateTimeFilter<$PrismaModel>
+    _max?: NestedDateTimeFilter<$PrismaModel>
+  }
+
+  export type NestedStringNullableFilter<$PrismaModel = never> = {
+    equals?: string | StringFieldRefInput<$PrismaModel> | null
+    in?: string[] | ListStringFieldRefInput<$PrismaModel> | null
+    notIn?: string[] | ListStringFieldRefInput<$PrismaModel> | null
+    lt?: string | StringFieldRefInput<$PrismaModel>
+    lte?: string | StringFieldRefInput<$PrismaModel>
+    gt?: string | StringFieldRefInput<$PrismaModel>
+    gte?: string | StringFieldRefInput<$PrismaModel>
+    contains?: string | StringFieldRefInput<$PrismaModel>
+    startsWith?: string | StringFieldRefInput<$PrismaModel>
+    endsWith?: string | StringFieldRefInput<$PrismaModel>
+    not?: NestedStringNullableFilter<$PrismaModel> | string | null
+  }
+
+  export type NestedDateTimeNullableFilter<$PrismaModel = never> = {
+    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel> | null
+    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
+    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
+    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    not?: NestedDateTimeNullableFilter<$PrismaModel> | Date | string | null
+  }
+
+  export type NestedEnumRoleFilter<$PrismaModel = never> = {
+    equals?: $Enums.Role | EnumRoleFieldRefInput<$PrismaModel>
+    in?: $Enums.Role[] | ListEnumRoleFieldRefInput<$PrismaModel>
+    notIn?: $Enums.Role[] | ListEnumRoleFieldRefInput<$PrismaModel>
+    not?: NestedEnumRoleFilter<$PrismaModel> | $Enums.Role
   }
 
   export type NestedStringNullableWithAggregatesFilter<$PrismaModel = never> = {
@@ -31150,20 +38404,6 @@ export namespace Prisma {
     _count?: NestedIntFilter<$PrismaModel>
     _min?: NestedEnumRoleFilter<$PrismaModel>
     _max?: NestedEnumRoleFilter<$PrismaModel>
-  }
-
-  export type NestedDateTimeWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel>
-    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel>
-    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    not?: NestedDateTimeWithAggregatesFilter<$PrismaModel> | Date | string
-    _count?: NestedIntFilter<$PrismaModel>
-    _min?: NestedDateTimeFilter<$PrismaModel>
-    _max?: NestedDateTimeFilter<$PrismaModel>
   }
 
   export type NestedIntNullableWithAggregatesFilter<$PrismaModel = never> = {
@@ -31333,6 +38573,40 @@ export namespace Prisma {
     _max?: NestedFloatNullableFilter<$PrismaModel>
   }
 
+  export type NestedEnumTemplateCategoryFilter<$PrismaModel = never> = {
+    equals?: $Enums.TemplateCategory | EnumTemplateCategoryFieldRefInput<$PrismaModel>
+    in?: $Enums.TemplateCategory[] | ListEnumTemplateCategoryFieldRefInput<$PrismaModel>
+    notIn?: $Enums.TemplateCategory[] | ListEnumTemplateCategoryFieldRefInput<$PrismaModel>
+    not?: NestedEnumTemplateCategoryFilter<$PrismaModel> | $Enums.TemplateCategory
+  }
+
+  export type NestedEnumTemplateCategoryWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.TemplateCategory | EnumTemplateCategoryFieldRefInput<$PrismaModel>
+    in?: $Enums.TemplateCategory[] | ListEnumTemplateCategoryFieldRefInput<$PrismaModel>
+    notIn?: $Enums.TemplateCategory[] | ListEnumTemplateCategoryFieldRefInput<$PrismaModel>
+    not?: NestedEnumTemplateCategoryWithAggregatesFilter<$PrismaModel> | $Enums.TemplateCategory
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumTemplateCategoryFilter<$PrismaModel>
+    _max?: NestedEnumTemplateCategoryFilter<$PrismaModel>
+  }
+
+  export type NestedEnumAutomationFrequencyFilter<$PrismaModel = never> = {
+    equals?: $Enums.AutomationFrequency | EnumAutomationFrequencyFieldRefInput<$PrismaModel>
+    in?: $Enums.AutomationFrequency[] | ListEnumAutomationFrequencyFieldRefInput<$PrismaModel>
+    notIn?: $Enums.AutomationFrequency[] | ListEnumAutomationFrequencyFieldRefInput<$PrismaModel>
+    not?: NestedEnumAutomationFrequencyFilter<$PrismaModel> | $Enums.AutomationFrequency
+  }
+
+  export type NestedEnumAutomationFrequencyWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.AutomationFrequency | EnumAutomationFrequencyFieldRefInput<$PrismaModel>
+    in?: $Enums.AutomationFrequency[] | ListEnumAutomationFrequencyFieldRefInput<$PrismaModel>
+    notIn?: $Enums.AutomationFrequency[] | ListEnumAutomationFrequencyFieldRefInput<$PrismaModel>
+    not?: NestedEnumAutomationFrequencyWithAggregatesFilter<$PrismaModel> | $Enums.AutomationFrequency
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumAutomationFrequencyFilter<$PrismaModel>
+    _max?: NestedEnumAutomationFrequencyFilter<$PrismaModel>
+  }
+
   export type NestedEnumEmailCampaignStatusFilter<$PrismaModel = never> = {
     equals?: $Enums.EmailCampaignStatus | EnumEmailCampaignStatusFieldRefInput<$PrismaModel>
     in?: $Enums.EmailCampaignStatus[] | ListEnumEmailCampaignStatusFieldRefInput<$PrismaModel>
@@ -31365,6 +38639,130 @@ export namespace Prisma {
     _count?: NestedIntNullableFilter<$PrismaModel>
     _min?: NestedEnumPlatformNullableFilter<$PrismaModel>
     _max?: NestedEnumPlatformNullableFilter<$PrismaModel>
+  }
+
+  export type UserCreateWithoutWhatsappConfigInput = {
+    id?: string
+    name?: string | null
+    email: string
+    emailVerified?: Date | string | null
+    image?: string | null
+    password?: string | null
+    role?: $Enums.Role
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    zernioProfileId?: string | null
+    accounts?: AccountCreateNestedManyWithoutUserInput
+    sessions?: SessionCreateNestedManyWithoutUserInput
+    socialAccounts?: SocialAccountCreateNestedManyWithoutUserInput
+    posts?: PostCreateNestedManyWithoutUserInput
+    campaigns?: CampaignCreateNestedManyWithoutUserInput
+    audienceGroups?: AudienceGroupCreateNestedManyWithoutUserInput
+    emailCampaigns?: EmailCampaignCreateNestedManyWithoutUserInput
+    emailTemplates?: EmailTemplateCreateNestedManyWithoutUserInput
+    scheduledCampaigns?: ScheduledCampaignCreateNestedManyWithoutUserInput
+    media?: MediaCreateNestedManyWithoutUserInput
+    analytics?: AnalyticsCreateNestedManyWithoutUserInput
+    notifications?: NotificationCreateNestedManyWithoutUserInput
+    subscription?: SubscriptionCreateNestedOneWithoutUserInput
+    transactions?: TransactionCreateNestedManyWithoutUserInput
+  }
+
+  export type UserUncheckedCreateWithoutWhatsappConfigInput = {
+    id?: string
+    name?: string | null
+    email: string
+    emailVerified?: Date | string | null
+    image?: string | null
+    password?: string | null
+    role?: $Enums.Role
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    zernioProfileId?: string | null
+    accounts?: AccountUncheckedCreateNestedManyWithoutUserInput
+    sessions?: SessionUncheckedCreateNestedManyWithoutUserInput
+    socialAccounts?: SocialAccountUncheckedCreateNestedManyWithoutUserInput
+    posts?: PostUncheckedCreateNestedManyWithoutUserInput
+    campaigns?: CampaignUncheckedCreateNestedManyWithoutUserInput
+    audienceGroups?: AudienceGroupUncheckedCreateNestedManyWithoutUserInput
+    emailCampaigns?: EmailCampaignUncheckedCreateNestedManyWithoutUserInput
+    emailTemplates?: EmailTemplateUncheckedCreateNestedManyWithoutUserInput
+    scheduledCampaigns?: ScheduledCampaignUncheckedCreateNestedManyWithoutUserInput
+    media?: MediaUncheckedCreateNestedManyWithoutUserInput
+    analytics?: AnalyticsUncheckedCreateNestedManyWithoutUserInput
+    notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
+    subscription?: SubscriptionUncheckedCreateNestedOneWithoutUserInput
+    transactions?: TransactionUncheckedCreateNestedManyWithoutUserInput
+  }
+
+  export type UserCreateOrConnectWithoutWhatsappConfigInput = {
+    where: UserWhereUniqueInput
+    create: XOR<UserCreateWithoutWhatsappConfigInput, UserUncheckedCreateWithoutWhatsappConfigInput>
+  }
+
+  export type UserUpsertWithoutWhatsappConfigInput = {
+    update: XOR<UserUpdateWithoutWhatsappConfigInput, UserUncheckedUpdateWithoutWhatsappConfigInput>
+    create: XOR<UserCreateWithoutWhatsappConfigInput, UserUncheckedCreateWithoutWhatsappConfigInput>
+    where?: UserWhereInput
+  }
+
+  export type UserUpdateToOneWithWhereWithoutWhatsappConfigInput = {
+    where?: UserWhereInput
+    data: XOR<UserUpdateWithoutWhatsappConfigInput, UserUncheckedUpdateWithoutWhatsappConfigInput>
+  }
+
+  export type UserUpdateWithoutWhatsappConfigInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: NullableStringFieldUpdateOperationsInput | string | null
+    email?: StringFieldUpdateOperationsInput | string
+    emailVerified?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    image?: NullableStringFieldUpdateOperationsInput | string | null
+    password?: NullableStringFieldUpdateOperationsInput | string | null
+    role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    zernioProfileId?: NullableStringFieldUpdateOperationsInput | string | null
+    accounts?: AccountUpdateManyWithoutUserNestedInput
+    sessions?: SessionUpdateManyWithoutUserNestedInput
+    socialAccounts?: SocialAccountUpdateManyWithoutUserNestedInput
+    posts?: PostUpdateManyWithoutUserNestedInput
+    campaigns?: CampaignUpdateManyWithoutUserNestedInput
+    audienceGroups?: AudienceGroupUpdateManyWithoutUserNestedInput
+    emailCampaigns?: EmailCampaignUpdateManyWithoutUserNestedInput
+    emailTemplates?: EmailTemplateUpdateManyWithoutUserNestedInput
+    scheduledCampaigns?: ScheduledCampaignUpdateManyWithoutUserNestedInput
+    media?: MediaUpdateManyWithoutUserNestedInput
+    analytics?: AnalyticsUpdateManyWithoutUserNestedInput
+    notifications?: NotificationUpdateManyWithoutUserNestedInput
+    subscription?: SubscriptionUpdateOneWithoutUserNestedInput
+    transactions?: TransactionUpdateManyWithoutUserNestedInput
+  }
+
+  export type UserUncheckedUpdateWithoutWhatsappConfigInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: NullableStringFieldUpdateOperationsInput | string | null
+    email?: StringFieldUpdateOperationsInput | string
+    emailVerified?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    image?: NullableStringFieldUpdateOperationsInput | string | null
+    password?: NullableStringFieldUpdateOperationsInput | string | null
+    role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    zernioProfileId?: NullableStringFieldUpdateOperationsInput | string | null
+    accounts?: AccountUncheckedUpdateManyWithoutUserNestedInput
+    sessions?: SessionUncheckedUpdateManyWithoutUserNestedInput
+    socialAccounts?: SocialAccountUncheckedUpdateManyWithoutUserNestedInput
+    posts?: PostUncheckedUpdateManyWithoutUserNestedInput
+    campaigns?: CampaignUncheckedUpdateManyWithoutUserNestedInput
+    audienceGroups?: AudienceGroupUncheckedUpdateManyWithoutUserNestedInput
+    emailCampaigns?: EmailCampaignUncheckedUpdateManyWithoutUserNestedInput
+    emailTemplates?: EmailTemplateUncheckedUpdateManyWithoutUserNestedInput
+    scheduledCampaigns?: ScheduledCampaignUncheckedUpdateManyWithoutUserNestedInput
+    media?: MediaUncheckedUpdateManyWithoutUserNestedInput
+    analytics?: AnalyticsUncheckedUpdateManyWithoutUserNestedInput
+    notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
+    subscription?: SubscriptionUncheckedUpdateOneWithoutUserNestedInput
+    transactions?: TransactionUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type AccountCreateWithoutUserInput = {
@@ -31591,15 +38989,22 @@ export namespace Prisma {
     status?: $Enums.EmailCampaignStatus
     scheduledAt?: Date | string | null
     sentAt?: Date | string | null
+    failedAt?: Date | string | null
     openRate?: number
     clickRate?: number
+    bounceRate?: number
+    retryCount?: number
+    maxRetries?: number
+    errorMessage?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    template?: EmailTemplateCreateNestedOneWithoutCampaignsInput
     recipients?: EmailCampaignRecipientCreateNestedManyWithoutCampaignInput
   }
 
   export type EmailCampaignUncheckedCreateWithoutUserInput = {
     id?: string
+    templateId?: string | null
     name: string
     subject: string
     previewText?: string | null
@@ -31608,8 +39013,13 @@ export namespace Prisma {
     status?: $Enums.EmailCampaignStatus
     scheduledAt?: Date | string | null
     sentAt?: Date | string | null
+    failedAt?: Date | string | null
     openRate?: number
     clickRate?: number
+    bounceRate?: number
+    retryCount?: number
+    maxRetries?: number
+    errorMessage?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     recipients?: EmailCampaignRecipientUncheckedCreateNestedManyWithoutCampaignInput
@@ -31622,6 +39032,92 @@ export namespace Prisma {
 
   export type EmailCampaignCreateManyUserInputEnvelope = {
     data: EmailCampaignCreateManyUserInput | EmailCampaignCreateManyUserInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type EmailTemplateCreateWithoutUserInput = {
+    id?: string
+    name: string
+    description?: string | null
+    htmlContent: string
+    designJSON?: string | null
+    category?: $Enums.TemplateCategory
+    thumbnailUrl?: string | null
+    isPublic?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    campaigns?: EmailCampaignCreateNestedManyWithoutTemplateInput
+  }
+
+  export type EmailTemplateUncheckedCreateWithoutUserInput = {
+    id?: string
+    name: string
+    description?: string | null
+    htmlContent: string
+    designJSON?: string | null
+    category?: $Enums.TemplateCategory
+    thumbnailUrl?: string | null
+    isPublic?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    campaigns?: EmailCampaignUncheckedCreateNestedManyWithoutTemplateInput
+  }
+
+  export type EmailTemplateCreateOrConnectWithoutUserInput = {
+    where: EmailTemplateWhereUniqueInput
+    create: XOR<EmailTemplateCreateWithoutUserInput, EmailTemplateUncheckedCreateWithoutUserInput>
+  }
+
+  export type EmailTemplateCreateManyUserInputEnvelope = {
+    data: EmailTemplateCreateManyUserInput | EmailTemplateCreateManyUserInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type ScheduledCampaignCreateWithoutUserInput = {
+    id?: string
+    campaignId?: string | null
+    templateId?: string | null
+    name: string
+    subject: string
+    htmlContent: string
+    frequency?: $Enums.AutomationFrequency
+    nextRunAt: Date | string
+    lastRunAt?: Date | string | null
+    sourceType: string
+    sourceData?: string | null
+    isActive?: boolean
+    failureCount?: number
+    lastError?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type ScheduledCampaignUncheckedCreateWithoutUserInput = {
+    id?: string
+    campaignId?: string | null
+    templateId?: string | null
+    name: string
+    subject: string
+    htmlContent: string
+    frequency?: $Enums.AutomationFrequency
+    nextRunAt: Date | string
+    lastRunAt?: Date | string | null
+    sourceType: string
+    sourceData?: string | null
+    isActive?: boolean
+    failureCount?: number
+    lastError?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type ScheduledCampaignCreateOrConnectWithoutUserInput = {
+    where: ScheduledCampaignWhereUniqueInput
+    create: XOR<ScheduledCampaignCreateWithoutUserInput, ScheduledCampaignUncheckedCreateWithoutUserInput>
+  }
+
+  export type ScheduledCampaignCreateManyUserInputEnvelope = {
+    data: ScheduledCampaignCreateManyUserInput | ScheduledCampaignCreateManyUserInput[]
     skipDuplicates?: boolean
   }
 
@@ -31734,6 +39230,12 @@ export namespace Prisma {
     status?: $Enums.SubscriptionStatus
     startDate?: Date | string
     endDate?: Date | string | null
+    postsUsed?: number
+    aiTextUsed?: number
+    aiImageUsed?: number
+    lastResetAt?: Date | string
+    paystackSubscriptionCode?: string | null
+    paystackCustomerCode?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     plan: PlanCreateNestedOneWithoutSubscriptionsInput
@@ -31745,6 +39247,12 @@ export namespace Prisma {
     status?: $Enums.SubscriptionStatus
     startDate?: Date | string
     endDate?: Date | string | null
+    postsUsed?: number
+    aiTextUsed?: number
+    aiImageUsed?: number
+    lastResetAt?: Date | string
+    paystackSubscriptionCode?: string | null
+    paystackCustomerCode?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -31752,6 +39260,65 @@ export namespace Prisma {
   export type SubscriptionCreateOrConnectWithoutUserInput = {
     where: SubscriptionWhereUniqueInput
     create: XOR<SubscriptionCreateWithoutUserInput, SubscriptionUncheckedCreateWithoutUserInput>
+  }
+
+  export type TransactionCreateWithoutUserInput = {
+    id?: string
+    amount: number
+    currency?: string
+    status: string
+    reference: string
+    paystackId?: string | null
+    channel?: string | null
+    paidAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type TransactionUncheckedCreateWithoutUserInput = {
+    id?: string
+    amount: number
+    currency?: string
+    status: string
+    reference: string
+    paystackId?: string | null
+    channel?: string | null
+    paidAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type TransactionCreateOrConnectWithoutUserInput = {
+    where: TransactionWhereUniqueInput
+    create: XOR<TransactionCreateWithoutUserInput, TransactionUncheckedCreateWithoutUserInput>
+  }
+
+  export type TransactionCreateManyUserInputEnvelope = {
+    data: TransactionCreateManyUserInput | TransactionCreateManyUserInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type WhatsAppConfigCreateWithoutUserInput = {
+    id?: string
+    phoneNumberId: string
+    wabaId: string
+    accessToken: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type WhatsAppConfigUncheckedCreateWithoutUserInput = {
+    id?: string
+    phoneNumberId: string
+    wabaId: string
+    accessToken: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type WhatsAppConfigCreateOrConnectWithoutUserInput = {
+    where: WhatsAppConfigWhereUniqueInput
+    create: XOR<WhatsAppConfigCreateWithoutUserInput, WhatsAppConfigUncheckedCreateWithoutUserInput>
   }
 
   export type AccountUpsertWithWhereUniqueWithoutUserInput = {
@@ -31969,6 +39536,7 @@ export namespace Prisma {
     NOT?: EmailCampaignScalarWhereInput | EmailCampaignScalarWhereInput[]
     id?: StringFilter<"EmailCampaign"> | string
     userId?: StringFilter<"EmailCampaign"> | string
+    templateId?: StringNullableFilter<"EmailCampaign"> | string | null
     name?: StringFilter<"EmailCampaign"> | string
     subject?: StringFilter<"EmailCampaign"> | string
     previewText?: StringNullableFilter<"EmailCampaign"> | string | null
@@ -31977,10 +39545,87 @@ export namespace Prisma {
     status?: EnumEmailCampaignStatusFilter<"EmailCampaign"> | $Enums.EmailCampaignStatus
     scheduledAt?: DateTimeNullableFilter<"EmailCampaign"> | Date | string | null
     sentAt?: DateTimeNullableFilter<"EmailCampaign"> | Date | string | null
+    failedAt?: DateTimeNullableFilter<"EmailCampaign"> | Date | string | null
     openRate?: FloatFilter<"EmailCampaign"> | number
     clickRate?: FloatFilter<"EmailCampaign"> | number
+    bounceRate?: FloatFilter<"EmailCampaign"> | number
+    retryCount?: IntFilter<"EmailCampaign"> | number
+    maxRetries?: IntFilter<"EmailCampaign"> | number
+    errorMessage?: StringNullableFilter<"EmailCampaign"> | string | null
     createdAt?: DateTimeFilter<"EmailCampaign"> | Date | string
     updatedAt?: DateTimeFilter<"EmailCampaign"> | Date | string
+  }
+
+  export type EmailTemplateUpsertWithWhereUniqueWithoutUserInput = {
+    where: EmailTemplateWhereUniqueInput
+    update: XOR<EmailTemplateUpdateWithoutUserInput, EmailTemplateUncheckedUpdateWithoutUserInput>
+    create: XOR<EmailTemplateCreateWithoutUserInput, EmailTemplateUncheckedCreateWithoutUserInput>
+  }
+
+  export type EmailTemplateUpdateWithWhereUniqueWithoutUserInput = {
+    where: EmailTemplateWhereUniqueInput
+    data: XOR<EmailTemplateUpdateWithoutUserInput, EmailTemplateUncheckedUpdateWithoutUserInput>
+  }
+
+  export type EmailTemplateUpdateManyWithWhereWithoutUserInput = {
+    where: EmailTemplateScalarWhereInput
+    data: XOR<EmailTemplateUpdateManyMutationInput, EmailTemplateUncheckedUpdateManyWithoutUserInput>
+  }
+
+  export type EmailTemplateScalarWhereInput = {
+    AND?: EmailTemplateScalarWhereInput | EmailTemplateScalarWhereInput[]
+    OR?: EmailTemplateScalarWhereInput[]
+    NOT?: EmailTemplateScalarWhereInput | EmailTemplateScalarWhereInput[]
+    id?: StringFilter<"EmailTemplate"> | string
+    userId?: StringFilter<"EmailTemplate"> | string
+    name?: StringFilter<"EmailTemplate"> | string
+    description?: StringNullableFilter<"EmailTemplate"> | string | null
+    htmlContent?: StringFilter<"EmailTemplate"> | string
+    designJSON?: StringNullableFilter<"EmailTemplate"> | string | null
+    category?: EnumTemplateCategoryFilter<"EmailTemplate"> | $Enums.TemplateCategory
+    thumbnailUrl?: StringNullableFilter<"EmailTemplate"> | string | null
+    isPublic?: BoolFilter<"EmailTemplate"> | boolean
+    createdAt?: DateTimeFilter<"EmailTemplate"> | Date | string
+    updatedAt?: DateTimeFilter<"EmailTemplate"> | Date | string
+  }
+
+  export type ScheduledCampaignUpsertWithWhereUniqueWithoutUserInput = {
+    where: ScheduledCampaignWhereUniqueInput
+    update: XOR<ScheduledCampaignUpdateWithoutUserInput, ScheduledCampaignUncheckedUpdateWithoutUserInput>
+    create: XOR<ScheduledCampaignCreateWithoutUserInput, ScheduledCampaignUncheckedCreateWithoutUserInput>
+  }
+
+  export type ScheduledCampaignUpdateWithWhereUniqueWithoutUserInput = {
+    where: ScheduledCampaignWhereUniqueInput
+    data: XOR<ScheduledCampaignUpdateWithoutUserInput, ScheduledCampaignUncheckedUpdateWithoutUserInput>
+  }
+
+  export type ScheduledCampaignUpdateManyWithWhereWithoutUserInput = {
+    where: ScheduledCampaignScalarWhereInput
+    data: XOR<ScheduledCampaignUpdateManyMutationInput, ScheduledCampaignUncheckedUpdateManyWithoutUserInput>
+  }
+
+  export type ScheduledCampaignScalarWhereInput = {
+    AND?: ScheduledCampaignScalarWhereInput | ScheduledCampaignScalarWhereInput[]
+    OR?: ScheduledCampaignScalarWhereInput[]
+    NOT?: ScheduledCampaignScalarWhereInput | ScheduledCampaignScalarWhereInput[]
+    id?: StringFilter<"ScheduledCampaign"> | string
+    userId?: StringFilter<"ScheduledCampaign"> | string
+    campaignId?: StringNullableFilter<"ScheduledCampaign"> | string | null
+    templateId?: StringNullableFilter<"ScheduledCampaign"> | string | null
+    name?: StringFilter<"ScheduledCampaign"> | string
+    subject?: StringFilter<"ScheduledCampaign"> | string
+    htmlContent?: StringFilter<"ScheduledCampaign"> | string
+    frequency?: EnumAutomationFrequencyFilter<"ScheduledCampaign"> | $Enums.AutomationFrequency
+    nextRunAt?: DateTimeFilter<"ScheduledCampaign"> | Date | string
+    lastRunAt?: DateTimeNullableFilter<"ScheduledCampaign"> | Date | string | null
+    sourceType?: StringFilter<"ScheduledCampaign"> | string
+    sourceData?: StringNullableFilter<"ScheduledCampaign"> | string | null
+    isActive?: BoolFilter<"ScheduledCampaign"> | boolean
+    failureCount?: IntFilter<"ScheduledCampaign"> | number
+    lastError?: StringNullableFilter<"ScheduledCampaign"> | string | null
+    createdAt?: DateTimeFilter<"ScheduledCampaign"> | Date | string
+    updatedAt?: DateTimeFilter<"ScheduledCampaign"> | Date | string
   }
 
   export type MediaUpsertWithWhereUniqueWithoutUserInput = {
@@ -32096,6 +39741,12 @@ export namespace Prisma {
     status?: EnumSubscriptionStatusFieldUpdateOperationsInput | $Enums.SubscriptionStatus
     startDate?: DateTimeFieldUpdateOperationsInput | Date | string
     endDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    postsUsed?: IntFieldUpdateOperationsInput | number
+    aiTextUsed?: IntFieldUpdateOperationsInput | number
+    aiImageUsed?: IntFieldUpdateOperationsInput | number
+    lastResetAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    paystackSubscriptionCode?: NullableStringFieldUpdateOperationsInput | string | null
+    paystackCustomerCode?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     plan?: PlanUpdateOneRequiredWithoutSubscriptionsNestedInput
@@ -32107,6 +39758,74 @@ export namespace Prisma {
     status?: EnumSubscriptionStatusFieldUpdateOperationsInput | $Enums.SubscriptionStatus
     startDate?: DateTimeFieldUpdateOperationsInput | Date | string
     endDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    postsUsed?: IntFieldUpdateOperationsInput | number
+    aiTextUsed?: IntFieldUpdateOperationsInput | number
+    aiImageUsed?: IntFieldUpdateOperationsInput | number
+    lastResetAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    paystackSubscriptionCode?: NullableStringFieldUpdateOperationsInput | string | null
+    paystackCustomerCode?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type TransactionUpsertWithWhereUniqueWithoutUserInput = {
+    where: TransactionWhereUniqueInput
+    update: XOR<TransactionUpdateWithoutUserInput, TransactionUncheckedUpdateWithoutUserInput>
+    create: XOR<TransactionCreateWithoutUserInput, TransactionUncheckedCreateWithoutUserInput>
+  }
+
+  export type TransactionUpdateWithWhereUniqueWithoutUserInput = {
+    where: TransactionWhereUniqueInput
+    data: XOR<TransactionUpdateWithoutUserInput, TransactionUncheckedUpdateWithoutUserInput>
+  }
+
+  export type TransactionUpdateManyWithWhereWithoutUserInput = {
+    where: TransactionScalarWhereInput
+    data: XOR<TransactionUpdateManyMutationInput, TransactionUncheckedUpdateManyWithoutUserInput>
+  }
+
+  export type TransactionScalarWhereInput = {
+    AND?: TransactionScalarWhereInput | TransactionScalarWhereInput[]
+    OR?: TransactionScalarWhereInput[]
+    NOT?: TransactionScalarWhereInput | TransactionScalarWhereInput[]
+    id?: StringFilter<"Transaction"> | string
+    userId?: StringFilter<"Transaction"> | string
+    amount?: FloatFilter<"Transaction"> | number
+    currency?: StringFilter<"Transaction"> | string
+    status?: StringFilter<"Transaction"> | string
+    reference?: StringFilter<"Transaction"> | string
+    paystackId?: StringNullableFilter<"Transaction"> | string | null
+    channel?: StringNullableFilter<"Transaction"> | string | null
+    paidAt?: DateTimeNullableFilter<"Transaction"> | Date | string | null
+    createdAt?: DateTimeFilter<"Transaction"> | Date | string
+    updatedAt?: DateTimeFilter<"Transaction"> | Date | string
+  }
+
+  export type WhatsAppConfigUpsertWithoutUserInput = {
+    update: XOR<WhatsAppConfigUpdateWithoutUserInput, WhatsAppConfigUncheckedUpdateWithoutUserInput>
+    create: XOR<WhatsAppConfigCreateWithoutUserInput, WhatsAppConfigUncheckedCreateWithoutUserInput>
+    where?: WhatsAppConfigWhereInput
+  }
+
+  export type WhatsAppConfigUpdateToOneWithWhereWithoutUserInput = {
+    where?: WhatsAppConfigWhereInput
+    data: XOR<WhatsAppConfigUpdateWithoutUserInput, WhatsAppConfigUncheckedUpdateWithoutUserInput>
+  }
+
+  export type WhatsAppConfigUpdateWithoutUserInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    phoneNumberId?: StringFieldUpdateOperationsInput | string
+    wabaId?: StringFieldUpdateOperationsInput | string
+    accessToken?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type WhatsAppConfigUncheckedUpdateWithoutUserInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    phoneNumberId?: StringFieldUpdateOperationsInput | string
+    wabaId?: StringFieldUpdateOperationsInput | string
+    accessToken?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -32121,16 +39840,21 @@ export namespace Prisma {
     role?: $Enums.Role
     createdAt?: Date | string
     updatedAt?: Date | string
+    zernioProfileId?: string | null
     sessions?: SessionCreateNestedManyWithoutUserInput
     socialAccounts?: SocialAccountCreateNestedManyWithoutUserInput
     posts?: PostCreateNestedManyWithoutUserInput
     campaigns?: CampaignCreateNestedManyWithoutUserInput
     audienceGroups?: AudienceGroupCreateNestedManyWithoutUserInput
     emailCampaigns?: EmailCampaignCreateNestedManyWithoutUserInput
+    emailTemplates?: EmailTemplateCreateNestedManyWithoutUserInput
+    scheduledCampaigns?: ScheduledCampaignCreateNestedManyWithoutUserInput
     media?: MediaCreateNestedManyWithoutUserInput
     analytics?: AnalyticsCreateNestedManyWithoutUserInput
     notifications?: NotificationCreateNestedManyWithoutUserInput
     subscription?: SubscriptionCreateNestedOneWithoutUserInput
+    transactions?: TransactionCreateNestedManyWithoutUserInput
+    whatsappConfig?: WhatsAppConfigCreateNestedOneWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutAccountsInput = {
@@ -32143,16 +39867,21 @@ export namespace Prisma {
     role?: $Enums.Role
     createdAt?: Date | string
     updatedAt?: Date | string
+    zernioProfileId?: string | null
     sessions?: SessionUncheckedCreateNestedManyWithoutUserInput
     socialAccounts?: SocialAccountUncheckedCreateNestedManyWithoutUserInput
     posts?: PostUncheckedCreateNestedManyWithoutUserInput
     campaigns?: CampaignUncheckedCreateNestedManyWithoutUserInput
     audienceGroups?: AudienceGroupUncheckedCreateNestedManyWithoutUserInput
     emailCampaigns?: EmailCampaignUncheckedCreateNestedManyWithoutUserInput
+    emailTemplates?: EmailTemplateUncheckedCreateNestedManyWithoutUserInput
+    scheduledCampaigns?: ScheduledCampaignUncheckedCreateNestedManyWithoutUserInput
     media?: MediaUncheckedCreateNestedManyWithoutUserInput
     analytics?: AnalyticsUncheckedCreateNestedManyWithoutUserInput
     notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
     subscription?: SubscriptionUncheckedCreateNestedOneWithoutUserInput
+    transactions?: TransactionUncheckedCreateNestedManyWithoutUserInput
+    whatsappConfig?: WhatsAppConfigUncheckedCreateNestedOneWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutAccountsInput = {
@@ -32181,16 +39910,21 @@ export namespace Prisma {
     role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    zernioProfileId?: NullableStringFieldUpdateOperationsInput | string | null
     sessions?: SessionUpdateManyWithoutUserNestedInput
     socialAccounts?: SocialAccountUpdateManyWithoutUserNestedInput
     posts?: PostUpdateManyWithoutUserNestedInput
     campaigns?: CampaignUpdateManyWithoutUserNestedInput
     audienceGroups?: AudienceGroupUpdateManyWithoutUserNestedInput
     emailCampaigns?: EmailCampaignUpdateManyWithoutUserNestedInput
+    emailTemplates?: EmailTemplateUpdateManyWithoutUserNestedInput
+    scheduledCampaigns?: ScheduledCampaignUpdateManyWithoutUserNestedInput
     media?: MediaUpdateManyWithoutUserNestedInput
     analytics?: AnalyticsUpdateManyWithoutUserNestedInput
     notifications?: NotificationUpdateManyWithoutUserNestedInput
     subscription?: SubscriptionUpdateOneWithoutUserNestedInput
+    transactions?: TransactionUpdateManyWithoutUserNestedInput
+    whatsappConfig?: WhatsAppConfigUpdateOneWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutAccountsInput = {
@@ -32203,16 +39937,21 @@ export namespace Prisma {
     role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    zernioProfileId?: NullableStringFieldUpdateOperationsInput | string | null
     sessions?: SessionUncheckedUpdateManyWithoutUserNestedInput
     socialAccounts?: SocialAccountUncheckedUpdateManyWithoutUserNestedInput
     posts?: PostUncheckedUpdateManyWithoutUserNestedInput
     campaigns?: CampaignUncheckedUpdateManyWithoutUserNestedInput
     audienceGroups?: AudienceGroupUncheckedUpdateManyWithoutUserNestedInput
     emailCampaigns?: EmailCampaignUncheckedUpdateManyWithoutUserNestedInput
+    emailTemplates?: EmailTemplateUncheckedUpdateManyWithoutUserNestedInput
+    scheduledCampaigns?: ScheduledCampaignUncheckedUpdateManyWithoutUserNestedInput
     media?: MediaUncheckedUpdateManyWithoutUserNestedInput
     analytics?: AnalyticsUncheckedUpdateManyWithoutUserNestedInput
     notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
     subscription?: SubscriptionUncheckedUpdateOneWithoutUserNestedInput
+    transactions?: TransactionUncheckedUpdateManyWithoutUserNestedInput
+    whatsappConfig?: WhatsAppConfigUncheckedUpdateOneWithoutUserNestedInput
   }
 
   export type UserCreateWithoutSessionsInput = {
@@ -32225,16 +39964,21 @@ export namespace Prisma {
     role?: $Enums.Role
     createdAt?: Date | string
     updatedAt?: Date | string
+    zernioProfileId?: string | null
     accounts?: AccountCreateNestedManyWithoutUserInput
     socialAccounts?: SocialAccountCreateNestedManyWithoutUserInput
     posts?: PostCreateNestedManyWithoutUserInput
     campaigns?: CampaignCreateNestedManyWithoutUserInput
     audienceGroups?: AudienceGroupCreateNestedManyWithoutUserInput
     emailCampaigns?: EmailCampaignCreateNestedManyWithoutUserInput
+    emailTemplates?: EmailTemplateCreateNestedManyWithoutUserInput
+    scheduledCampaigns?: ScheduledCampaignCreateNestedManyWithoutUserInput
     media?: MediaCreateNestedManyWithoutUserInput
     analytics?: AnalyticsCreateNestedManyWithoutUserInput
     notifications?: NotificationCreateNestedManyWithoutUserInput
     subscription?: SubscriptionCreateNestedOneWithoutUserInput
+    transactions?: TransactionCreateNestedManyWithoutUserInput
+    whatsappConfig?: WhatsAppConfigCreateNestedOneWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutSessionsInput = {
@@ -32247,16 +39991,21 @@ export namespace Prisma {
     role?: $Enums.Role
     createdAt?: Date | string
     updatedAt?: Date | string
+    zernioProfileId?: string | null
     accounts?: AccountUncheckedCreateNestedManyWithoutUserInput
     socialAccounts?: SocialAccountUncheckedCreateNestedManyWithoutUserInput
     posts?: PostUncheckedCreateNestedManyWithoutUserInput
     campaigns?: CampaignUncheckedCreateNestedManyWithoutUserInput
     audienceGroups?: AudienceGroupUncheckedCreateNestedManyWithoutUserInput
     emailCampaigns?: EmailCampaignUncheckedCreateNestedManyWithoutUserInput
+    emailTemplates?: EmailTemplateUncheckedCreateNestedManyWithoutUserInput
+    scheduledCampaigns?: ScheduledCampaignUncheckedCreateNestedManyWithoutUserInput
     media?: MediaUncheckedCreateNestedManyWithoutUserInput
     analytics?: AnalyticsUncheckedCreateNestedManyWithoutUserInput
     notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
     subscription?: SubscriptionUncheckedCreateNestedOneWithoutUserInput
+    transactions?: TransactionUncheckedCreateNestedManyWithoutUserInput
+    whatsappConfig?: WhatsAppConfigUncheckedCreateNestedOneWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutSessionsInput = {
@@ -32285,16 +40034,21 @@ export namespace Prisma {
     role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    zernioProfileId?: NullableStringFieldUpdateOperationsInput | string | null
     accounts?: AccountUpdateManyWithoutUserNestedInput
     socialAccounts?: SocialAccountUpdateManyWithoutUserNestedInput
     posts?: PostUpdateManyWithoutUserNestedInput
     campaigns?: CampaignUpdateManyWithoutUserNestedInput
     audienceGroups?: AudienceGroupUpdateManyWithoutUserNestedInput
     emailCampaigns?: EmailCampaignUpdateManyWithoutUserNestedInput
+    emailTemplates?: EmailTemplateUpdateManyWithoutUserNestedInput
+    scheduledCampaigns?: ScheduledCampaignUpdateManyWithoutUserNestedInput
     media?: MediaUpdateManyWithoutUserNestedInput
     analytics?: AnalyticsUpdateManyWithoutUserNestedInput
     notifications?: NotificationUpdateManyWithoutUserNestedInput
     subscription?: SubscriptionUpdateOneWithoutUserNestedInput
+    transactions?: TransactionUpdateManyWithoutUserNestedInput
+    whatsappConfig?: WhatsAppConfigUpdateOneWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutSessionsInput = {
@@ -32307,16 +40061,21 @@ export namespace Prisma {
     role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    zernioProfileId?: NullableStringFieldUpdateOperationsInput | string | null
     accounts?: AccountUncheckedUpdateManyWithoutUserNestedInput
     socialAccounts?: SocialAccountUncheckedUpdateManyWithoutUserNestedInput
     posts?: PostUncheckedUpdateManyWithoutUserNestedInput
     campaigns?: CampaignUncheckedUpdateManyWithoutUserNestedInput
     audienceGroups?: AudienceGroupUncheckedUpdateManyWithoutUserNestedInput
     emailCampaigns?: EmailCampaignUncheckedUpdateManyWithoutUserNestedInput
+    emailTemplates?: EmailTemplateUncheckedUpdateManyWithoutUserNestedInput
+    scheduledCampaigns?: ScheduledCampaignUncheckedUpdateManyWithoutUserNestedInput
     media?: MediaUncheckedUpdateManyWithoutUserNestedInput
     analytics?: AnalyticsUncheckedUpdateManyWithoutUserNestedInput
     notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
     subscription?: SubscriptionUncheckedUpdateOneWithoutUserNestedInput
+    transactions?: TransactionUncheckedUpdateManyWithoutUserNestedInput
+    whatsappConfig?: WhatsAppConfigUncheckedUpdateOneWithoutUserNestedInput
   }
 
   export type SubscriptionCreateWithoutPlanInput = {
@@ -32324,6 +40083,12 @@ export namespace Prisma {
     status?: $Enums.SubscriptionStatus
     startDate?: Date | string
     endDate?: Date | string | null
+    postsUsed?: number
+    aiTextUsed?: number
+    aiImageUsed?: number
+    lastResetAt?: Date | string
+    paystackSubscriptionCode?: string | null
+    paystackCustomerCode?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     user: UserCreateNestedOneWithoutSubscriptionInput
@@ -32335,6 +40100,12 @@ export namespace Prisma {
     status?: $Enums.SubscriptionStatus
     startDate?: Date | string
     endDate?: Date | string | null
+    postsUsed?: number
+    aiTextUsed?: number
+    aiImageUsed?: number
+    lastResetAt?: Date | string
+    paystackSubscriptionCode?: string | null
+    paystackCustomerCode?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -32375,6 +40146,12 @@ export namespace Prisma {
     status?: EnumSubscriptionStatusFilter<"Subscription"> | $Enums.SubscriptionStatus
     startDate?: DateTimeFilter<"Subscription"> | Date | string
     endDate?: DateTimeNullableFilter<"Subscription"> | Date | string | null
+    postsUsed?: IntFilter<"Subscription"> | number
+    aiTextUsed?: IntFilter<"Subscription"> | number
+    aiImageUsed?: IntFilter<"Subscription"> | number
+    lastResetAt?: DateTimeFilter<"Subscription"> | Date | string
+    paystackSubscriptionCode?: StringNullableFilter<"Subscription"> | string | null
+    paystackCustomerCode?: StringNullableFilter<"Subscription"> | string | null
     createdAt?: DateTimeFilter<"Subscription"> | Date | string
     updatedAt?: DateTimeFilter<"Subscription"> | Date | string
   }
@@ -32389,6 +40166,7 @@ export namespace Prisma {
     role?: $Enums.Role
     createdAt?: Date | string
     updatedAt?: Date | string
+    zernioProfileId?: string | null
     accounts?: AccountCreateNestedManyWithoutUserInput
     sessions?: SessionCreateNestedManyWithoutUserInput
     socialAccounts?: SocialAccountCreateNestedManyWithoutUserInput
@@ -32396,9 +40174,13 @@ export namespace Prisma {
     campaigns?: CampaignCreateNestedManyWithoutUserInput
     audienceGroups?: AudienceGroupCreateNestedManyWithoutUserInput
     emailCampaigns?: EmailCampaignCreateNestedManyWithoutUserInput
+    emailTemplates?: EmailTemplateCreateNestedManyWithoutUserInput
+    scheduledCampaigns?: ScheduledCampaignCreateNestedManyWithoutUserInput
     media?: MediaCreateNestedManyWithoutUserInput
     analytics?: AnalyticsCreateNestedManyWithoutUserInput
     notifications?: NotificationCreateNestedManyWithoutUserInput
+    transactions?: TransactionCreateNestedManyWithoutUserInput
+    whatsappConfig?: WhatsAppConfigCreateNestedOneWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutSubscriptionInput = {
@@ -32411,6 +40193,7 @@ export namespace Prisma {
     role?: $Enums.Role
     createdAt?: Date | string
     updatedAt?: Date | string
+    zernioProfileId?: string | null
     accounts?: AccountUncheckedCreateNestedManyWithoutUserInput
     sessions?: SessionUncheckedCreateNestedManyWithoutUserInput
     socialAccounts?: SocialAccountUncheckedCreateNestedManyWithoutUserInput
@@ -32418,9 +40201,13 @@ export namespace Prisma {
     campaigns?: CampaignUncheckedCreateNestedManyWithoutUserInput
     audienceGroups?: AudienceGroupUncheckedCreateNestedManyWithoutUserInput
     emailCampaigns?: EmailCampaignUncheckedCreateNestedManyWithoutUserInput
+    emailTemplates?: EmailTemplateUncheckedCreateNestedManyWithoutUserInput
+    scheduledCampaigns?: ScheduledCampaignUncheckedCreateNestedManyWithoutUserInput
     media?: MediaUncheckedCreateNestedManyWithoutUserInput
     analytics?: AnalyticsUncheckedCreateNestedManyWithoutUserInput
     notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
+    transactions?: TransactionUncheckedCreateNestedManyWithoutUserInput
+    whatsappConfig?: WhatsAppConfigUncheckedCreateNestedOneWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutSubscriptionInput = {
@@ -32436,7 +40223,10 @@ export namespace Prisma {
     features?: PlanCreatefeaturesInput | string[]
     postsPerMonth: number
     platforms: number
-    aiCredits: number
+    aiCredits?: number
+    aiTextLimit?: number
+    aiImageLimit?: number
+    paystackPlanCode?: string | null
     createdAt?: Date | string
   }
 
@@ -32448,7 +40238,10 @@ export namespace Prisma {
     features?: PlanCreatefeaturesInput | string[]
     postsPerMonth: number
     platforms: number
-    aiCredits: number
+    aiCredits?: number
+    aiTextLimit?: number
+    aiImageLimit?: number
+    paystackPlanCode?: string | null
     createdAt?: Date | string
   }
 
@@ -32478,6 +40271,7 @@ export namespace Prisma {
     role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    zernioProfileId?: NullableStringFieldUpdateOperationsInput | string | null
     accounts?: AccountUpdateManyWithoutUserNestedInput
     sessions?: SessionUpdateManyWithoutUserNestedInput
     socialAccounts?: SocialAccountUpdateManyWithoutUserNestedInput
@@ -32485,9 +40279,13 @@ export namespace Prisma {
     campaigns?: CampaignUpdateManyWithoutUserNestedInput
     audienceGroups?: AudienceGroupUpdateManyWithoutUserNestedInput
     emailCampaigns?: EmailCampaignUpdateManyWithoutUserNestedInput
+    emailTemplates?: EmailTemplateUpdateManyWithoutUserNestedInput
+    scheduledCampaigns?: ScheduledCampaignUpdateManyWithoutUserNestedInput
     media?: MediaUpdateManyWithoutUserNestedInput
     analytics?: AnalyticsUpdateManyWithoutUserNestedInput
     notifications?: NotificationUpdateManyWithoutUserNestedInput
+    transactions?: TransactionUpdateManyWithoutUserNestedInput
+    whatsappConfig?: WhatsAppConfigUpdateOneWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutSubscriptionInput = {
@@ -32500,6 +40298,7 @@ export namespace Prisma {
     role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    zernioProfileId?: NullableStringFieldUpdateOperationsInput | string | null
     accounts?: AccountUncheckedUpdateManyWithoutUserNestedInput
     sessions?: SessionUncheckedUpdateManyWithoutUserNestedInput
     socialAccounts?: SocialAccountUncheckedUpdateManyWithoutUserNestedInput
@@ -32507,9 +40306,13 @@ export namespace Prisma {
     campaigns?: CampaignUncheckedUpdateManyWithoutUserNestedInput
     audienceGroups?: AudienceGroupUncheckedUpdateManyWithoutUserNestedInput
     emailCampaigns?: EmailCampaignUncheckedUpdateManyWithoutUserNestedInput
+    emailTemplates?: EmailTemplateUncheckedUpdateManyWithoutUserNestedInput
+    scheduledCampaigns?: ScheduledCampaignUncheckedUpdateManyWithoutUserNestedInput
     media?: MediaUncheckedUpdateManyWithoutUserNestedInput
     analytics?: AnalyticsUncheckedUpdateManyWithoutUserNestedInput
     notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
+    transactions?: TransactionUncheckedUpdateManyWithoutUserNestedInput
+    whatsappConfig?: WhatsAppConfigUncheckedUpdateOneWithoutUserNestedInput
   }
 
   export type PlanUpsertWithoutSubscriptionsInput = {
@@ -32532,6 +40335,9 @@ export namespace Prisma {
     postsPerMonth?: IntFieldUpdateOperationsInput | number
     platforms?: IntFieldUpdateOperationsInput | number
     aiCredits?: IntFieldUpdateOperationsInput | number
+    aiTextLimit?: IntFieldUpdateOperationsInput | number
+    aiImageLimit?: IntFieldUpdateOperationsInput | number
+    paystackPlanCode?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
@@ -32544,7 +40350,134 @@ export namespace Prisma {
     postsPerMonth?: IntFieldUpdateOperationsInput | number
     platforms?: IntFieldUpdateOperationsInput | number
     aiCredits?: IntFieldUpdateOperationsInput | number
+    aiTextLimit?: IntFieldUpdateOperationsInput | number
+    aiImageLimit?: IntFieldUpdateOperationsInput | number
+    paystackPlanCode?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type UserCreateWithoutTransactionsInput = {
+    id?: string
+    name?: string | null
+    email: string
+    emailVerified?: Date | string | null
+    image?: string | null
+    password?: string | null
+    role?: $Enums.Role
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    zernioProfileId?: string | null
+    accounts?: AccountCreateNestedManyWithoutUserInput
+    sessions?: SessionCreateNestedManyWithoutUserInput
+    socialAccounts?: SocialAccountCreateNestedManyWithoutUserInput
+    posts?: PostCreateNestedManyWithoutUserInput
+    campaigns?: CampaignCreateNestedManyWithoutUserInput
+    audienceGroups?: AudienceGroupCreateNestedManyWithoutUserInput
+    emailCampaigns?: EmailCampaignCreateNestedManyWithoutUserInput
+    emailTemplates?: EmailTemplateCreateNestedManyWithoutUserInput
+    scheduledCampaigns?: ScheduledCampaignCreateNestedManyWithoutUserInput
+    media?: MediaCreateNestedManyWithoutUserInput
+    analytics?: AnalyticsCreateNestedManyWithoutUserInput
+    notifications?: NotificationCreateNestedManyWithoutUserInput
+    subscription?: SubscriptionCreateNestedOneWithoutUserInput
+    whatsappConfig?: WhatsAppConfigCreateNestedOneWithoutUserInput
+  }
+
+  export type UserUncheckedCreateWithoutTransactionsInput = {
+    id?: string
+    name?: string | null
+    email: string
+    emailVerified?: Date | string | null
+    image?: string | null
+    password?: string | null
+    role?: $Enums.Role
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    zernioProfileId?: string | null
+    accounts?: AccountUncheckedCreateNestedManyWithoutUserInput
+    sessions?: SessionUncheckedCreateNestedManyWithoutUserInput
+    socialAccounts?: SocialAccountUncheckedCreateNestedManyWithoutUserInput
+    posts?: PostUncheckedCreateNestedManyWithoutUserInput
+    campaigns?: CampaignUncheckedCreateNestedManyWithoutUserInput
+    audienceGroups?: AudienceGroupUncheckedCreateNestedManyWithoutUserInput
+    emailCampaigns?: EmailCampaignUncheckedCreateNestedManyWithoutUserInput
+    emailTemplates?: EmailTemplateUncheckedCreateNestedManyWithoutUserInput
+    scheduledCampaigns?: ScheduledCampaignUncheckedCreateNestedManyWithoutUserInput
+    media?: MediaUncheckedCreateNestedManyWithoutUserInput
+    analytics?: AnalyticsUncheckedCreateNestedManyWithoutUserInput
+    notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
+    subscription?: SubscriptionUncheckedCreateNestedOneWithoutUserInput
+    whatsappConfig?: WhatsAppConfigUncheckedCreateNestedOneWithoutUserInput
+  }
+
+  export type UserCreateOrConnectWithoutTransactionsInput = {
+    where: UserWhereUniqueInput
+    create: XOR<UserCreateWithoutTransactionsInput, UserUncheckedCreateWithoutTransactionsInput>
+  }
+
+  export type UserUpsertWithoutTransactionsInput = {
+    update: XOR<UserUpdateWithoutTransactionsInput, UserUncheckedUpdateWithoutTransactionsInput>
+    create: XOR<UserCreateWithoutTransactionsInput, UserUncheckedCreateWithoutTransactionsInput>
+    where?: UserWhereInput
+  }
+
+  export type UserUpdateToOneWithWhereWithoutTransactionsInput = {
+    where?: UserWhereInput
+    data: XOR<UserUpdateWithoutTransactionsInput, UserUncheckedUpdateWithoutTransactionsInput>
+  }
+
+  export type UserUpdateWithoutTransactionsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: NullableStringFieldUpdateOperationsInput | string | null
+    email?: StringFieldUpdateOperationsInput | string
+    emailVerified?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    image?: NullableStringFieldUpdateOperationsInput | string | null
+    password?: NullableStringFieldUpdateOperationsInput | string | null
+    role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    zernioProfileId?: NullableStringFieldUpdateOperationsInput | string | null
+    accounts?: AccountUpdateManyWithoutUserNestedInput
+    sessions?: SessionUpdateManyWithoutUserNestedInput
+    socialAccounts?: SocialAccountUpdateManyWithoutUserNestedInput
+    posts?: PostUpdateManyWithoutUserNestedInput
+    campaigns?: CampaignUpdateManyWithoutUserNestedInput
+    audienceGroups?: AudienceGroupUpdateManyWithoutUserNestedInput
+    emailCampaigns?: EmailCampaignUpdateManyWithoutUserNestedInput
+    emailTemplates?: EmailTemplateUpdateManyWithoutUserNestedInput
+    scheduledCampaigns?: ScheduledCampaignUpdateManyWithoutUserNestedInput
+    media?: MediaUpdateManyWithoutUserNestedInput
+    analytics?: AnalyticsUpdateManyWithoutUserNestedInput
+    notifications?: NotificationUpdateManyWithoutUserNestedInput
+    subscription?: SubscriptionUpdateOneWithoutUserNestedInput
+    whatsappConfig?: WhatsAppConfigUpdateOneWithoutUserNestedInput
+  }
+
+  export type UserUncheckedUpdateWithoutTransactionsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: NullableStringFieldUpdateOperationsInput | string | null
+    email?: StringFieldUpdateOperationsInput | string
+    emailVerified?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    image?: NullableStringFieldUpdateOperationsInput | string | null
+    password?: NullableStringFieldUpdateOperationsInput | string | null
+    role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    zernioProfileId?: NullableStringFieldUpdateOperationsInput | string | null
+    accounts?: AccountUncheckedUpdateManyWithoutUserNestedInput
+    sessions?: SessionUncheckedUpdateManyWithoutUserNestedInput
+    socialAccounts?: SocialAccountUncheckedUpdateManyWithoutUserNestedInput
+    posts?: PostUncheckedUpdateManyWithoutUserNestedInput
+    campaigns?: CampaignUncheckedUpdateManyWithoutUserNestedInput
+    audienceGroups?: AudienceGroupUncheckedUpdateManyWithoutUserNestedInput
+    emailCampaigns?: EmailCampaignUncheckedUpdateManyWithoutUserNestedInput
+    emailTemplates?: EmailTemplateUncheckedUpdateManyWithoutUserNestedInput
+    scheduledCampaigns?: ScheduledCampaignUncheckedUpdateManyWithoutUserNestedInput
+    media?: MediaUncheckedUpdateManyWithoutUserNestedInput
+    analytics?: AnalyticsUncheckedUpdateManyWithoutUserNestedInput
+    notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
+    subscription?: SubscriptionUncheckedUpdateOneWithoutUserNestedInput
+    whatsappConfig?: WhatsAppConfigUncheckedUpdateOneWithoutUserNestedInput
   }
 
   export type UserCreateWithoutSocialAccountsInput = {
@@ -32557,16 +40490,21 @@ export namespace Prisma {
     role?: $Enums.Role
     createdAt?: Date | string
     updatedAt?: Date | string
+    zernioProfileId?: string | null
     accounts?: AccountCreateNestedManyWithoutUserInput
     sessions?: SessionCreateNestedManyWithoutUserInput
     posts?: PostCreateNestedManyWithoutUserInput
     campaigns?: CampaignCreateNestedManyWithoutUserInput
     audienceGroups?: AudienceGroupCreateNestedManyWithoutUserInput
     emailCampaigns?: EmailCampaignCreateNestedManyWithoutUserInput
+    emailTemplates?: EmailTemplateCreateNestedManyWithoutUserInput
+    scheduledCampaigns?: ScheduledCampaignCreateNestedManyWithoutUserInput
     media?: MediaCreateNestedManyWithoutUserInput
     analytics?: AnalyticsCreateNestedManyWithoutUserInput
     notifications?: NotificationCreateNestedManyWithoutUserInput
     subscription?: SubscriptionCreateNestedOneWithoutUserInput
+    transactions?: TransactionCreateNestedManyWithoutUserInput
+    whatsappConfig?: WhatsAppConfigCreateNestedOneWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutSocialAccountsInput = {
@@ -32579,16 +40517,21 @@ export namespace Prisma {
     role?: $Enums.Role
     createdAt?: Date | string
     updatedAt?: Date | string
+    zernioProfileId?: string | null
     accounts?: AccountUncheckedCreateNestedManyWithoutUserInput
     sessions?: SessionUncheckedCreateNestedManyWithoutUserInput
     posts?: PostUncheckedCreateNestedManyWithoutUserInput
     campaigns?: CampaignUncheckedCreateNestedManyWithoutUserInput
     audienceGroups?: AudienceGroupUncheckedCreateNestedManyWithoutUserInput
     emailCampaigns?: EmailCampaignUncheckedCreateNestedManyWithoutUserInput
+    emailTemplates?: EmailTemplateUncheckedCreateNestedManyWithoutUserInput
+    scheduledCampaigns?: ScheduledCampaignUncheckedCreateNestedManyWithoutUserInput
     media?: MediaUncheckedCreateNestedManyWithoutUserInput
     analytics?: AnalyticsUncheckedCreateNestedManyWithoutUserInput
     notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
     subscription?: SubscriptionUncheckedCreateNestedOneWithoutUserInput
+    transactions?: TransactionUncheckedCreateNestedManyWithoutUserInput
+    whatsappConfig?: WhatsAppConfigUncheckedCreateNestedOneWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutSocialAccountsInput = {
@@ -32659,16 +40602,21 @@ export namespace Prisma {
     role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    zernioProfileId?: NullableStringFieldUpdateOperationsInput | string | null
     accounts?: AccountUpdateManyWithoutUserNestedInput
     sessions?: SessionUpdateManyWithoutUserNestedInput
     posts?: PostUpdateManyWithoutUserNestedInput
     campaigns?: CampaignUpdateManyWithoutUserNestedInput
     audienceGroups?: AudienceGroupUpdateManyWithoutUserNestedInput
     emailCampaigns?: EmailCampaignUpdateManyWithoutUserNestedInput
+    emailTemplates?: EmailTemplateUpdateManyWithoutUserNestedInput
+    scheduledCampaigns?: ScheduledCampaignUpdateManyWithoutUserNestedInput
     media?: MediaUpdateManyWithoutUserNestedInput
     analytics?: AnalyticsUpdateManyWithoutUserNestedInput
     notifications?: NotificationUpdateManyWithoutUserNestedInput
     subscription?: SubscriptionUpdateOneWithoutUserNestedInput
+    transactions?: TransactionUpdateManyWithoutUserNestedInput
+    whatsappConfig?: WhatsAppConfigUpdateOneWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutSocialAccountsInput = {
@@ -32681,16 +40629,21 @@ export namespace Prisma {
     role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    zernioProfileId?: NullableStringFieldUpdateOperationsInput | string | null
     accounts?: AccountUncheckedUpdateManyWithoutUserNestedInput
     sessions?: SessionUncheckedUpdateManyWithoutUserNestedInput
     posts?: PostUncheckedUpdateManyWithoutUserNestedInput
     campaigns?: CampaignUncheckedUpdateManyWithoutUserNestedInput
     audienceGroups?: AudienceGroupUncheckedUpdateManyWithoutUserNestedInput
     emailCampaigns?: EmailCampaignUncheckedUpdateManyWithoutUserNestedInput
+    emailTemplates?: EmailTemplateUncheckedUpdateManyWithoutUserNestedInput
+    scheduledCampaigns?: ScheduledCampaignUncheckedUpdateManyWithoutUserNestedInput
     media?: MediaUncheckedUpdateManyWithoutUserNestedInput
     analytics?: AnalyticsUncheckedUpdateManyWithoutUserNestedInput
     notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
     subscription?: SubscriptionUncheckedUpdateOneWithoutUserNestedInput
+    transactions?: TransactionUncheckedUpdateManyWithoutUserNestedInput
+    whatsappConfig?: WhatsAppConfigUncheckedUpdateOneWithoutUserNestedInput
   }
 
   export type PlatformPostUpsertWithWhereUniqueWithoutSocialAccountInput = {
@@ -32739,16 +40692,21 @@ export namespace Prisma {
     role?: $Enums.Role
     createdAt?: Date | string
     updatedAt?: Date | string
+    zernioProfileId?: string | null
     accounts?: AccountCreateNestedManyWithoutUserInput
     sessions?: SessionCreateNestedManyWithoutUserInput
     socialAccounts?: SocialAccountCreateNestedManyWithoutUserInput
     campaigns?: CampaignCreateNestedManyWithoutUserInput
     audienceGroups?: AudienceGroupCreateNestedManyWithoutUserInput
     emailCampaigns?: EmailCampaignCreateNestedManyWithoutUserInput
+    emailTemplates?: EmailTemplateCreateNestedManyWithoutUserInput
+    scheduledCampaigns?: ScheduledCampaignCreateNestedManyWithoutUserInput
     media?: MediaCreateNestedManyWithoutUserInput
     analytics?: AnalyticsCreateNestedManyWithoutUserInput
     notifications?: NotificationCreateNestedManyWithoutUserInput
     subscription?: SubscriptionCreateNestedOneWithoutUserInput
+    transactions?: TransactionCreateNestedManyWithoutUserInput
+    whatsappConfig?: WhatsAppConfigCreateNestedOneWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutPostsInput = {
@@ -32761,16 +40719,21 @@ export namespace Prisma {
     role?: $Enums.Role
     createdAt?: Date | string
     updatedAt?: Date | string
+    zernioProfileId?: string | null
     accounts?: AccountUncheckedCreateNestedManyWithoutUserInput
     sessions?: SessionUncheckedCreateNestedManyWithoutUserInput
     socialAccounts?: SocialAccountUncheckedCreateNestedManyWithoutUserInput
     campaigns?: CampaignUncheckedCreateNestedManyWithoutUserInput
     audienceGroups?: AudienceGroupUncheckedCreateNestedManyWithoutUserInput
     emailCampaigns?: EmailCampaignUncheckedCreateNestedManyWithoutUserInput
+    emailTemplates?: EmailTemplateUncheckedCreateNestedManyWithoutUserInput
+    scheduledCampaigns?: ScheduledCampaignUncheckedCreateNestedManyWithoutUserInput
     media?: MediaUncheckedCreateNestedManyWithoutUserInput
     analytics?: AnalyticsUncheckedCreateNestedManyWithoutUserInput
     notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
     subscription?: SubscriptionUncheckedCreateNestedOneWithoutUserInput
+    transactions?: TransactionUncheckedCreateNestedManyWithoutUserInput
+    whatsappConfig?: WhatsAppConfigUncheckedCreateNestedOneWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutPostsInput = {
@@ -32874,16 +40837,21 @@ export namespace Prisma {
     role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    zernioProfileId?: NullableStringFieldUpdateOperationsInput | string | null
     accounts?: AccountUpdateManyWithoutUserNestedInput
     sessions?: SessionUpdateManyWithoutUserNestedInput
     socialAccounts?: SocialAccountUpdateManyWithoutUserNestedInput
     campaigns?: CampaignUpdateManyWithoutUserNestedInput
     audienceGroups?: AudienceGroupUpdateManyWithoutUserNestedInput
     emailCampaigns?: EmailCampaignUpdateManyWithoutUserNestedInput
+    emailTemplates?: EmailTemplateUpdateManyWithoutUserNestedInput
+    scheduledCampaigns?: ScheduledCampaignUpdateManyWithoutUserNestedInput
     media?: MediaUpdateManyWithoutUserNestedInput
     analytics?: AnalyticsUpdateManyWithoutUserNestedInput
     notifications?: NotificationUpdateManyWithoutUserNestedInput
     subscription?: SubscriptionUpdateOneWithoutUserNestedInput
+    transactions?: TransactionUpdateManyWithoutUserNestedInput
+    whatsappConfig?: WhatsAppConfigUpdateOneWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutPostsInput = {
@@ -32896,16 +40864,21 @@ export namespace Prisma {
     role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    zernioProfileId?: NullableStringFieldUpdateOperationsInput | string | null
     accounts?: AccountUncheckedUpdateManyWithoutUserNestedInput
     sessions?: SessionUncheckedUpdateManyWithoutUserNestedInput
     socialAccounts?: SocialAccountUncheckedUpdateManyWithoutUserNestedInput
     campaigns?: CampaignUncheckedUpdateManyWithoutUserNestedInput
     audienceGroups?: AudienceGroupUncheckedUpdateManyWithoutUserNestedInput
     emailCampaigns?: EmailCampaignUncheckedUpdateManyWithoutUserNestedInput
+    emailTemplates?: EmailTemplateUncheckedUpdateManyWithoutUserNestedInput
+    scheduledCampaigns?: ScheduledCampaignUncheckedUpdateManyWithoutUserNestedInput
     media?: MediaUncheckedUpdateManyWithoutUserNestedInput
     analytics?: AnalyticsUncheckedUpdateManyWithoutUserNestedInput
     notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
     subscription?: SubscriptionUncheckedUpdateOneWithoutUserNestedInput
+    transactions?: TransactionUncheckedUpdateManyWithoutUserNestedInput
+    whatsappConfig?: WhatsAppConfigUncheckedUpdateOneWithoutUserNestedInput
   }
 
   export type CampaignUpsertWithoutPostsInput = {
@@ -33133,16 +41106,21 @@ export namespace Prisma {
     role?: $Enums.Role
     createdAt?: Date | string
     updatedAt?: Date | string
+    zernioProfileId?: string | null
     accounts?: AccountCreateNestedManyWithoutUserInput
     sessions?: SessionCreateNestedManyWithoutUserInput
     socialAccounts?: SocialAccountCreateNestedManyWithoutUserInput
     posts?: PostCreateNestedManyWithoutUserInput
     audienceGroups?: AudienceGroupCreateNestedManyWithoutUserInput
     emailCampaigns?: EmailCampaignCreateNestedManyWithoutUserInput
+    emailTemplates?: EmailTemplateCreateNestedManyWithoutUserInput
+    scheduledCampaigns?: ScheduledCampaignCreateNestedManyWithoutUserInput
     media?: MediaCreateNestedManyWithoutUserInput
     analytics?: AnalyticsCreateNestedManyWithoutUserInput
     notifications?: NotificationCreateNestedManyWithoutUserInput
     subscription?: SubscriptionCreateNestedOneWithoutUserInput
+    transactions?: TransactionCreateNestedManyWithoutUserInput
+    whatsappConfig?: WhatsAppConfigCreateNestedOneWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutCampaignsInput = {
@@ -33155,16 +41133,21 @@ export namespace Prisma {
     role?: $Enums.Role
     createdAt?: Date | string
     updatedAt?: Date | string
+    zernioProfileId?: string | null
     accounts?: AccountUncheckedCreateNestedManyWithoutUserInput
     sessions?: SessionUncheckedCreateNestedManyWithoutUserInput
     socialAccounts?: SocialAccountUncheckedCreateNestedManyWithoutUserInput
     posts?: PostUncheckedCreateNestedManyWithoutUserInput
     audienceGroups?: AudienceGroupUncheckedCreateNestedManyWithoutUserInput
     emailCampaigns?: EmailCampaignUncheckedCreateNestedManyWithoutUserInput
+    emailTemplates?: EmailTemplateUncheckedCreateNestedManyWithoutUserInput
+    scheduledCampaigns?: ScheduledCampaignUncheckedCreateNestedManyWithoutUserInput
     media?: MediaUncheckedCreateNestedManyWithoutUserInput
     analytics?: AnalyticsUncheckedCreateNestedManyWithoutUserInput
     notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
     subscription?: SubscriptionUncheckedCreateNestedOneWithoutUserInput
+    transactions?: TransactionUncheckedCreateNestedManyWithoutUserInput
+    whatsappConfig?: WhatsAppConfigUncheckedCreateNestedOneWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutCampaignsInput = {
@@ -33235,16 +41218,21 @@ export namespace Prisma {
     role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    zernioProfileId?: NullableStringFieldUpdateOperationsInput | string | null
     accounts?: AccountUpdateManyWithoutUserNestedInput
     sessions?: SessionUpdateManyWithoutUserNestedInput
     socialAccounts?: SocialAccountUpdateManyWithoutUserNestedInput
     posts?: PostUpdateManyWithoutUserNestedInput
     audienceGroups?: AudienceGroupUpdateManyWithoutUserNestedInput
     emailCampaigns?: EmailCampaignUpdateManyWithoutUserNestedInput
+    emailTemplates?: EmailTemplateUpdateManyWithoutUserNestedInput
+    scheduledCampaigns?: ScheduledCampaignUpdateManyWithoutUserNestedInput
     media?: MediaUpdateManyWithoutUserNestedInput
     analytics?: AnalyticsUpdateManyWithoutUserNestedInput
     notifications?: NotificationUpdateManyWithoutUserNestedInput
     subscription?: SubscriptionUpdateOneWithoutUserNestedInput
+    transactions?: TransactionUpdateManyWithoutUserNestedInput
+    whatsappConfig?: WhatsAppConfigUpdateOneWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutCampaignsInput = {
@@ -33257,16 +41245,21 @@ export namespace Prisma {
     role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    zernioProfileId?: NullableStringFieldUpdateOperationsInput | string | null
     accounts?: AccountUncheckedUpdateManyWithoutUserNestedInput
     sessions?: SessionUncheckedUpdateManyWithoutUserNestedInput
     socialAccounts?: SocialAccountUncheckedUpdateManyWithoutUserNestedInput
     posts?: PostUncheckedUpdateManyWithoutUserNestedInput
     audienceGroups?: AudienceGroupUncheckedUpdateManyWithoutUserNestedInput
     emailCampaigns?: EmailCampaignUncheckedUpdateManyWithoutUserNestedInput
+    emailTemplates?: EmailTemplateUncheckedUpdateManyWithoutUserNestedInput
+    scheduledCampaigns?: ScheduledCampaignUncheckedUpdateManyWithoutUserNestedInput
     media?: MediaUncheckedUpdateManyWithoutUserNestedInput
     analytics?: AnalyticsUncheckedUpdateManyWithoutUserNestedInput
     notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
     subscription?: SubscriptionUncheckedUpdateOneWithoutUserNestedInput
+    transactions?: TransactionUncheckedUpdateManyWithoutUserNestedInput
+    whatsappConfig?: WhatsAppConfigUncheckedUpdateOneWithoutUserNestedInput
   }
 
   export type PostUpsertWithWhereUniqueWithoutCampaignInput = {
@@ -33295,16 +41288,21 @@ export namespace Prisma {
     role?: $Enums.Role
     createdAt?: Date | string
     updatedAt?: Date | string
+    zernioProfileId?: string | null
     accounts?: AccountCreateNestedManyWithoutUserInput
     sessions?: SessionCreateNestedManyWithoutUserInput
     socialAccounts?: SocialAccountCreateNestedManyWithoutUserInput
     posts?: PostCreateNestedManyWithoutUserInput
     campaigns?: CampaignCreateNestedManyWithoutUserInput
     emailCampaigns?: EmailCampaignCreateNestedManyWithoutUserInput
+    emailTemplates?: EmailTemplateCreateNestedManyWithoutUserInput
+    scheduledCampaigns?: ScheduledCampaignCreateNestedManyWithoutUserInput
     media?: MediaCreateNestedManyWithoutUserInput
     analytics?: AnalyticsCreateNestedManyWithoutUserInput
     notifications?: NotificationCreateNestedManyWithoutUserInput
     subscription?: SubscriptionCreateNestedOneWithoutUserInput
+    transactions?: TransactionCreateNestedManyWithoutUserInput
+    whatsappConfig?: WhatsAppConfigCreateNestedOneWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutAudienceGroupsInput = {
@@ -33317,16 +41315,21 @@ export namespace Prisma {
     role?: $Enums.Role
     createdAt?: Date | string
     updatedAt?: Date | string
+    zernioProfileId?: string | null
     accounts?: AccountUncheckedCreateNestedManyWithoutUserInput
     sessions?: SessionUncheckedCreateNestedManyWithoutUserInput
     socialAccounts?: SocialAccountUncheckedCreateNestedManyWithoutUserInput
     posts?: PostUncheckedCreateNestedManyWithoutUserInput
     campaigns?: CampaignUncheckedCreateNestedManyWithoutUserInput
     emailCampaigns?: EmailCampaignUncheckedCreateNestedManyWithoutUserInput
+    emailTemplates?: EmailTemplateUncheckedCreateNestedManyWithoutUserInput
+    scheduledCampaigns?: ScheduledCampaignUncheckedCreateNestedManyWithoutUserInput
     media?: MediaUncheckedCreateNestedManyWithoutUserInput
     analytics?: AnalyticsUncheckedCreateNestedManyWithoutUserInput
     notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
     subscription?: SubscriptionUncheckedCreateNestedOneWithoutUserInput
+    transactions?: TransactionUncheckedCreateNestedManyWithoutUserInput
+    whatsappConfig?: WhatsAppConfigUncheckedCreateNestedOneWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutAudienceGroupsInput = {
@@ -33373,16 +41376,21 @@ export namespace Prisma {
     role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    zernioProfileId?: NullableStringFieldUpdateOperationsInput | string | null
     accounts?: AccountUpdateManyWithoutUserNestedInput
     sessions?: SessionUpdateManyWithoutUserNestedInput
     socialAccounts?: SocialAccountUpdateManyWithoutUserNestedInput
     posts?: PostUpdateManyWithoutUserNestedInput
     campaigns?: CampaignUpdateManyWithoutUserNestedInput
     emailCampaigns?: EmailCampaignUpdateManyWithoutUserNestedInput
+    emailTemplates?: EmailTemplateUpdateManyWithoutUserNestedInput
+    scheduledCampaigns?: ScheduledCampaignUpdateManyWithoutUserNestedInput
     media?: MediaUpdateManyWithoutUserNestedInput
     analytics?: AnalyticsUpdateManyWithoutUserNestedInput
     notifications?: NotificationUpdateManyWithoutUserNestedInput
     subscription?: SubscriptionUpdateOneWithoutUserNestedInput
+    transactions?: TransactionUpdateManyWithoutUserNestedInput
+    whatsappConfig?: WhatsAppConfigUpdateOneWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutAudienceGroupsInput = {
@@ -33395,16 +41403,21 @@ export namespace Prisma {
     role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    zernioProfileId?: NullableStringFieldUpdateOperationsInput | string | null
     accounts?: AccountUncheckedUpdateManyWithoutUserNestedInput
     sessions?: SessionUncheckedUpdateManyWithoutUserNestedInput
     socialAccounts?: SocialAccountUncheckedUpdateManyWithoutUserNestedInput
     posts?: PostUncheckedUpdateManyWithoutUserNestedInput
     campaigns?: CampaignUncheckedUpdateManyWithoutUserNestedInput
     emailCampaigns?: EmailCampaignUncheckedUpdateManyWithoutUserNestedInput
+    emailTemplates?: EmailTemplateUncheckedUpdateManyWithoutUserNestedInput
+    scheduledCampaigns?: ScheduledCampaignUncheckedUpdateManyWithoutUserNestedInput
     media?: MediaUncheckedUpdateManyWithoutUserNestedInput
     analytics?: AnalyticsUncheckedUpdateManyWithoutUserNestedInput
     notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
     subscription?: SubscriptionUncheckedUpdateOneWithoutUserNestedInput
+    transactions?: TransactionUncheckedUpdateManyWithoutUserNestedInput
+    whatsappConfig?: WhatsAppConfigUncheckedUpdateOneWithoutUserNestedInput
   }
 
   export type ContactGroupUpsertWithWhereUniqueWithoutGroupInput = {
@@ -33646,6 +41659,326 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
+  export type UserCreateWithoutEmailTemplatesInput = {
+    id?: string
+    name?: string | null
+    email: string
+    emailVerified?: Date | string | null
+    image?: string | null
+    password?: string | null
+    role?: $Enums.Role
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    zernioProfileId?: string | null
+    accounts?: AccountCreateNestedManyWithoutUserInput
+    sessions?: SessionCreateNestedManyWithoutUserInput
+    socialAccounts?: SocialAccountCreateNestedManyWithoutUserInput
+    posts?: PostCreateNestedManyWithoutUserInput
+    campaigns?: CampaignCreateNestedManyWithoutUserInput
+    audienceGroups?: AudienceGroupCreateNestedManyWithoutUserInput
+    emailCampaigns?: EmailCampaignCreateNestedManyWithoutUserInput
+    scheduledCampaigns?: ScheduledCampaignCreateNestedManyWithoutUserInput
+    media?: MediaCreateNestedManyWithoutUserInput
+    analytics?: AnalyticsCreateNestedManyWithoutUserInput
+    notifications?: NotificationCreateNestedManyWithoutUserInput
+    subscription?: SubscriptionCreateNestedOneWithoutUserInput
+    transactions?: TransactionCreateNestedManyWithoutUserInput
+    whatsappConfig?: WhatsAppConfigCreateNestedOneWithoutUserInput
+  }
+
+  export type UserUncheckedCreateWithoutEmailTemplatesInput = {
+    id?: string
+    name?: string | null
+    email: string
+    emailVerified?: Date | string | null
+    image?: string | null
+    password?: string | null
+    role?: $Enums.Role
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    zernioProfileId?: string | null
+    accounts?: AccountUncheckedCreateNestedManyWithoutUserInput
+    sessions?: SessionUncheckedCreateNestedManyWithoutUserInput
+    socialAccounts?: SocialAccountUncheckedCreateNestedManyWithoutUserInput
+    posts?: PostUncheckedCreateNestedManyWithoutUserInput
+    campaigns?: CampaignUncheckedCreateNestedManyWithoutUserInput
+    audienceGroups?: AudienceGroupUncheckedCreateNestedManyWithoutUserInput
+    emailCampaigns?: EmailCampaignUncheckedCreateNestedManyWithoutUserInput
+    scheduledCampaigns?: ScheduledCampaignUncheckedCreateNestedManyWithoutUserInput
+    media?: MediaUncheckedCreateNestedManyWithoutUserInput
+    analytics?: AnalyticsUncheckedCreateNestedManyWithoutUserInput
+    notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
+    subscription?: SubscriptionUncheckedCreateNestedOneWithoutUserInput
+    transactions?: TransactionUncheckedCreateNestedManyWithoutUserInput
+    whatsappConfig?: WhatsAppConfigUncheckedCreateNestedOneWithoutUserInput
+  }
+
+  export type UserCreateOrConnectWithoutEmailTemplatesInput = {
+    where: UserWhereUniqueInput
+    create: XOR<UserCreateWithoutEmailTemplatesInput, UserUncheckedCreateWithoutEmailTemplatesInput>
+  }
+
+  export type EmailCampaignCreateWithoutTemplateInput = {
+    id?: string
+    name: string
+    subject: string
+    previewText?: string | null
+    htmlContent: string
+    textContent?: string | null
+    status?: $Enums.EmailCampaignStatus
+    scheduledAt?: Date | string | null
+    sentAt?: Date | string | null
+    failedAt?: Date | string | null
+    openRate?: number
+    clickRate?: number
+    bounceRate?: number
+    retryCount?: number
+    maxRetries?: number
+    errorMessage?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    user: UserCreateNestedOneWithoutEmailCampaignsInput
+    recipients?: EmailCampaignRecipientCreateNestedManyWithoutCampaignInput
+  }
+
+  export type EmailCampaignUncheckedCreateWithoutTemplateInput = {
+    id?: string
+    userId: string
+    name: string
+    subject: string
+    previewText?: string | null
+    htmlContent: string
+    textContent?: string | null
+    status?: $Enums.EmailCampaignStatus
+    scheduledAt?: Date | string | null
+    sentAt?: Date | string | null
+    failedAt?: Date | string | null
+    openRate?: number
+    clickRate?: number
+    bounceRate?: number
+    retryCount?: number
+    maxRetries?: number
+    errorMessage?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    recipients?: EmailCampaignRecipientUncheckedCreateNestedManyWithoutCampaignInput
+  }
+
+  export type EmailCampaignCreateOrConnectWithoutTemplateInput = {
+    where: EmailCampaignWhereUniqueInput
+    create: XOR<EmailCampaignCreateWithoutTemplateInput, EmailCampaignUncheckedCreateWithoutTemplateInput>
+  }
+
+  export type EmailCampaignCreateManyTemplateInputEnvelope = {
+    data: EmailCampaignCreateManyTemplateInput | EmailCampaignCreateManyTemplateInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type UserUpsertWithoutEmailTemplatesInput = {
+    update: XOR<UserUpdateWithoutEmailTemplatesInput, UserUncheckedUpdateWithoutEmailTemplatesInput>
+    create: XOR<UserCreateWithoutEmailTemplatesInput, UserUncheckedCreateWithoutEmailTemplatesInput>
+    where?: UserWhereInput
+  }
+
+  export type UserUpdateToOneWithWhereWithoutEmailTemplatesInput = {
+    where?: UserWhereInput
+    data: XOR<UserUpdateWithoutEmailTemplatesInput, UserUncheckedUpdateWithoutEmailTemplatesInput>
+  }
+
+  export type UserUpdateWithoutEmailTemplatesInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: NullableStringFieldUpdateOperationsInput | string | null
+    email?: StringFieldUpdateOperationsInput | string
+    emailVerified?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    image?: NullableStringFieldUpdateOperationsInput | string | null
+    password?: NullableStringFieldUpdateOperationsInput | string | null
+    role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    zernioProfileId?: NullableStringFieldUpdateOperationsInput | string | null
+    accounts?: AccountUpdateManyWithoutUserNestedInput
+    sessions?: SessionUpdateManyWithoutUserNestedInput
+    socialAccounts?: SocialAccountUpdateManyWithoutUserNestedInput
+    posts?: PostUpdateManyWithoutUserNestedInput
+    campaigns?: CampaignUpdateManyWithoutUserNestedInput
+    audienceGroups?: AudienceGroupUpdateManyWithoutUserNestedInput
+    emailCampaigns?: EmailCampaignUpdateManyWithoutUserNestedInput
+    scheduledCampaigns?: ScheduledCampaignUpdateManyWithoutUserNestedInput
+    media?: MediaUpdateManyWithoutUserNestedInput
+    analytics?: AnalyticsUpdateManyWithoutUserNestedInput
+    notifications?: NotificationUpdateManyWithoutUserNestedInput
+    subscription?: SubscriptionUpdateOneWithoutUserNestedInput
+    transactions?: TransactionUpdateManyWithoutUserNestedInput
+    whatsappConfig?: WhatsAppConfigUpdateOneWithoutUserNestedInput
+  }
+
+  export type UserUncheckedUpdateWithoutEmailTemplatesInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: NullableStringFieldUpdateOperationsInput | string | null
+    email?: StringFieldUpdateOperationsInput | string
+    emailVerified?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    image?: NullableStringFieldUpdateOperationsInput | string | null
+    password?: NullableStringFieldUpdateOperationsInput | string | null
+    role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    zernioProfileId?: NullableStringFieldUpdateOperationsInput | string | null
+    accounts?: AccountUncheckedUpdateManyWithoutUserNestedInput
+    sessions?: SessionUncheckedUpdateManyWithoutUserNestedInput
+    socialAccounts?: SocialAccountUncheckedUpdateManyWithoutUserNestedInput
+    posts?: PostUncheckedUpdateManyWithoutUserNestedInput
+    campaigns?: CampaignUncheckedUpdateManyWithoutUserNestedInput
+    audienceGroups?: AudienceGroupUncheckedUpdateManyWithoutUserNestedInput
+    emailCampaigns?: EmailCampaignUncheckedUpdateManyWithoutUserNestedInput
+    scheduledCampaigns?: ScheduledCampaignUncheckedUpdateManyWithoutUserNestedInput
+    media?: MediaUncheckedUpdateManyWithoutUserNestedInput
+    analytics?: AnalyticsUncheckedUpdateManyWithoutUserNestedInput
+    notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
+    subscription?: SubscriptionUncheckedUpdateOneWithoutUserNestedInput
+    transactions?: TransactionUncheckedUpdateManyWithoutUserNestedInput
+    whatsappConfig?: WhatsAppConfigUncheckedUpdateOneWithoutUserNestedInput
+  }
+
+  export type EmailCampaignUpsertWithWhereUniqueWithoutTemplateInput = {
+    where: EmailCampaignWhereUniqueInput
+    update: XOR<EmailCampaignUpdateWithoutTemplateInput, EmailCampaignUncheckedUpdateWithoutTemplateInput>
+    create: XOR<EmailCampaignCreateWithoutTemplateInput, EmailCampaignUncheckedCreateWithoutTemplateInput>
+  }
+
+  export type EmailCampaignUpdateWithWhereUniqueWithoutTemplateInput = {
+    where: EmailCampaignWhereUniqueInput
+    data: XOR<EmailCampaignUpdateWithoutTemplateInput, EmailCampaignUncheckedUpdateWithoutTemplateInput>
+  }
+
+  export type EmailCampaignUpdateManyWithWhereWithoutTemplateInput = {
+    where: EmailCampaignScalarWhereInput
+    data: XOR<EmailCampaignUpdateManyMutationInput, EmailCampaignUncheckedUpdateManyWithoutTemplateInput>
+  }
+
+  export type UserCreateWithoutScheduledCampaignsInput = {
+    id?: string
+    name?: string | null
+    email: string
+    emailVerified?: Date | string | null
+    image?: string | null
+    password?: string | null
+    role?: $Enums.Role
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    zernioProfileId?: string | null
+    accounts?: AccountCreateNestedManyWithoutUserInput
+    sessions?: SessionCreateNestedManyWithoutUserInput
+    socialAccounts?: SocialAccountCreateNestedManyWithoutUserInput
+    posts?: PostCreateNestedManyWithoutUserInput
+    campaigns?: CampaignCreateNestedManyWithoutUserInput
+    audienceGroups?: AudienceGroupCreateNestedManyWithoutUserInput
+    emailCampaigns?: EmailCampaignCreateNestedManyWithoutUserInput
+    emailTemplates?: EmailTemplateCreateNestedManyWithoutUserInput
+    media?: MediaCreateNestedManyWithoutUserInput
+    analytics?: AnalyticsCreateNestedManyWithoutUserInput
+    notifications?: NotificationCreateNestedManyWithoutUserInput
+    subscription?: SubscriptionCreateNestedOneWithoutUserInput
+    transactions?: TransactionCreateNestedManyWithoutUserInput
+    whatsappConfig?: WhatsAppConfigCreateNestedOneWithoutUserInput
+  }
+
+  export type UserUncheckedCreateWithoutScheduledCampaignsInput = {
+    id?: string
+    name?: string | null
+    email: string
+    emailVerified?: Date | string | null
+    image?: string | null
+    password?: string | null
+    role?: $Enums.Role
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    zernioProfileId?: string | null
+    accounts?: AccountUncheckedCreateNestedManyWithoutUserInput
+    sessions?: SessionUncheckedCreateNestedManyWithoutUserInput
+    socialAccounts?: SocialAccountUncheckedCreateNestedManyWithoutUserInput
+    posts?: PostUncheckedCreateNestedManyWithoutUserInput
+    campaigns?: CampaignUncheckedCreateNestedManyWithoutUserInput
+    audienceGroups?: AudienceGroupUncheckedCreateNestedManyWithoutUserInput
+    emailCampaigns?: EmailCampaignUncheckedCreateNestedManyWithoutUserInput
+    emailTemplates?: EmailTemplateUncheckedCreateNestedManyWithoutUserInput
+    media?: MediaUncheckedCreateNestedManyWithoutUserInput
+    analytics?: AnalyticsUncheckedCreateNestedManyWithoutUserInput
+    notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
+    subscription?: SubscriptionUncheckedCreateNestedOneWithoutUserInput
+    transactions?: TransactionUncheckedCreateNestedManyWithoutUserInput
+    whatsappConfig?: WhatsAppConfigUncheckedCreateNestedOneWithoutUserInput
+  }
+
+  export type UserCreateOrConnectWithoutScheduledCampaignsInput = {
+    where: UserWhereUniqueInput
+    create: XOR<UserCreateWithoutScheduledCampaignsInput, UserUncheckedCreateWithoutScheduledCampaignsInput>
+  }
+
+  export type UserUpsertWithoutScheduledCampaignsInput = {
+    update: XOR<UserUpdateWithoutScheduledCampaignsInput, UserUncheckedUpdateWithoutScheduledCampaignsInput>
+    create: XOR<UserCreateWithoutScheduledCampaignsInput, UserUncheckedCreateWithoutScheduledCampaignsInput>
+    where?: UserWhereInput
+  }
+
+  export type UserUpdateToOneWithWhereWithoutScheduledCampaignsInput = {
+    where?: UserWhereInput
+    data: XOR<UserUpdateWithoutScheduledCampaignsInput, UserUncheckedUpdateWithoutScheduledCampaignsInput>
+  }
+
+  export type UserUpdateWithoutScheduledCampaignsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: NullableStringFieldUpdateOperationsInput | string | null
+    email?: StringFieldUpdateOperationsInput | string
+    emailVerified?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    image?: NullableStringFieldUpdateOperationsInput | string | null
+    password?: NullableStringFieldUpdateOperationsInput | string | null
+    role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    zernioProfileId?: NullableStringFieldUpdateOperationsInput | string | null
+    accounts?: AccountUpdateManyWithoutUserNestedInput
+    sessions?: SessionUpdateManyWithoutUserNestedInput
+    socialAccounts?: SocialAccountUpdateManyWithoutUserNestedInput
+    posts?: PostUpdateManyWithoutUserNestedInput
+    campaigns?: CampaignUpdateManyWithoutUserNestedInput
+    audienceGroups?: AudienceGroupUpdateManyWithoutUserNestedInput
+    emailCampaigns?: EmailCampaignUpdateManyWithoutUserNestedInput
+    emailTemplates?: EmailTemplateUpdateManyWithoutUserNestedInput
+    media?: MediaUpdateManyWithoutUserNestedInput
+    analytics?: AnalyticsUpdateManyWithoutUserNestedInput
+    notifications?: NotificationUpdateManyWithoutUserNestedInput
+    subscription?: SubscriptionUpdateOneWithoutUserNestedInput
+    transactions?: TransactionUpdateManyWithoutUserNestedInput
+    whatsappConfig?: WhatsAppConfigUpdateOneWithoutUserNestedInput
+  }
+
+  export type UserUncheckedUpdateWithoutScheduledCampaignsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: NullableStringFieldUpdateOperationsInput | string | null
+    email?: StringFieldUpdateOperationsInput | string
+    emailVerified?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    image?: NullableStringFieldUpdateOperationsInput | string | null
+    password?: NullableStringFieldUpdateOperationsInput | string | null
+    role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    zernioProfileId?: NullableStringFieldUpdateOperationsInput | string | null
+    accounts?: AccountUncheckedUpdateManyWithoutUserNestedInput
+    sessions?: SessionUncheckedUpdateManyWithoutUserNestedInput
+    socialAccounts?: SocialAccountUncheckedUpdateManyWithoutUserNestedInput
+    posts?: PostUncheckedUpdateManyWithoutUserNestedInput
+    campaigns?: CampaignUncheckedUpdateManyWithoutUserNestedInput
+    audienceGroups?: AudienceGroupUncheckedUpdateManyWithoutUserNestedInput
+    emailCampaigns?: EmailCampaignUncheckedUpdateManyWithoutUserNestedInput
+    emailTemplates?: EmailTemplateUncheckedUpdateManyWithoutUserNestedInput
+    media?: MediaUncheckedUpdateManyWithoutUserNestedInput
+    analytics?: AnalyticsUncheckedUpdateManyWithoutUserNestedInput
+    notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
+    subscription?: SubscriptionUncheckedUpdateOneWithoutUserNestedInput
+    transactions?: TransactionUncheckedUpdateManyWithoutUserNestedInput
+    whatsappConfig?: WhatsAppConfigUncheckedUpdateOneWithoutUserNestedInput
+  }
+
   export type UserCreateWithoutEmailCampaignsInput = {
     id?: string
     name?: string | null
@@ -33656,16 +41989,21 @@ export namespace Prisma {
     role?: $Enums.Role
     createdAt?: Date | string
     updatedAt?: Date | string
+    zernioProfileId?: string | null
     accounts?: AccountCreateNestedManyWithoutUserInput
     sessions?: SessionCreateNestedManyWithoutUserInput
     socialAccounts?: SocialAccountCreateNestedManyWithoutUserInput
     posts?: PostCreateNestedManyWithoutUserInput
     campaigns?: CampaignCreateNestedManyWithoutUserInput
     audienceGroups?: AudienceGroupCreateNestedManyWithoutUserInput
+    emailTemplates?: EmailTemplateCreateNestedManyWithoutUserInput
+    scheduledCampaigns?: ScheduledCampaignCreateNestedManyWithoutUserInput
     media?: MediaCreateNestedManyWithoutUserInput
     analytics?: AnalyticsCreateNestedManyWithoutUserInput
     notifications?: NotificationCreateNestedManyWithoutUserInput
     subscription?: SubscriptionCreateNestedOneWithoutUserInput
+    transactions?: TransactionCreateNestedManyWithoutUserInput
+    whatsappConfig?: WhatsAppConfigCreateNestedOneWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutEmailCampaignsInput = {
@@ -33678,21 +42016,59 @@ export namespace Prisma {
     role?: $Enums.Role
     createdAt?: Date | string
     updatedAt?: Date | string
+    zernioProfileId?: string | null
     accounts?: AccountUncheckedCreateNestedManyWithoutUserInput
     sessions?: SessionUncheckedCreateNestedManyWithoutUserInput
     socialAccounts?: SocialAccountUncheckedCreateNestedManyWithoutUserInput
     posts?: PostUncheckedCreateNestedManyWithoutUserInput
     campaigns?: CampaignUncheckedCreateNestedManyWithoutUserInput
     audienceGroups?: AudienceGroupUncheckedCreateNestedManyWithoutUserInput
+    emailTemplates?: EmailTemplateUncheckedCreateNestedManyWithoutUserInput
+    scheduledCampaigns?: ScheduledCampaignUncheckedCreateNestedManyWithoutUserInput
     media?: MediaUncheckedCreateNestedManyWithoutUserInput
     analytics?: AnalyticsUncheckedCreateNestedManyWithoutUserInput
     notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
     subscription?: SubscriptionUncheckedCreateNestedOneWithoutUserInput
+    transactions?: TransactionUncheckedCreateNestedManyWithoutUserInput
+    whatsappConfig?: WhatsAppConfigUncheckedCreateNestedOneWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutEmailCampaignsInput = {
     where: UserWhereUniqueInput
     create: XOR<UserCreateWithoutEmailCampaignsInput, UserUncheckedCreateWithoutEmailCampaignsInput>
+  }
+
+  export type EmailTemplateCreateWithoutCampaignsInput = {
+    id?: string
+    name: string
+    description?: string | null
+    htmlContent: string
+    designJSON?: string | null
+    category?: $Enums.TemplateCategory
+    thumbnailUrl?: string | null
+    isPublic?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    user: UserCreateNestedOneWithoutEmailTemplatesInput
+  }
+
+  export type EmailTemplateUncheckedCreateWithoutCampaignsInput = {
+    id?: string
+    userId: string
+    name: string
+    description?: string | null
+    htmlContent: string
+    designJSON?: string | null
+    category?: $Enums.TemplateCategory
+    thumbnailUrl?: string | null
+    isPublic?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type EmailTemplateCreateOrConnectWithoutCampaignsInput = {
+    where: EmailTemplateWhereUniqueInput
+    create: XOR<EmailTemplateCreateWithoutCampaignsInput, EmailTemplateUncheckedCreateWithoutCampaignsInput>
   }
 
   export type EmailCampaignRecipientCreateWithoutCampaignInput = {
@@ -33744,16 +42120,21 @@ export namespace Prisma {
     role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    zernioProfileId?: NullableStringFieldUpdateOperationsInput | string | null
     accounts?: AccountUpdateManyWithoutUserNestedInput
     sessions?: SessionUpdateManyWithoutUserNestedInput
     socialAccounts?: SocialAccountUpdateManyWithoutUserNestedInput
     posts?: PostUpdateManyWithoutUserNestedInput
     campaigns?: CampaignUpdateManyWithoutUserNestedInput
     audienceGroups?: AudienceGroupUpdateManyWithoutUserNestedInput
+    emailTemplates?: EmailTemplateUpdateManyWithoutUserNestedInput
+    scheduledCampaigns?: ScheduledCampaignUpdateManyWithoutUserNestedInput
     media?: MediaUpdateManyWithoutUserNestedInput
     analytics?: AnalyticsUpdateManyWithoutUserNestedInput
     notifications?: NotificationUpdateManyWithoutUserNestedInput
     subscription?: SubscriptionUpdateOneWithoutUserNestedInput
+    transactions?: TransactionUpdateManyWithoutUserNestedInput
+    whatsappConfig?: WhatsAppConfigUpdateOneWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutEmailCampaignsInput = {
@@ -33766,16 +42147,60 @@ export namespace Prisma {
     role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    zernioProfileId?: NullableStringFieldUpdateOperationsInput | string | null
     accounts?: AccountUncheckedUpdateManyWithoutUserNestedInput
     sessions?: SessionUncheckedUpdateManyWithoutUserNestedInput
     socialAccounts?: SocialAccountUncheckedUpdateManyWithoutUserNestedInput
     posts?: PostUncheckedUpdateManyWithoutUserNestedInput
     campaigns?: CampaignUncheckedUpdateManyWithoutUserNestedInput
     audienceGroups?: AudienceGroupUncheckedUpdateManyWithoutUserNestedInput
+    emailTemplates?: EmailTemplateUncheckedUpdateManyWithoutUserNestedInput
+    scheduledCampaigns?: ScheduledCampaignUncheckedUpdateManyWithoutUserNestedInput
     media?: MediaUncheckedUpdateManyWithoutUserNestedInput
     analytics?: AnalyticsUncheckedUpdateManyWithoutUserNestedInput
     notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
     subscription?: SubscriptionUncheckedUpdateOneWithoutUserNestedInput
+    transactions?: TransactionUncheckedUpdateManyWithoutUserNestedInput
+    whatsappConfig?: WhatsAppConfigUncheckedUpdateOneWithoutUserNestedInput
+  }
+
+  export type EmailTemplateUpsertWithoutCampaignsInput = {
+    update: XOR<EmailTemplateUpdateWithoutCampaignsInput, EmailTemplateUncheckedUpdateWithoutCampaignsInput>
+    create: XOR<EmailTemplateCreateWithoutCampaignsInput, EmailTemplateUncheckedCreateWithoutCampaignsInput>
+    where?: EmailTemplateWhereInput
+  }
+
+  export type EmailTemplateUpdateToOneWithWhereWithoutCampaignsInput = {
+    where?: EmailTemplateWhereInput
+    data: XOR<EmailTemplateUpdateWithoutCampaignsInput, EmailTemplateUncheckedUpdateWithoutCampaignsInput>
+  }
+
+  export type EmailTemplateUpdateWithoutCampaignsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    htmlContent?: StringFieldUpdateOperationsInput | string
+    designJSON?: NullableStringFieldUpdateOperationsInput | string | null
+    category?: EnumTemplateCategoryFieldUpdateOperationsInput | $Enums.TemplateCategory
+    thumbnailUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    isPublic?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    user?: UserUpdateOneRequiredWithoutEmailTemplatesNestedInput
+  }
+
+  export type EmailTemplateUncheckedUpdateWithoutCampaignsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    userId?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    htmlContent?: StringFieldUpdateOperationsInput | string
+    designJSON?: NullableStringFieldUpdateOperationsInput | string | null
+    category?: EnumTemplateCategoryFieldUpdateOperationsInput | $Enums.TemplateCategory
+    thumbnailUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    isPublic?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type EmailCampaignRecipientUpsertWithWhereUniqueWithoutCampaignInput = {
@@ -33804,16 +42229,23 @@ export namespace Prisma {
     status?: $Enums.EmailCampaignStatus
     scheduledAt?: Date | string | null
     sentAt?: Date | string | null
+    failedAt?: Date | string | null
     openRate?: number
     clickRate?: number
+    bounceRate?: number
+    retryCount?: number
+    maxRetries?: number
+    errorMessage?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     user: UserCreateNestedOneWithoutEmailCampaignsInput
+    template?: EmailTemplateCreateNestedOneWithoutCampaignsInput
   }
 
   export type EmailCampaignUncheckedCreateWithoutRecipientsInput = {
     id?: string
     userId: string
+    templateId?: string | null
     name: string
     subject: string
     previewText?: string | null
@@ -33822,8 +42254,13 @@ export namespace Prisma {
     status?: $Enums.EmailCampaignStatus
     scheduledAt?: Date | string | null
     sentAt?: Date | string | null
+    failedAt?: Date | string | null
     openRate?: number
     clickRate?: number
+    bounceRate?: number
+    retryCount?: number
+    maxRetries?: number
+    errorMessage?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -33885,16 +42322,23 @@ export namespace Prisma {
     status?: EnumEmailCampaignStatusFieldUpdateOperationsInput | $Enums.EmailCampaignStatus
     scheduledAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     sentAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    failedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     openRate?: FloatFieldUpdateOperationsInput | number
     clickRate?: FloatFieldUpdateOperationsInput | number
+    bounceRate?: FloatFieldUpdateOperationsInput | number
+    retryCount?: IntFieldUpdateOperationsInput | number
+    maxRetries?: IntFieldUpdateOperationsInput | number
+    errorMessage?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     user?: UserUpdateOneRequiredWithoutEmailCampaignsNestedInput
+    template?: EmailTemplateUpdateOneWithoutCampaignsNestedInput
   }
 
   export type EmailCampaignUncheckedUpdateWithoutRecipientsInput = {
     id?: StringFieldUpdateOperationsInput | string
     userId?: StringFieldUpdateOperationsInput | string
+    templateId?: NullableStringFieldUpdateOperationsInput | string | null
     name?: StringFieldUpdateOperationsInput | string
     subject?: StringFieldUpdateOperationsInput | string
     previewText?: NullableStringFieldUpdateOperationsInput | string | null
@@ -33903,8 +42347,13 @@ export namespace Prisma {
     status?: EnumEmailCampaignStatusFieldUpdateOperationsInput | $Enums.EmailCampaignStatus
     scheduledAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     sentAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    failedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     openRate?: FloatFieldUpdateOperationsInput | number
     clickRate?: FloatFieldUpdateOperationsInput | number
+    bounceRate?: FloatFieldUpdateOperationsInput | number
+    retryCount?: IntFieldUpdateOperationsInput | number
+    maxRetries?: IntFieldUpdateOperationsInput | number
+    errorMessage?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -33956,6 +42405,7 @@ export namespace Prisma {
     role?: $Enums.Role
     createdAt?: Date | string
     updatedAt?: Date | string
+    zernioProfileId?: string | null
     accounts?: AccountCreateNestedManyWithoutUserInput
     sessions?: SessionCreateNestedManyWithoutUserInput
     socialAccounts?: SocialAccountCreateNestedManyWithoutUserInput
@@ -33963,9 +42413,13 @@ export namespace Prisma {
     campaigns?: CampaignCreateNestedManyWithoutUserInput
     audienceGroups?: AudienceGroupCreateNestedManyWithoutUserInput
     emailCampaigns?: EmailCampaignCreateNestedManyWithoutUserInput
+    emailTemplates?: EmailTemplateCreateNestedManyWithoutUserInput
+    scheduledCampaigns?: ScheduledCampaignCreateNestedManyWithoutUserInput
     analytics?: AnalyticsCreateNestedManyWithoutUserInput
     notifications?: NotificationCreateNestedManyWithoutUserInput
     subscription?: SubscriptionCreateNestedOneWithoutUserInput
+    transactions?: TransactionCreateNestedManyWithoutUserInput
+    whatsappConfig?: WhatsAppConfigCreateNestedOneWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutMediaInput = {
@@ -33978,6 +42432,7 @@ export namespace Prisma {
     role?: $Enums.Role
     createdAt?: Date | string
     updatedAt?: Date | string
+    zernioProfileId?: string | null
     accounts?: AccountUncheckedCreateNestedManyWithoutUserInput
     sessions?: SessionUncheckedCreateNestedManyWithoutUserInput
     socialAccounts?: SocialAccountUncheckedCreateNestedManyWithoutUserInput
@@ -33985,9 +42440,13 @@ export namespace Prisma {
     campaigns?: CampaignUncheckedCreateNestedManyWithoutUserInput
     audienceGroups?: AudienceGroupUncheckedCreateNestedManyWithoutUserInput
     emailCampaigns?: EmailCampaignUncheckedCreateNestedManyWithoutUserInput
+    emailTemplates?: EmailTemplateUncheckedCreateNestedManyWithoutUserInput
+    scheduledCampaigns?: ScheduledCampaignUncheckedCreateNestedManyWithoutUserInput
     analytics?: AnalyticsUncheckedCreateNestedManyWithoutUserInput
     notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
     subscription?: SubscriptionUncheckedCreateNestedOneWithoutUserInput
+    transactions?: TransactionUncheckedCreateNestedManyWithoutUserInput
+    whatsappConfig?: WhatsAppConfigUncheckedCreateNestedOneWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutMediaInput = {
@@ -34016,6 +42475,7 @@ export namespace Prisma {
     role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    zernioProfileId?: NullableStringFieldUpdateOperationsInput | string | null
     accounts?: AccountUpdateManyWithoutUserNestedInput
     sessions?: SessionUpdateManyWithoutUserNestedInput
     socialAccounts?: SocialAccountUpdateManyWithoutUserNestedInput
@@ -34023,9 +42483,13 @@ export namespace Prisma {
     campaigns?: CampaignUpdateManyWithoutUserNestedInput
     audienceGroups?: AudienceGroupUpdateManyWithoutUserNestedInput
     emailCampaigns?: EmailCampaignUpdateManyWithoutUserNestedInput
+    emailTemplates?: EmailTemplateUpdateManyWithoutUserNestedInput
+    scheduledCampaigns?: ScheduledCampaignUpdateManyWithoutUserNestedInput
     analytics?: AnalyticsUpdateManyWithoutUserNestedInput
     notifications?: NotificationUpdateManyWithoutUserNestedInput
     subscription?: SubscriptionUpdateOneWithoutUserNestedInput
+    transactions?: TransactionUpdateManyWithoutUserNestedInput
+    whatsappConfig?: WhatsAppConfigUpdateOneWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutMediaInput = {
@@ -34038,6 +42502,7 @@ export namespace Prisma {
     role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    zernioProfileId?: NullableStringFieldUpdateOperationsInput | string | null
     accounts?: AccountUncheckedUpdateManyWithoutUserNestedInput
     sessions?: SessionUncheckedUpdateManyWithoutUserNestedInput
     socialAccounts?: SocialAccountUncheckedUpdateManyWithoutUserNestedInput
@@ -34045,9 +42510,13 @@ export namespace Prisma {
     campaigns?: CampaignUncheckedUpdateManyWithoutUserNestedInput
     audienceGroups?: AudienceGroupUncheckedUpdateManyWithoutUserNestedInput
     emailCampaigns?: EmailCampaignUncheckedUpdateManyWithoutUserNestedInput
+    emailTemplates?: EmailTemplateUncheckedUpdateManyWithoutUserNestedInput
+    scheduledCampaigns?: ScheduledCampaignUncheckedUpdateManyWithoutUserNestedInput
     analytics?: AnalyticsUncheckedUpdateManyWithoutUserNestedInput
     notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
     subscription?: SubscriptionUncheckedUpdateOneWithoutUserNestedInput
+    transactions?: TransactionUncheckedUpdateManyWithoutUserNestedInput
+    whatsappConfig?: WhatsAppConfigUncheckedUpdateOneWithoutUserNestedInput
   }
 
   export type UserCreateWithoutAnalyticsInput = {
@@ -34060,6 +42529,7 @@ export namespace Prisma {
     role?: $Enums.Role
     createdAt?: Date | string
     updatedAt?: Date | string
+    zernioProfileId?: string | null
     accounts?: AccountCreateNestedManyWithoutUserInput
     sessions?: SessionCreateNestedManyWithoutUserInput
     socialAccounts?: SocialAccountCreateNestedManyWithoutUserInput
@@ -34067,9 +42537,13 @@ export namespace Prisma {
     campaigns?: CampaignCreateNestedManyWithoutUserInput
     audienceGroups?: AudienceGroupCreateNestedManyWithoutUserInput
     emailCampaigns?: EmailCampaignCreateNestedManyWithoutUserInput
+    emailTemplates?: EmailTemplateCreateNestedManyWithoutUserInput
+    scheduledCampaigns?: ScheduledCampaignCreateNestedManyWithoutUserInput
     media?: MediaCreateNestedManyWithoutUserInput
     notifications?: NotificationCreateNestedManyWithoutUserInput
     subscription?: SubscriptionCreateNestedOneWithoutUserInput
+    transactions?: TransactionCreateNestedManyWithoutUserInput
+    whatsappConfig?: WhatsAppConfigCreateNestedOneWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutAnalyticsInput = {
@@ -34082,6 +42556,7 @@ export namespace Prisma {
     role?: $Enums.Role
     createdAt?: Date | string
     updatedAt?: Date | string
+    zernioProfileId?: string | null
     accounts?: AccountUncheckedCreateNestedManyWithoutUserInput
     sessions?: SessionUncheckedCreateNestedManyWithoutUserInput
     socialAccounts?: SocialAccountUncheckedCreateNestedManyWithoutUserInput
@@ -34089,9 +42564,13 @@ export namespace Prisma {
     campaigns?: CampaignUncheckedCreateNestedManyWithoutUserInput
     audienceGroups?: AudienceGroupUncheckedCreateNestedManyWithoutUserInput
     emailCampaigns?: EmailCampaignUncheckedCreateNestedManyWithoutUserInput
+    emailTemplates?: EmailTemplateUncheckedCreateNestedManyWithoutUserInput
+    scheduledCampaigns?: ScheduledCampaignUncheckedCreateNestedManyWithoutUserInput
     media?: MediaUncheckedCreateNestedManyWithoutUserInput
     notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
     subscription?: SubscriptionUncheckedCreateNestedOneWithoutUserInput
+    transactions?: TransactionUncheckedCreateNestedManyWithoutUserInput
+    whatsappConfig?: WhatsAppConfigUncheckedCreateNestedOneWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutAnalyticsInput = {
@@ -34120,6 +42599,7 @@ export namespace Prisma {
     role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    zernioProfileId?: NullableStringFieldUpdateOperationsInput | string | null
     accounts?: AccountUpdateManyWithoutUserNestedInput
     sessions?: SessionUpdateManyWithoutUserNestedInput
     socialAccounts?: SocialAccountUpdateManyWithoutUserNestedInput
@@ -34127,9 +42607,13 @@ export namespace Prisma {
     campaigns?: CampaignUpdateManyWithoutUserNestedInput
     audienceGroups?: AudienceGroupUpdateManyWithoutUserNestedInput
     emailCampaigns?: EmailCampaignUpdateManyWithoutUserNestedInput
+    emailTemplates?: EmailTemplateUpdateManyWithoutUserNestedInput
+    scheduledCampaigns?: ScheduledCampaignUpdateManyWithoutUserNestedInput
     media?: MediaUpdateManyWithoutUserNestedInput
     notifications?: NotificationUpdateManyWithoutUserNestedInput
     subscription?: SubscriptionUpdateOneWithoutUserNestedInput
+    transactions?: TransactionUpdateManyWithoutUserNestedInput
+    whatsappConfig?: WhatsAppConfigUpdateOneWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutAnalyticsInput = {
@@ -34142,6 +42626,7 @@ export namespace Prisma {
     role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    zernioProfileId?: NullableStringFieldUpdateOperationsInput | string | null
     accounts?: AccountUncheckedUpdateManyWithoutUserNestedInput
     sessions?: SessionUncheckedUpdateManyWithoutUserNestedInput
     socialAccounts?: SocialAccountUncheckedUpdateManyWithoutUserNestedInput
@@ -34149,9 +42634,13 @@ export namespace Prisma {
     campaigns?: CampaignUncheckedUpdateManyWithoutUserNestedInput
     audienceGroups?: AudienceGroupUncheckedUpdateManyWithoutUserNestedInput
     emailCampaigns?: EmailCampaignUncheckedUpdateManyWithoutUserNestedInput
+    emailTemplates?: EmailTemplateUncheckedUpdateManyWithoutUserNestedInput
+    scheduledCampaigns?: ScheduledCampaignUncheckedUpdateManyWithoutUserNestedInput
     media?: MediaUncheckedUpdateManyWithoutUserNestedInput
     notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
     subscription?: SubscriptionUncheckedUpdateOneWithoutUserNestedInput
+    transactions?: TransactionUncheckedUpdateManyWithoutUserNestedInput
+    whatsappConfig?: WhatsAppConfigUncheckedUpdateOneWithoutUserNestedInput
   }
 
   export type UserCreateWithoutNotificationsInput = {
@@ -34164,6 +42653,7 @@ export namespace Prisma {
     role?: $Enums.Role
     createdAt?: Date | string
     updatedAt?: Date | string
+    zernioProfileId?: string | null
     accounts?: AccountCreateNestedManyWithoutUserInput
     sessions?: SessionCreateNestedManyWithoutUserInput
     socialAccounts?: SocialAccountCreateNestedManyWithoutUserInput
@@ -34171,9 +42661,13 @@ export namespace Prisma {
     campaigns?: CampaignCreateNestedManyWithoutUserInput
     audienceGroups?: AudienceGroupCreateNestedManyWithoutUserInput
     emailCampaigns?: EmailCampaignCreateNestedManyWithoutUserInput
+    emailTemplates?: EmailTemplateCreateNestedManyWithoutUserInput
+    scheduledCampaigns?: ScheduledCampaignCreateNestedManyWithoutUserInput
     media?: MediaCreateNestedManyWithoutUserInput
     analytics?: AnalyticsCreateNestedManyWithoutUserInput
     subscription?: SubscriptionCreateNestedOneWithoutUserInput
+    transactions?: TransactionCreateNestedManyWithoutUserInput
+    whatsappConfig?: WhatsAppConfigCreateNestedOneWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutNotificationsInput = {
@@ -34186,6 +42680,7 @@ export namespace Prisma {
     role?: $Enums.Role
     createdAt?: Date | string
     updatedAt?: Date | string
+    zernioProfileId?: string | null
     accounts?: AccountUncheckedCreateNestedManyWithoutUserInput
     sessions?: SessionUncheckedCreateNestedManyWithoutUserInput
     socialAccounts?: SocialAccountUncheckedCreateNestedManyWithoutUserInput
@@ -34193,9 +42688,13 @@ export namespace Prisma {
     campaigns?: CampaignUncheckedCreateNestedManyWithoutUserInput
     audienceGroups?: AudienceGroupUncheckedCreateNestedManyWithoutUserInput
     emailCampaigns?: EmailCampaignUncheckedCreateNestedManyWithoutUserInput
+    emailTemplates?: EmailTemplateUncheckedCreateNestedManyWithoutUserInput
+    scheduledCampaigns?: ScheduledCampaignUncheckedCreateNestedManyWithoutUserInput
     media?: MediaUncheckedCreateNestedManyWithoutUserInput
     analytics?: AnalyticsUncheckedCreateNestedManyWithoutUserInput
     subscription?: SubscriptionUncheckedCreateNestedOneWithoutUserInput
+    transactions?: TransactionUncheckedCreateNestedManyWithoutUserInput
+    whatsappConfig?: WhatsAppConfigUncheckedCreateNestedOneWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutNotificationsInput = {
@@ -34224,6 +42723,7 @@ export namespace Prisma {
     role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    zernioProfileId?: NullableStringFieldUpdateOperationsInput | string | null
     accounts?: AccountUpdateManyWithoutUserNestedInput
     sessions?: SessionUpdateManyWithoutUserNestedInput
     socialAccounts?: SocialAccountUpdateManyWithoutUserNestedInput
@@ -34231,9 +42731,13 @@ export namespace Prisma {
     campaigns?: CampaignUpdateManyWithoutUserNestedInput
     audienceGroups?: AudienceGroupUpdateManyWithoutUserNestedInput
     emailCampaigns?: EmailCampaignUpdateManyWithoutUserNestedInput
+    emailTemplates?: EmailTemplateUpdateManyWithoutUserNestedInput
+    scheduledCampaigns?: ScheduledCampaignUpdateManyWithoutUserNestedInput
     media?: MediaUpdateManyWithoutUserNestedInput
     analytics?: AnalyticsUpdateManyWithoutUserNestedInput
     subscription?: SubscriptionUpdateOneWithoutUserNestedInput
+    transactions?: TransactionUpdateManyWithoutUserNestedInput
+    whatsappConfig?: WhatsAppConfigUpdateOneWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutNotificationsInput = {
@@ -34246,6 +42750,7 @@ export namespace Prisma {
     role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    zernioProfileId?: NullableStringFieldUpdateOperationsInput | string | null
     accounts?: AccountUncheckedUpdateManyWithoutUserNestedInput
     sessions?: SessionUncheckedUpdateManyWithoutUserNestedInput
     socialAccounts?: SocialAccountUncheckedUpdateManyWithoutUserNestedInput
@@ -34253,9 +42758,13 @@ export namespace Prisma {
     campaigns?: CampaignUncheckedUpdateManyWithoutUserNestedInput
     audienceGroups?: AudienceGroupUncheckedUpdateManyWithoutUserNestedInput
     emailCampaigns?: EmailCampaignUncheckedUpdateManyWithoutUserNestedInput
+    emailTemplates?: EmailTemplateUncheckedUpdateManyWithoutUserNestedInput
+    scheduledCampaigns?: ScheduledCampaignUncheckedUpdateManyWithoutUserNestedInput
     media?: MediaUncheckedUpdateManyWithoutUserNestedInput
     analytics?: AnalyticsUncheckedUpdateManyWithoutUserNestedInput
     subscription?: SubscriptionUncheckedUpdateOneWithoutUserNestedInput
+    transactions?: TransactionUncheckedUpdateManyWithoutUserNestedInput
+    whatsappConfig?: WhatsAppConfigUncheckedUpdateOneWithoutUserNestedInput
   }
 
   export type AccountCreateManyUserInput = {
@@ -34333,6 +42842,7 @@ export namespace Prisma {
 
   export type EmailCampaignCreateManyUserInput = {
     id?: string
+    templateId?: string | null
     name: string
     subject: string
     previewText?: string | null
@@ -34341,8 +42851,45 @@ export namespace Prisma {
     status?: $Enums.EmailCampaignStatus
     scheduledAt?: Date | string | null
     sentAt?: Date | string | null
+    failedAt?: Date | string | null
     openRate?: number
     clickRate?: number
+    bounceRate?: number
+    retryCount?: number
+    maxRetries?: number
+    errorMessage?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type EmailTemplateCreateManyUserInput = {
+    id?: string
+    name: string
+    description?: string | null
+    htmlContent: string
+    designJSON?: string | null
+    category?: $Enums.TemplateCategory
+    thumbnailUrl?: string | null
+    isPublic?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type ScheduledCampaignCreateManyUserInput = {
+    id?: string
+    campaignId?: string | null
+    templateId?: string | null
+    name: string
+    subject: string
+    htmlContent: string
+    frequency?: $Enums.AutomationFrequency
+    nextRunAt: Date | string
+    lastRunAt?: Date | string | null
+    sourceType: string
+    sourceData?: string | null
+    isActive?: boolean
+    failureCount?: number
+    lastError?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -34382,6 +42929,19 @@ export namespace Prisma {
     read?: boolean
     link?: string | null
     createdAt?: Date | string
+  }
+
+  export type TransactionCreateManyUserInput = {
+    id?: string
+    amount: number
+    currency?: string
+    status: string
+    reference: string
+    paystackId?: string | null
+    channel?: string | null
+    paidAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
   }
 
   export type AccountUpdateWithoutUserInput = {
@@ -34621,15 +43181,22 @@ export namespace Prisma {
     status?: EnumEmailCampaignStatusFieldUpdateOperationsInput | $Enums.EmailCampaignStatus
     scheduledAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     sentAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    failedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     openRate?: FloatFieldUpdateOperationsInput | number
     clickRate?: FloatFieldUpdateOperationsInput | number
+    bounceRate?: FloatFieldUpdateOperationsInput | number
+    retryCount?: IntFieldUpdateOperationsInput | number
+    maxRetries?: IntFieldUpdateOperationsInput | number
+    errorMessage?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    template?: EmailTemplateUpdateOneWithoutCampaignsNestedInput
     recipients?: EmailCampaignRecipientUpdateManyWithoutCampaignNestedInput
   }
 
   export type EmailCampaignUncheckedUpdateWithoutUserInput = {
     id?: StringFieldUpdateOperationsInput | string
+    templateId?: NullableStringFieldUpdateOperationsInput | string | null
     name?: StringFieldUpdateOperationsInput | string
     subject?: StringFieldUpdateOperationsInput | string
     previewText?: NullableStringFieldUpdateOperationsInput | string | null
@@ -34638,8 +43205,13 @@ export namespace Prisma {
     status?: EnumEmailCampaignStatusFieldUpdateOperationsInput | $Enums.EmailCampaignStatus
     scheduledAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     sentAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    failedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     openRate?: FloatFieldUpdateOperationsInput | number
     clickRate?: FloatFieldUpdateOperationsInput | number
+    bounceRate?: FloatFieldUpdateOperationsInput | number
+    retryCount?: IntFieldUpdateOperationsInput | number
+    maxRetries?: IntFieldUpdateOperationsInput | number
+    errorMessage?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     recipients?: EmailCampaignRecipientUncheckedUpdateManyWithoutCampaignNestedInput
@@ -34647,6 +43219,7 @@ export namespace Prisma {
 
   export type EmailCampaignUncheckedUpdateManyWithoutUserInput = {
     id?: StringFieldUpdateOperationsInput | string
+    templateId?: NullableStringFieldUpdateOperationsInput | string | null
     name?: StringFieldUpdateOperationsInput | string
     subject?: StringFieldUpdateOperationsInput | string
     previewText?: NullableStringFieldUpdateOperationsInput | string | null
@@ -34655,8 +43228,111 @@ export namespace Prisma {
     status?: EnumEmailCampaignStatusFieldUpdateOperationsInput | $Enums.EmailCampaignStatus
     scheduledAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     sentAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    failedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     openRate?: FloatFieldUpdateOperationsInput | number
     clickRate?: FloatFieldUpdateOperationsInput | number
+    bounceRate?: FloatFieldUpdateOperationsInput | number
+    retryCount?: IntFieldUpdateOperationsInput | number
+    maxRetries?: IntFieldUpdateOperationsInput | number
+    errorMessage?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type EmailTemplateUpdateWithoutUserInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    htmlContent?: StringFieldUpdateOperationsInput | string
+    designJSON?: NullableStringFieldUpdateOperationsInput | string | null
+    category?: EnumTemplateCategoryFieldUpdateOperationsInput | $Enums.TemplateCategory
+    thumbnailUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    isPublic?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    campaigns?: EmailCampaignUpdateManyWithoutTemplateNestedInput
+  }
+
+  export type EmailTemplateUncheckedUpdateWithoutUserInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    htmlContent?: StringFieldUpdateOperationsInput | string
+    designJSON?: NullableStringFieldUpdateOperationsInput | string | null
+    category?: EnumTemplateCategoryFieldUpdateOperationsInput | $Enums.TemplateCategory
+    thumbnailUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    isPublic?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    campaigns?: EmailCampaignUncheckedUpdateManyWithoutTemplateNestedInput
+  }
+
+  export type EmailTemplateUncheckedUpdateManyWithoutUserInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    htmlContent?: StringFieldUpdateOperationsInput | string
+    designJSON?: NullableStringFieldUpdateOperationsInput | string | null
+    category?: EnumTemplateCategoryFieldUpdateOperationsInput | $Enums.TemplateCategory
+    thumbnailUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    isPublic?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ScheduledCampaignUpdateWithoutUserInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    campaignId?: NullableStringFieldUpdateOperationsInput | string | null
+    templateId?: NullableStringFieldUpdateOperationsInput | string | null
+    name?: StringFieldUpdateOperationsInput | string
+    subject?: StringFieldUpdateOperationsInput | string
+    htmlContent?: StringFieldUpdateOperationsInput | string
+    frequency?: EnumAutomationFrequencyFieldUpdateOperationsInput | $Enums.AutomationFrequency
+    nextRunAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    lastRunAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    sourceType?: StringFieldUpdateOperationsInput | string
+    sourceData?: NullableStringFieldUpdateOperationsInput | string | null
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    failureCount?: IntFieldUpdateOperationsInput | number
+    lastError?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ScheduledCampaignUncheckedUpdateWithoutUserInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    campaignId?: NullableStringFieldUpdateOperationsInput | string | null
+    templateId?: NullableStringFieldUpdateOperationsInput | string | null
+    name?: StringFieldUpdateOperationsInput | string
+    subject?: StringFieldUpdateOperationsInput | string
+    htmlContent?: StringFieldUpdateOperationsInput | string
+    frequency?: EnumAutomationFrequencyFieldUpdateOperationsInput | $Enums.AutomationFrequency
+    nextRunAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    lastRunAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    sourceType?: StringFieldUpdateOperationsInput | string
+    sourceData?: NullableStringFieldUpdateOperationsInput | string | null
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    failureCount?: IntFieldUpdateOperationsInput | number
+    lastError?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ScheduledCampaignUncheckedUpdateManyWithoutUserInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    campaignId?: NullableStringFieldUpdateOperationsInput | string | null
+    templateId?: NullableStringFieldUpdateOperationsInput | string | null
+    name?: StringFieldUpdateOperationsInput | string
+    subject?: StringFieldUpdateOperationsInput | string
+    htmlContent?: StringFieldUpdateOperationsInput | string
+    frequency?: EnumAutomationFrequencyFieldUpdateOperationsInput | $Enums.AutomationFrequency
+    nextRunAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    lastRunAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    sourceType?: StringFieldUpdateOperationsInput | string
+    sourceData?: NullableStringFieldUpdateOperationsInput | string | null
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    failureCount?: IntFieldUpdateOperationsInput | number
+    lastError?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -34772,12 +43448,57 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
+  export type TransactionUpdateWithoutUserInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    amount?: FloatFieldUpdateOperationsInput | number
+    currency?: StringFieldUpdateOperationsInput | string
+    status?: StringFieldUpdateOperationsInput | string
+    reference?: StringFieldUpdateOperationsInput | string
+    paystackId?: NullableStringFieldUpdateOperationsInput | string | null
+    channel?: NullableStringFieldUpdateOperationsInput | string | null
+    paidAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type TransactionUncheckedUpdateWithoutUserInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    amount?: FloatFieldUpdateOperationsInput | number
+    currency?: StringFieldUpdateOperationsInput | string
+    status?: StringFieldUpdateOperationsInput | string
+    reference?: StringFieldUpdateOperationsInput | string
+    paystackId?: NullableStringFieldUpdateOperationsInput | string | null
+    channel?: NullableStringFieldUpdateOperationsInput | string | null
+    paidAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type TransactionUncheckedUpdateManyWithoutUserInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    amount?: FloatFieldUpdateOperationsInput | number
+    currency?: StringFieldUpdateOperationsInput | string
+    status?: StringFieldUpdateOperationsInput | string
+    reference?: StringFieldUpdateOperationsInput | string
+    paystackId?: NullableStringFieldUpdateOperationsInput | string | null
+    channel?: NullableStringFieldUpdateOperationsInput | string | null
+    paidAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
   export type SubscriptionCreateManyPlanInput = {
     id?: string
     userId: string
     status?: $Enums.SubscriptionStatus
     startDate?: Date | string
     endDate?: Date | string | null
+    postsUsed?: number
+    aiTextUsed?: number
+    aiImageUsed?: number
+    lastResetAt?: Date | string
+    paystackSubscriptionCode?: string | null
+    paystackCustomerCode?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -34787,6 +43508,12 @@ export namespace Prisma {
     status?: EnumSubscriptionStatusFieldUpdateOperationsInput | $Enums.SubscriptionStatus
     startDate?: DateTimeFieldUpdateOperationsInput | Date | string
     endDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    postsUsed?: IntFieldUpdateOperationsInput | number
+    aiTextUsed?: IntFieldUpdateOperationsInput | number
+    aiImageUsed?: IntFieldUpdateOperationsInput | number
+    lastResetAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    paystackSubscriptionCode?: NullableStringFieldUpdateOperationsInput | string | null
+    paystackCustomerCode?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     user?: UserUpdateOneRequiredWithoutSubscriptionNestedInput
@@ -34798,6 +43525,12 @@ export namespace Prisma {
     status?: EnumSubscriptionStatusFieldUpdateOperationsInput | $Enums.SubscriptionStatus
     startDate?: DateTimeFieldUpdateOperationsInput | Date | string
     endDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    postsUsed?: IntFieldUpdateOperationsInput | number
+    aiTextUsed?: IntFieldUpdateOperationsInput | number
+    aiImageUsed?: IntFieldUpdateOperationsInput | number
+    lastResetAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    paystackSubscriptionCode?: NullableStringFieldUpdateOperationsInput | string | null
+    paystackCustomerCode?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -34808,6 +43541,12 @@ export namespace Prisma {
     status?: EnumSubscriptionStatusFieldUpdateOperationsInput | $Enums.SubscriptionStatus
     startDate?: DateTimeFieldUpdateOperationsInput | Date | string
     endDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    postsUsed?: IntFieldUpdateOperationsInput | number
+    aiTextUsed?: IntFieldUpdateOperationsInput | number
+    aiImageUsed?: IntFieldUpdateOperationsInput | number
+    lastResetAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    paystackSubscriptionCode?: NullableStringFieldUpdateOperationsInput | string | null
+    paystackCustomerCode?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -35068,6 +43807,96 @@ export namespace Prisma {
     opened?: BoolFieldUpdateOperationsInput | boolean
     clicked?: BoolFieldUpdateOperationsInput | boolean
     sentAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  }
+
+  export type EmailCampaignCreateManyTemplateInput = {
+    id?: string
+    userId: string
+    name: string
+    subject: string
+    previewText?: string | null
+    htmlContent: string
+    textContent?: string | null
+    status?: $Enums.EmailCampaignStatus
+    scheduledAt?: Date | string | null
+    sentAt?: Date | string | null
+    failedAt?: Date | string | null
+    openRate?: number
+    clickRate?: number
+    bounceRate?: number
+    retryCount?: number
+    maxRetries?: number
+    errorMessage?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type EmailCampaignUpdateWithoutTemplateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    subject?: StringFieldUpdateOperationsInput | string
+    previewText?: NullableStringFieldUpdateOperationsInput | string | null
+    htmlContent?: StringFieldUpdateOperationsInput | string
+    textContent?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: EnumEmailCampaignStatusFieldUpdateOperationsInput | $Enums.EmailCampaignStatus
+    scheduledAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    sentAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    failedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    openRate?: FloatFieldUpdateOperationsInput | number
+    clickRate?: FloatFieldUpdateOperationsInput | number
+    bounceRate?: FloatFieldUpdateOperationsInput | number
+    retryCount?: IntFieldUpdateOperationsInput | number
+    maxRetries?: IntFieldUpdateOperationsInput | number
+    errorMessage?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    user?: UserUpdateOneRequiredWithoutEmailCampaignsNestedInput
+    recipients?: EmailCampaignRecipientUpdateManyWithoutCampaignNestedInput
+  }
+
+  export type EmailCampaignUncheckedUpdateWithoutTemplateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    userId?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    subject?: StringFieldUpdateOperationsInput | string
+    previewText?: NullableStringFieldUpdateOperationsInput | string | null
+    htmlContent?: StringFieldUpdateOperationsInput | string
+    textContent?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: EnumEmailCampaignStatusFieldUpdateOperationsInput | $Enums.EmailCampaignStatus
+    scheduledAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    sentAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    failedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    openRate?: FloatFieldUpdateOperationsInput | number
+    clickRate?: FloatFieldUpdateOperationsInput | number
+    bounceRate?: FloatFieldUpdateOperationsInput | number
+    retryCount?: IntFieldUpdateOperationsInput | number
+    maxRetries?: IntFieldUpdateOperationsInput | number
+    errorMessage?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    recipients?: EmailCampaignRecipientUncheckedUpdateManyWithoutCampaignNestedInput
+  }
+
+  export type EmailCampaignUncheckedUpdateManyWithoutTemplateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    userId?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    subject?: StringFieldUpdateOperationsInput | string
+    previewText?: NullableStringFieldUpdateOperationsInput | string | null
+    htmlContent?: StringFieldUpdateOperationsInput | string
+    textContent?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: EnumEmailCampaignStatusFieldUpdateOperationsInput | $Enums.EmailCampaignStatus
+    scheduledAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    sentAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    failedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    openRate?: FloatFieldUpdateOperationsInput | number
+    clickRate?: FloatFieldUpdateOperationsInput | number
+    bounceRate?: FloatFieldUpdateOperationsInput | number
+    retryCount?: IntFieldUpdateOperationsInput | number
+    maxRetries?: IntFieldUpdateOperationsInput | number
+    errorMessage?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type EmailCampaignRecipientCreateManyCampaignInput = {

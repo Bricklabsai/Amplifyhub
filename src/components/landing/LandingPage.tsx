@@ -19,7 +19,7 @@ const FEATURES = [
   {
     icon: HiPencil,
     title: "AI Content Generation",
-    desc: "Generate platform-perfect posts with GPT-4o-mini. Tailored tone and format for every channel.",
+    desc: "Generate platform-perfect posts with GPT-5. Tailored tone and format for every channel.",
     color: "#7c3aed",
   },
   {

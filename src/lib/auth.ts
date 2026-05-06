@@ -1,4 +1,4 @@
-import type { NextAuthOptions } from "next-auth";
+import { type NextAuthOptions } from "next-auth";
 import type { Adapter } from "next-auth/adapters";
 import CredentialsProvider from "next-auth/providers/credentials";
 import FacebookProvider from "next-auth/providers/facebook";
@@ -9,6 +9,7 @@ import GoogleProvider from "next-auth/providers/google";
 import { PrismaAdapter } from "@auth/prisma-adapter";
 import type { Platform } from "@/generated/client";
 import { prisma } from "@/lib/prisma";
+import { getZernioClient } from "@/lib/zernio";
 import bcrypt from "bcryptjs";
 
 import { refreshSocialProfile } from "./social";
@@ -275,6 +276,7 @@ export const authOptions: NextAuthOptions = {
         }
       }
 
+      // Zernio profile is created only during signup, not during login
       return true;
     },
     async jwt({ token, user }) {

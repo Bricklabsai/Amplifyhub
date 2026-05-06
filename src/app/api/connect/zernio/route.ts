@@ -4,9 +4,9 @@ import { authOptions } from "@/lib/auth";
 import {
   getAppBaseUrl,
   getZernioClient,
-  getZernioProfileId,
   toZernioPlatform,
 } from "@/lib/zernio";
+import { prisma } from "@/lib/prisma";
 
 export const dynamic = "force-dynamic";
 
@@ -14,6 +14,26 @@ export async function GET(req: NextRequest) {
   const session = await getServerSession(authOptions);
   if (!session?.user) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  }
+
+  // Query the user to get their Zernio profile ID
+  const user = await prisma.user.findUnique({
+    where: { id: session.user.id },
+    select: { id: true, zernioProfileId: true },
+  });
+
+  if (!user) {
+    return NextResponse.json(
+      { error: "User not found" },
+      { status: 404 }
+    );
+  }
+
+  if (!user.zernioProfileId) {
+    return NextResponse.json(
+      { error: "User workspace not configured" },
+      { status: 400 }
+    );
   }
 
   const platformParam = req.nextUrl.searchParams.get("platform");
@@ -39,7 +59,7 @@ export async function GET(req: NextRequest) {
     const result = await zernio.connect.getConnectUrl({
       path: { platform },
       query: {
-        profileId: getZernioProfileId(),
+        profileId: user.zernioProfileId,
         redirect_url: redirectUrl,
       },
     });

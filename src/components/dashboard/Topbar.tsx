@@ -1,7 +1,7 @@
 "use client";
 import { useState, useEffect, useRef } from "react";
 import { usePathname } from "next/navigation";
-import { HiBell, HiCheck, HiX } from "react-icons/hi";
+import { HiBell, HiCheck, HiX, HiMenu } from "react-icons/hi";
 import { formatRelative } from "@/lib/utils";
 import { cn } from "@/lib/utils";
 
@@ -20,7 +20,7 @@ const PAGE_TITLES: Record<string, string> = {
   "/admin": "Admin Panel",
 };
 
-export default function Topbar() {
+export default function Topbar({ onMenuClick }: { onMenuClick: () => void }) {
   const pathname = usePathname();
   const [notifs, setNotifs] = useState<any[]>([]);
   const [unread, setUnread] = useState(0);
@@ -64,9 +64,17 @@ export default function Topbar() {
 
   return (
     <header className="h-16 bg-white border-b border-gray-100 flex items-center justify-between px-6 flex-shrink-0">
-      <div>
-        <h1 className="text-lg font-bold text-gray-900">{title}</h1>
-        <p className="text-xs text-gray-400">AmplifyHub AI Platform</p>
+      <div className="flex items-center gap-4">
+        <button
+          onClick={onMenuClick}
+          className="md:hidden p-2 -ml-2 text-gray-600 hover:bg-gray-100 rounded-lg transition-colors"
+        >
+          <HiMenu className="text-2xl" />
+        </button>
+        <div>
+          <h1 className="text-lg font-bold text-gray-900 leading-tight">{title}</h1>
+          <p className="text-[10px] text-gray-400 font-medium uppercase tracking-wider">AI Platform</p>
+        </div>
       </div>
 
       <div className="flex items-center gap-3">

@@ -41,12 +41,41 @@ enum EmailCampaignStatus {
   DRAFT
   SENT
   SCHEDULED
+  PARTIAL_SUCCESS
+  FAILED
 }
 
 enum SubscriptionStatus {
   ACTIVE
   CANCELLED
   EXPIRED
+}
+
+enum TemplateCategory {
+  NEWSLETTER
+  EVENT
+  TRANSACTIONAL
+  PROMOTIONAL
+  CUSTOM
+}
+
+enum AutomationFrequency {
+  DAILY
+  WEEKLY
+  MONTHLY
+  CUSTOM
+}
+
+model WhatsAppConfig {
+  id                String   @id @default(cuid())
+  userId            String   @unique
+  phoneNumberId     String
+  wabaId            String
+  accessToken       String   // This will be encrypted
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
 model User {
@@ -59,6 +88,7 @@ model User {
   role           Role      @default(USER)
   createdAt      DateTime  @default(now())
   updatedAt      DateTime  @updatedAt
+  zernioProfileId String?   @unique
 
   accounts       Account[]
   sessions       Session[]
@@ -67,10 +97,14 @@ model User {
   campaigns      Campaign[]
   audienceGroups AudienceGroup[]
   emailCampaigns EmailCampaign[]
+  emailTemplates EmailTemplate[]
+  scheduledCampaigns ScheduledCampaign[]
   media          Media[]
   analytics      Analytics[]
   notifications  Notification[]
   subscription   Subscription?
+  transactions   Transaction[]
+  whatsappConfig WhatsAppConfig?
 }
 
 model Account {
@@ -111,31 +145,56 @@ model VerificationToken {
 }
 
 model Plan {
-  id            String   @id @default(cuid())
-  name          String   @unique
-  price         Float
-  description   String?
-  features      String[]
-  postsPerMonth Int
-  platforms     Int
-  aiCredits     Int
-  createdAt     DateTime @default(now())
+  id               String   @id @default(cuid())
+  name             String   @unique
+  price            Float
+  description      String?
+  features         String[]
+  postsPerMonth    Int
+  platforms        Int
+  aiCredits        Int      @default(0)
+  aiTextLimit      Int      @default(0)
+  aiImageLimit     Int      @default(0)
+  paystackPlanCode String?
+  createdAt        DateTime @default(now())
 
   subscriptions Subscription[]
 }
 
 model Subscription {
-  id        String             @id @default(cuid())
-  userId    String             @unique
-  planId    String
-  status    SubscriptionStatus @default(ACTIVE)
-  startDate DateTime           @default(now())
-  endDate   DateTime?
-  createdAt DateTime           @default(now())
-  updatedAt DateTime           @updatedAt
+  id                       String             @id @default(cuid())
+  userId                   String             @unique
+  planId                   String
+  status                   SubscriptionStatus @default(ACTIVE)
+  startDate                DateTime           @default(now())
+  endDate                  DateTime?
+  postsUsed                Int                @default(0)
+  aiTextUsed               Int                @default(0)
+  aiImageUsed              Int                @default(0)
+  lastResetAt              DateTime           @default(now())
+  paystackSubscriptionCode String?
+  paystackCustomerCode     String?
+  createdAt                DateTime           @default(now())
+  updatedAt                DateTime           @updatedAt
 
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
   plan Plan @relation(fields: [planId], references: [id])
+}
+
+model Transaction {
+  id              String   @id @default(cuid())
+  userId          String
+  amount          Float
+  currency        String   @default("NGN")
+  status          String   // "success", "failed", "pending"
+  reference       String   @unique
+  paystackId      String?
+  channel         String?
+  paidAt          DateTime?
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
 model SocialAccount {
@@ -254,9 +313,49 @@ model ContactGroup {
   @@id([contactId, groupId])
 }
 
+model EmailTemplate {
+  id           String           @id @default(cuid())
+  userId       String
+  name         String
+  description  String?
+  htmlContent  String
+  designJSON   String?          // TipTap editor state (stored as JSON)
+  category     TemplateCategory @default(CUSTOM)
+  thumbnailUrl String?
+  isPublic     Boolean          @default(false)
+  createdAt    DateTime         @default(now())
+  updatedAt    DateTime         @updatedAt
+
+  user      User              @relation(fields: [userId], references: [id], onDelete: Cascade)
+  campaigns EmailCampaign[]
+}
+
+model ScheduledCampaign {
+  id           String               @id @default(cuid())
+  userId       String
+  campaignId   String?
+  templateId   String?
+  name         String
+  subject      String
+  htmlContent  String
+  frequency    AutomationFrequency  @default(WEEKLY)
+  nextRunAt    DateTime
+  lastRunAt    DateTime?
+  sourceType   String               // "latest_posts", "custom", "events"
+  sourceData   String?              // JSON config for source (e.g., how many posts, which topics)
+  isActive     Boolean              @default(true)
+  failureCount Int                  @default(0)
+  lastError    String?
+  createdAt    DateTime             @default(now())
+  updatedAt    DateTime             @updatedAt
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
 model EmailCampaign {
   id          String              @id @default(cuid())
   userId      String
+  templateId  String?
   name        String
   subject     String
   previewText String?
@@ -265,12 +364,18 @@ model EmailCampaign {
   status      EmailCampaignStatus @default(DRAFT)
   scheduledAt DateTime?
   sentAt      DateTime?
+  failedAt    DateTime?
   openRate    Float               @default(0)
   clickRate   Float               @default(0)
+  bounceRate  Float               @default(0)
+  retryCount  Int                 @default(0)
+  maxRetries  Int                 @default(3)
+  errorMessage String?
   createdAt   DateTime            @default(now())
   updatedAt   DateTime            @updatedAt
 
   user       User                    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  template   EmailTemplate?          @relation(fields: [templateId], references: [id])
   recipients EmailCampaignRecipient[]
 }
 

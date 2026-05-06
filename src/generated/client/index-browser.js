@@ -121,6 +121,16 @@ exports.Prisma.TransactionIsolationLevel = makeStrictEnum({
   Serializable: 'Serializable'
 });
 
+exports.Prisma.WhatsAppConfigScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  phoneNumberId: 'phoneNumberId',
+  wabaId: 'wabaId',
+  accessToken: 'accessToken',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
 exports.Prisma.UserScalarFieldEnum = {
   id: 'id',
   name: 'name',
@@ -130,7 +140,8 @@ exports.Prisma.UserScalarFieldEnum = {
   password: 'password',
   role: 'role',
   createdAt: 'createdAt',
-  updatedAt: 'updatedAt'
+  updatedAt: 'updatedAt',
+  zernioProfileId: 'zernioProfileId'
 };
 
 exports.Prisma.AccountScalarFieldEnum = {
@@ -171,6 +182,9 @@ exports.Prisma.PlanScalarFieldEnum = {
   postsPerMonth: 'postsPerMonth',
   platforms: 'platforms',
   aiCredits: 'aiCredits',
+  aiTextLimit: 'aiTextLimit',
+  aiImageLimit: 'aiImageLimit',
+  paystackPlanCode: 'paystackPlanCode',
   createdAt: 'createdAt'
 };
 
@@ -181,6 +195,26 @@ exports.Prisma.SubscriptionScalarFieldEnum = {
   status: 'status',
   startDate: 'startDate',
   endDate: 'endDate',
+  postsUsed: 'postsUsed',
+  aiTextUsed: 'aiTextUsed',
+  aiImageUsed: 'aiImageUsed',
+  lastResetAt: 'lastResetAt',
+  paystackSubscriptionCode: 'paystackSubscriptionCode',
+  paystackCustomerCode: 'paystackCustomerCode',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.TransactionScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  amount: 'amount',
+  currency: 'currency',
+  status: 'status',
+  reference: 'reference',
+  paystackId: 'paystackId',
+  channel: 'channel',
+  paidAt: 'paidAt',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 };
@@ -275,9 +309,44 @@ exports.Prisma.ContactGroupScalarFieldEnum = {
   groupId: 'groupId'
 };
 
+exports.Prisma.EmailTemplateScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  name: 'name',
+  description: 'description',
+  htmlContent: 'htmlContent',
+  designJSON: 'designJSON',
+  category: 'category',
+  thumbnailUrl: 'thumbnailUrl',
+  isPublic: 'isPublic',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.ScheduledCampaignScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  campaignId: 'campaignId',
+  templateId: 'templateId',
+  name: 'name',
+  subject: 'subject',
+  htmlContent: 'htmlContent',
+  frequency: 'frequency',
+  nextRunAt: 'nextRunAt',
+  lastRunAt: 'lastRunAt',
+  sourceType: 'sourceType',
+  sourceData: 'sourceData',
+  isActive: 'isActive',
+  failureCount: 'failureCount',
+  lastError: 'lastError',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
 exports.Prisma.EmailCampaignScalarFieldEnum = {
   id: 'id',
   userId: 'userId',
+  templateId: 'templateId',
   name: 'name',
   subject: 'subject',
   previewText: 'previewText',
@@ -286,8 +355,13 @@ exports.Prisma.EmailCampaignScalarFieldEnum = {
   status: 'status',
   scheduledAt: 'scheduledAt',
   sentAt: 'sentAt',
+  failedAt: 'failedAt',
   openRate: 'openRate',
   clickRate: 'clickRate',
+  bounceRate: 'bounceRate',
+  retryCount: 'retryCount',
+  maxRetries: 'maxRetries',
+  errorMessage: 'errorMessage',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 };
@@ -400,19 +474,38 @@ exports.CampaignStatus = exports.$Enums.CampaignStatus = {
   COMPLETED: 'COMPLETED'
 };
 
+exports.TemplateCategory = exports.$Enums.TemplateCategory = {
+  NEWSLETTER: 'NEWSLETTER',
+  EVENT: 'EVENT',
+  TRANSACTIONAL: 'TRANSACTIONAL',
+  PROMOTIONAL: 'PROMOTIONAL',
+  CUSTOM: 'CUSTOM'
+};
+
+exports.AutomationFrequency = exports.$Enums.AutomationFrequency = {
+  DAILY: 'DAILY',
+  WEEKLY: 'WEEKLY',
+  MONTHLY: 'MONTHLY',
+  CUSTOM: 'CUSTOM'
+};
+
 exports.EmailCampaignStatus = exports.$Enums.EmailCampaignStatus = {
   DRAFT: 'DRAFT',
   SENT: 'SENT',
-  SCHEDULED: 'SCHEDULED'
+  SCHEDULED: 'SCHEDULED',
+  PARTIAL_SUCCESS: 'PARTIAL_SUCCESS',
+  FAILED: 'FAILED'
 };
 
 exports.Prisma.ModelName = {
+  WhatsAppConfig: 'WhatsAppConfig',
   User: 'User',
   Account: 'Account',
   Session: 'Session',
   VerificationToken: 'VerificationToken',
   Plan: 'Plan',
   Subscription: 'Subscription',
+  Transaction: 'Transaction',
   SocialAccount: 'SocialAccount',
   Post: 'Post',
   PlatformPost: 'PlatformPost',
@@ -420,6 +513,8 @@ exports.Prisma.ModelName = {
   AudienceGroup: 'AudienceGroup',
   Contact: 'Contact',
   ContactGroup: 'ContactGroup',
+  EmailTemplate: 'EmailTemplate',
+  ScheduledCampaign: 'ScheduledCampaign',
   EmailCampaign: 'EmailCampaign',
   EmailCampaignRecipient: 'EmailCampaignRecipient',
   Media: 'Media',

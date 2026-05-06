@@ -2,7 +2,7 @@
 import { usePathname } from "next/navigation";
 import Link from "next/link";
 import { useSession, signOut } from "next-auth/react";
-import { HiSparkles, HiHome, HiPencil, HiCollection, HiShare, HiFlag, HiUsers, HiMail, HiPhotograph, HiChartBar, HiCreditCard, HiCog, HiShieldCheck, HiLogout, HiUserGroup } from "react-icons/hi";
+import { HiSparkles, HiHome, HiPencil, HiCollection, HiShare, HiFlag, HiUsers, HiMail, HiPhotograph, HiChartBar, HiCreditCard, HiCog, HiShieldCheck, HiLogout, HiUserGroup, HiX } from "react-icons/hi";
 import { cn } from "@/lib/utils";
 
 const NAV_ITEMS = [
@@ -20,15 +20,18 @@ const NAV_ITEMS = [
   { href: "/settings", icon: HiCog, label: "Settings" },
 ];
 
-export default function Sidebar() {
+export default function Sidebar({ isOpen, onClose }: { isOpen: boolean; onClose: () => void }) {
   const pathname = usePathname();
   const { data: session } = useSession();
   const isAdmin = (session?.user as any)?.role === "ADMIN";
 
   return (
-    <aside className="sidebar-gradient w-64 flex-shrink-0 flex flex-col h-full shadow-2xl">
+    <aside className={cn(
+      "sidebar-gradient w-64 flex-shrink-0 flex flex-col h-full shadow-2xl transition-all duration-300 fixed md:relative z-[60] md:z-0",
+      isOpen ? "translate-x-0" : "-translate-x-full md:translate-x-0"
+    )}>
       {/* Logo */}
-      <div className="p-6 border-b border-white/10">
+      <div className="p-6 border-b border-white/10 flex items-center justify-between">
         <Link href="/dashboard" className="flex items-center gap-3">
           <div>
             <span className="text-white font-black text-lg block leading-tight">
@@ -37,6 +40,9 @@ export default function Sidebar() {
             <span className="text-white/40 text-xs">AI Platform</span>
           </div>
         </Link>
+        <button onClick={onClose} className="md:hidden p-2 text-white/50 hover:text-white transition-colors">
+          <HiX className="text-xl" />
+        </button>
       </div>
 
       {/* Navigation */}
@@ -47,6 +53,9 @@ export default function Sidebar() {
             <Link
               key={href}
               href={href}
+              onClick={() => {
+                if (window.innerWidth < 768) onClose();
+              }}
               className={cn(
                 "flex items-center gap-3 px-3 py-2.5 rounded-xl transition-all group text-sm",
                 active
@@ -69,6 +78,9 @@ export default function Sidebar() {
             </div>
             <Link
               href="/admin"
+              onClick={() => {
+                if (window.innerWidth < 768) onClose();
+              }}
               className={cn(
                 "flex items-center gap-3 px-3 py-2.5 rounded-xl transition-all text-sm",
                 pathname === "/admin"
@@ -98,7 +110,10 @@ export default function Sidebar() {
           {isAdmin && <span className="text-xs text-amber-400 font-medium">Admin</span>}
         </div>
         <button
-          onClick={() => signOut({ callbackUrl: "/" })}
+          onClick={() => {
+            if (window.innerWidth < 768) onClose();
+            signOut({ callbackUrl: "/" });
+          }}
           className="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-white/50 hover:bg-white/5 hover:text-white/80 transition-all text-sm"
         >
           <HiLogout className="text-lg" />

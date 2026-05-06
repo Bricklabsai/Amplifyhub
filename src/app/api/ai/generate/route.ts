@@ -1,12 +1,26 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
+import { getAzureOpenAIClient } from "@/lib/azure-openai";
+import { checkAndIncrementUsage } from "@/lib/usage";
 
 export async function POST(req: NextRequest) {
   const session = await getServerSession(authOptions);
   if (!session?.user) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  const userId = (session.user as any).id;
 
   const { prompt, platforms, tone, action, message } = await req.json();
+
+  // Check usage limits
+  const usage = await checkAndIncrementUsage(userId, "aiText");
+  if (!usage.allowed) {
+    return NextResponse.json({ 
+      error: "AI text generation limit reached. Please upgrade your plan.",
+      limit: usage.limit,
+      current: usage.current,
+      upgradeRequired: true
+    }, { status: 403 });
+  }
   if (action === "enhance" && !message?.trim() && !prompt?.trim()) {
     return NextResponse.json({ error: "Message is required" }, { status: 400 });
   }
@@ -14,33 +28,14 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: "Prompt is required" }, { status: 400 });
   }
 
-  const azureKey = process.env.AZURE_OPENAI_API_KEY;
-  const azureUrl = process.env.AZURE_OPENAI_URL;
-  
-  if (!azureKey || !azureUrl) {
-    return NextResponse.json({ error: "Azure OpenAI is not configured" }, { status: 500 });
-  }
-
   const targetPlatforms = platforms || ["FACEBOOK", "TWITTER", "INSTAGRAM", "LINKEDIN"];
 
   try {
-    const { AzureOpenAI } = await import("openai");
-    
-    const url = new URL(azureUrl);
-    const endpoint = `${url.protocol}//${url.host}`;
-    const deployment = url.pathname.split("/deployments/")[1]?.split("/")[0] || "gpt-4";
-    const apiVersion = url.searchParams.get("api-version") || "2025-01-01-preview";
-
-    const client = new AzureOpenAI({ 
-      apiKey: azureKey,
-      endpoint,
-      deployment,
-      apiVersion,
-    });
+    const client = getAzureOpenAIClient();
 
     if (action === "enhance") {
       const response = await client.chat.completions.create({
-        model: deployment,
+        model: "gpt-4",
         messages: [
           {
             role: "system",
@@ -63,7 +58,7 @@ export async function POST(req: NextRequest) {
     }
 
     const response = await client.chat.completions.create({
-      model: deployment,
+      model: "gpt-4",
       messages: [
         { 
           role: "system", 
