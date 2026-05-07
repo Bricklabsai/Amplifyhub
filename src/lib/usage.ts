@@ -5,7 +5,18 @@ export type Feature = "posts" | "aiText" | "aiImage";
 export async function checkAndIncrementUsage(userId: string, feature: Feature) {
   const subscription = await prisma.subscription.findUnique({
     where: { userId },
-    include: { plan: true },
+    include: {
+      plan: {
+        select: {
+          id: true,
+          name: true,
+          price: true,
+          postsPerMonth: true,
+          aiTextLimit: true,
+          aiImageLimit: true,
+        },
+      },
+    },
   });
 
   if (!subscription) {
@@ -14,7 +25,10 @@ export async function checkAndIncrementUsage(userId: string, feature: Feature) {
     if (!user) throw new Error("User not found");
     
     // Auto-create basic subscription if missing
-    const basicPlan = await prisma.plan.findUnique({ where: { name: "Basic" } });
+    const basicPlan = await prisma.plan.findUnique({
+      where: { name: "Basic" },
+      select: { id: true },
+    });
     if (basicPlan) {
       const newSub = await prisma.subscription.create({
         data: {
@@ -22,7 +36,18 @@ export async function checkAndIncrementUsage(userId: string, feature: Feature) {
           planId: basicPlan.id,
           status: "ACTIVE",
         },
-        include: { plan: true },
+        include: {
+          plan: {
+            select: {
+              id: true,
+              name: true,
+              price: true,
+              postsPerMonth: true,
+              aiTextLimit: true,
+              aiImageLimit: true,
+            },
+          },
+        },
       });
       return await performCheck(newSub, feature, userId);
     }

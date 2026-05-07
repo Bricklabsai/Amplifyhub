@@ -1,5 +1,6 @@
 "use client";
 import { useState, useEffect } from "react";
+import { useToast } from "@/hooks/use-toast";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { Badge } from "@/components/ui/badge";
@@ -37,8 +38,17 @@ export default function SocialAccountsPage() {
   const [refreshing, setRefreshing] = useState(false);
   const [connectingPlatform, setConnectingPlatform] = useState<string | null>(null);
   const [open, setOpen] = useState(false);
+  const { toast } = useToast();
 
-  useEffect(() => { fetchAccounts(); }, []);
+  useEffect(() => { 
+    fetchAccounts();
+    // Check for success param (just connected)
+    const params = new URLSearchParams(window.location.search);
+    if (params.get("success")) {
+      // Auto-refresh after successful connection to display followers
+      setTimeout(() => refreshProfiles(), 500);
+    }
+  }, []);
 
   async function fetchAccounts() {
     const res = await fetch("/api/social-accounts");
@@ -69,7 +79,11 @@ export default function SocialAccountsPage() {
       window.location.href = url;
     } catch (err) {
       console.error("Zernio connect failed", err);
-      alert(err instanceof Error ? err.message : "Failed to start connection");
+      toast({
+        title: "Connection error",
+        description: err instanceof Error ? err.message : "Failed to start connection.",
+        variant: "destructive",
+      });
       setConnectingPlatform(null);
     }
   }

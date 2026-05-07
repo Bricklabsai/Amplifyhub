@@ -1,25 +1,65 @@
 "use client";
 import { useState, useEffect } from "react";
+import { useSearchParams } from "next/navigation";
 import { HiCheck, HiSparkles, HiCreditCard } from "react-icons/hi";
+import { useToast } from "@/hooks/use-toast";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { UsageStats } from "@/components/billing/UsageStats";
 
 export default function BillingPage() {
+  const searchParams = useSearchParams();
   const [plans, setPlans] = useState<any[]>([]);
   const [currentPlan, setCurrentPlan] = useState<any>(null);
   const [loading, setLoading] = useState(true);
   const [upgradeLoading, setUpgradeLoading] = useState<string | null>(null);
+  const [successMessage, setSuccessMessage] = useState<string | null>(null);
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
+  const { toast } = useToast();
 
-  useEffect(() => {
-    Promise.all([
-      fetch("/api/plans").then((r) => r.json()),
-      fetch("/api/billing/info").then((r) => r.json()),
-    ]).then(([plansData, billingData]) => {
+  const loadBillingData = async () => {
+    try {
+      const [plansData, billingData] = await Promise.all([
+        fetch("/api/plans").then((r) => r.json()),
+        fetch("/api/billing/info").then((r) => r.json()),
+      ]);
       setPlans(plansData);
       setCurrentPlan(billingData.subscription?.plan);
+    } catch (error) {
+      console.error("Failed to load billing data:", error);
+    } finally {
       setLoading(false);
-    });
+    }
+  };
+
+  useEffect(() => {
+    // Check for callback results
+    const payment = searchParams.get("payment");
+    const error = searchParams.get("error");
+
+    if (payment === "success") {
+      setSuccessMessage("🎉 Payment successful! Your plan has been upgraded.");
+      // Clear message after 5 seconds
+      const timer = setTimeout(() => setSuccessMessage(null), 5000);
+      return () => clearTimeout(timer);
+    }
+
+    if (error) {
+      const errorMessages: Record<string, string> = {
+        "no-reference": "No payment reference found. Please try again.",
+        "transaction-not-found": "Transaction not found. Please contact support.",
+        "payment-failed": "Payment verification failed. Please try again.",
+        "verification-failed": "Payment verification failed. Please try again.",
+        "callback-error": "An error occurred during payment processing.",
+      };
+      setErrorMessage(errorMessages[error] || `Payment error: ${error}`);
+      const timer = setTimeout(() => setErrorMessage(null), 5000);
+      return () => clearTimeout(timer);
+    }
+  }, [searchParams]);
+
+  useEffect(() => {
+    loadBillingData();
   }, []);
 
   const handleUpgrade = async (planId: string) => {
@@ -36,13 +76,23 @@ export default function BillingPage() {
         window.location.href = data.authorization_url;
       } else if (data.success) {
         // Free plan - refresh page to show new subscription
-        window.location.reload();
+        setSuccessMessage("✓ You've successfully upgraded to the free plan!");
+        await loadBillingData();
+        setTimeout(() => setSuccessMessage(null), 5000);
       } else {
-        alert(data.error || "Failed to initialize payment");
+        toast({
+          title: "Payment initialization failed",
+          description: data.error || "Failed to initialize payment.",
+          variant: "destructive",
+        });
       }
     } catch (error) {
       console.error("Upgrade error:", error);
-      alert("Failed to process upgrade");
+      toast({
+        title: "Upgrade failed",
+        description: error instanceof Error ? error.message : "Failed to process upgrade.",
+        variant: "destructive",
+      });
     } finally {
       setUpgradeLoading(null);
     }
@@ -50,6 +100,21 @@ export default function BillingPage() {
 
   return (
     <div className="max-w-6xl space-y-8">
+      {/* Success/Error Messages */}
+      {successMessage && (
+        <div className="bg-emerald-50 border border-emerald-200 rounded-2xl p-4 text-emerald-800 flex items-center gap-3">
+          <span className="text-xl">✓</span>
+          <span className="font-medium">{successMessage}</span>
+        </div>
+      )}
+
+      {errorMessage && (
+        <div className="bg-red-50 border border-red-200 rounded-2xl p-4 text-red-800 flex items-center gap-3">
+          <span className="text-xl">✕</span>
+          <span className="font-medium">{errorMessage}</span>
+        </div>
+      )}
+
       {/* Usage Stats */}
       <div>
         <h3 className="font-bold text-gray-900 text-xl mb-4" style={{ fontFamily: "Outfit, sans-serif" }}>Your Usage</h3>

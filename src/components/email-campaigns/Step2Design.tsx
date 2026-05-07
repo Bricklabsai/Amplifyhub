@@ -1,5 +1,6 @@
 "use client";
 import { useState } from "react";
+import { useToast } from "@/hooks/use-toast";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { HiEye, HiDevicePhoneMobile, HiComputerDesktop, HiPaperAirplane } from "react-icons/hi2";
@@ -75,6 +76,7 @@ export default function Step2Design({ form, setForm }: Step2DesignProps) {
   const [showPreview, setShowPreview] = useState(false);
   const [previewMode, setPreviewMode] = useState<"mobile" | "desktop">("desktop");
   const [testEmailSending, setTestEmailSending] = useState(false);
+  const { toast } = useToast();
 
   async function applyTemplate(content: string) {
     setForm({ ...form, htmlContent: content });
@@ -82,7 +84,11 @@ export default function Step2Design({ form, setForm }: Step2DesignProps) {
 
   async function sendTestEmail() {
     if (!form.htmlContent.trim()) {
-      alert("Please add email content before sending a test");
+      toast({
+        title: "Email content required",
+        description: "Please add email content before sending a test.",
+        variant: "destructive",
+      });
       return;
     }
 
@@ -99,13 +105,24 @@ export default function Step2Design({ form, setForm }: Step2DesignProps) {
       });
 
       if (res.ok) {
-        alert("Test email sent successfully!");
+        toast({
+          title: "Test email sent",
+          description: "Your test email was sent successfully.",
+        });
       } else {
-        alert("Failed to send test email");
+        toast({
+          title: "Send failed",
+          description: "Failed to send test email.",
+          variant: "destructive",
+        });
       }
     } catch (error) {
       console.error("Error sending test email:", error);
-      alert("Error sending test email");
+      toast({
+        title: "Send failed",
+        description: "Error sending test email.",
+        variant: "destructive",
+      });
     } finally {
       setTestEmailSending(false);
     }

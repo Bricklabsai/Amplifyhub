@@ -144,13 +144,25 @@ function ComposeContent() {
     }
   }
 
+  const isTwitterSelected = useMemo(() => {
+    if (selectedPlatforms.includes("TWITTER")) return true;
+    return socialAccounts.some(
+      (acc) => publishAccountIds.includes(acc.id) && acc.platform.toUpperCase() === "TWITTER"
+    );
+  }, [selectedPlatforms, socialAccounts, publishAccountIds]);
+
   async function generate() {
     if (!prompt.trim()) return;
     setLoading(true);
     const res = await fetch("/api/ai/generate", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ prompt, platforms: selectedPlatforms, tone }),
+      body: JSON.stringify({ 
+        prompt, 
+        platforms: selectedPlatforms, 
+        tone,
+        maxCharacters: isTwitterSelected ? 280 : undefined
+      }),
     });
     const data = await res.json();
     if (data.content) setMessage(data.content);
@@ -164,7 +176,14 @@ function ComposeContent() {
     const res = await fetch("/api/ai/generate", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ action: "enhance", prompt, message: source, tone }),
+      body: JSON.stringify({ 
+        action: "enhance", 
+        prompt, 
+        message: source, 
+        tone,
+        platforms: selectedPlatforms,
+        maxCharacters: isTwitterSelected ? 280 : undefined
+      }),
     });
     const data = await res.json();
     if (data.improvedMessage) setMessage(data.improvedMessage);

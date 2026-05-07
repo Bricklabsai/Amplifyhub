@@ -18,7 +18,7 @@ export async function refreshSocialProfile(socialAccountId: string) {
   // counts (and display name) from Zernio's analytics in a single call.
   if (account.zernioAccountId) {
     try {
-      const stats = await fetchZernioFollowerCounts([account]);
+      const stats = await fetchZernioFollowerCounts([account], account.user.zernioProfileId || undefined);
       const remote = stats.get(account.id);
       if (remote) {
         return await prisma.socialAccount.update({

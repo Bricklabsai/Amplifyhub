@@ -45,13 +45,11 @@ async function main() {
       platforms: 10,
       aiTextLimit: 200,
       aiImageLimit: 50,
-      paystackPlanCode: process.env.PAYSTACK_PRO_PLAN_CODE || "PLN_pro_placeholder",
     },
     create: {
       name: "Pro",
       price: 29.99,
       description: "Perfect for growing brands",
-      paystackPlanCode: process.env.PAYSTACK_PRO_PLAN_CODE || "PLN_pro_placeholder",
       features: [
         "10 social accounts",
         "100 posts/month",
@@ -76,13 +74,11 @@ async function main() {
       platforms: 999999,
       aiTextLimit: 999999,
       aiImageLimit: 999999,
-      paystackPlanCode: process.env.PAYSTACK_CORPORATE_PLAN_CODE || "PLN_corporate_placeholder",
     },
     create: {
       name: "Corporate",
       price: 99.99,
       description: "Enterprise-grade for large organizations",
-      paystackPlanCode: process.env.PAYSTACK_CORPORATE_PLAN_CODE || "PLN_corporate_placeholder",
       features: [
         "Unlimited social accounts",
         "Unlimited posts",

@@ -144,6 +144,33 @@ exports.Prisma.UserScalarFieldEnum = {
   zernioProfileId: 'zernioProfileId'
 };
 
+exports.Prisma.TeamScalarFieldEnum = {
+  id: 'id',
+  name: 'name',
+  ownerId: 'ownerId',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.TeamMemberScalarFieldEnum = {
+  id: 'id',
+  teamId: 'teamId',
+  userId: 'userId',
+  role: 'role',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.TeamInviteScalarFieldEnum = {
+  id: 'id',
+  teamId: 'teamId',
+  email: 'email',
+  role: 'role',
+  token: 'token',
+  expires: 'expires',
+  createdAt: 'createdAt'
+};
+
 exports.Prisma.AccountScalarFieldEnum = {
   id: 'id',
   userId: 'userId',
@@ -184,7 +211,7 @@ exports.Prisma.PlanScalarFieldEnum = {
   aiCredits: 'aiCredits',
   aiTextLimit: 'aiTextLimit',
   aiImageLimit: 'aiImageLimit',
-  paystackPlanCode: 'paystackPlanCode',
+  paynowPaymentId: 'paynowPaymentId',
   createdAt: 'createdAt'
 };
 
@@ -199,8 +226,7 @@ exports.Prisma.SubscriptionScalarFieldEnum = {
   aiTextUsed: 'aiTextUsed',
   aiImageUsed: 'aiImageUsed',
   lastResetAt: 'lastResetAt',
-  paystackSubscriptionCode: 'paystackSubscriptionCode',
-  paystackCustomerCode: 'paystackCustomerCode',
+  paynowPaymentId: 'paynowPaymentId',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 };
@@ -212,7 +238,7 @@ exports.Prisma.TransactionScalarFieldEnum = {
   currency: 'currency',
   status: 'status',
   reference: 'reference',
-  paystackId: 'paystackId',
+  pollUrl: 'pollUrl',
   channel: 'channel',
   paidAt: 'paidAt',
   createdAt: 'createdAt',
@@ -444,6 +470,12 @@ exports.Role = exports.$Enums.Role = {
   ADMIN: 'ADMIN'
 };
 
+exports.TeamRole = exports.$Enums.TeamRole = {
+  ADMIN: 'ADMIN',
+  EDITOR: 'EDITOR',
+  VIEWER: 'VIEWER'
+};
+
 exports.SubscriptionStatus = exports.$Enums.SubscriptionStatus = {
   ACTIVE: 'ACTIVE',
   CANCELLED: 'CANCELLED',
@@ -500,6 +532,9 @@ exports.EmailCampaignStatus = exports.$Enums.EmailCampaignStatus = {
 exports.Prisma.ModelName = {
   WhatsAppConfig: 'WhatsAppConfig',
   User: 'User',
+  Team: 'Team',
+  TeamMember: 'TeamMember',
+  TeamInvite: 'TeamInvite',
   Account: 'Account',
   Session: 'Session',
   VerificationToken: 'VerificationToken',

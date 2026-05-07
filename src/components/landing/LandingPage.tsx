@@ -7,6 +7,15 @@ import { HiPencil, HiChartBar, HiCalendar, HiUsers, HiShieldCheck, HiLightningBo
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 
+// Bright modern color palette – NO PURPLE, NO BLUE. Neon coral, mango, lime, electric pink, amber
+const BRIGHT_PRIMARY = "#FF6B4A";    // vibrant coral
+const BRIGHT_SECONDARY = "#F9A826";  // warm mango
+const BRIGHT_ACCENT = "#FF4D6D";     // electric pink
+const BRIGHT_GREEN = "#2DC653";      // lime pop
+const BRIGHT_ORANGE = "#FF9F1C";
+const BRIGHT_YELLOW = "#FFD166";
+const GOLDEN = "#FFB347";
+
 const TYPEWRITER_WORDS = [
   "Social Media Presence",
   "Brand Awareness",
@@ -15,45 +24,47 @@ const TYPEWRITER_WORDS = [
   "AI-Powered Growth",
 ];
 
+// Updated feature colors – bright, energetic, no blue/purple
 const FEATURES = [
   {
     icon: HiPencil,
     title: "AI Content Generation",
     desc: "Generate platform-perfect posts with GPT-5. Tailored tone and format for every channel.",
-    color: "#7c3aed",
+    color: "#FF6B4A",
   },
   {
     icon: HiCalendar,
     title: "Smart Scheduling",
     desc: "Schedule posts at optimal times. Our AI analyzes your audience for maximum reach.",
-    color: "#2563eb",
+    color: "#F9A826",
   },
   {
     icon: HiChartBar,
     title: "Deep Analytics",
     desc: "Track followers, engagement, reach, and conversions across all platforms in real-time.",
-    color: "#db2777",
+    color: "#FF4D6D",
   },
   {
     icon: HiUsers,
     title: "Audience Segmentation",
     desc: "Build targeted contact lists, import CSVs, and send personalized email campaigns.",
-    color: "#059669",
+    color: "#2DC653",
   },
   {
     icon: HiLightningBolt,
     title: "Multi-Platform Publishing",
     desc: "Publish simultaneously to Facebook, X, Instagram, LinkedIn, TikTok, YouTube, and WhatsApp.",
-    color: "#d97706",
+    color: "#FF9F1C",
   },
   {
     icon: HiShieldCheck,
     title: "Enterprise Security",
     desc: "Role-based access control, JWT auth, and rate limiting. Built for teams of any size.",
-    color: "#0891b2",
+    color: "#FFB347",
   },
 ];
 
+// Floating icons – keep original positions & colors (brand colors for each platform)
 const SOCIAL_ICONS = [
   { Icon: FaFacebook, color: "#1877F2", label: "Facebook", className: "float-1 top-16 left-8" },
   { Icon: FaXTwitter, color: "#000000", label: "X", className: "float-2 top-32 right-12" },
@@ -101,24 +112,26 @@ function TypewriterText() {
 export default function LandingPage() {
   return (
     <div className="min-h-screen paper-bg overflow-x-hidden">
-      {/* Navbar */}
-      <nav className="fixed top-0 left-0 right-0 z-50 flex items-center justify-between px-6 py-4 backdrop-blur-md bg-[#fcfbf9]/80 border-b border-gray-100">
+      {/* Navbar – modern glass with bright accents */}
+      <nav className="fixed top-0 left-0 right-0 z-50 flex items-center justify-between px-6 py-4 backdrop-blur-md bg-[#FFF9F0]/90 border-b border-orange-100/70 shadow-sm">
         <div className="flex items-center gap-2">
           <span className="font-heading font-700 text-xl text-gray-900" style={{ fontWeight: 700 }}>
             Amplify<span className="brand-gradient-text">Hub</span>
           </span>
         </div>
-        <div className="hidden md:flex items-center gap-8 text-sm text-gray-600">
-          <a href="#features" className="hover:text-violet-600 transition-colors">Features</a>
-          <a href="#pricing" className="hover:text-violet-600 transition-colors">Pricing</a>
-          <a href="#platforms" className="hover:text-violet-600 transition-colors">Platforms</a>
+        <div className="hidden md:flex items-center gap-8 text-sm font-medium text-gray-700">
+          <a href="#features" className="hover:text-[#FF6B4A] transition-colors duration-200">Features</a>
+          <a href="#pricing" className="hover:text-[#FF6B4A] transition-colors duration-200">Pricing</a>
+          <a href="#platforms" className="hover:text-[#FF6B4A] transition-colors duration-200">Platforms</a>
         </div>
         <div className="flex items-center gap-3">
           <Link href="/auth/login">
-            <Button variant="ghost" className="text-sm font-medium hover:text-violet-600">Sign In</Button>
+            <Button variant="ghost" className="text-sm font-medium text-gray-700 hover:text-[#FF6B4A] hover:bg-orange-50/50 rounded-xl transition-all">
+              Sign In
+            </Button>
           </Link>
           <Link href="/auth/register">
-            <Button className="brand-gradient-bg text-white border-0 hover:opacity-90 shadow-md text-sm font-medium">
+            <Button className="brand-gradient-bg text-white border-0 hover:shadow-lg hover:scale-[1.02] transition-all shadow-md text-sm font-semibold px-5 py-2 rounded-xl">
               Get Started Free
             </Button>
           </Link>
@@ -127,18 +140,19 @@ export default function LandingPage() {
 
       {/* Hero Section */}
       <section className="relative min-h-screen flex items-center justify-center pt-20 pb-20 overflow-hidden">
-        {/* Background Orbs */}
-        <div className="orb w-96 h-96 bg-blue-400 top-10 -left-20" style={{ opacity: 0.12 }} />
-        <div className="orb w-80 h-80 bg-violet-500 top-1/3 right-0" style={{ opacity: 0.1 }} />
-        <div className="orb w-64 h-64 bg-pink-400 bottom-20 left-1/4" style={{ opacity: 0.08 }} />
+        {/* Bright modern background orbs – warm coral, mango, lime, no blues/purples */}
+        <div className="orb w-96 h-96 bg-[#FF6B4A] top-10 -left-20" style={{ opacity: 0.12 }} />
+        <div className="orb w-80 h-80 bg-[#F9A826] top-1/3 right-0" style={{ opacity: 0.1 }} />
+        <div className="orb w-64 h-64 bg-[#FF4D6D] bottom-20 left-1/4" style={{ opacity: 0.08 }} />
+        <div className="orb w-72 h-72 bg-[#2DC653] bottom-10 right-1/3" style={{ opacity: 0.07 }} />
 
-        {/* Floating Social Icons */}
+        {/* Floating Social Icons (unchanged but with slight modern glassmorphism) */}
         <div className="absolute inset-0 pointer-events-none">
           {SOCIAL_ICONS.map(({ Icon, color, label, className }) => (
             <div
               key={label}
-              className={`absolute ${className} w-14 h-14 rounded-2xl flex items-center justify-center shadow-xl`}
-              style={{ background: `${color}18`, border: `1px solid ${color}30` }}
+              className={`absolute ${className} w-14 h-14 rounded-2xl flex items-center justify-center shadow-xl backdrop-blur-sm transition-transform hover:scale-110 duration-300`}
+              style={{ background: `${color}18`, border: `1px solid ${color}40`, backdropFilter: "blur(2px)" }}
             >
               <Icon style={{ color, fontSize: "1.8rem" }} />
             </div>
@@ -147,11 +161,7 @@ export default function LandingPage() {
 
         {/* Hero Content */}
         <div className="relative z-10 text-center max-w-4xl mx-auto px-6 pt-12">
-          
-          <h1
-            className="text-5xl md:text-7xl font-black mb-6 leading-tight text-gray-900"
-           
-          >
+          <h1 className="text-5xl md:text-7xl font-black mb-6 leading-tight text-gray-900">
             Amplify Your
             <br />
             <TypewriterText />
@@ -164,7 +174,7 @@ export default function LandingPage() {
             <Link href="/auth/register">
               <Button
                 size="lg"
-                className="brand-gradient-bg text-white border-0 hover:opacity-90 shadow-xl px-8 py-6 text-base font-semibold rounded-xl"
+                className="brand-gradient-bg text-white border-0 hover:shadow-xl hover:scale-[1.02] transition-all shadow-md px-8 py-6 text-base font-bold rounded-xl"
               >
                 Start Free Today
               </Button>
@@ -173,34 +183,16 @@ export default function LandingPage() {
               <Button
                 size="lg"
                 variant="outline"
-                className="border-2 border-violet-200 text-violet-700 hover:bg-violet-50 px-8 py-6 text-base font-semibold rounded-xl"
+                className="border-2 border-[#FF9F1C] text-[#FF6B4A] bg-white/60 hover:bg-[#FFF2E0] px-8 py-6 text-base font-semibold rounded-xl transition-all"
               >
                 View Demo
               </Button>
             </Link>
           </div>
-
-          {/* Social proof */}
-          {/* <div className="mt-12 flex flex-col sm:flex-row items-center justify-center gap-8 text-sm text-gray-500">
-            <div className="text-center">
-              <div className="text-2xl font-bold text-gray-900">10K+</div>
-              <div>Active Users</div>
-            </div>
-            <div className="hidden sm:block w-px h-8 bg-gray-200" />
-            <div className="text-center">
-              <div className="text-2xl font-bold text-gray-900">50M+</div>
-              <div>Posts Published</div>
-            </div>
-            <div className="hidden sm:block w-px h-8 bg-gray-200" />
-            <div className="text-center">
-              <div className="text-2xl font-bold text-gray-900">7</div>
-              <div>Platforms Supported</div>
-            </div>
-          </div> */}
         </div>
       </section>
 
-      {/* Platforms Section */}
+      {/* Platforms Section – bright card style */}
       <section id="platforms" className="py-20 bg-white">
         <div className="max-w-6xl mx-auto px-6">
           <div className="text-center mb-12">
@@ -221,7 +213,7 @@ export default function LandingPage() {
             ].map(({ Icon, color, name }) => (
               <div
                 key={name}
-                className="flex items-center gap-3 px-6 py-4 rounded-2xl border border-gray-100 bg-gray-50 hover:shadow-md transition-all group"
+                className="flex items-center gap-3 px-6 py-4 rounded-2xl border border-gray-100 bg-gradient-to-br from-white to-orange-50/40 hover:shadow-md hover:scale-[1.02] transition-all duration-200 group cursor-default"
               >
                 <Icon style={{ color, fontSize: "1.8rem" }} />
                 <span className="font-semibold text-gray-700 group-hover:text-gray-900">{name}</span>
@@ -231,11 +223,11 @@ export default function LandingPage() {
         </div>
       </section>
 
-      {/* Features Section */}
+      {/* Features Section – bright modern cards, no blues/purples */}
       <section id="features" className="py-20 paper-bg">
         <div className="max-w-6xl mx-auto px-6">
           <div className="text-center mb-16">
-            <Badge className="mb-4 bg-blue-100 text-blue-700 border-blue-200 font-medium">Everything You Need</Badge>
+            
             <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
               Powerful Features for Modern Marketers
             </h2>
@@ -245,11 +237,11 @@ export default function LandingPage() {
             {FEATURES.map(({ icon: Icon, title, desc, color }) => (
               <div
                 key={title}
-                className="bg-white rounded-2xl p-6 border border-gray-100 hover:shadow-lg hover:-translate-y-1 transition-all group"
+                className="bg-white rounded-2xl p-6 border border-orange-50/80 shadow-sm hover:shadow-xl hover:-translate-y-1.5 transition-all duration-300 group"
               >
                 <div
                   className="w-12 h-12 rounded-xl flex items-center justify-center mb-4"
-                  style={{ background: `${color}15` }}
+                  style={{ background: `${color}20` }}
                 >
                   <Icon style={{ color, fontSize: "1.5rem" }} />
                 </div>
@@ -261,11 +253,11 @@ export default function LandingPage() {
         </div>
       </section>
 
-      {/* Pricing Section */}
+      {/* Pricing Section – bright & bold, no purple/blue */}
       <section id="pricing" className="py-20 bg-white">
         <div className="max-w-6xl mx-auto px-6">
           <div className="text-center mb-16">
-            <Badge className="mb-4 bg-pink-100 text-pink-700 border-pink-200 font-medium">Simple Pricing</Badge>
+            
             <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
               Plans for Every Stage of Growth
             </h2>
@@ -274,28 +266,30 @@ export default function LandingPage() {
             {PLANS.map(({ name, price, period, highlight, features }) => (
               <div
                 key={name}
-                className={`relative rounded-3xl p-8 border transition-all ${
+                className={`relative rounded-3xl p-8 transition-all duration-300 ${
                   highlight
-                    ? "border-violet-400 shadow-2xl shadow-violet-100 scale-105"
-                    : "border-gray-200 hover:shadow-lg"
+                    ? "border-2 border-[#FF9F1C] shadow-2xl shadow-amber-200/50 scale-105 bg-gradient-to-br from-white to-amber-50/30"
+                    : "border border-gray-200 hover:shadow-lg bg-white"
                 }`}
               >
                 {highlight && (
                   <div className="absolute -top-4 left-1/2 -translate-x-1/2">
-                    <Badge className="brand-gradient-bg text-white border-0 px-4 py-1 font-semibold">Most Popular</Badge>
+                    <Badge className="bg-[#FF6B4A] text-white border-0 px-4 py-1 font-bold shadow-md rounded-full text-sm">
+                       Most Popular
+                    </Badge>
                   </div>
                 )}
                 <div className="mb-6">
-                  <h3 className="text-xl font-bold text-gray-900 mb-2">{name}</h3>
+                  <h3 className="text-2xl font-bold text-gray-900 mb-2">{name}</h3>
                   <div className="flex items-baseline gap-1">
-                    <span className="text-4xl font-black brand-gradient-text">{price}</span>
+                    <span className="text-4xl font-black bg-gradient-to-r from-[#FF6B4A] to-[#F9A826] bg-clip-text text-transparent">{price}</span>
                     <span className="text-gray-500">{period}</span>
                   </div>
                 </div>
                 <ul className="space-y-3 mb-8">
                   {features.map((f) => (
-                    <li key={f} className="flex items-center gap-2 text-sm text-gray-600">
-                      <svg className="w-4 h-4 text-violet-500 flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
+                    <li key={f} className="flex items-center gap-2 text-sm text-gray-700">
+                      <svg className="w-5 h-5 text-[#2DC653] flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
                         <path d="M20 6L9 17l-5-5" strokeLinecap="round" strokeLinejoin="round" />
                       </svg>
                       {f}
@@ -304,10 +298,10 @@ export default function LandingPage() {
                 </ul>
                 <Link href="/auth/register">
                   <Button
-                    className={`w-full font-semibold rounded-xl py-5 ${
+                    className={`w-full font-semibold rounded-xl py-5 transition-all ${
                       highlight
-                        ? "brand-gradient-bg text-white border-0 hover:opacity-90"
-                        : "bg-gray-50 text-gray-900 border border-gray-200 hover:bg-gray-100"
+                        ? "brand-gradient-bg text-white border-0 hover:shadow-lg hover:scale-[1.02]"
+                        : "bg-gray-100 text-gray-800 border border-gray-200 hover:bg-[#FFE8D9] hover:text-[#FF6B4A]"
                     }`}
                   >
                     Get Started
@@ -319,22 +313,22 @@ export default function LandingPage() {
         </div>
       </section>
 
-      {/* CTA Section */}
+      {/* CTA Section – bright coral/orange gradient, no purple/blue */}
       <section className="py-24 relative overflow-hidden">
-        <div className="brand-gradient-bg absolute inset-0" />
-        <div className="orb w-96 h-96 bg-white/20 top-0 right-0" />
-        <div className="orb w-64 h-64 bg-white/10 bottom-0 left-0" />
+        <div className="absolute inset-0 bg-gradient-to-br from-[#FF6B4A] via-[#FF8C42] to-[#FF4D6D]"></div>
+        <div className="orb w-96 h-96 bg-white/25 top-0 right-0" />
+        <div className="orb w-64 h-64 bg-white/15 bottom-0 left-0" />
         <div className="relative z-10 max-w-4xl mx-auto px-6 text-center text-white">
           <h2 className="text-4xl md:text-5xl font-black mb-6">
             Ready to Amplify Your Brand?
           </h2>
-          <p className="text-xl text-white/80 mb-10 max-w-2xl mx-auto">
+          <p className="text-xl text-white/90 mb-10 max-w-2xl mx-auto">
             Join thousands of marketers who trust AmplifyHub AI to grow their social media presence every day.
           </p>
           <Link href="/auth/register">
             <Button
               size="lg"
-              className="bg-white text-violet-700 hover:bg-white/90 shadow-xl px-10 py-6 text-base font-bold rounded-xl"
+              className="bg-white text-[#FF6B4A] hover:bg-amber-50 shadow-xl px-10 py-6 text-base font-bold rounded-xl transition-all hover:scale-[1.02]"
             >
               Start Free — No Credit Card Required
             </Button>
@@ -342,32 +336,81 @@ export default function LandingPage() {
         </div>
       </section>
 
-      {/* Footer */}
+      {/* Footer – sleek modern dark with bright accent */}
       <footer className="bg-gray-900 text-gray-400 py-12 px-6">
         <div className="max-w-6xl mx-auto">
           <div className="flex flex-col md:flex-row items-center justify-between gap-6">
             <div className="flex items-center gap-2">
-              <span className="font-bold text-white">AmplifyHub AI</span>
+              <span className="font-bold text-white text-xl">Amplify<span className="text-[#FF9F1C]">Hub</span></span>
             </div>
             <div className="flex flex-wrap justify-center gap-6 text-sm">
-              <a href="#" className="hover:text-white transition-colors">Privacy</a>
-              <a href="#" className="hover:text-white transition-colors">Terms</a>
-              <a href="#" className="hover:text-white transition-colors">Support</a>
-              <a href="#" className="hover:text-white transition-colors">API</a>
+              <a href="#" className="hover:text-[#FF9F1C] transition-colors">Privacy</a>
+              <a href="#" className="hover:text-[#FF9F1C] transition-colors">Terms</a>
+              <a href="#" className="hover:text-[#FF9F1C] transition-colors">Support</a>
+              <a href="#" className="hover:text-[#FF9F1C] transition-colors">API</a>
             </div>
             <div className="flex items-center gap-4">
               {[FaFacebook, FaXTwitter, FaInstagram, FaLinkedin].map((Icon, i) => (
-                <a key={i} href="#" className="w-8 h-8 rounded-full bg-gray-800 flex items-center justify-center hover:bg-gray-700 transition-colors">
-                  <Icon className="text-sm text-gray-300" />
+                <a key={i} href="#" className="w-8 h-8 rounded-full bg-gray-800 flex items-center justify-center hover:bg-[#FF6B4A] hover:text-white transition-all group">
+                  <Icon className="text-sm text-gray-300 group-hover:text-white" />
                 </a>
               ))}
             </div>
           </div>
           <div className="mt-8 pt-8 border-t border-gray-800 text-center text-sm">
-            © 2024 AmplifyHub AI. All rights reserved. Built with ❤️ for modern marketers.
+            © 2026 AmplifyHub AI. All rights reserved. Built for modern marketers.
           </div>
         </div>
       </footer>
+
+      <style jsx>{`
+        .typewriter-cursor::after {
+          content: "|";
+          animation: blink 0.8s infinite;
+          margin-left: 2px;
+          background: linear-gradient(135deg, #FF6B4A, #F9A826);
+          background-clip: text;
+          -webkit-background-clip: text;
+          color: transparent;
+        }
+        @keyframes blink {
+          0%, 100% { opacity: 1; }
+          50% { opacity: 0; }
+        }
+        .brand-gradient-bg {
+          background: linear-gradient(105deg, #FF7A2F 0%, #FF4D6D 100%);
+        }
+        .brand-gradient-text {
+          background: linear-gradient(135deg, #FF8C42, #FF4D6D, #F9C74F);
+          background-clip: text;
+          -webkit-background-clip: text;
+          color: transparent;
+        }
+        .paper-bg {
+          background-color: #FFFCF5;
+        }
+        .float-1 { animation: float1 12s infinite ease-in-out; }
+        .float-2 { animation: float2 14s infinite ease-in-out; }
+        .float-3 { animation: float3 11s infinite ease-in-out; }
+        .float-4 { animation: float4 15s infinite ease-in-out; }
+        .float-5 { animation: float5 13s infinite ease-in-out; }
+        .float-6 { animation: float6 16s infinite ease-in-out; }
+        .float-7 { animation: float7 10s infinite ease-in-out; }
+        @keyframes float1 { 0% { transform: translateY(0px) rotate(0deg); } 50% { transform: translateY(-12px) rotate(3deg); } 100% { transform: translateY(0px) rotate(0deg); } }
+        @keyframes float2 { 0% { transform: translateY(0px) rotate(0deg); } 50% { transform: translateY(-15px) rotate(-2deg); } 100% { transform: translateY(0px) rotate(0deg); } }
+        @keyframes float3 { 0% { transform: translateY(0px) rotate(0deg); } 50% { transform: translateY(-10px) rotate(4deg); } 100% { transform: translateY(0px) rotate(0deg); } }
+        @keyframes float4 { 0% { transform: translateY(0px) rotate(0deg); } 50% { transform: translateY(-18px) rotate(-3deg); } 100% { transform: translateY(0px) rotate(0deg); } }
+        @keyframes float5 { 0% { transform: translateY(0px) rotate(0deg); } 50% { transform: translateY(-8px) rotate(2deg); } 100% { transform: translateY(0px) rotate(0deg); } }
+        @keyframes float6 { 0% { transform: translateY(0px) rotate(0deg); } 50% { transform: translateY(-14px) rotate(-4deg); } 100% { transform: translateY(0px) rotate(0deg); } }
+        @keyframes float7 { 0% { transform: translateY(0px) rotate(0deg); } 50% { transform: translateY(-11px) rotate(3deg); } 100% { transform: translateY(0px) rotate(0deg); } }
+        .orb {
+          position: absolute;
+          border-radius: 50%;
+          filter: blur(80px);
+          z-index: 0;
+          pointer-events: none;
+        }
+      `}</style>
     </div>
   );
 }

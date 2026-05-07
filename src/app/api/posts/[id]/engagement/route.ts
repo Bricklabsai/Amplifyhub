@@ -5,6 +5,7 @@ import { prisma } from "@/lib/prisma";
 import { readJsonStore, writeJsonStore } from "@/lib/json-store";
 import { randomUUID } from "crypto";
 import { fetchPlatformPostEngagement, fetchPlatformPostComments } from "@/lib/social";
+import { replyViaZernio } from "@/lib/zernio-engagement";
 
 type EngagementComment = {
   id: string;
@@ -165,25 +166,93 @@ export async function POST(req: NextRequest, { params }: { params: Promise<{ id:
   const userId = (session.user as any).id;
 
   const { id } = await params;
-  const post = await prisma.post.findFirst({ where: { id, userId, status: "PUBLISHED" } });
+  const post = await prisma.post.findFirst({
+    where: { id, userId, status: "PUBLISHED" },
+    include: {
+      platformPosts: {
+        include: {
+          socialAccount: true,
+        },
+      },
+    },
+  });
   if (!post) return NextResponse.json({ error: "Published post not found" }, { status: 404 });
 
   const body = await req.json();
-  const { action, commentId, message } = body as { action: "reply" | "analyze"; commentId?: string; message?: string };
+  const { action, commentId, message, socialAccountId } = body as {
+    action: "reply" | "analyze";
+    commentId?: string;
+    message?: string;
+    socialAccountId?: string;
+  };
   const store = await readJsonStore<PostEngagement[]>(FILE_NAME, []);
   const idx = store.findIndex((x) => x.postId === id);
   const current: PostEngagement = idx >= 0 ? store[idx] : { postId: id, likes: 0, comments: [] };
 
   if (action === "reply") {
-    if (!commentId || !message?.trim()) return NextResponse.json({ error: "commentId and message required" }, { status: 400 });
+    if (!commentId || !message?.trim()) {
+      return NextResponse.json({ error: "commentId and message required" }, { status: 400 });
+    }
     const cIdx = current.comments.findIndex((c) => c.id === commentId);
-    if (cIdx < 0) return NextResponse.json({ error: "Comment not found" }, { status: 404 });
-    current.comments[cIdx].replies.push({ id: randomUUID(), message: message.trim(), createdAt: new Date().toISOString() });
+    if (cIdx < 0) {
+      return NextResponse.json({ error: "Comment not found" }, { status: 404 });
+    }
+
+    // Try to post the reply to the actual platform
+    let replyPosted = false;
+    if (socialAccountId) {
+      try {
+        const platformPost = post.platformPosts.find((pp) => pp.socialAccountId === socialAccountId);
+        if (platformPost && platformPost.externalId) {
+          const account = platformPost.socialAccount;
+
+          // For Zernio-connected accounts, use Zernio API to reply
+          if (account.zernioAccountId) {
+            console.log(`[Engagement] Posting reply via Zernio for account ${account.zernioAccountId}`);
+            const zernioReplyId = await replyViaZernio(
+              platformPost.externalId,
+              account.zernioAccountId,
+              message.trim(),
+              commentId
+            );
+
+            if (zernioReplyId) {
+              console.log(`[Engagement] Successfully posted reply to Zernio: ${zernioReplyId}`);
+              replyPosted = true;
+            } else {
+              console.warn(`[Engagement] Zernio reply returned no ID`);
+            }
+          } else {
+            console.warn(
+              `[Engagement] Account ${account.id} is not Zernio-connected, cannot post reply via API`
+            );
+            // For legacy accounts, we would need platform-specific implementations
+            // This is left as a future enhancement
+          }
+        }
+      } catch (replyError) {
+        console.error(`[Engagement] Failed to post reply to platform:`, replyError);
+        // Continue - we'll still save it locally
+      }
+    }
+
+    // Always save the reply locally as a record
+    current.comments[cIdx].replies.push({
+      id: randomUUID(),
+      message: message.trim(),
+      createdAt: new Date().toISOString(),
+    });
+
+    const status = replyPosted ? "posted" : "local-only";
+    console.log(`[Engagement] Reply saved (${status}) for comment ${commentId}`);
   }
 
   if (action === "analyze") {
     const sentiments = await analyzeSentiment(current.comments.map((c) => c.message));
-    current.comments = current.comments.map((comment, i) => ({ ...comment, sentiment: sentiments[i] || comment.sentiment || "neutral" }));
+    current.comments = current.comments.map((comment, i) => ({
+      ...comment,
+      sentiment: sentiments[i] || comment.sentiment || "neutral",
+    }));
   }
 
   if (idx >= 0) store[idx] = current;

@@ -225,3 +225,35 @@ export async function sendBulkEmails({ to, subject, content, textContent, campai
     results,
   };
 }
+
+export async function sendEmail({ to, subject, content, textContent }: { to: string, subject: string, content: string, textContent?: string }) {
+  return sendBulkEmails({
+    to: [{ email: to }],
+    subject,
+    content,
+    textContent
+  });
+}
+
+export async function sendInviteEmail(email: string, teamName: string, inviterName: string, inviteUrl: string) {
+  const subject = `You've been invited to join ${teamName} on AmplifyHub AI`;
+  const content = `
+    <div style="font-family: sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; border: 1px solid #e2e8f0; rounded: 12px;">
+      <h2 style="color: #4f46e5; margin-bottom: 24px;">Join the Team</h2>
+      <p style="font-size: 16px; color: #1e293b; line-height: 1.5;">
+        Hi there! <strong>${inviterName}</strong> has invited you to join their team <strong>${teamName}</strong> on AmplifyHub AI.
+      </p>
+      <p style="font-size: 16px; color: #1e293b; line-height: 1.5; margin-bottom: 32px;">
+        As a team member, you'll be able to help manage social media posts, audience groups, and AI content generation.
+      </p>
+      <a href="${inviteUrl}" style="background-color: #4f46e5; color: white; padding: 12px 24px; border-radius: 8px; text-decoration: none; font-weight: bold; display: inline-block;">
+        Accept Invitation
+      </a>
+      <p style="font-size: 14px; color: #64748b; margin-top: 32px; border-top: 1px solid #f1f5f9; padding-top: 16px;">
+        If you didn't expect this invitation, you can safely ignore this email.
+      </p>
+    </div>
+  `;
+  
+  return sendEmail({ to: email, subject, content });
+}

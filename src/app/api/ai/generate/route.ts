@@ -9,7 +9,7 @@ export async function POST(req: NextRequest) {
   if (!session?.user) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   const userId = (session.user as any).id;
 
-  const { prompt, platforms, tone, action, message } = await req.json();
+  const { prompt, platforms, tone, action, message, maxCharacters } = await req.json();
 
   // Check usage limits
   const usage = await checkAndIncrementUsage(userId, "aiText");
@@ -28,12 +28,18 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: "Prompt is required" }, { status: 400 });
   }
 
-  const targetPlatforms = platforms || ["FACEBOOK", "TWITTER", "INSTAGRAM", "LINKEDIN"];
+  const targetPlatforms = (platforms || ["FACEBOOK", "TWITTER", "INSTAGRAM", "LINKEDIN"]).map((p: string) => p.toUpperCase());
+  
+  let characterLimit = maxCharacters;
+  if (targetPlatforms.includes("TWITTER") && (!characterLimit || characterLimit > 280)) {
+    characterLimit = 280;
+  }
 
   try {
     const client = getAzureOpenAIClient();
 
     if (action === "enhance") {
+      const charLimit = characterLimit ? `\nCRITICAL: Keep the response under ${characterLimit} characters strictly.` : "";
       const response = await client.chat.completions.create({
         model: "gpt-4",
         messages: [
@@ -44,7 +50,7 @@ export async function POST(req: NextRequest) {
           },
           {
             role: "user",
-            content: `Tone: ${tone || "professional"}\nOriginal message: ${message || prompt}\nReturn JSON with keys: improvedMessage (string), suggestions (string[]).`,
+            content: `Tone: ${tone || "professional"}\nOriginal message: ${message || prompt}\nReturn JSON with keys: improvedMessage (string), suggestions (string[]).${charLimit}`,
           },
         ],
         response_format: { type: "json_object" },
@@ -57,12 +63,13 @@ export async function POST(req: NextRequest) {
       });
     }
 
+    const charLimit = characterLimit ? `\nCRITICAL: Keep the response under ${characterLimit} characters strictly.` : "";
     const response = await client.chat.completions.create({
       model: "gpt-4",
       messages: [
         { 
           role: "system", 
-          content: `You are a social media expert. Generate a single engaging post suitable for all major platforms (Facebook, X/Twitter, LinkedIn, Instagram, etc.). Tone: ${tone || "professional"}. Keep it concise enough for all platforms.` 
+          content: `You are a social media expert. Generate a single engaging post suitable for all major platforms (Facebook, X/Twitter, LinkedIn, Instagram, etc.). Tone: ${tone || "professional"}. Keep it concise enough for all platforms.${charLimit}` 
         },
         { 
           role: "user", 

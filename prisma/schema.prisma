@@ -66,6 +66,12 @@ enum AutomationFrequency {
   CUSTOM
 }
 
+enum TeamRole {
+  ADMIN
+  EDITOR
+  VIEWER
+}
+
 model WhatsAppConfig {
   id                String   @id @default(cuid())
   userId            String   @unique
@@ -105,6 +111,47 @@ model User {
   subscription   Subscription?
   transactions   Transaction[]
   whatsappConfig WhatsAppConfig?
+  ownedTeams     Team[]          @relation("TeamOwner")
+  teamMemberships TeamMember[]
+}
+
+model Team {
+  id          String       @id @default(cuid())
+  name        String
+  ownerId     String
+  owner       User         @relation("TeamOwner", fields: [ownerId], references: [id], onDelete: Cascade)
+  members     TeamMember[]
+  invites     TeamInvite[]
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
+}
+
+model TeamMember {
+  id        String   @id @default(cuid())
+  teamId    String
+  userId    String
+  role      TeamRole @default(EDITOR)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  team Team @relation(fields: [teamId], references: [id], onDelete: Cascade)
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([teamId, userId])
+}
+
+model TeamInvite {
+  id        String   @id @default(cuid())
+  teamId    String
+  email     String
+  role      TeamRole @default(EDITOR)
+  token     String   @unique
+  expires   DateTime
+  createdAt DateTime @default(now())
+
+  team Team @relation(fields: [teamId], references: [id], onDelete: Cascade)
+
+  @@unique([teamId, email])
 }
 
 model Account {
@@ -155,44 +202,43 @@ model Plan {
   aiCredits        Int      @default(0)
   aiTextLimit      Int      @default(0)
   aiImageLimit     Int      @default(0)
-  paystackPlanCode String?
+  paynowPaymentId  String?  // Reference for Paynow payment tracking
   createdAt        DateTime @default(now())
 
   subscriptions Subscription[]
 }
 
 model Subscription {
-  id                       String             @id @default(cuid())
-  userId                   String             @unique
-  planId                   String
-  status                   SubscriptionStatus @default(ACTIVE)
-  startDate                DateTime           @default(now())
-  endDate                  DateTime?
-  postsUsed                Int                @default(0)
-  aiTextUsed               Int                @default(0)
-  aiImageUsed              Int                @default(0)
-  lastResetAt              DateTime           @default(now())
-  paystackSubscriptionCode String?
-  paystackCustomerCode     String?
-  createdAt                DateTime           @default(now())
-  updatedAt                DateTime           @updatedAt
+  id                String             @id @default(cuid())
+  userId            String             @unique
+  planId            String
+  status            SubscriptionStatus @default(ACTIVE)
+  startDate         DateTime           @default(now())
+  endDate           DateTime?
+  postsUsed         Int                @default(0)
+  aiTextUsed        Int                @default(0)
+  aiImageUsed       Int                @default(0)
+  lastResetAt       DateTime           @default(now())
+  paynowPaymentId   String?            // Paynow transaction reference for subscription
+  createdAt         DateTime           @default(now())
+  updatedAt         DateTime           @updatedAt
 
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
   plan Plan @relation(fields: [planId], references: [id])
 }
 
 model Transaction {
-  id              String   @id @default(cuid())
-  userId          String
-  amount          Float
-  currency        String   @default("NGN")
-  status          String   // "success", "failed", "pending"
-  reference       String   @unique
-  paystackId      String?
-  channel         String?
-  paidAt          DateTime?
-  createdAt       DateTime @default(now())
-  updatedAt       DateTime @updatedAt
+  id          String   @id @default(cuid())
+  userId      String
+  amount      Float
+  currency    String   @default("ZWL")  // Zimbabwe currency for Paynow
+  status      String   // "success", "failed", "pending", "cancelled"
+  reference   String   @unique           // Paynow merchantReference
+  pollUrl     String?                     // Paynow polling URL for status updates
+  channel     String?                     // Payment method used (ecocash, visa, mastercard)
+  paidAt      DateTime?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
 
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 }

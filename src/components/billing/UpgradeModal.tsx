@@ -1,5 +1,6 @@
 "use client";
 import { useEffect, useState } from "react";
+import { useToast } from "@/hooks/use-toast";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { HiSparkles, HiArrowRight } from "react-icons/hi";
@@ -31,6 +32,7 @@ export function UpgradeModal({
   onSelectPlan,
 }: UpgradeModalProps) {
   const [loading, setLoading] = useState(false);
+  const { toast } = useToast();
 
   // Filter plans for upgrade (exclude free plan if user is on free)
   const upgradePlans = plans.filter((p) => p.price > 0).sort((a, b) => a.price - b.price);
@@ -45,14 +47,26 @@ export function UpgradeModal({
       });
 
       const data = await res.json();
-      if (data.authorization_url) {
-        window.location.href = data.authorization_url;
+      if (data.redirectUrl) {
+        // Paynow payment redirect
+        window.location.href = data.redirectUrl;
       } else if (data.success) {
         onClose();
         onSelectPlan(planId);
+      } else {
+        toast({
+          title: "Upgrade failed",
+          description: data.error || "Could not start the upgrade flow.",
+          variant: "destructive",
+        });
       }
     } catch (error) {
       console.error("Upgrade error:", error);
+      toast({
+        title: "Upgrade failed",
+        description: error instanceof Error ? error.message : "An unexpected error occurred.",
+        variant: "destructive",
+      });
     } finally {
       setLoading(false);
     }

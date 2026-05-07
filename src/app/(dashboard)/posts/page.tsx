@@ -1,5 +1,6 @@
 "use client";
 import { useState, useEffect } from "react";
+import { useToast } from "@/hooks/use-toast";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -26,7 +27,9 @@ export default function PostsPage() {
   const [selectedPostId, setSelectedPostId] = useState("");
   const [engagement, setEngagement] = useState<any | null>(null);
   const [replyDraft, setReplyDraft] = useState<Record<string, string>>({});
+  const [replyAccountSelection, setReplyAccountSelection] = useState<Record<string, string>>({});
   const [analyzing, setAnalyzing] = useState(false);
+  const { toast } = useToast();
   const [socialAccounts, setSocialAccounts] = useState<any[]>([]);
   const [selectedPublishAccounts, setSelectedPublishAccounts] = useState<string[]>([]);
   const [publishingPostId, setPublishingPostId] = useState("");
@@ -73,15 +76,38 @@ export default function PostsPage() {
   async function replyToComment(commentId: string) {
     const message = replyDraft[commentId];
     if (!message?.trim() || !selectedPostId) return;
+    
+    const selectedAccount = replyAccountSelection[commentId];
+    if (!selectedAccount) {
+      toast({
+        title: "Account required",
+        description: "Please select which account to reply from.",
+        variant: "destructive",
+      });
+      return;
+    }
+
     const res = await fetch(`/api/posts/${selectedPostId}/engagement`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ action: "reply", commentId, message }),
+      body: JSON.stringify({
+        action: "reply",
+        commentId,
+        message: message.trim(),
+        socialAccountId: selectedAccount,
+      }),
     });
     const data = await res.json();
     if (res.ok) {
       setEngagement(data);
       setReplyDraft((prev) => ({ ...prev, [commentId]: "" }));
+      setReplyAccountSelection((prev) => ({ ...prev, [commentId]: "" }));
+    } else {
+      toast({
+        title: "Reply failed",
+        description: data.error || "Failed to post reply.",
+        variant: "destructive",
+      });
     }
   }
 
@@ -313,7 +339,25 @@ export default function PostsPage() {
                     value={replyDraft[comment.id] || ""}
                     onChange={(e) => setReplyDraft((prev) => ({ ...prev, [comment.id]: e.target.value }))}
                   />
-                  <Button size="sm" onClick={() => replyToComment(comment.id)}>Reply</Button>
+                  {socialAccounts.length > 0 && (
+                    <select
+                      value={replyAccountSelection[comment.id] || ""}
+                      onChange={(e) =>
+                        setReplyAccountSelection((prev) => ({ ...prev, [comment.id]: e.target.value }))
+                      }
+                      className="px-2 py-1 text-sm border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    >
+                      <option value="">Select account...</option>
+                      {socialAccounts.map((acc) => (
+                        <option key={acc.id} value={acc.id}>
+                          {acc.accountName || acc.platform}
+                        </option>
+                      ))}
+                    </select>
+                  )}
+                  <Button size="sm" onClick={() => replyToComment(comment.id)}>
+                    Reply
+                  </Button>
                 </div>
               </div>
             ))}
