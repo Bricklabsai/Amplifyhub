@@ -5,6 +5,19 @@ export async function GET() {
   try {
     const plans = await prisma.plan.findMany({
       orderBy: { price: 'asc' },
+      select: {
+        id: true,
+        name: true,
+        price: true,
+        description: true,
+        features: true,
+        postsPerMonth: true,
+        platforms: true,
+        aiCredits: true,
+        aiTextLimit: true,
+        aiImageLimit: true,
+        paynowPaymentId: true,
+      },
     });
 
     return NextResponse.json(plans);

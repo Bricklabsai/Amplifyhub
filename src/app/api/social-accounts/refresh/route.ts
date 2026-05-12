@@ -1,4 +1,4 @@
-import { NextRequest, NextResponse } from "next/server";
+import { type NextRequest, NextResponse } from "next/server";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
@@ -23,7 +23,13 @@ export async function POST(req: NextRequest) {
 
   if (zernioBacked.length > 0) {
     try {
-      const stats = await fetchZernioFollowerCounts(zernioBacked);
+      // Get the user's Zernio profile ID
+      const user = await prisma.user.findUnique({
+        where: { id: userId },
+        select: { zernioProfileId: true },
+      });
+      
+      const stats = await fetchZernioFollowerCounts(zernioBacked, user?.zernioProfileId || undefined);
       // Update each account in parallel using whatever we got back. Accounts
       // missing from the response (e.g. Zernio still warming up follower data
       // for newly connected accounts) are recorded as failures.

@@ -1,5 +1,6 @@
 "use client";
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useToast } from "@/hooks/use-toast";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { HiEye, HiDevicePhoneMobile, HiComputerDesktop, HiPaperAirplane } from "react-icons/hi2";
@@ -75,6 +76,24 @@ export default function Step2Design({ form, setForm }: Step2DesignProps) {
   const [showPreview, setShowPreview] = useState(false);
   const [previewMode, setPreviewMode] = useState<"mobile" | "desktop">("desktop");
   const [testEmailSending, setTestEmailSending] = useState(false);
+  const [savedTemplates, setSavedTemplates] = useState<any[]>([]);
+  const { toast } = useToast();
+
+  useEffect(() => {
+    void fetchSavedTemplates();
+  }, []);
+
+  async function fetchSavedTemplates() {
+    try {
+      const res = await fetch("/api/email-templates");
+      if (res.ok) {
+        const data = await res.json();
+        setSavedTemplates(Array.isArray(data) ? data : []);
+      }
+    } catch (error) {
+      console.error("Failed to load saved templates", error);
+    }
+  }
 
   async function applyTemplate(content: string) {
     setForm({ ...form, htmlContent: content });
@@ -82,7 +101,11 @@ export default function Step2Design({ form, setForm }: Step2DesignProps) {
 
   async function sendTestEmail() {
     if (!form.htmlContent.trim()) {
-      alert("Please add email content before sending a test");
+      toast({
+        title: "Email content required",
+        description: "Please add email content before sending a test.",
+        variant: "destructive",
+      });
       return;
     }
 
@@ -99,13 +122,24 @@ export default function Step2Design({ form, setForm }: Step2DesignProps) {
       });
 
       if (res.ok) {
-        alert("Test email sent successfully!");
+        toast({
+          title: "Test email sent",
+          description: "Your test email was sent successfully.",
+        });
       } else {
-        alert("Failed to send test email");
+        toast({
+          title: "Send failed",
+          description: "Failed to send test email.",
+          variant: "destructive",
+        });
       }
     } catch (error) {
       console.error("Error sending test email:", error);
-      alert("Error sending test email");
+      toast({
+        title: "Send failed",
+        description: "Error sending test email.",
+        variant: "destructive",
+      });
     } finally {
       setTestEmailSending(false);
     }
@@ -113,9 +147,31 @@ export default function Step2Design({ form, setForm }: Step2DesignProps) {
 
   return (
     <div className="space-y-6 py-4 max-h-[70vh] overflow-y-auto">
+      {/* Saved Templates */}
+      {savedTemplates.length > 0 && (
+        <div>
+          <div className="flex items-center justify-between mb-3">
+            <Label className="text-sm font-semibold text-gray-700">Saved Templates</Label>
+            <p className="text-xs text-gray-400">Use a saved template from your library</p>
+          </div>
+          <div className="grid grid-cols-3 gap-3 mb-4">
+            {savedTemplates.map((template) => (
+              <button
+                key={template.id}
+                onClick={() => applyTemplate(template.htmlContent)}
+                className="border border-gray-200 rounded-lg p-3 hover:border-violet-500 hover:bg-violet-50 transition-all text-left"
+              >
+                <p className="font-semibold text-sm text-gray-900">{template.name}</p>
+                <p className="text-xs text-gray-500 mt-1 truncate">{template.description}</p>
+              </button>
+            ))}
+          </div>
+        </div>
+      )}
+
       {/* Template Gallery */}
       <div>
-        <Label className="text-sm font-semibold text-gray-700 mb-3 block">Email Template Gallery</Label>
+        <Label className="text-sm font-semibold text-gray-700 mb-3 block">Quick Starter Templates</Label>
         <div className="grid grid-cols-3 gap-3">
           {EMAIL_TEMPLATES.map((template) => (
             <button

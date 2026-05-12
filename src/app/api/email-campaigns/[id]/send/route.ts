@@ -1,4 +1,4 @@
-import { NextRequest, NextResponse } from "next/server";
+import { type NextRequest, NextResponse } from "next/server";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
@@ -23,29 +23,38 @@ export async function POST(req: NextRequest, { params }: { params: Promise<{ id:
 
   if (!campaign) return NextResponse.json({ error: "Not found" }, { status: 404 });
 
-  const emailRecipients = campaign.recipients
-    .filter(r => r.contact.email)
-    .map((r) => ({
-      id: r.contactId,
-      email: r.contact.email,
-      firstName: r.contact.firstName || undefined,
-      lastName: r.contact.lastName || undefined,
-      company: r.contact.company || undefined,
+  const emailRecipients = await prisma.$queryRaw<Record<string, string | null>[]>`
+    SELECT c.id, c.email, c."firstName", c."lastName", c.company
+    FROM "EmailCampaignRecipient" r
+    JOIN "Contact" c ON c.id = r."contactId"
+    WHERE r."campaignId" = ${id}
+      AND c.email IS NOT NULL
+      AND c."isUnsubscribed" = false
+  `;
+
+  const formattedRecipients = emailRecipients
+    .filter((recipient) => recipient.email)
+    .map((recipient) => ({
+      id: recipient.id as string,
+      email: recipient.email as string,
+      firstName: (recipient["firstName"] as string) || undefined,
+      lastName: (recipient["lastName"] as string) || undefined,
+      company: (recipient.company as string) || undefined,
     }));
 
-  const sendgridApiKey = process.env.SENDGRID_API_KEY;
+  const resendApiKey = process.env.RESEND_API_KEY;
 
-  if (emailRecipients.length > 0) {
+  if (formattedRecipients.length > 0) {
     const emailResult = await sendBulkEmails({
-      to: emailRecipients,
+      to: formattedRecipients,
       subject: campaign.subject,
       content: campaign.htmlContent,
       textContent: campaign.textContent || undefined,
       campaignId: campaign.id
     });
 
-    if (!emailResult.success && sendgridApiKey) {
-      return NextResponse.json({ error: `SendGrid send failed: ${JSON.stringify(emailResult.results)}` }, { status: 500 });
+    if (!emailResult.success && resendApiKey) {
+      return NextResponse.json({ error: `Resend send failed: ${JSON.stringify(emailResult.results)}` }, { status: 500 });
     }
   }
 
@@ -62,10 +71,10 @@ export async function POST(req: NextRequest, { params }: { params: Promise<{ id:
 
   return NextResponse.json({
     success: true,
-    provider: sendgridApiKey ? "sendgrid" : "simulation",
-    recipients: emailRecipients.length,
-    message: sendgridApiKey
-      ? "Campaign sent successfully with SendGrid."
-      : "Campaign sent successfully (simulation, set SENDGRID_API_KEY to enable real sending).",
+    provider: resendApiKey ? "resend" : "simulation",
+    recipients: formattedRecipients.length,
+    message: resendApiKey
+      ? "Campaign sent successfully with Resend."
+      : "Campaign sent successfully (simulation, set RESEND_API_KEY to enable real sending).",
   });
 }

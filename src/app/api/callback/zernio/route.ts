@@ -1,4 +1,4 @@
-import { NextRequest, NextResponse } from "next/server";
+import { type NextRequest, NextResponse } from "next/server";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 import { connectWithZernio } from "@/lib/services/connectAccount";
@@ -9,6 +9,7 @@ import {
   getZernioClient,
   getZernioProfileId,
 } from "@/lib/zernio";
+import { fetchZernioFollowerCounts } from "@/lib/zernio-engagement";
 
 export const dynamic = "force-dynamic";
 
@@ -208,11 +209,38 @@ export async function GET(req: NextRequest) {
       );
     }
 
-    await connectWithZernio(userId, {
+    const account = await connectWithZernio(userId, {
       zernioAccountId: resolved.zernioAccountId,
       accountName: resolved.username || resolved.zernioAccountId,
       platform,
     });
+
+    // Immediately fetch follower counts for the newly connected account
+    try {
+      console.log(`[Zernio Callback] Fetching followers for newly connected account: ${account.id}`);
+      const user = await prisma.user.findUnique({
+        where: { id: userId },
+        select: { zernioProfileId: true },
+      });
+      
+      const stats = await fetchZernioFollowerCounts([account], user?.zernioProfileId || undefined);
+      const followerData = stats.get(account.id);
+      
+      if (followerData) {
+        console.log(`[Zernio Callback] Successfully fetched followers: ${followerData.followers}`);
+        await prisma.socialAccount.update({
+          where: { id: account.id },
+          data: {
+            followers: followerData.followers,
+            accountName: followerData.displayName || followerData.username || account.accountName,
+            updatedAt: new Date(),
+          },
+        });
+      }
+    } catch (followerError) {
+      console.warn(`[Zernio Callback] Could not fetch followers immediately, user can refresh later:`, followerError);
+      // Don't block the redirect if follower fetching fails — user can click refresh
+    }
 
     return redirect(SUCCESS_REDIRECT, baseUrl);
   } catch (err) {

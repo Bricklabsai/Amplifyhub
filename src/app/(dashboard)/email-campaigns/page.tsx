@@ -2,6 +2,7 @@
 import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
+import Link from "next/link";
 import { HiMail, HiPaperAirplane } from "react-icons/hi";
 import { formatDate } from "@/lib/utils";
 import EmailCampaignWizard from "@/components/email-campaigns/EmailCampaignWizard";
@@ -63,8 +64,18 @@ export default function EmailCampaignsPage() {
 
   return (
     <div className="max-w-6xl space-y-6">
-      <div className="flex items-center justify-between">
-        <p className="text-gray-500 text-sm">{campaigns.length} email campaigns</p>
+      <div className="flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
+        <div>
+          <p className="text-gray-500 text-sm">{campaigns.length} email campaigns</p>
+          <div className="flex flex-wrap gap-2 mt-2">
+            <Link href="/email-templates" className="rounded-xl border border-gray-200 px-4 py-2 text-sm text-gray-600 hover:bg-gray-50 transition">
+              Email Templates
+            </Link>
+            <Link href="/scheduled-campaigns" className="rounded-xl border border-gray-200 px-4 py-2 text-sm text-gray-600 hover:bg-gray-50 transition">
+              Scheduled Campaigns
+            </Link>
+          </div>
+        </div>
         <EmailCampaignWizard groups={groups} onCampaignCreated={fetchCampaigns} />
       </div>
 

@@ -1,4 +1,4 @@
-import { NextRequest, NextResponse } from "next/server";
+import { type NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { publishPost } from "@/lib/services/publishPost";
 import crypto from "crypto";
@@ -12,6 +12,7 @@ export async function POST(req: NextRequest) {
   }
 
   const now = new Date();
+  // 1. Process Scheduled Social Posts
   const scheduledPosts = await prisma.post.findMany({
     where: { status: "SCHEDULED", scheduledAt: { lte: now } },
     include: { platformPosts: { include: { socialAccount: true } } },
@@ -160,12 +161,38 @@ export async function POST(req: NextRequest) {
     }
   }
 
-  return NextResponse.json({
-    processed: scheduledPosts.length,
-    published,
-    failed,
-    message: `Processed ${scheduledPosts.length} scheduled posts. ${published} succeeded, ${failed} failed.`
+  // 2. Process Scheduled Email Campaigns (Newsletters, etc.)
+  const scheduledEmails = await prisma.scheduledCampaign.findMany({
+    where: { nextRunAt: { lte: now } },
   });
+
+  let emailsProcessed = 0;
+
+  for (const schedule of scheduledEmails) {
+    try {
+      // Call the internal run endpoint logic or refactor it to a shared service
+      // For now, we can trigger the run via a local fetch to the existing API
+      const baseUrl = process.env.NEXTAUTH_URL || "http://localhost:3000";
+      await fetch(`${baseUrl}/api/scheduled-campaigns/${schedule.id}/run`, {
+        method: "POST",
+        headers: {
+          "Authorization": `Bearer ${cronSecret}`,
+          "Content-Type": "application/json"
+        }
+      });
+      emailsProcessed++;
+    } catch (error) {
+      console.error(`Error running scheduled email ${schedule.id}:`, error);
+    }
+  }
+
+  return NextResponse.json({
+    processed: scheduledPosts.length + scheduledEmails.length,
+    socialPublished: published,
+    emailsProcessed,
+    message: `Processed ${scheduledPosts.length} social posts and ${scheduledEmails.length} email campaigns.`
+  });
+
 }
 
 export async function GET() {

@@ -76,8 +76,12 @@ export async function fetchZernioEngagement(
       reach: a.reach,
       impressions: a.impressions,
     };
-  } catch (err) {
-    console.error("fetchZernioEngagement threw:", err);
+  } catch (err: any) {
+    if (err?.statusCode === 404 || err?.message?.includes("not found")) {
+      console.warn(`[Zernio] Post ${postId} not found, skipping Zernio engagement fetch.`);
+    } else {
+      console.error("fetchZernioEngagement threw:", err);
+    }
     return null;
   }
 }
@@ -181,9 +185,12 @@ export async function replyViaZernio(
  * accounts. Calls Zernio's getFollowerStats endpoint **once** with a
  * comma-separated accountIds list, regardless of how many accounts are
  * supplied — saves N round-trips when refreshing the social-accounts page.
+ * @param accounts - Array of social accounts
+ * @param userZernioProfileId - The user's personal Zernio profile ID (created during registration)
  */
 export async function fetchZernioFollowerCounts(
-  accounts: SocialAccount[]
+  accounts: SocialAccount[],
+  userZernioProfileId?: string
 ): Promise<Map<string, { followers: number; displayName?: string; username?: string }>> {
   const out = new Map<
     string,
@@ -198,9 +205,13 @@ export async function fetchZernioFollowerCounts(
 
   try {
     const zernio = getZernioClient();
+    // Use the user's profile ID if provided, otherwise fall back to workspace profile ID
+    const profileId = userZernioProfileId || getZernioProfileId();
+    console.log(`[Zernio] Fetching follower stats for ${zernioBacked.length} accounts using profileId: ${profileId.substring(0, 8)}...`);
+    
     const result = await zernio.accounts.getFollowerStats({
       query: {
-        profileId: getZernioProfileId(),
+        profileId,
         accountIds: zernioBacked.map((a) => a.zernioAccountId).join(","),
       },
     });

@@ -1,5 +1,24 @@
 [
   {
+    "postId": "cmp18wehe0005frqc89lklpll",
+    "likes": 0,
+    "comments": [
+      {
+        "id": "urn:li:comment:(urn:li:activity:7459598998870421504,7459599504745574400)",
+        "author": "Elizabeth Onyango",
+        "message": "#learning",
+        "replies": [
+          {
+            "id": "ee54629b-bd48-4990-b61d-0de79312cecf",
+            "message": "great job",
+            "createdAt": "2026-05-11T13:47:30.379Z"
+          }
+        ],
+        "createdAt": "2026-05-11T13:45:14.589Z"
+      }
+    ]
+  },
+  {
     "postId": "cmojungy10005frzw7r8ms0jr",
     "likes": 0,
     "comments": [

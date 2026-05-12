@@ -2,6 +2,7 @@
 import { useState, useEffect } from "react";
 import { AreaChart, Area, BarChart, Bar, PieChart, Pie, Cell, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from "recharts";
 import { formatNumber } from "@/lib/utils";
+import { HiDownload } from "react-icons/hi";
 
 const PLATFORM_COLORS: Record<string, string> = {
   FACEBOOK: "#1877F2",
@@ -45,25 +46,27 @@ export default function AnalyticsPage() {
     );
   }
 
-  const { analytics = [], platforms = [] } = data || {};
+  const { analytics = [], platforms = [], liveTotals } = data || {};
 
   const chartData = analytics.map((a: any) => ({
     date: new Date(a.date).toLocaleDateString("en-US", { month: "short", day: "numeric" }),
     followers: a.followers,
     reach: a.reach,
     impressions: a.impressions,
-    engagement: parseFloat(a.engagement?.toFixed(1) || "0"),
+    engagement: Number.parseFloat(a.engagement?.toFixed(1) || "0"),
     likes: a.likes,
     comments: a.comments,
     shares: a.shares,
   }));
 
-  const totals = analytics.reduce((acc: any, a: any) => ({
+  const totals = liveTotals || analytics.reduce((acc: any, a: any) => ({
     likes: acc.likes + a.likes,
     comments: acc.comments + a.comments,
     shares: acc.shares + a.shares,
     reach: acc.reach + a.reach,
   }), { likes: 0, comments: 0, shares: 0, reach: 0 });
+
+  const totalFollowers = platforms.reduce((acc: number, p: any) => acc + p.followers, 0);
 
   const pieData = platforms.map((p: any) => ({
     name: p.platform,
@@ -77,25 +80,61 @@ export default function AnalyticsPage() {
     { name: "Shares", value: totals.shares, color: "#db2777" },
   ];
 
+  const exportToCSV = () => {
+    if (!chartData.length) return;
+    const headers = ["Date", "Followers", "Reach", "Impressions", "Engagement%", "Likes", "Comments", "Shares"];
+    const rows = chartData.map((d: any) => [
+      d.date,
+      d.followers,
+      d.reach,
+      d.impressions,
+      d.engagement,
+      d.likes,
+      d.comments,
+      d.shares
+    ]);
+    const csvContent = [headers, ...rows].map(e => e.join(",")).join("\n");
+    const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
+    const link = document.createElement("a");
+    const url = URL.createObjectURL(blob);
+    link.setAttribute("href", url);
+    link.setAttribute("download", `analytics_export_${new Date().toISOString().split('T')[0]}.csv`);
+    link.style.visibility = "hidden";
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  };
+
   return (
     <div className="max-w-7xl space-y-6">
-      {/* Period Toggle */}
-      <div className="flex items-center gap-2 justify-end">
-        {[7, 14, 30, 90].map((d) => (
+      {/* Header & Period Toggle */}
+      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+        <h2 className="text-2xl font-bold text-gray-900" style={{ fontFamily: "Outfit, sans-serif" }}>Analytics Overview</h2>
+        <div className="flex items-center gap-2">
           <button
-            key={d}
-            onClick={() => setDays(d)}
-            className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition-all ${
-              days === d ? "brand-gradient-bg text-white" : "bg-white border border-gray-200 text-gray-600 hover:bg-gray-50"
-            }`}
+            onClick={exportToCSV}
+            className="flex items-center gap-2 px-3 py-1.5 rounded-lg text-xs font-semibold bg-white border border-gray-200 text-gray-600 hover:bg-gray-50 transition-all mr-2"
           >
-            {d}D
+            <HiDownload className="text-sm" />
+            Export CSV
           </button>
-        ))}
+          {[7, 14, 30, 90].map((d) => (
+            <button
+              key={d}
+              onClick={() => setDays(d)}
+              className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition-all ${
+                days === d ? "brand-gradient-bg text-white" : "bg-white border border-gray-200 text-gray-600 hover:bg-gray-50"
+              }`}
+            >
+              {d}D
+            </button>
+          ))}
+        </div>
       </div>
 
       {/* KPI Row */}
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+      <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
+        <StatCard label="Total Followers" value={formatNumber(totalFollowers)} sub="Across all platforms" />
         <StatCard label="Total Reach" value={formatNumber(totals.reach)} sub={`Last ${days} days`} />
         <StatCard label="Total Likes" value={formatNumber(totals.likes)} sub="Across all platforms" />
         <StatCard label="Total Comments" value={formatNumber(totals.comments)} sub="Across all platforms" />

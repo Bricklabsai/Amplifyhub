@@ -1,5 +1,5 @@
 import type { SocialAccount } from "../../generated/client";
-import { type PublishResult } from "../publishers";
+import type { PublishResult } from "../publishers";
 import { getProvider } from "../providers/providerFactory";
 
 export interface PublishPostData {
