@@ -3,7 +3,7 @@ import { useState, useEffect } from "react";
 import Link from "next/link";
 import { FaFacebook, FaInstagram, FaLinkedin, FaTiktok, FaYoutube, FaWhatsapp } from "react-icons/fa";
 import { FaXTwitter } from "react-icons/fa6";
-import { HiPencil, HiChartBar, HiCalendar, HiUsers, HiShieldCheck, HiLightningBolt } from "react-icons/hi";
+import { HiPencil, HiChartBar, HiCalendar, HiUsers, HiShieldCheck, HiLightningBolt, HiCheck, HiSparkles } from "react-icons/hi";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 
@@ -75,11 +75,6 @@ const SOCIAL_ICONS = [
   { Icon: FaWhatsapp, color: "#25D366", label: "WhatsApp", className: "float-7 bottom-20 left-1/3" },
 ];
 
-const PLANS = [
-  { name: "Basic", price: "$9.99", period: "/mo", highlight: false, features: ["5 social accounts", "30 posts/month", "50 AI credits", "Basic analytics"] },
-  { name: "Pro", price: "$29.99", period: "/mo", highlight: true, features: ["15 social accounts", "150 posts/month", "300 AI credits", "Advanced analytics", "Campaign management", "Priority support"] },
-  { name: "Corporate", price: "$99.99", period: "/mo", highlight: false, features: ["Unlimited accounts", "Unlimited posts", "Unlimited AI credits", "Full analytics suite", "API access", "Dedicated manager"] },
-];
 
 function TypewriterText() {
   const [wordIdx, setWordIdx] = useState(0);
@@ -110,6 +105,22 @@ function TypewriterText() {
 }
 
 export default function LandingPage() {
+  const [plans, setPlans] = useState<any[]>([]);
+  const [loadingPlans, setLoadingPlans] = useState(true);
+
+  useEffect(() => {
+    fetch("/api/plans")
+      .then((res) => res.json())
+      .then((data) => {
+        setPlans(Array.isArray(data) ? data : []);
+        setLoadingPlans(false);
+      })
+      .catch((err) => {
+        console.error("Failed to fetch plans:", err);
+        setLoadingPlans(false);
+      });
+  }, []);
+
   return (
     <div className="min-h-screen paper-bg overflow-x-hidden">
       {/* Navbar – modern glass with bright accents */}
@@ -253,63 +264,98 @@ export default function LandingPage() {
         </div>
       </section>
 
-      {/* Pricing Section – bright & bold, no purple/blue */}
+      {/* Pricing Section – Updated to match Billing page */}
       <section id="pricing" className="py-20 bg-white">
         <div className="max-w-6xl mx-auto px-6">
           <div className="text-center mb-16">
-            
-            <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
+            <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4" style={{ fontFamily: "Outfit, sans-serif" }}>
               Plans for Every Stage of Growth
             </h2>
           </div>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            {PLANS.map(({ name, price, period, highlight, features }) => (
-              <div
-                key={name}
-                className={`relative rounded-3xl p-8 transition-all duration-300 ${
-                  highlight
-                    ? "border-2 border-[#FF9F1C] shadow-2xl shadow-amber-200/50 scale-105 bg-gradient-to-br from-white to-amber-50/30"
-                    : "border border-gray-200 hover:shadow-lg bg-white"
-                }`}
-              >
-                {highlight && (
-                  <div className="absolute -top-4 left-1/2 -translate-x-1/2">
-                    <Badge className="bg-[#FF6B4A] text-white border-0 px-4 py-1 font-bold shadow-md rounded-full text-sm">
-                       Most Popular
-                    </Badge>
-                  </div>
-                )}
-                <div className="mb-6">
-                  <h3 className="text-2xl font-bold text-gray-900 mb-2">{name}</h3>
-                  <div className="flex items-baseline gap-1">
-                    <span className="text-4xl font-black bg-gradient-to-r from-[#FF6B4A] to-[#F9A826] bg-clip-text text-transparent">{price}</span>
-                    <span className="text-gray-500">{period}</span>
-                  </div>
-                </div>
-                <ul className="space-y-3 mb-8">
-                  {features.map((f) => (
-                    <li key={f} className="flex items-center gap-2 text-sm text-gray-700">
-                      <svg className="w-5 h-5 text-[#2DC653] flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
-                        <path d="M20 6L9 17l-5-5" strokeLinecap="round" strokeLinejoin="round" />
-                      </svg>
-                      {f}
-                    </li>
-                  ))}
-                </ul>
-                <Link href="/auth/register">
-                  <Button
-                    className={`w-full font-semibold rounded-xl py-5 transition-all ${
-                      highlight
-                        ? "brand-gradient-bg text-white border-0 hover:shadow-lg hover:scale-[1.02]"
-                        : "bg-gray-100 text-gray-800 border border-gray-200 hover:bg-[#FFE8D9] hover:text-[#FF6B4A]"
+
+          {loadingPlans ? (
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+              {[1, 2, 3].map((i) => (
+                <div key={i} className="bg-white rounded-3xl h-96 animate-pulse border border-gray-100" />
+              ))}
+            </div>
+          ) : (
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+              {plans.map((plan, idx) => {
+                const gradients = ["from-blue-500 to-violet-500", "from-violet-500 to-pink-500", "from-pink-500 to-red-500"];
+                const isPopular = idx === 1; // Middle plan is usually popular
+
+                return (
+                  <div
+                    key={plan.id}
+                    className={`relative bg-white rounded-3xl border p-8 transition-all duration-300 ${
+                      isPopular ? "border-violet-400 shadow-2xl shadow-violet-100 scale-105" : "border-gray-200 hover:shadow-lg"
                     }`}
                   >
-                    Get Started
-                  </Button>
-                </Link>
-              </div>
-            ))}
-          </div>
+                    {isPopular && (
+                      <div className="absolute -top-4 left-1/2 -translate-x-1/2">
+                        <Badge className="brand-gradient-bg text-white border-0 px-4 py-1 font-bold shadow-md rounded-full text-sm">
+                          Most Popular
+                        </Badge>
+                      </div>
+                    )}
+
+                    <div className={`w-12 h-12 rounded-xl bg-gradient-to-br ${gradients[idx % gradients.length]} flex items-center justify-center mb-6`}>
+                      <HiSparkles className="text-white text-xl" />
+                    </div>
+
+                    <h3 className="text-2xl font-black text-gray-900 mb-1" style={{ fontFamily: "Outfit, sans-serif" }}>{plan.name}</h3>
+                    <p className="text-sm text-gray-500 mb-6">{plan.description}</p>
+
+                    <div className="flex items-baseline gap-1 mb-8">
+                      <span className="text-5xl font-black brand-gradient-text" style={{ fontFamily: "Outfit, sans-serif" }}>
+                        ${plan.price}
+                      </span>
+                      <span className="text-gray-400">/mo</span>
+                    </div>
+
+                    <ul className="space-y-3 mb-8">
+                      {plan.features.map((f: string) => (
+                        <li key={f} className="flex items-center gap-3 text-sm text-gray-600">
+                          <div className={`w-5 h-5 rounded-full bg-gradient-to-br ${gradients[idx % gradients.length]} flex items-center justify-center flex-shrink-0`}>
+                            <HiCheck className="text-white text-[10px]" />
+                          </div>
+                          {f}
+                        </li>
+                      ))}
+                    </ul>
+
+                    <div className="space-y-2 text-xs text-gray-400 mb-8 bg-gray-50 rounded-2xl p-4">
+                      <div className="flex justify-between">
+                        <span>Posts/month</span>
+                        <span className="font-semibold text-gray-700">{plan.postsPerMonth >= 999999 ? "Unlimited" : plan.postsPerMonth}</span>
+                      </div>
+                      <div className="flex justify-between">
+                        <span>AI Text</span>
+                        <span className="font-semibold text-gray-700">{plan.aiTextLimit >= 999999 ? "Unlimited" : plan.aiTextLimit}</span>
+                      </div>
+                      <div className="flex justify-between">
+                        <span>AI Image</span>
+                        <span className="font-semibold text-gray-700">{plan.aiImageLimit >= 999999 ? "Unlimited" : plan.aiImageLimit}</span>
+                      </div>
+                    </div>
+
+                    <Link href="/auth/register" className="block">
+                      <Button
+                        className={`w-full font-bold rounded-xl py-6 transition-all ${
+                          isPopular
+                            ? "brand-gradient-bg text-white border-0 hover:shadow-lg hover:scale-[1.02]"
+                            : "border-2 border-gray-200 bg-white text-gray-700 hover:bg-gray-50"
+                        }`}
+                      >
+                        Get Started
+                      </Button>
+                    </Link>
+                  </div>
+                );
+              })}
+            </div>
+          )}
         </div>
       </section>
 

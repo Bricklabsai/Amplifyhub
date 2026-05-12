@@ -34,7 +34,7 @@ export default function CampaignsPage() {
     const res = await fetch("/api/campaigns", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ ...form, budget: parseFloat(form.budget) || 0, status: "DRAFT" }),
+      body: JSON.stringify({ ...form, budget: Number.parseFloat(form.budget) || 0, status: "DRAFT" }),
     });
     const data = await res.json();
     setCampaigns((c) => [data, ...c]);

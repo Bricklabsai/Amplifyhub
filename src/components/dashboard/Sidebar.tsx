@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useSession, signOut } from "next-auth/react";
 import { HiSparkles, HiHome, HiPencil, HiCollection, HiShare, HiFlag, HiUsers, HiMail, HiPhotograph, HiChartBar, HiCreditCard, HiCog, HiShieldCheck, HiLogout, HiUserGroup, HiX } from "react-icons/hi";
 import { cn } from "@/lib/utils";
+import { HiArrowPath } from "react-icons/hi2";
 
 const NAV_ITEMS = [
   { href: "/dashboard", icon: HiHome, label: "Dashboard" },
@@ -14,6 +15,9 @@ const NAV_ITEMS = [
   { href: "/audience", icon: HiUsers, label: "Audience" },
   { href: "/team", icon: HiUserGroup, label: "Team" },
   { href: "/email-campaigns", icon: HiMail, label: "Email Campaigns" },
+  { href: "/email-templates", icon: HiSparkles, label: "Email Templates" },
+  { href: "/email-composer", icon: HiSparkles, label: "AI Email Composer" },
+  { href: "/scheduled-campaigns", icon: HiArrowPath, label: "Scheduled Campaigns" },
   { href: "/ai-studio", icon: HiPhotograph, label: "AI Studio" },
   { href: "/analytics", icon: HiChartBar, label: "Analytics" },
   { href: "/billing", icon: HiCreditCard, label: "Billing" },

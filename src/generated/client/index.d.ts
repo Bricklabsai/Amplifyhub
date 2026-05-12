@@ -22457,6 +22457,7 @@ export namespace Prisma {
     lastName: string | null
     phone: string | null
     company: string | null
+    isUnsubscribed: boolean | null
     createdAt: Date | null
     updatedAt: Date | null
   }
@@ -22468,6 +22469,7 @@ export namespace Prisma {
     lastName: string | null
     phone: string | null
     company: string | null
+    isUnsubscribed: boolean | null
     createdAt: Date | null
     updatedAt: Date | null
   }
@@ -22480,6 +22482,7 @@ export namespace Prisma {
     phone: number
     company: number
     tags: number
+    isUnsubscribed: number
     createdAt: number
     updatedAt: number
     _all: number
@@ -22493,6 +22496,7 @@ export namespace Prisma {
     lastName?: true
     phone?: true
     company?: true
+    isUnsubscribed?: true
     createdAt?: true
     updatedAt?: true
   }
@@ -22504,6 +22508,7 @@ export namespace Prisma {
     lastName?: true
     phone?: true
     company?: true
+    isUnsubscribed?: true
     createdAt?: true
     updatedAt?: true
   }
@@ -22516,6 +22521,7 @@ export namespace Prisma {
     phone?: true
     company?: true
     tags?: true
+    isUnsubscribed?: true
     createdAt?: true
     updatedAt?: true
     _all?: true
@@ -22601,6 +22607,7 @@ export namespace Prisma {
     phone: string | null
     company: string | null
     tags: string[]
+    isUnsubscribed: boolean
     createdAt: Date
     updatedAt: Date
     _count: ContactCountAggregateOutputType | null
@@ -22630,6 +22637,7 @@ export namespace Prisma {
     phone?: boolean
     company?: boolean
     tags?: boolean
+    isUnsubscribed?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     groups?: boolean | Contact$groupsArgs<ExtArgs>
@@ -22645,6 +22653,7 @@ export namespace Prisma {
     phone?: boolean
     company?: boolean
     tags?: boolean
+    isUnsubscribed?: boolean
     createdAt?: boolean
     updatedAt?: boolean
   }, ExtArgs["result"]["contact"]>
@@ -22657,6 +22666,7 @@ export namespace Prisma {
     phone?: boolean
     company?: boolean
     tags?: boolean
+    isUnsubscribed?: boolean
     createdAt?: boolean
     updatedAt?: boolean
   }, ExtArgs["result"]["contact"]>
@@ -22669,11 +22679,12 @@ export namespace Prisma {
     phone?: boolean
     company?: boolean
     tags?: boolean
+    isUnsubscribed?: boolean
     createdAt?: boolean
     updatedAt?: boolean
   }
 
-  export type ContactOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "email" | "firstName" | "lastName" | "phone" | "company" | "tags" | "createdAt" | "updatedAt", ExtArgs["result"]["contact"]>
+  export type ContactOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "email" | "firstName" | "lastName" | "phone" | "company" | "tags" | "isUnsubscribed" | "createdAt" | "updatedAt", ExtArgs["result"]["contact"]>
   export type ContactInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     groups?: boolean | Contact$groupsArgs<ExtArgs>
     emailRecipients?: boolean | Contact$emailRecipientsArgs<ExtArgs>
@@ -22696,6 +22707,7 @@ export namespace Prisma {
       phone: string | null
       company: string | null
       tags: string[]
+      isUnsubscribed: boolean
       createdAt: Date
       updatedAt: Date
     }, ExtArgs["result"]["contact"]>
@@ -23130,6 +23142,7 @@ export namespace Prisma {
     readonly phone: FieldRef<"Contact", 'String'>
     readonly company: FieldRef<"Contact", 'String'>
     readonly tags: FieldRef<"Contact", 'String[]'>
+    readonly isUnsubscribed: FieldRef<"Contact", 'Boolean'>
     readonly createdAt: FieldRef<"Contact", 'DateTime'>
     readonly updatedAt: FieldRef<"Contact", 'DateTime'>
   }
@@ -28405,6 +28418,8 @@ export namespace Prisma {
     opened: boolean | null
     clicked: boolean | null
     sentAt: Date | null
+    rsvpStatus: string | null
+    rsvpAt: Date | null
   }
 
   export type EmailCampaignRecipientMaxAggregateOutputType = {
@@ -28415,6 +28430,8 @@ export namespace Prisma {
     opened: boolean | null
     clicked: boolean | null
     sentAt: Date | null
+    rsvpStatus: string | null
+    rsvpAt: Date | null
   }
 
   export type EmailCampaignRecipientCountAggregateOutputType = {
@@ -28425,6 +28442,8 @@ export namespace Prisma {
     opened: number
     clicked: number
     sentAt: number
+    rsvpStatus: number
+    rsvpAt: number
     _all: number
   }
 
@@ -28437,6 +28456,8 @@ export namespace Prisma {
     opened?: true
     clicked?: true
     sentAt?: true
+    rsvpStatus?: true
+    rsvpAt?: true
   }
 
   export type EmailCampaignRecipientMaxAggregateInputType = {
@@ -28447,6 +28468,8 @@ export namespace Prisma {
     opened?: true
     clicked?: true
     sentAt?: true
+    rsvpStatus?: true
+    rsvpAt?: true
   }
 
   export type EmailCampaignRecipientCountAggregateInputType = {
@@ -28457,6 +28480,8 @@ export namespace Prisma {
     opened?: true
     clicked?: true
     sentAt?: true
+    rsvpStatus?: true
+    rsvpAt?: true
     _all?: true
   }
 
@@ -28540,6 +28565,8 @@ export namespace Prisma {
     opened: boolean
     clicked: boolean
     sentAt: Date | null
+    rsvpStatus: string | null
+    rsvpAt: Date | null
     _count: EmailCampaignRecipientCountAggregateOutputType | null
     _min: EmailCampaignRecipientMinAggregateOutputType | null
     _max: EmailCampaignRecipientMaxAggregateOutputType | null
@@ -28567,6 +28594,8 @@ export namespace Prisma {
     opened?: boolean
     clicked?: boolean
     sentAt?: boolean
+    rsvpStatus?: boolean
+    rsvpAt?: boolean
     campaign?: boolean | EmailCampaignDefaultArgs<ExtArgs>
     contact?: boolean | ContactDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["emailCampaignRecipient"]>
@@ -28579,6 +28608,8 @@ export namespace Prisma {
     opened?: boolean
     clicked?: boolean
     sentAt?: boolean
+    rsvpStatus?: boolean
+    rsvpAt?: boolean
     campaign?: boolean | EmailCampaignDefaultArgs<ExtArgs>
     contact?: boolean | ContactDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["emailCampaignRecipient"]>
@@ -28591,6 +28622,8 @@ export namespace Prisma {
     opened?: boolean
     clicked?: boolean
     sentAt?: boolean
+    rsvpStatus?: boolean
+    rsvpAt?: boolean
     campaign?: boolean | EmailCampaignDefaultArgs<ExtArgs>
     contact?: boolean | ContactDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["emailCampaignRecipient"]>
@@ -28603,9 +28636,11 @@ export namespace Prisma {
     opened?: boolean
     clicked?: boolean
     sentAt?: boolean
+    rsvpStatus?: boolean
+    rsvpAt?: boolean
   }
 
-  export type EmailCampaignRecipientOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "campaignId" | "contactId" | "sent" | "opened" | "clicked" | "sentAt", ExtArgs["result"]["emailCampaignRecipient"]>
+  export type EmailCampaignRecipientOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "campaignId" | "contactId" | "sent" | "opened" | "clicked" | "sentAt" | "rsvpStatus" | "rsvpAt", ExtArgs["result"]["emailCampaignRecipient"]>
   export type EmailCampaignRecipientInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     campaign?: boolean | EmailCampaignDefaultArgs<ExtArgs>
     contact?: boolean | ContactDefaultArgs<ExtArgs>
@@ -28633,6 +28668,8 @@ export namespace Prisma {
       opened: boolean
       clicked: boolean
       sentAt: Date | null
+      rsvpStatus: string | null
+      rsvpAt: Date | null
     }, ExtArgs["result"]["emailCampaignRecipient"]>
     composites: {}
   }
@@ -29065,6 +29102,8 @@ export namespace Prisma {
     readonly opened: FieldRef<"EmailCampaignRecipient", 'Boolean'>
     readonly clicked: FieldRef<"EmailCampaignRecipient", 'Boolean'>
     readonly sentAt: FieldRef<"EmailCampaignRecipient", 'DateTime'>
+    readonly rsvpStatus: FieldRef<"EmailCampaignRecipient", 'String'>
+    readonly rsvpAt: FieldRef<"EmailCampaignRecipient", 'DateTime'>
   }
     
 
@@ -34266,6 +34305,7 @@ export namespace Prisma {
     phone: 'phone',
     company: 'company',
     tags: 'tags',
+    isUnsubscribed: 'isUnsubscribed',
     createdAt: 'createdAt',
     updatedAt: 'updatedAt'
   };
@@ -34354,7 +34394,9 @@ export namespace Prisma {
     sent: 'sent',
     opened: 'opened',
     clicked: 'clicked',
-    sentAt: 'sentAt'
+    sentAt: 'sentAt',
+    rsvpStatus: 'rsvpStatus',
+    rsvpAt: 'rsvpAt'
   };
 
   export type EmailCampaignRecipientScalarFieldEnum = (typeof EmailCampaignRecipientScalarFieldEnum)[keyof typeof EmailCampaignRecipientScalarFieldEnum]
@@ -35972,6 +36014,7 @@ export namespace Prisma {
     phone?: StringNullableFilter<"Contact"> | string | null
     company?: StringNullableFilter<"Contact"> | string | null
     tags?: StringNullableListFilter<"Contact">
+    isUnsubscribed?: BoolFilter<"Contact"> | boolean
     createdAt?: DateTimeFilter<"Contact"> | Date | string
     updatedAt?: DateTimeFilter<"Contact"> | Date | string
     groups?: ContactGroupListRelationFilter
@@ -35986,6 +36029,7 @@ export namespace Prisma {
     phone?: SortOrderInput | SortOrder
     company?: SortOrderInput | SortOrder
     tags?: SortOrder
+    isUnsubscribed?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     groups?: ContactGroupOrderByRelationAggregateInput
@@ -36003,6 +36047,7 @@ export namespace Prisma {
     phone?: StringNullableFilter<"Contact"> | string | null
     company?: StringNullableFilter<"Contact"> | string | null
     tags?: StringNullableListFilter<"Contact">
+    isUnsubscribed?: BoolFilter<"Contact"> | boolean
     createdAt?: DateTimeFilter<"Contact"> | Date | string
     updatedAt?: DateTimeFilter<"Contact"> | Date | string
     groups?: ContactGroupListRelationFilter
@@ -36017,6 +36062,7 @@ export namespace Prisma {
     phone?: SortOrderInput | SortOrder
     company?: SortOrderInput | SortOrder
     tags?: SortOrder
+    isUnsubscribed?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     _count?: ContactCountOrderByAggregateInput
@@ -36035,6 +36081,7 @@ export namespace Prisma {
     phone?: StringNullableWithAggregatesFilter<"Contact"> | string | null
     company?: StringNullableWithAggregatesFilter<"Contact"> | string | null
     tags?: StringNullableListFilter<"Contact">
+    isUnsubscribed?: BoolWithAggregatesFilter<"Contact"> | boolean
     createdAt?: DateTimeWithAggregatesFilter<"Contact"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"Contact"> | Date | string
   }
@@ -36437,6 +36484,8 @@ export namespace Prisma {
     opened?: BoolFilter<"EmailCampaignRecipient"> | boolean
     clicked?: BoolFilter<"EmailCampaignRecipient"> | boolean
     sentAt?: DateTimeNullableFilter<"EmailCampaignRecipient"> | Date | string | null
+    rsvpStatus?: StringNullableFilter<"EmailCampaignRecipient"> | string | null
+    rsvpAt?: DateTimeNullableFilter<"EmailCampaignRecipient"> | Date | string | null
     campaign?: XOR<EmailCampaignScalarRelationFilter, EmailCampaignWhereInput>
     contact?: XOR<ContactScalarRelationFilter, ContactWhereInput>
   }
@@ -36449,6 +36498,8 @@ export namespace Prisma {
     opened?: SortOrder
     clicked?: SortOrder
     sentAt?: SortOrderInput | SortOrder
+    rsvpStatus?: SortOrderInput | SortOrder
+    rsvpAt?: SortOrderInput | SortOrder
     campaign?: EmailCampaignOrderByWithRelationInput
     contact?: ContactOrderByWithRelationInput
   }
@@ -36464,6 +36515,8 @@ export namespace Prisma {
     opened?: BoolFilter<"EmailCampaignRecipient"> | boolean
     clicked?: BoolFilter<"EmailCampaignRecipient"> | boolean
     sentAt?: DateTimeNullableFilter<"EmailCampaignRecipient"> | Date | string | null
+    rsvpStatus?: StringNullableFilter<"EmailCampaignRecipient"> | string | null
+    rsvpAt?: DateTimeNullableFilter<"EmailCampaignRecipient"> | Date | string | null
     campaign?: XOR<EmailCampaignScalarRelationFilter, EmailCampaignWhereInput>
     contact?: XOR<ContactScalarRelationFilter, ContactWhereInput>
   }, "id">
@@ -36476,6 +36529,8 @@ export namespace Prisma {
     opened?: SortOrder
     clicked?: SortOrder
     sentAt?: SortOrderInput | SortOrder
+    rsvpStatus?: SortOrderInput | SortOrder
+    rsvpAt?: SortOrderInput | SortOrder
     _count?: EmailCampaignRecipientCountOrderByAggregateInput
     _max?: EmailCampaignRecipientMaxOrderByAggregateInput
     _min?: EmailCampaignRecipientMinOrderByAggregateInput
@@ -36492,6 +36547,8 @@ export namespace Prisma {
     opened?: BoolWithAggregatesFilter<"EmailCampaignRecipient"> | boolean
     clicked?: BoolWithAggregatesFilter<"EmailCampaignRecipient"> | boolean
     sentAt?: DateTimeNullableWithAggregatesFilter<"EmailCampaignRecipient"> | Date | string | null
+    rsvpStatus?: StringNullableWithAggregatesFilter<"EmailCampaignRecipient"> | string | null
+    rsvpAt?: DateTimeNullableWithAggregatesFilter<"EmailCampaignRecipient"> | Date | string | null
   }
 
   export type MediaWhereInput = {
@@ -38268,6 +38325,7 @@ export namespace Prisma {
     phone?: string | null
     company?: string | null
     tags?: ContactCreatetagsInput | string[]
+    isUnsubscribed?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     groups?: ContactGroupCreateNestedManyWithoutContactInput
@@ -38282,6 +38340,7 @@ export namespace Prisma {
     phone?: string | null
     company?: string | null
     tags?: ContactCreatetagsInput | string[]
+    isUnsubscribed?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     groups?: ContactGroupUncheckedCreateNestedManyWithoutContactInput
@@ -38296,6 +38355,7 @@ export namespace Prisma {
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     company?: NullableStringFieldUpdateOperationsInput | string | null
     tags?: ContactUpdatetagsInput | string[]
+    isUnsubscribed?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     groups?: ContactGroupUpdateManyWithoutContactNestedInput
@@ -38310,6 +38370,7 @@ export namespace Prisma {
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     company?: NullableStringFieldUpdateOperationsInput | string | null
     tags?: ContactUpdatetagsInput | string[]
+    isUnsubscribed?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     groups?: ContactGroupUncheckedUpdateManyWithoutContactNestedInput
@@ -38324,6 +38385,7 @@ export namespace Prisma {
     phone?: string | null
     company?: string | null
     tags?: ContactCreatetagsInput | string[]
+    isUnsubscribed?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -38336,6 +38398,7 @@ export namespace Prisma {
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     company?: NullableStringFieldUpdateOperationsInput | string | null
     tags?: ContactUpdatetagsInput | string[]
+    isUnsubscribed?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -38348,6 +38411,7 @@ export namespace Prisma {
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     company?: NullableStringFieldUpdateOperationsInput | string | null
     tags?: ContactUpdatetagsInput | string[]
+    isUnsubscribed?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -38795,6 +38859,8 @@ export namespace Prisma {
     opened?: boolean
     clicked?: boolean
     sentAt?: Date | string | null
+    rsvpStatus?: string | null
+    rsvpAt?: Date | string | null
     campaign: EmailCampaignCreateNestedOneWithoutRecipientsInput
     contact: ContactCreateNestedOneWithoutEmailRecipientsInput
   }
@@ -38807,6 +38873,8 @@ export namespace Prisma {
     opened?: boolean
     clicked?: boolean
     sentAt?: Date | string | null
+    rsvpStatus?: string | null
+    rsvpAt?: Date | string | null
   }
 
   export type EmailCampaignRecipientUpdateInput = {
@@ -38815,6 +38883,8 @@ export namespace Prisma {
     opened?: BoolFieldUpdateOperationsInput | boolean
     clicked?: BoolFieldUpdateOperationsInput | boolean
     sentAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    rsvpStatus?: NullableStringFieldUpdateOperationsInput | string | null
+    rsvpAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     campaign?: EmailCampaignUpdateOneRequiredWithoutRecipientsNestedInput
     contact?: ContactUpdateOneRequiredWithoutEmailRecipientsNestedInput
   }
@@ -38827,6 +38897,8 @@ export namespace Prisma {
     opened?: BoolFieldUpdateOperationsInput | boolean
     clicked?: BoolFieldUpdateOperationsInput | boolean
     sentAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    rsvpStatus?: NullableStringFieldUpdateOperationsInput | string | null
+    rsvpAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   }
 
   export type EmailCampaignRecipientCreateManyInput = {
@@ -38837,6 +38909,8 @@ export namespace Prisma {
     opened?: boolean
     clicked?: boolean
     sentAt?: Date | string | null
+    rsvpStatus?: string | null
+    rsvpAt?: Date | string | null
   }
 
   export type EmailCampaignRecipientUpdateManyMutationInput = {
@@ -38845,6 +38919,8 @@ export namespace Prisma {
     opened?: BoolFieldUpdateOperationsInput | boolean
     clicked?: BoolFieldUpdateOperationsInput | boolean
     sentAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    rsvpStatus?: NullableStringFieldUpdateOperationsInput | string | null
+    rsvpAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   }
 
   export type EmailCampaignRecipientUncheckedUpdateManyInput = {
@@ -38855,6 +38931,8 @@ export namespace Prisma {
     opened?: BoolFieldUpdateOperationsInput | boolean
     clicked?: BoolFieldUpdateOperationsInput | boolean
     sentAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    rsvpStatus?: NullableStringFieldUpdateOperationsInput | string | null
+    rsvpAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   }
 
   export type MediaCreateInput = {
@@ -40491,6 +40569,7 @@ export namespace Prisma {
     phone?: SortOrder
     company?: SortOrder
     tags?: SortOrder
+    isUnsubscribed?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -40502,6 +40581,7 @@ export namespace Prisma {
     lastName?: SortOrder
     phone?: SortOrder
     company?: SortOrder
+    isUnsubscribed?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -40513,6 +40593,7 @@ export namespace Prisma {
     lastName?: SortOrder
     phone?: SortOrder
     company?: SortOrder
+    isUnsubscribed?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -40811,6 +40892,8 @@ export namespace Prisma {
     opened?: SortOrder
     clicked?: SortOrder
     sentAt?: SortOrder
+    rsvpStatus?: SortOrder
+    rsvpAt?: SortOrder
   }
 
   export type EmailCampaignRecipientMaxOrderByAggregateInput = {
@@ -40821,6 +40904,8 @@ export namespace Prisma {
     opened?: SortOrder
     clicked?: SortOrder
     sentAt?: SortOrder
+    rsvpStatus?: SortOrder
+    rsvpAt?: SortOrder
   }
 
   export type EmailCampaignRecipientMinOrderByAggregateInput = {
@@ -40831,6 +40916,8 @@ export namespace Prisma {
     opened?: SortOrder
     clicked?: SortOrder
     sentAt?: SortOrder
+    rsvpStatus?: SortOrder
+    rsvpAt?: SortOrder
   }
 
   export type MediaCountOrderByAggregateInput = {
@@ -46595,6 +46682,8 @@ export namespace Prisma {
     opened?: boolean
     clicked?: boolean
     sentAt?: Date | string | null
+    rsvpStatus?: string | null
+    rsvpAt?: Date | string | null
     campaign: EmailCampaignCreateNestedOneWithoutRecipientsInput
   }
 
@@ -46605,6 +46694,8 @@ export namespace Prisma {
     opened?: boolean
     clicked?: boolean
     sentAt?: Date | string | null
+    rsvpStatus?: string | null
+    rsvpAt?: Date | string | null
   }
 
   export type EmailCampaignRecipientCreateOrConnectWithoutContactInput = {
@@ -46660,6 +46751,8 @@ export namespace Prisma {
     opened?: BoolFilter<"EmailCampaignRecipient"> | boolean
     clicked?: BoolFilter<"EmailCampaignRecipient"> | boolean
     sentAt?: DateTimeNullableFilter<"EmailCampaignRecipient"> | Date | string | null
+    rsvpStatus?: StringNullableFilter<"EmailCampaignRecipient"> | string | null
+    rsvpAt?: DateTimeNullableFilter<"EmailCampaignRecipient"> | Date | string | null
   }
 
   export type ContactCreateWithoutGroupsInput = {
@@ -46670,6 +46763,7 @@ export namespace Prisma {
     phone?: string | null
     company?: string | null
     tags?: ContactCreatetagsInput | string[]
+    isUnsubscribed?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     emailRecipients?: EmailCampaignRecipientCreateNestedManyWithoutContactInput
@@ -46683,6 +46777,7 @@ export namespace Prisma {
     phone?: string | null
     company?: string | null
     tags?: ContactCreatetagsInput | string[]
+    isUnsubscribed?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     emailRecipients?: EmailCampaignRecipientUncheckedCreateNestedManyWithoutContactInput
@@ -46737,6 +46832,7 @@ export namespace Prisma {
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     company?: NullableStringFieldUpdateOperationsInput | string | null
     tags?: ContactUpdatetagsInput | string[]
+    isUnsubscribed?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     emailRecipients?: EmailCampaignRecipientUpdateManyWithoutContactNestedInput
@@ -46750,6 +46846,7 @@ export namespace Prisma {
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     company?: NullableStringFieldUpdateOperationsInput | string | null
     tags?: ContactUpdatetagsInput | string[]
+    isUnsubscribed?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     emailRecipients?: EmailCampaignRecipientUncheckedUpdateManyWithoutContactNestedInput
@@ -47224,6 +47321,8 @@ export namespace Prisma {
     opened?: boolean
     clicked?: boolean
     sentAt?: Date | string | null
+    rsvpStatus?: string | null
+    rsvpAt?: Date | string | null
     contact: ContactCreateNestedOneWithoutEmailRecipientsInput
   }
 
@@ -47234,6 +47333,8 @@ export namespace Prisma {
     opened?: boolean
     clicked?: boolean
     sentAt?: Date | string | null
+    rsvpStatus?: string | null
+    rsvpAt?: Date | string | null
   }
 
   export type EmailCampaignRecipientCreateOrConnectWithoutCampaignInput = {
@@ -47429,6 +47530,7 @@ export namespace Prisma {
     phone?: string | null
     company?: string | null
     tags?: ContactCreatetagsInput | string[]
+    isUnsubscribed?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     groups?: ContactGroupCreateNestedManyWithoutContactInput
@@ -47442,6 +47544,7 @@ export namespace Prisma {
     phone?: string | null
     company?: string | null
     tags?: ContactCreatetagsInput | string[]
+    isUnsubscribed?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     groups?: ContactGroupUncheckedCreateNestedManyWithoutContactInput
@@ -47528,6 +47631,7 @@ export namespace Prisma {
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     company?: NullableStringFieldUpdateOperationsInput | string | null
     tags?: ContactUpdatetagsInput | string[]
+    isUnsubscribed?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     groups?: ContactGroupUpdateManyWithoutContactNestedInput
@@ -47541,6 +47645,7 @@ export namespace Prisma {
     phone?: NullableStringFieldUpdateOperationsInput | string | null
     company?: NullableStringFieldUpdateOperationsInput | string | null
     tags?: ContactUpdatetagsInput | string[]
+    isUnsubscribed?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     groups?: ContactGroupUncheckedUpdateManyWithoutContactNestedInput
@@ -49071,6 +49176,8 @@ export namespace Prisma {
     opened?: boolean
     clicked?: boolean
     sentAt?: Date | string | null
+    rsvpStatus?: string | null
+    rsvpAt?: Date | string | null
   }
 
   export type ContactGroupUpdateWithoutContactInput = {
@@ -49091,6 +49198,8 @@ export namespace Prisma {
     opened?: BoolFieldUpdateOperationsInput | boolean
     clicked?: BoolFieldUpdateOperationsInput | boolean
     sentAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    rsvpStatus?: NullableStringFieldUpdateOperationsInput | string | null
+    rsvpAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     campaign?: EmailCampaignUpdateOneRequiredWithoutRecipientsNestedInput
   }
 
@@ -49101,6 +49210,8 @@ export namespace Prisma {
     opened?: BoolFieldUpdateOperationsInput | boolean
     clicked?: BoolFieldUpdateOperationsInput | boolean
     sentAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    rsvpStatus?: NullableStringFieldUpdateOperationsInput | string | null
+    rsvpAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   }
 
   export type EmailCampaignRecipientUncheckedUpdateManyWithoutContactInput = {
@@ -49110,6 +49221,8 @@ export namespace Prisma {
     opened?: BoolFieldUpdateOperationsInput | boolean
     clicked?: BoolFieldUpdateOperationsInput | boolean
     sentAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    rsvpStatus?: NullableStringFieldUpdateOperationsInput | string | null
+    rsvpAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   }
 
   export type EmailCampaignCreateManyTemplateInput = {
@@ -49209,6 +49322,8 @@ export namespace Prisma {
     opened?: boolean
     clicked?: boolean
     sentAt?: Date | string | null
+    rsvpStatus?: string | null
+    rsvpAt?: Date | string | null
   }
 
   export type EmailCampaignRecipientUpdateWithoutCampaignInput = {
@@ -49217,6 +49332,8 @@ export namespace Prisma {
     opened?: BoolFieldUpdateOperationsInput | boolean
     clicked?: BoolFieldUpdateOperationsInput | boolean
     sentAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    rsvpStatus?: NullableStringFieldUpdateOperationsInput | string | null
+    rsvpAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     contact?: ContactUpdateOneRequiredWithoutEmailRecipientsNestedInput
   }
 
@@ -49227,6 +49344,8 @@ export namespace Prisma {
     opened?: BoolFieldUpdateOperationsInput | boolean
     clicked?: BoolFieldUpdateOperationsInput | boolean
     sentAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    rsvpStatus?: NullableStringFieldUpdateOperationsInput | string | null
+    rsvpAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   }
 
   export type EmailCampaignRecipientUncheckedUpdateManyWithoutCampaignInput = {
@@ -49236,6 +49355,8 @@ export namespace Prisma {
     opened?: BoolFieldUpdateOperationsInput | boolean
     clicked?: BoolFieldUpdateOperationsInput | boolean
     sentAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    rsvpStatus?: NullableStringFieldUpdateOperationsInput | string | null
+    rsvpAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   }
 
 

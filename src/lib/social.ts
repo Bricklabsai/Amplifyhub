@@ -140,7 +140,7 @@ async function fetchYouTubeProfile(accessToken: string) {
     const channel = data.items?.[0];
     return {
       accountName: channel?.snippet?.title,
-      followers: parseInt(channel?.statistics?.subscriberCount || "0"),
+      followers: Number.parseInt(channel?.statistics?.subscriberCount || "0"),
     };
   } catch (e) {
     return {};
@@ -255,6 +255,17 @@ export async function fetchAllPostEngagements(userId: string) {
     if (!pp.externalId) continue;
     const engagement = await fetchPlatformPostEngagement(pp.socialAccountId, pp.externalId);
     if (engagement) {
+      // Persist the latest counts
+      await prisma.platformPost.update({
+        where: { id: pp.id },
+        data: {
+          likes: engagement.likes ?? pp.likes,
+          comments: engagement.comments ?? pp.comments,
+          shares: engagement.shares ?? pp.shares,
+          reach: (engagement as any).reach ?? pp.reach,
+        },
+      });
+
       results.push({
         platformPostId: pp.id,
         platform: pp.platform,
@@ -373,9 +384,9 @@ async function fetchYouTubePostEngagement(accessToken: string, videoId: string |
     const data = await res.json();
     const stats = data.items?.[0]?.statistics || {};
     return {
-      likes: parseInt(stats.likeCount || "0"),
-      comments: parseInt(stats.commentCount || "0"),
-      shares: parseInt(stats.shareCount || "0"),
+      likes: Number.parseInt(stats.likeCount || "0"),
+      comments: Number.parseInt(stats.commentCount || "0"),
+      shares: Number.parseInt(stats.shareCount || "0"),
     };
   } catch (e) {
     console.error("YouTube engagement fetch error:", e);
@@ -595,7 +606,7 @@ async function fetchTikTokPostComments(accessToken: string, videoId: string | nu
       id: c.id || c.user_id + c.create_time,
       author: "TikTok User",
       message: c.text,
-      createdAt: new Date(parseInt(c.create_time) * 1000).toISOString(),
+      createdAt: new Date(Number.parseInt(c.create_time) * 1000).toISOString(),
       replies: [],
     }));
   } catch (e) {

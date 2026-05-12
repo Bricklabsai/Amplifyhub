@@ -1,4 +1,4 @@
-import { NextRequest, NextResponse } from "next/server";
+import { type NextRequest, NextResponse } from "next/server";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
@@ -24,7 +24,10 @@ export async function POST(req: NextRequest, { params }: { params: Promise<{ id:
   if (!campaign) return NextResponse.json({ error: "Not found" }, { status: 404 });
 
   const emailRecipients = campaign.recipients
-    .filter(r => r.contact.email)
+    .filter((r) => {
+      const contact = r.contact as any;
+      return contact.email && contact.isUnsubscribed !== true;
+    })
     .map((r) => ({
       id: r.contactId,
       email: r.contact.email,

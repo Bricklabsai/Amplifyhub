@@ -326,6 +326,7 @@ exports.Prisma.ContactScalarFieldEnum = {
   phone: 'phone',
   company: 'company',
   tags: 'tags',
+  isUnsubscribed: 'isUnsubscribed',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 };
@@ -399,7 +400,9 @@ exports.Prisma.EmailCampaignRecipientScalarFieldEnum = {
   sent: 'sent',
   opened: 'opened',
   clicked: 'clicked',
-  sentAt: 'sentAt'
+  sentAt: 'sentAt',
+  rsvpStatus: 'rsvpStatus',
+  rsvpAt: 'rsvpAt'
 };
 
 exports.Prisma.MediaScalarFieldEnum = {

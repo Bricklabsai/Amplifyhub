@@ -76,8 +76,12 @@ export async function fetchZernioEngagement(
       reach: a.reach,
       impressions: a.impressions,
     };
-  } catch (err) {
-    console.error("fetchZernioEngagement threw:", err);
+  } catch (err: any) {
+    if (err?.statusCode === 404 || err?.message?.includes("not found")) {
+      console.warn(`[Zernio] Post ${postId} not found, skipping Zernio engagement fetch.`);
+    } else {
+      console.error("fetchZernioEngagement threw:", err);
+    }
     return null;
   }
 }

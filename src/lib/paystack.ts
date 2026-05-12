@@ -61,7 +61,7 @@ export async function createSubscription(customerEmail: string, planCode: string
   return data.data;
 }
 
-export async function createPlan(name: string, amount: number, interval: string = 'monthly') {
+export async function createPlan(name: string, amount: number, interval = 'monthly') {
   const response = await fetch('https://api.paystack.co/plan', {
     method: 'POST',
     headers: {

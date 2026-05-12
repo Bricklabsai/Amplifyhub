@@ -1,11 +1,10 @@
 import { prisma } from "./prisma";
-import crypto from "crypto";
+import { randomBytes } from "crypto";
 
-const SENDGRID_API_URL = "https://api.sendgrid.com/v3/mail/send";
-const SENDGRID_API_KEY = process.env.SENDGRID_API_KEY;
+const RESEND_API_URL = "https://api.resend.com/emails";
+const RESEND_API_KEY = process.env.RESEND_API_KEY;
 const FROM_EMAIL = process.env.FROM_EMAIL || "notifications@amplifyhub.ai";
 const FROM_NAME = process.env.FROM_NAME || "AmplifyHub AI";
-const UNSUBSCRIBE_URL = process.env.UNSUBSCRIBE_URL || "https://amplifyhub.ai/unsubscribe";
 
 export interface EmailRecipient {
   email: string;
@@ -29,18 +28,18 @@ export interface SendEmailOptions {
  * Generates a unique RSVP link for tracking
  */
 function generateRsvpLink(campaignId: string, recipientId: string): string {
-  const token = crypto.randomBytes(32).toString("hex");
+  const token = randomBytes(32).toString("hex");
   const baseUrl = process.env.NEXTAUTH_URL || "http://localhost:3000";
-  return `${baseUrl}/api/email/rsvp?token=${token}&campaignId=${campaignId}&recipientId=${recipientId}`;
+  return `${baseUrl}/rsvp?token=${token}&campaignId=${campaignId}&recipientId=${recipientId}`;
 }
 
 /**
  * Generates an unsubscribe link
  */
 function generateUnsubscribeLink(email: string): string {
-  const token = crypto.randomBytes(16).toString("hex");
+  const token = randomBytes(16).toString("hex");
   const baseUrl = process.env.NEXTAUTH_URL || "http://localhost:3000";
-  return `${baseUrl}/api/email/unsubscribe?email=${encodeURIComponent(email)}&token=${token}`;
+  return `${baseUrl}/unsubscribe?email=${encodeURIComponent(email)}&token=${token}`;
 }
 
 /**
@@ -84,8 +83,8 @@ function personalizeContent(content: string, recipient: EmailRecipient, campaign
 }
 
 export async function sendBulkEmails({ to, subject, content, textContent, campaignId, maxRetries = 3 }: SendEmailOptions) {
-  if (!SENDGRID_API_KEY) {
-    console.warn("SENDGRID_API_KEY is not set. Emails will not be sent.");
+  if (!RESEND_API_KEY) {
+    console.warn("RESEND_API_KEY is not set. Emails will not be sent.");
     return { success: false, error: "Email service not configured", sent: 0, failed: to.length, total: to.length, results: [] };
   }
 
@@ -106,34 +105,19 @@ export async function sendBulkEmails({ to, subject, content, textContent, campai
     // Retry logic
     while (retryCount < maxRetries && !success) {
       try {
-        const response = await fetch(SENDGRID_API_URL, {
+        const response = await fetch(RESEND_API_URL, {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
-            Authorization: `Bearer ${SENDGRID_API_KEY}`,
+            Authorization: `Bearer ${RESEND_API_KEY}`,
           },
           body: JSON.stringify({
-            personalizations: [
-              {
-                to: [{ email: recipient.email }],
-                subject: personalizedSubject,
-                custom_args: {
-                  campaignId: campaignId || "manual",
-                  recipientId: recipient.id || "unknown",
-                  timestamp: new Date().toISOString(),
-                },
-              },
-            ],
-            from: { email: FROM_EMAIL, name: FROM_NAME },
-            replyTo: { email: FROM_EMAIL },
-            content: [
-              { type: "text/plain", value: personalizedText || personalizedHtml.replace(/<[^>]*>/g, "") },
-              { type: "text/html", value: personalizedHtml },
-            ],
-            trackingSettings: {
-              clickTracking: { enabled: true },
-              openTracking: { enabled: true },
-            },
+            from: FROM_NAME ? `${FROM_NAME} <${FROM_EMAIL}>` : FROM_EMAIL,
+            to: [recipient.email],
+            subject: personalizedSubject,
+            html: personalizedHtml,
+            text: personalizedText,
+            reply_to: FROM_EMAIL,
           }),
         });
 
