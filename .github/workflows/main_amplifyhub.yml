@@ -44,6 +44,8 @@ jobs:
         run: pnpm run build
         env:
           DATABASE_URL: ${{ secrets.DATABASE_URL }}
+          PAYNOW_INTEGRATION_ID: ${{ secrets.PAYNOW_INTEGRATION_ID }}
+          PAYNOW_INTEGRATION_KEY: ${{ secrets.PAYNOW_INTEGRATION_KEY }}
 
       - name: Prepare Standalone Artifact (Azure-safe)
         shell: bash
