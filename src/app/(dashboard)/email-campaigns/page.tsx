@@ -74,6 +74,9 @@ export default function EmailCampaignsPage() {
             <Link href="/scheduled-campaigns" className="rounded-xl border border-gray-200 px-4 py-2 text-sm text-gray-600 hover:bg-gray-50 transition">
               Scheduled Campaigns
             </Link>
+            <Link href="/email-composer" className="rounded-xl border border-violet-200 bg-violet-50 px-4 py-2 text-sm text-violet-700 hover:bg-violet-100 transition">
+              AI Composer
+            </Link>
           </div>
         </div>
         <EmailCampaignWizard groups={groups} onCampaignCreated={fetchCampaigns} />

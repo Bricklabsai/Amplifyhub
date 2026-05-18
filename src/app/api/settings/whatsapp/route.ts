@@ -23,7 +23,7 @@ export async function POST(req: NextRequest) {
 
     const encryptedToken = encrypt(accessToken);
 
-    const config = await prisma.whatsappConfig.upsert({
+    const config = await prisma.whatsAppConfig.upsert({
       where: { userId },
       update: {
         phoneNumberId,
@@ -59,7 +59,7 @@ export async function GET(req: NextRequest) {
     }
     const userId = session.user.id;
 
-    const config = await prisma.whatsappConfig.findUnique({
+    const config = await prisma.whatsAppConfig.findUnique({
       where: { userId },
       select: {
         phoneNumberId: true,

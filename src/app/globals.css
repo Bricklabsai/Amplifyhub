@@ -1,77 +1,79 @@
-@import url('https://fonts.googleapis.com/css2?family=Roboto+Slab:wght@100..900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap');
 
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 :root {
-  --font-heading: 'Roboto Slab', serif;
-  --font-body: 'Roboto Slab', serif;
+  --font-heading: 'Cormorant Garamond', serif;
+  --font-body: 'Inter', ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
 
-  /* Brand palette: Ocean Sorbet */
-  --brand-primary: #46658C;
-  --brand-primary-light: #4A6D8C;
-  --brand-accent: #D9895B;
-  --brand-neutral: #BFADA8;
-  --brand-text: #2D2D2D;
-  --brand-gradient: linear-gradient(135deg, #46658C, #4A6D8C, #D9895B);
+  /* Brand palette: black, purple, yellow */
+  --brand-primary: #111318;
+  --brand-primary-light: #1B1F2B;
+  --brand-accent: #FFC01E;
+  --brand-neutral: #7331FF;
+  --brand-text: #111318;
+  --brand-gradient: linear-gradient(135deg, #7331FF, #FFC01E, #111318);
 
   /* Landing */
-  --paper-white: #F2E9E9;
+  --paper-white: #FFFFFF;
 
   /* Sidebar */
-  --sidebar-start: #46658C;
-  --sidebar-mid: #4A6D8C;
-  --sidebar-end: #2D2D2D;
+  --sidebar-start: #111318;
+  --sidebar-mid: #1E2240;
+  --sidebar-end: #7331FF;
 
-  /* shadcn tokens */
+  /* shadcn tokens - Light Mode by default */
   --background: 0 0% 100%;
-  --foreground: 0 0% 18%; /* #2D2D2D */
+  --foreground: 240 10% 3.9%;
   --card: 0 0% 100%;
-  --card-foreground: 0 0% 18%;
+  --card-foreground: 240 10% 3.9%;
   --popover: 0 0% 100%;
-  --popover-foreground: 0 0% 18%;
-  --primary: 212 33% 41%; /* #46658C */
+  --popover-foreground: 240 10% 3.9%;
+  --primary: 264 100% 57%;
   --primary-foreground: 0 0% 98%;
-  --secondary: 16 19% 70%; /* #BFADA8 roughly */
-  --secondary-foreground: 0 0% 18%;
-  --muted: 0 14% 93%; /* #F2E9E9 roughly */
-  --muted-foreground: 0 0% 40%;
-  --accent: 21 66% 60%; /* #D9895B */
-  --accent-foreground: 0 0% 98%;
+  --secondary: 47 94% 54%;
+  --secondary-foreground: 240 5.9% 10%;
+  --muted: 240 4.8% 95.9%;
+  --muted-foreground: 240 3.8% 46.1%;
+  --accent: 47 94% 54%;
+  --accent-foreground: 240 5.9% 10%;
   --destructive: 0 84.2% 60.2%;
-  --destructive-foreground: 210 40% 98%;
-  --border: 0 0% 91%;
-  --input: 0 0% 91%;
-  --ring: 212 33% 41%;
+  --destructive-foreground: 0 0% 98%;
+  --border: 240 5.9% 90%;
+  --input: 240 5.9% 90%;
+  --ring: 264 100% 57%;
   --radius: 0.75rem;
-  --chart-1: 12 76% 61%;
-  --chart-2: 173 58% 39%;
-  --chart-3: 197 37% 24%;
-  --chart-4: 43 74% 66%;
-  --chart-5: 27 87% 67%;
+  --chart-1: 264 100% 57%;
+  --chart-2: 47 94% 54%;
+  --chart-3: 210 12% 24%;
+  --chart-4: 216 15% 34%;
+  --chart-5: 50 80% 60%;
 }
 
 .dark {
-  --background: 222.2 84% 4.9%;
-  --foreground: 210 40% 98%;
-  --card: 222.2 84% 4.9%;
-  --card-foreground: 210 40% 98%;
-  --popover: 222.2 84% 4.9%;
-  --popover-foreground: 210 40% 98%;
-  --primary: 210 40% 98%;
-  --primary-foreground: 222.2 47.4% 11.2%;
-  --secondary: 217.2 32.6% 17.5%;
-  --secondary-foreground: 210 40% 98%;
-  --muted: 217.2 32.6% 17.5%;
-  --muted-foreground: 215 20.2% 65.1%;
-  --accent: 217.2 32.6% 17.5%;
-  --accent-foreground: 210 40% 98%;
-  --destructive: 0 62.8% 30.6%;
-  --destructive-foreground: 210 40% 98%;
-  --border: 217.2 32.6% 17.5%;
-  --input: 217.2 32.6% 17.5%;
-  --ring: 212.7 26.8% 83.9%;
+  --background: 210 8% 7%;
+  --foreground: 0 0% 95%;
+  --card: 210 11% 11%;
+  --card-foreground: 0 0% 95%;
+  --popover: 210 11% 11%;
+  --popover-foreground: 0 0% 95%;
+  --primary: 264 100% 57%;
+  --primary-foreground: 0 0% 98%;
+  --secondary: 47 94% 54%;
+  --secondary-foreground: 0 0% 8%;
+  --muted: 220 10% 18%;
+  --muted-foreground: 0 0% 80%;
+  --accent: 47 94% 54%;
+  --accent-foreground: 0 0% 8%;
+  --destructive: 0 100% 62%;
+  --destructive-foreground: 0 0% 98%;
+  --border: 219 15% 25%;
+  --input: 210 11% 13%;
+  --ring: 264 100% 57%;
+  --brand-text: #F4F5F8;
+  --paper-white: #151820;
 }
 
 * {

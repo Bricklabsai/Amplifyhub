@@ -16489,6 +16489,7 @@ export namespace Prisma {
     userId: string | null
     platform: $Enums.Platform | null
     accountName: string | null
+    profileImage: string | null
     accountId: string | null
     accessToken: string | null
     refreshToken: string | null
@@ -16505,6 +16506,7 @@ export namespace Prisma {
     userId: string | null
     platform: $Enums.Platform | null
     accountName: string | null
+    profileImage: string | null
     accountId: string | null
     accessToken: string | null
     refreshToken: string | null
@@ -16521,6 +16523,7 @@ export namespace Prisma {
     userId: number
     platform: number
     accountName: number
+    profileImage: number
     accountId: number
     accessToken: number
     refreshToken: number
@@ -16547,6 +16550,7 @@ export namespace Prisma {
     userId?: true
     platform?: true
     accountName?: true
+    profileImage?: true
     accountId?: true
     accessToken?: true
     refreshToken?: true
@@ -16563,6 +16567,7 @@ export namespace Prisma {
     userId?: true
     platform?: true
     accountName?: true
+    profileImage?: true
     accountId?: true
     accessToken?: true
     refreshToken?: true
@@ -16579,6 +16584,7 @@ export namespace Prisma {
     userId?: true
     platform?: true
     accountName?: true
+    profileImage?: true
     accountId?: true
     accessToken?: true
     refreshToken?: true
@@ -16682,6 +16688,7 @@ export namespace Prisma {
     userId: string
     platform: $Enums.Platform
     accountName: string
+    profileImage: string | null
     accountId: string | null
     accessToken: string | null
     refreshToken: string | null
@@ -16717,6 +16724,7 @@ export namespace Prisma {
     userId?: boolean
     platform?: boolean
     accountName?: boolean
+    profileImage?: boolean
     accountId?: boolean
     accessToken?: boolean
     refreshToken?: boolean
@@ -16736,6 +16744,7 @@ export namespace Prisma {
     userId?: boolean
     platform?: boolean
     accountName?: boolean
+    profileImage?: boolean
     accountId?: boolean
     accessToken?: boolean
     refreshToken?: boolean
@@ -16753,6 +16762,7 @@ export namespace Prisma {
     userId?: boolean
     platform?: boolean
     accountName?: boolean
+    profileImage?: boolean
     accountId?: boolean
     accessToken?: boolean
     refreshToken?: boolean
@@ -16770,6 +16780,7 @@ export namespace Prisma {
     userId?: boolean
     platform?: boolean
     accountName?: boolean
+    profileImage?: boolean
     accountId?: boolean
     accessToken?: boolean
     refreshToken?: boolean
@@ -16781,7 +16792,7 @@ export namespace Prisma {
     updatedAt?: boolean
   }
 
-  export type SocialAccountOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "userId" | "platform" | "accountName" | "accountId" | "accessToken" | "refreshToken" | "zernioAccountId" | "expiresAt" | "isActive" | "followers" | "createdAt" | "updatedAt", ExtArgs["result"]["socialAccount"]>
+  export type SocialAccountOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "userId" | "platform" | "accountName" | "profileImage" | "accountId" | "accessToken" | "refreshToken" | "zernioAccountId" | "expiresAt" | "isActive" | "followers" | "createdAt" | "updatedAt", ExtArgs["result"]["socialAccount"]>
   export type SocialAccountInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     user?: boolean | UserDefaultArgs<ExtArgs>
     platformPosts?: boolean | SocialAccount$platformPostsArgs<ExtArgs>
@@ -16805,6 +16816,7 @@ export namespace Prisma {
       userId: string
       platform: $Enums.Platform
       accountName: string
+      profileImage: string | null
       accountId: string | null
       accessToken: string | null
       refreshToken: string | null
@@ -17243,6 +17255,7 @@ export namespace Prisma {
     readonly userId: FieldRef<"SocialAccount", 'String'>
     readonly platform: FieldRef<"SocialAccount", 'Platform'>
     readonly accountName: FieldRef<"SocialAccount", 'String'>
+    readonly profileImage: FieldRef<"SocialAccount", 'String'>
     readonly accountId: FieldRef<"SocialAccount", 'String'>
     readonly accessToken: FieldRef<"SocialAccount", 'String'>
     readonly refreshToken: FieldRef<"SocialAccount", 'String'>
@@ -34214,6 +34227,7 @@ export namespace Prisma {
     userId: 'userId',
     platform: 'platform',
     accountName: 'accountName',
+    profileImage: 'profileImage',
     accountId: 'accountId',
     accessToken: 'accessToken',
     refreshToken: 'refreshToken',
@@ -35546,6 +35560,7 @@ export namespace Prisma {
     userId?: StringFilter<"SocialAccount"> | string
     platform?: EnumPlatformFilter<"SocialAccount"> | $Enums.Platform
     accountName?: StringFilter<"SocialAccount"> | string
+    profileImage?: StringNullableFilter<"SocialAccount"> | string | null
     accountId?: StringNullableFilter<"SocialAccount"> | string | null
     accessToken?: StringNullableFilter<"SocialAccount"> | string | null
     refreshToken?: StringNullableFilter<"SocialAccount"> | string | null
@@ -35564,6 +35579,7 @@ export namespace Prisma {
     userId?: SortOrder
     platform?: SortOrder
     accountName?: SortOrder
+    profileImage?: SortOrderInput | SortOrder
     accountId?: SortOrderInput | SortOrder
     accessToken?: SortOrderInput | SortOrder
     refreshToken?: SortOrderInput | SortOrder
@@ -35587,6 +35603,7 @@ export namespace Prisma {
     userId?: StringFilter<"SocialAccount"> | string
     platform?: EnumPlatformFilter<"SocialAccount"> | $Enums.Platform
     accountName?: StringFilter<"SocialAccount"> | string
+    profileImage?: StringNullableFilter<"SocialAccount"> | string | null
     accountId?: StringNullableFilter<"SocialAccount"> | string | null
     accessToken?: StringNullableFilter<"SocialAccount"> | string | null
     refreshToken?: StringNullableFilter<"SocialAccount"> | string | null
@@ -35604,6 +35621,7 @@ export namespace Prisma {
     userId?: SortOrder
     platform?: SortOrder
     accountName?: SortOrder
+    profileImage?: SortOrderInput | SortOrder
     accountId?: SortOrderInput | SortOrder
     accessToken?: SortOrderInput | SortOrder
     refreshToken?: SortOrderInput | SortOrder
@@ -35628,6 +35646,7 @@ export namespace Prisma {
     userId?: StringWithAggregatesFilter<"SocialAccount"> | string
     platform?: EnumPlatformWithAggregatesFilter<"SocialAccount"> | $Enums.Platform
     accountName?: StringWithAggregatesFilter<"SocialAccount"> | string
+    profileImage?: StringNullableWithAggregatesFilter<"SocialAccount"> | string | null
     accountId?: StringNullableWithAggregatesFilter<"SocialAccount"> | string | null
     accessToken?: StringNullableWithAggregatesFilter<"SocialAccount"> | string | null
     refreshToken?: StringNullableWithAggregatesFilter<"SocialAccount"> | string | null
@@ -37801,6 +37820,7 @@ export namespace Prisma {
     id?: string
     platform: $Enums.Platform
     accountName: string
+    profileImage?: string | null
     accountId?: string | null
     accessToken?: string | null
     refreshToken?: string | null
@@ -37819,6 +37839,7 @@ export namespace Prisma {
     userId: string
     platform: $Enums.Platform
     accountName: string
+    profileImage?: string | null
     accountId?: string | null
     accessToken?: string | null
     refreshToken?: string | null
@@ -37835,6 +37856,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     platform?: EnumPlatformFieldUpdateOperationsInput | $Enums.Platform
     accountName?: StringFieldUpdateOperationsInput | string
+    profileImage?: NullableStringFieldUpdateOperationsInput | string | null
     accountId?: NullableStringFieldUpdateOperationsInput | string | null
     accessToken?: NullableStringFieldUpdateOperationsInput | string | null
     refreshToken?: NullableStringFieldUpdateOperationsInput | string | null
@@ -37853,6 +37875,7 @@ export namespace Prisma {
     userId?: StringFieldUpdateOperationsInput | string
     platform?: EnumPlatformFieldUpdateOperationsInput | $Enums.Platform
     accountName?: StringFieldUpdateOperationsInput | string
+    profileImage?: NullableStringFieldUpdateOperationsInput | string | null
     accountId?: NullableStringFieldUpdateOperationsInput | string | null
     accessToken?: NullableStringFieldUpdateOperationsInput | string | null
     refreshToken?: NullableStringFieldUpdateOperationsInput | string | null
@@ -37870,6 +37893,7 @@ export namespace Prisma {
     userId: string
     platform: $Enums.Platform
     accountName: string
+    profileImage?: string | null
     accountId?: string | null
     accessToken?: string | null
     refreshToken?: string | null
@@ -37885,6 +37909,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     platform?: EnumPlatformFieldUpdateOperationsInput | $Enums.Platform
     accountName?: StringFieldUpdateOperationsInput | string
+    profileImage?: NullableStringFieldUpdateOperationsInput | string | null
     accountId?: NullableStringFieldUpdateOperationsInput | string | null
     accessToken?: NullableStringFieldUpdateOperationsInput | string | null
     refreshToken?: NullableStringFieldUpdateOperationsInput | string | null
@@ -37901,6 +37926,7 @@ export namespace Prisma {
     userId?: StringFieldUpdateOperationsInput | string
     platform?: EnumPlatformFieldUpdateOperationsInput | $Enums.Platform
     accountName?: StringFieldUpdateOperationsInput | string
+    profileImage?: NullableStringFieldUpdateOperationsInput | string | null
     accountId?: NullableStringFieldUpdateOperationsInput | string | null
     accessToken?: NullableStringFieldUpdateOperationsInput | string | null
     refreshToken?: NullableStringFieldUpdateOperationsInput | string | null
@@ -40201,6 +40227,7 @@ export namespace Prisma {
     userId?: SortOrder
     platform?: SortOrder
     accountName?: SortOrder
+    profileImage?: SortOrder
     accountId?: SortOrder
     accessToken?: SortOrder
     refreshToken?: SortOrder
@@ -40221,6 +40248,7 @@ export namespace Prisma {
     userId?: SortOrder
     platform?: SortOrder
     accountName?: SortOrder
+    profileImage?: SortOrder
     accountId?: SortOrder
     accessToken?: SortOrder
     refreshToken?: SortOrder
@@ -40237,6 +40265,7 @@ export namespace Prisma {
     userId?: SortOrder
     platform?: SortOrder
     accountName?: SortOrder
+    profileImage?: SortOrder
     accountId?: SortOrder
     accessToken?: SortOrder
     refreshToken?: SortOrder
@@ -43412,6 +43441,7 @@ export namespace Prisma {
     id?: string
     platform: $Enums.Platform
     accountName: string
+    profileImage?: string | null
     accountId?: string | null
     accessToken?: string | null
     refreshToken?: string | null
@@ -43428,6 +43458,7 @@ export namespace Prisma {
     id?: string
     platform: $Enums.Platform
     accountName: string
+    profileImage?: string | null
     accountId?: string | null
     accessToken?: string | null
     refreshToken?: string | null
@@ -44039,6 +44070,7 @@ export namespace Prisma {
     userId?: StringFilter<"SocialAccount"> | string
     platform?: EnumPlatformFilter<"SocialAccount"> | $Enums.Platform
     accountName?: StringFilter<"SocialAccount"> | string
+    profileImage?: StringNullableFilter<"SocialAccount"> | string | null
     accountId?: StringNullableFilter<"SocialAccount"> | string | null
     accessToken?: StringNullableFilter<"SocialAccount"> | string | null
     refreshToken?: StringNullableFilter<"SocialAccount"> | string | null
@@ -46175,6 +46207,7 @@ export namespace Prisma {
     id?: string
     platform: $Enums.Platform
     accountName: string
+    profileImage?: string | null
     accountId?: string | null
     accessToken?: string | null
     refreshToken?: string | null
@@ -46192,6 +46225,7 @@ export namespace Prisma {
     userId: string
     platform: $Enums.Platform
     accountName: string
+    profileImage?: string | null
     accountId?: string | null
     accessToken?: string | null
     refreshToken?: string | null
@@ -46266,6 +46300,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     platform?: EnumPlatformFieldUpdateOperationsInput | $Enums.Platform
     accountName?: StringFieldUpdateOperationsInput | string
+    profileImage?: NullableStringFieldUpdateOperationsInput | string | null
     accountId?: NullableStringFieldUpdateOperationsInput | string | null
     accessToken?: NullableStringFieldUpdateOperationsInput | string | null
     refreshToken?: NullableStringFieldUpdateOperationsInput | string | null
@@ -46283,6 +46318,7 @@ export namespace Prisma {
     userId?: StringFieldUpdateOperationsInput | string
     platform?: EnumPlatformFieldUpdateOperationsInput | $Enums.Platform
     accountName?: StringFieldUpdateOperationsInput | string
+    profileImage?: NullableStringFieldUpdateOperationsInput | string | null
     accountId?: NullableStringFieldUpdateOperationsInput | string | null
     accessToken?: NullableStringFieldUpdateOperationsInput | string | null
     refreshToken?: NullableStringFieldUpdateOperationsInput | string | null
@@ -48072,6 +48108,7 @@ export namespace Prisma {
     id?: string
     platform: $Enums.Platform
     accountName: string
+    profileImage?: string | null
     accountId?: string | null
     accessToken?: string | null
     refreshToken?: string | null
@@ -48306,6 +48343,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     platform?: EnumPlatformFieldUpdateOperationsInput | $Enums.Platform
     accountName?: StringFieldUpdateOperationsInput | string
+    profileImage?: NullableStringFieldUpdateOperationsInput | string | null
     accountId?: NullableStringFieldUpdateOperationsInput | string | null
     accessToken?: NullableStringFieldUpdateOperationsInput | string | null
     refreshToken?: NullableStringFieldUpdateOperationsInput | string | null
@@ -48322,6 +48360,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     platform?: EnumPlatformFieldUpdateOperationsInput | $Enums.Platform
     accountName?: StringFieldUpdateOperationsInput | string
+    profileImage?: NullableStringFieldUpdateOperationsInput | string | null
     accountId?: NullableStringFieldUpdateOperationsInput | string | null
     accessToken?: NullableStringFieldUpdateOperationsInput | string | null
     refreshToken?: NullableStringFieldUpdateOperationsInput | string | null
@@ -48338,6 +48377,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     platform?: EnumPlatformFieldUpdateOperationsInput | $Enums.Platform
     accountName?: StringFieldUpdateOperationsInput | string
+    profileImage?: NullableStringFieldUpdateOperationsInput | string | null
     accountId?: NullableStringFieldUpdateOperationsInput | string | null
     accessToken?: NullableStringFieldUpdateOperationsInput | string | null
     refreshToken?: NullableStringFieldUpdateOperationsInput | string | null

@@ -60,16 +60,16 @@ export default function TeamPage() {
         <div className="grid grid-cols-1 md:grid-cols-4 gap-3">
           <div>
             <Label className="mb-2 block">Name</Label>
-            <Input value={form.name} onChange={(e) => setForm((f) => ({ ...f, name: e.target.value }))} />
+             <Input value={form.name} onChange={(e) => setForm((f) => ({ ...f, name: e.target.value }))} className="text-black" />
           </div>
           <div>
             <Label className="mb-2 block">Email</Label>
-            <Input value={form.email} onChange={(e) => setForm((f) => ({ ...f, email: e.target.value }))} />
+             <Input value={form.email} onChange={(e) => setForm((f) => ({ ...f, email: e.target.value }))} className="text-black" />
           </div>
           <div>
             <Label className="mb-2 block">Role</Label>
             <Select value={form.role} onValueChange={(v) => setForm((f) => ({ ...f, role: v }))}>
-              <SelectTrigger><SelectValue /></SelectTrigger>
+               <SelectTrigger className="text-black"><SelectValue /></SelectTrigger>
               <SelectContent>
                 <SelectItem value="ADMIN">Admin</SelectItem>
                 <SelectItem value="EDITOR">Editor</SelectItem>
@@ -79,7 +79,7 @@ export default function TeamPage() {
           </div>
           <div>
             <Label className="mb-2 block">Organization</Label>
-            <Input value={form.organization} onChange={(e) => setForm((f) => ({ ...f, organization: e.target.value }))} />
+             <Input value={form.organization} onChange={(e) => setForm((f) => ({ ...f, organization: e.target.value }))} className="text-black" />
           </div>
         </div>
         <Button onClick={addMember} disabled={saving || !form.name || !form.email} className="brand-gradient-bg text-white">

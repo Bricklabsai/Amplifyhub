@@ -43,11 +43,11 @@ export default function SettingsPage() {
         <div className="space-y-4">
           <div>
             <Label className="text-sm font-semibold text-gray-700 mb-2 block">Display Name</Label>
-            <Input defaultValue={session?.user?.name || ""} className="rounded-xl border-gray-200 h-11" />
+             <Input defaultValue={session?.user?.name || ""} className="rounded-xl border-gray-200 h-11 text-foreground" />
           </div>
           <div>
             <Label className="text-sm font-semibold text-gray-700 mb-2 block">Email Address</Label>
-            <Input defaultValue={session?.user?.email || ""} type="email" disabled className="rounded-xl border-gray-200 h-11 opacity-60" />
+             <Input defaultValue={session?.user?.email || ""} type="email" disabled className="rounded-xl border-gray-200 h-11 opacity-60 text-foreground" />
           </div>
           <Button onClick={save} className="brand-gradient-bg text-white border-0 hover:opacity-90 rounded-xl px-6 h-10 font-semibold text-sm">
             {saved ? "✓ Saved!" : "Save Changes"}
@@ -92,7 +92,7 @@ export default function SettingsPage() {
         <div className="space-y-4">
           <div>
             <Label className="text-sm font-semibold text-gray-700 mb-2 block">OpenAI API Key</Label>
-            <Input type="password" placeholder="sk-..." className="rounded-xl border-gray-200 h-11 font-mono text-sm" />
+             <Input type="password" placeholder="sk-..." className="rounded-xl border-gray-200 h-11 font-mono text-sm text-foreground" />
             <p className="text-xs text-gray-400 mt-1">Configure via environment variable OPENAI_API_KEY</p>
           </div>
         </div>

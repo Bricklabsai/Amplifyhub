@@ -23,7 +23,7 @@ export default function Step1Basics({ form, setForm }: Step1BasicsProps) {
         <Input
           value={form.name}
           onChange={(e) => setForm({ ...form, name: e.target.value })}
-          className="rounded-xl h-11"
+          className="rounded-xl h-11 text-black"
           placeholder="e.g., Monthly Newsletter, Spring Sale"
         />
         <p className="text-xs text-gray-400 mt-1">Internal name for your reference</p>
@@ -34,7 +34,7 @@ export default function Step1Basics({ form, setForm }: Step1BasicsProps) {
         <Input
           value={form.subject}
           onChange={(e) => setForm({ ...form, subject: e.target.value })}
-          className="rounded-xl h-11"
+          className="rounded-xl h-11 text-black"
           placeholder="e.g., Check Out Our Latest Products!"
         />
         <p className="text-xs text-gray-400 mt-1">This is what recipients see in their inbox</p>
@@ -45,7 +45,7 @@ export default function Step1Basics({ form, setForm }: Step1BasicsProps) {
         <Input
           value={form.previewText}
           onChange={(e) => setForm({ ...form, previewText: e.target.value })}
-          className="rounded-xl h-11"
+          className="rounded-xl h-11 text-black"
           placeholder="Short snippet shown in email preview (optional)"
         />
         <p className="text-xs text-gray-400 mt-1">

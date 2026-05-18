@@ -250,6 +250,7 @@ exports.Prisma.SocialAccountScalarFieldEnum = {
   userId: 'userId',
   platform: 'platform',
   accountName: 'accountName',
+  profileImage: 'profileImage',
   accountId: 'accountId',
   accessToken: 'accessToken',
   refreshToken: 'refreshToken',

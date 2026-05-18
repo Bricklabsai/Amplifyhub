@@ -44,7 +44,7 @@ export async function refreshSocialProfile(socialAccountId: string) {
   if (!account.accessToken) return account;
 
   try {
-    let profileData: { accountName?: string; followers?: number } = {};
+    let profileData: { accountName?: string; followers?: number; profileImage?: string } = {};
 
     switch (account.platform) {
       case "FACEBOOK":
@@ -77,6 +77,7 @@ export async function refreshSocialProfile(socialAccountId: string) {
         data: {
           accountName: profileData.accountName || account.accountName,
           followers: profileData.followers ?? account.followers,
+          profileImage: profileData.profileImage || account.profileImage,
           updatedAt: new Date(),
         },
       });
@@ -118,15 +119,115 @@ async function fetchTwitterProfile(accessToken: string) {
 
 async function fetchLinkedInProfile(accessToken: string) {
   try {
-    const res = await fetch("https://api.linkedin.com/v2/me", {
-      headers: { Authorization: `Bearer ${accessToken}` },
+    // Try REST API first (works better with OIDC tokens)
+    const res = await fetch("https://api.linkedin.com/rest/me", {
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+        "LinkedIn-Version": "202510",
+        "X-Restli-Protocol-Version": "2.0.0",
+      },
     });
+
+    if (!res.ok) {
+      console.warn(`LinkedIn REST API returned ${res.status}, falling back to v2 API`);
+      return await fallbackFetchLinkedInProfileV2(accessToken);
+    }
+
     const data = await res.json();
+    
+    // In Versioned API, firstName and lastName are direct strings
+    const firstName = data.firstName || "";
+    const lastName = data.lastName || "";
+    const accountName = `${firstName} ${lastName}`.trim();
+    
+    let followers = 0;
+    let profileImage: string | undefined;
+
+    // Extract profile picture if available (Versioned API)
+    if (data.profilePicture) {
+      profileImage = data.profilePicture;
+    }
+
+    try {
+      const id = data.id;
+      if (id) {
+        // Use versioned API for network size
+        const networkRes = await fetch(
+          `https://api.linkedin.com/rest/networkSizes/me?edgeType=FollowedBy`,
+          {
+            headers: {
+              Authorization: `Bearer ${accessToken}`,
+              "LinkedIn-Version": "202510",
+              "X-Restli-Protocol-Version": "2.0.0",
+            },
+          }
+        );
+        if (networkRes.ok) {
+          const networkData = await networkRes.json();
+          followers = networkData.firstDegreeSize || networkData.followedByCount || 0;
+        }
+      }
+    } catch (e) {
+      console.warn("Failed to fetch LinkedIn followers:", e);
+    }
+
     return {
-      accountName: `${data.localizedFirstName} ${data.localizedLastName}`,
-      followers: 0, // LinkedIn followers API is more complex
+      accountName: accountName || "LinkedIn User",
+      followers,
+      profileImage,
     };
   } catch (e) {
+    console.error("LinkedIn profile fetch error (REST API):", e);
+    return await fallbackFetchLinkedInProfileV2(accessToken);
+  }
+}
+
+async function fallbackFetchLinkedInProfileV2(accessToken: string) {
+  try {
+    const res = await fetch("https://api.linkedin.com/v2/me?projection=(id,localizedFirstName,localizedLastName,profilePicture(displayImage~:playableStreams))", {
+      headers: { Authorization: `Bearer ${accessToken}` },
+    });
+    
+    if (!res.ok) return {};
+    
+    const data = await res.json();
+    const accountName = `${data.localizedFirstName || ""} ${data.localizedLastName || ""}`.trim();
+    let followers = 0;
+    let profileImage: string | undefined;
+
+    // Extract profile picture from V2 complex structure
+    try {
+      const displayImage = data.profilePicture?.["displayImage~"]?.elements?.[0]?.identifiers?.[0]?.identifier;
+      if (displayImage) profileImage = displayImage;
+    } catch (e) {
+      // Ignore image parsing errors
+    }
+
+    try {
+      const id = data.id;
+      if (id) {
+        const networkRes = await fetch(
+          `https://api.linkedin.com/v2/networkSizes/urn:li:person:${id}?edgeType=FollowedBy`,
+          {
+            headers: { Authorization: `Bearer ${accessToken}` },
+          }
+        );
+        if (networkRes.ok) {
+          const networkData = await networkRes.json();
+          followers = networkData.firstDegreeSize || networkData.total || 0;
+        }
+      }
+    } catch (e) {
+      // Ignore follower fetching errors
+    }
+
+    return {
+      accountName: accountName || "LinkedIn User",
+      followers,
+      profileImage,
+    };
+  } catch (e) {
+    console.error("LinkedIn profile fetch error (v2 API fallback):", e);
     return {};
   }
 }

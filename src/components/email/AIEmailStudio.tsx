@@ -1,9 +1,14 @@
 "use client";
-import { useState } from "react";
-import { HiSparkles, HiEye, HiDocumentDownload, HiCheckCircle, HiX } from "react-icons/hi";
+import { useEffect, useState } from "react";
+import Link from "next/link";
+import { useToast } from "@/hooks/use-toast";
+import { HiSparkles, HiEye, HiDocumentDownload, HiCheckCircle, HiX, HiUsers, HiMail, HiPlus, HiPaperAirplane } from "react-icons/hi";
 
 type EmailType = "NEWSLETTER" | "EVENT" | "TRANSACTIONAL" | "PROMOTIONAL" | "CUSTOM";
 type Tone = "Professional" | "Casual" | "Friendly" | "Urgent";
+
+type Group = { id: string; name: string; _count: { contacts: number } };
+type EmailTemplate = { id: string; name: string; description: string | null; category: string; htmlContent: string };
 
 interface GeneratedEmail {
   subject: string;
@@ -22,8 +27,46 @@ export default function AIEmailStudio() {
 
   const [generatedContent, setGeneratedContent] = useState<GeneratedEmail | null>(null);
   const [generatedTemplate, setGeneratedTemplate] = useState<string | null>(null);
+  const [savedTemplates, setSavedTemplates] = useState<EmailTemplate[]>([]);
+  const [groups, setGroups] = useState<Group[]>([]);
+  const [selectedGroupIds, setSelectedGroupIds] = useState<string[]>([]);
+  const [campaignName, setCampaignName] = useState("");
+  const [subject, setSubject] = useState("");
+  const [previewText, setPreviewText] = useState("");
+  const [creatingCampaign, setCreatingCampaign] = useState(false);
+  const [sendingCampaign, setSendingCampaign] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const { toast } = useToast();
+
+  useEffect(() => {
+    void fetchSavedTemplates();
+    void fetchAudienceGroups();
+  }, []);
+
+  async function fetchSavedTemplates() {
+    try {
+      const res = await fetch("/api/email-templates");
+      if (res.ok) {
+        const data = await res.json();
+        setSavedTemplates(Array.isArray(data) ? data : []);
+      }
+    } catch (error) {
+      console.error("Failed to load saved templates", error);
+    }
+  }
+
+  async function fetchAudienceGroups() {
+    try {
+      const res = await fetch("/api/audience");
+      if (res.ok) {
+        const data = await res.json();
+        setGroups(Array.isArray(data) ? data : []);
+      }
+    } catch (error) {
+      console.error("Failed to load audience groups", error);
+    }
+  }
 
   async function generateContent() {
     setLoading(true);
@@ -43,6 +86,8 @@ export default function AIEmailStudio() {
 
       const data = await res.json();
       setGeneratedContent(data);
+      setSubject(data.subject);
+      setPreviewText(data.preview);
       setStep("template");
     } catch (err) {
       setError(err instanceof Error ? err.message : "An error occurred");
@@ -82,30 +127,156 @@ export default function AIEmailStudio() {
   }
 
   async function saveAsTemplate() {
-    if (!generatedContent || !generatedTemplate) return;
+    if (!generatedTemplate) return;
 
     try {
       const res = await fetch("/api/email-templates", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          name: generatedContent.subject,
-          description: generatedContent.preview,
+          name: subject || generatedContent?.subject || "AI Template",
+          description: previewText || generatedContent?.preview || "Generated with AI",
           category: emailType,
           htmlContent: generatedTemplate,
         }),
       });
 
       if (res.ok) {
+        toast({ title: "Template saved", description: "Your email template is now available in the library." });
         setError(null);
-        // Reset
         setPrompt("");
         setGeneratedContent(null);
         setGeneratedTemplate(null);
+        setSubject("");
+        setPreviewText("");
+        setCampaignName("");
+        setSelectedGroupIds([]);
         setStep("content");
+        await fetchSavedTemplates();
       }
     } catch (err) {
+      console.error(err);
       setError("Failed to save template");
+    }
+  }
+
+  function wrapPlainBodyHtml(content: GeneratedEmail | null) {
+    if (!content) {
+      return "<div style='color:#6b7280;padding:20px;'>No preview available</div>";
+    }
+
+    const bodyHtml = content.body
+      .split("\n")
+      .map((line) => `<p style=\"margin: 0 0 16px; line-height:1.6;\">${line}</p>`)
+      .join("");
+
+    return `
+      <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px;">
+        <div style="margin-bottom: 24px;">
+          ${bodyHtml}
+        </div>
+        <div style="text-align: center; margin-top: 30px;">
+          <a href="${content.ctaUrl || '#'}" style="background: ${brandColor}; color: #fff; padding: 12px 28px; text-decoration: none; border-radius: 8px; display: inline-block;">${content.ctaText || 'Learn More'}</a>
+        </div>
+      </div>
+    `;
+  }
+
+  async function handleCreateCampaign(sendNow: boolean) {
+    if (!campaignName.trim() || !subject.trim() || selectedGroupIds.length === 0) {
+      toast({
+        title: "Missing campaign info",
+        description: "Provide a campaign name, subject, and select at least one audience group.",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    if (!generatedTemplate && !generatedContent) {
+      toast({
+        title: "No email content",
+        description: "Generate email content and template before creating a campaign.",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    const htmlContent = generatedTemplate || wrapPlainBodyHtml(generatedContent);
+    setCreatingCampaign(true);
+    setSendingCampaign(sendNow);
+
+    try {
+      const res = await fetch("/api/email-campaigns", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          name: campaignName,
+          subject,
+          previewText,
+          htmlContent,
+        }),
+      });
+
+      if (!res.ok) {
+        const data = await res.json();
+        throw new Error(data.error || "Failed to create campaign");
+      }
+
+      const data = await res.json();
+
+      if (selectedGroupIds.length > 0) {
+        const attachRes = await fetch(`/api/email-campaigns/${data.id}/attach-groups`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ groupIds: selectedGroupIds }),
+        });
+
+        if (!attachRes.ok) {
+          const attachData = await attachRes.json();
+          throw new Error(attachData.error || "Failed to attach audience groups");
+        }
+      }
+
+      if (sendNow) {
+        const sendRes = await fetch(`/api/email-campaigns/${data.id}/send`, {
+          method: "POST",
+        });
+
+        if (!sendRes.ok) {
+          const sendData = await sendRes.json();
+          throw new Error(sendData.error || "Failed to send campaign");
+        }
+
+        toast({
+          title: "Campaign sent",
+          description: "Your campaign was created and is sending to selected audiences.",
+        });
+      } else {
+        toast({
+          title: "Campaign created",
+          description: "Your campaign draft is saved and ready in Email Campaigns.",
+        });
+      }
+
+      setPrompt("");
+      setGeneratedContent(null);
+      setGeneratedTemplate(null);
+      setSubject("");
+      setPreviewText("");
+      setCampaignName("");
+      setSelectedGroupIds([]);
+      setStep("content");
+      await fetchSavedTemplates();
+    } catch (err) {
+      console.error(err);
+      toast({
+        title: "Action failed",
+        description: err instanceof Error ? err.message : "Could not complete campaign creation.",
+        variant: "destructive",
+      });
+    } finally {
+      setCreatingCampaign(false);
+      setSendingCampaign(false);
     }
   }
 
@@ -113,13 +284,20 @@ export default function AIEmailStudio() {
     <div className="max-w-6xl space-y-6">
       {/* Header */}
       <div className="bg-gradient-to-r from-violet-500 to-purple-600 rounded-2xl p-8 text-white">
-        <div className="flex items-center gap-3 mb-2">
-          <HiSparkles className="text-3xl" />
-          <h1 className="text-3xl font-black" style={{ fontFamily: "Outfit, sans-serif" }}>
-            AI Email Studio
-          </h1>
+        <div className="flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
+          <div>
+            <div className="flex items-center gap-3 mb-2">
+              <HiSparkles className="text-3xl" />
+              <h1 className="text-3xl font-black" style={{ fontFamily: "Outfit, sans-serif" }}>
+                AI Email Studio
+              </h1>
+            </div>
+            <p className="text-white/80">Generate email content and templates, then send campaigns to audiences from one place.</p>
+          </div>
+          <Link href="/email-campaigns" className="inline-flex items-center gap-2 rounded-2xl border border-white/30 bg-white/10 px-4 py-3 text-sm font-semibold text-white hover:bg-white/20 transition">
+            <HiMail /> Open Email Campaigns
+          </Link>
         </div>
-        <p className="text-white/80">Generate beautiful emails with AI-powered content and templates</p>
       </div>
 
       {/* Steps */}
@@ -163,13 +341,25 @@ export default function AIEmailStudio() {
         <div className="bg-white rounded-2xl border border-gray-100 p-8 space-y-6">
           <h2 className="text-2xl font-bold">Step 1: Generate Email Content</h2>
 
+          <div className="rounded-2xl border border-violet-100 bg-violet-50 p-4">
+            <div className="flex items-center justify-between gap-4">
+              <div>
+                <p className="text-sm font-semibold text-violet-900">Unified Email Studio</p>
+                <p className="text-sm text-violet-700">Create AI email copy, turn it into a template, and send campaigns from the same workflow.</p>
+              </div>
+              <Link href="/email-campaigns" className="rounded-full border border-white bg-white/90 px-4 py-2 text-sm font-semibold text-violet-700 hover:bg-violet-100 transition">
+                Open Campaigns
+              </Link>
+            </div>
+          </div>
+
           <div className="grid grid-cols-2 gap-6">
             <div>
               <label className="block text-sm font-semibold mb-2">Email Type</label>
               <select
                 value={emailType}
                 onChange={(e) => setEmailType(e.target.value as EmailType)}
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-violet-400"
+                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-violet-400 text-black"
               >
                 <option value="NEWSLETTER">Newsletter</option>
                 <option value="EVENT">Event Invitation</option>
@@ -184,7 +374,7 @@ export default function AIEmailStudio() {
               <select
                 value={tone}
                 onChange={(e) => setTone(e.target.value as Tone)}
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-violet-400"
+                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-violet-400 text-black"
               >
                 <option value="Professional">Professional</option>
                 <option value="Casual">Casual</option>
@@ -201,7 +391,7 @@ export default function AIEmailStudio() {
               onChange={(e) => setPrompt(e.target.value)}
               placeholder="e.g., 'Tell customers about our new summer collection with a 20% discount, emphasize free shipping, and encourage them to shop now'"
               rows={5}
-              className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:border-violet-400 resize-none"
+              className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:border-violet-400 resize-none text-black"
             />
           </div>
 
@@ -248,7 +438,7 @@ export default function AIEmailStudio() {
                 type="text"
                 value={brandColor}
                 onChange={(e) => setBrandColor(e.target.value)}
-                className="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-violet-400 font-mono text-sm"
+                className="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-violet-400 font-mono text-sm text-black"
               />
             </div>
           </div>
@@ -264,46 +454,133 @@ export default function AIEmailStudio() {
       )}
 
       {/* Step 3: Preview & Save */}
-      {step === "preview" && generatedContent && generatedTemplate && (
+      {step === "preview" && (generatedTemplate || generatedContent) && (
         <div className="space-y-6">
           <div className="bg-white rounded-2xl border border-gray-100 p-8">
-            <h2 className="text-2xl font-bold mb-6">Step 3: Preview & Save</h2>
+            <h2 className="text-2xl font-bold mb-6">Step 3: Preview & Send</h2>
 
-            {/* Email Details */}
-            <div className="bg-gray-50 rounded-xl p-6 mb-6 space-y-4">
-              <div>
-                <p className="text-xs text-gray-600 font-semibold uppercase mb-1">Subject</p>
-                <p className="font-semibold text-gray-900">{generatedContent.subject}</p>
+            <div className="grid gap-4 lg:grid-cols-[2fr_1fr]">
+              <div className="space-y-6">
+                <div className="bg-gray-50 rounded-xl p-6 space-y-4">
+                  <div>
+                    <label className="block text-sm font-semibold mb-2">Campaign Name</label>
+                    <input
+                      value={campaignName}
+                      onChange={(e) => setCampaignName(e.target.value)}
+                      className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:border-violet-400 text-black"
+                      placeholder="e.g. Spring Launch Campaign"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-semibold mb-2">Subject</label>
+                    <input
+                      value={subject}
+                      onChange={(e) => setSubject(e.target.value)}
+                      className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:border-violet-400 text-black"
+                      placeholder="Email subject line"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-semibold mb-2">Preview Text</label>
+                    <input
+                      value={previewText}
+                      onChange={(e) => setPreviewText(e.target.value)}
+                      className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:border-violet-400 text-black"
+                      placeholder="Short preview text for inbox" 
+                    />
+                  </div>
+                </div>
+
+                <div className="bg-violet-50 border border-violet-100 rounded-2xl p-6 space-y-4">
+                  <div className="flex items-center justify-between gap-2">
+                    <div>
+                      <p className="text-sm font-semibold text-violet-900">Audience groups</p>
+                      <p className="text-xs text-violet-700">Choose the groups to attach this campaign to.</p>
+                    </div>
+                    <span className="rounded-full bg-white px-3 py-1 text-xs font-semibold text-violet-700">{selectedGroupIds.length} selected</span>
+                  </div>
+
+                  <div className="grid gap-2">
+                    {groups.length === 0 ? (
+                      <div className="rounded-xl border border-dashed border-violet-200 bg-white p-4 text-sm text-violet-600">No audience groups yet. Create groups from the Audience page first.</div>
+                    ) : (
+                      groups.map((group) => (
+                        <button
+                          key={group.id}
+                          onClick={() => {
+                            setSelectedGroupIds((prev) =>
+                              prev.includes(group.id) ? prev.filter((item) => item !== group.id) : [...prev, group.id]
+                            );
+                          }}
+                          className={`w-full rounded-2xl border p-4 text-left transition ${
+                            selectedGroupIds.includes(group.id)
+                              ? "border-violet-500 bg-violet-50"
+                              : "border-white bg-white hover:border-violet-200"
+                          }`}
+                        >
+                          <div className="flex items-center justify-between gap-4">
+                            <div>
+                              <p className="font-semibold text-gray-900">{group.name}</p>
+                              <p className="text-xs text-gray-600">{group._count?.contacts || 0} contact{(group._count?.contacts || 0) !== 1 ? "s" : ""}</p>
+                            </div>
+                            {selectedGroupIds.includes(group.id) && <HiCheckCircle className="text-violet-600" />}
+                          </div>
+                        </button>
+                      ))
+                    )}
+                  </div>
+                </div>
               </div>
-              <div>
-                <p className="text-xs text-gray-600 font-semibold uppercase mb-1">Preview</p>
-                <p className="text-sm text-gray-700">{generatedContent.preview}</p>
+
+              <div className="space-y-6">
+                <div className="bg-gray-50 rounded-xl p-6 mb-6 space-y-4">
+                  <div>
+                    <p className="text-xs text-gray-500 font-semibold uppercase mb-2">Email Preview</p>
+                    <p className="text-sm text-gray-700">Subject: {subject || generatedContent?.subject}</p>
+                    <p className="text-sm text-gray-700">Preview text: {previewText || generatedContent?.preview}</p>
+                  </div>
+                  <div className="border-2 border-gray-200 rounded-xl overflow-hidden bg-gray-100">
+                    <iframe
+                      srcDoc={generatedTemplate || wrapPlainBodyHtml(generatedContent)}
+                      className="w-full h-96"
+                      title="Email Preview"
+                      sandbox="allow-scripts"
+                    />
+                  </div>
+                </div>
               </div>
             </div>
 
-            {/* Template Preview */}
-            <div className="border-2 border-gray-200 rounded-xl overflow-hidden bg-gray-100">
-              <iframe
-                srcDoc={generatedTemplate}
-                className="w-full h-96"
-                title="Email Preview"
-                sandbox={{ allow: [] }}
-              />
-            </div>
-
-            <div className="flex gap-4 mt-6">
+            <div className="grid gap-3 lg:grid-cols-3">
               <button
                 onClick={() => setStep("content")}
-                className="flex-1 border border-gray-300 text-gray-700 font-semibold py-3 rounded-lg hover:bg-gray-50 transition-all"
+                className="rounded-xl border border-gray-300 bg-white py-3 text-sm font-semibold text-gray-700 hover:bg-gray-50 transition"
               >
                 Start Over
               </button>
               <button
                 onClick={saveAsTemplate}
-                className="flex-1 bg-green-600 hover:bg-green-700 text-white font-semibold py-3 rounded-lg transition-all flex items-center justify-center gap-2"
+                disabled={!generatedTemplate}
+                className="rounded-xl bg-green-600 py-3 text-sm font-semibold text-white hover:bg-green-700 transition disabled:opacity-50"
               >
                 <HiCheckCircle /> Save as Template
               </button>
+              <div className="lg:col-span-2 grid gap-3 sm:grid-cols-2">
+                <button
+                  onClick={() => handleCreateCampaign(false)}
+                  disabled={creatingCampaign || !campaignName || !subject || selectedGroupIds.length === 0}
+                  className="rounded-xl bg-violet-600 py-3 text-sm font-semibold text-white hover:bg-violet-700 transition disabled:opacity-50"
+                >
+                  <HiPlus /> Create Campaign Draft
+                </button>
+                <button
+                  onClick={() => handleCreateCampaign(true)}
+                  disabled={sendingCampaign || !campaignName || !subject || selectedGroupIds.length === 0}
+                  className="rounded-xl bg-fuchsia-600 py-3 text-sm font-semibold text-white hover:bg-fuchsia-700 transition disabled:opacity-50"
+                >
+                  <HiPaperAirplane /> Create & Send Campaign
+                </button>
+              </div>
             </div>
           </div>
         </div>

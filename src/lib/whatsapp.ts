@@ -16,7 +16,7 @@ export async function sendWhatsAppTemplate({
   languageCode?: string;
   components?: unknown[];
 }) {
-  const config = await prisma.whatsappConfig.findUnique({
+  const config = await prisma.whatsAppConfig.findUnique({
     where: { userId },
   });
 

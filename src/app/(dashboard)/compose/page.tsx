@@ -350,7 +350,7 @@ function ComposeContent() {
               placeholder="Describe your content idea... e.g. 'Announce our new product launch with exciting features and a 20% launch discount'"
               value={prompt}
               onChange={(e) => setPrompt(e.target.value)}
-              className="min-h-24 rounded-xl border-gray-200 focus:border-violet-400 resize-none"
+              className="min-h-24 rounded-xl border-gray-200 focus:border-violet-400 resize-none text-foreground"
             />
           </div>
 
@@ -360,7 +360,7 @@ function ComposeContent() {
               placeholder="Write your message (or generate then refine with AI)... e.g. 'Hello {{firstName}}, check out our new arrivals!'"
               value={message}
               onChange={(e) => setMessage(e.target.value)}
-              className="min-h-28 rounded-xl border-gray-200 focus:border-violet-400 resize-none"
+              className="min-h-28 rounded-xl border-gray-200 focus:border-violet-400 resize-none text-foreground"
             />
             <p className="text-[10px] text-gray-400 mt-1">
               Available tags: {"{{firstName}}"}, {"{{lastName}}"}, {"{{name}}"}, {"{{company}}"}, {"{{email}}"}
@@ -387,7 +387,7 @@ function ComposeContent() {
             <div>
               <Label className="text-sm font-semibold text-gray-700 mb-2 block">Content Tone</Label>
               <Select value={tone} onValueChange={setTone}>
-                <SelectTrigger className="rounded-xl border-gray-200 h-11">
+                <SelectTrigger className="rounded-xl border-gray-200 h-11 text-foreground">
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent>
@@ -469,81 +469,7 @@ function ComposeContent() {
         </div>
       </div>
 
-      <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-6 space-y-4">
-        <h3 className="font-bold text-gray-900" style={{ fontFamily: "Outfit, sans-serif" }}>Recipients & Delivery</h3>
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-          <div>
-            <Label className="text-sm font-semibold text-gray-700 mb-2 block">Category Channel</Label>
-            <Select value={channel} onValueChange={(v: "EMAIL" | "WHATSAPP") => { setChannel(v); setSelectedContactIds([]); }}>
-              <SelectTrigger className="rounded-xl border-gray-200 h-11">
-                <SelectValue />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="EMAIL">Email Category</SelectItem>
-                <SelectItem value="WHATSAPP">WhatsApp Category</SelectItem>
-              </SelectContent>
-            </Select>
-          </div>
-        </div>
-
-        {channel === "EMAIL" && (
-          <div className="mt-2">
-            <Label className="text-sm font-semibold text-gray-700 mb-2 block">Email Subject</Label>
-            <Input
-              placeholder="Enter email subject..."
-              value={subject}
-              onChange={(e) => setSubject(e.target.value)}
-              className="rounded-xl border-gray-200 h-11"
-            />
-          </div>
-        )}
-
-        <div>
-          <Label className="text-sm font-semibold text-gray-700 mb-2 block">Audience Categories</Label>
-          <div className="flex flex-wrap gap-2">
-            {groups.map((group) => (
-              <button
-                key={group.id}
-                type="button"
-                onClick={() => toggleArrayValue(group.id, setSelectedGroupIds)}
-                className={`px-3 py-1.5 rounded-lg text-xs border ${
-                  selectedGroupIds.includes(group.id)
-                    ? "border-violet-500 bg-violet-50 text-violet-700"
-                    : "border-gray-200 text-gray-600"
-                }`}
-              >
-                {group.name} ({group.contactCount})
-              </button>
-            ))}
-          </div>
-        </div>
-        <div>
-          <Label className="text-sm font-semibold text-gray-700 mb-2 block">
-            {channel === "WHATSAPP" ? "Individual WhatsApp Contacts" : "Individual Email Contacts"}
-          </Label>
-          <div className="max-h-44 overflow-auto border border-gray-100 rounded-xl p-3 grid grid-cols-1 md:grid-cols-2 gap-2">
-            {(channel === "WHATSAPP" ? whatsappContacts : contacts).map((contact) => {
-              const label = `${contact.firstName || ""} ${contact.lastName || ""}`.trim() || contact.email;
-              return (
-                <label key={contact.id} className="flex items-center gap-2 text-sm text-gray-700">
-                  <input
-                    type="checkbox"
-                    checked={selectedContactIds.includes(contact.id)}
-                    onChange={() => toggleArrayValue(contact.id, setSelectedContactIds)}
-                  />
-                  <span className="truncate">{label} - {channel === "WHATSAPP" ? contact.phone : contact.email}</span>
-                </label>
-              );
-            })}
-          </div>
-        </div>
-        {sendResult && <p className="text-sm text-gray-600 mt-4">{sendResult}</p>}
-        <div className="flex gap-3 pt-4">
-          <Button onClick={sendNow} disabled={sending} className="brand-gradient-bg text-white border-0 hover:opacity-90 px-8 h-11 rounded-xl font-semibold">
-            {sending ? "Sending..." : `Send ${channel === "WHATSAPP" ? "WhatsApp" : "Email"} Message`}
-          </Button>
-        </div>
-      </div>
+      
 
       <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-6">
         <div className="flex items-center justify-between mb-4">
@@ -554,7 +480,7 @@ function ComposeContent() {
           value={message}
           onChange={(e) => setMessage(e.target.value)}
           placeholder="Finalize your generated content here before publishing..."
-          className="min-h-40 rounded-xl border-gray-200 focus:border-violet-400 shadow-inner bg-gray-50/10"
+          className="min-h-40 rounded-xl border-gray-200 focus:border-violet-400 shadow-inner bg-gray-50/10 text-black"
         />
         <p className="text-[10px] text-gray-400 mt-2">
           Tip: You can edit this text directly. All previews below will update in real-time.
@@ -659,7 +585,7 @@ function ComposeContent() {
                   type="date"
                   value={scheduleDate}
                   onChange={(e) => setScheduleDate(e.target.value)}
-                  className="rounded-xl h-11"
+                  className="rounded-xl h-11 text-black"
                 />
               </div>
               <div>
@@ -668,7 +594,7 @@ function ComposeContent() {
                   type="time"
                   value={scheduleTime}
                   onChange={(e) => setScheduleTime(e.target.value)}
-                  className="rounded-xl h-11"
+                  className="rounded-xl h-11 text-black"
                 />
               </div>
             </div>

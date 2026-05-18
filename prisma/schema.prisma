@@ -248,6 +248,7 @@ model SocialAccount {
   userId           String
   platform         Platform
   accountName      String
+  profileImage     String?
   accountId        String?
   accessToken      String?
   refreshToken     String?

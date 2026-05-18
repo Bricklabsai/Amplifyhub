@@ -1,5 +1,5 @@
 "use client";
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 import { signIn } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
@@ -9,6 +9,7 @@ import { Label } from "@/components/ui/label";
 import { HiEye, HiEyeOff, HiMail, HiLockClosed } from "react-icons/hi";
 import { FaFacebook, FaInstagram, FaLinkedin } from "react-icons/fa";
 import { FaXTwitter } from "react-icons/fa6";
+import Script from "next/script";
 
 const SOCIAL_ICONS = [
   { Icon: FaFacebook, color: "#1877F2", className: "top-[10%] left-[8%]" },
@@ -19,28 +20,95 @@ const SOCIAL_ICONS = [
 
 export default function LoginPage() {
   const router = useRouter();
+  const turnstileRef = useRef<HTMLDivElement>(null);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPwd, setShowPwd] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+  const [turnstileToken, setTurnstileToken] = useState<string | null>(null);
+  const [turnstileReady, setTurnstileReady] = useState(false);
+
+  useEffect(() => {
+    const checkTurnstile = setInterval(() => {
+      if (typeof window !== "undefined" && (window as any).turnstile) {
+        setTurnstileReady(true);
+        clearInterval(checkTurnstile);
+      }
+    }, 100);
+
+    return () => clearInterval(checkTurnstile);
+  }, []);
+
+  useEffect(() => {
+    if (turnstileReady && turnstileRef.current && !(window as any).turnstile?.isInitialized) {
+      (window as any).turnstile?.render(`#turnstile-widget`, {
+        sitekey: process.env.NEXT_PUBLIC_CLOUDFLARE_TURNSTILE_SITE_KEY,
+        theme: "light",
+        callback: (token: string) => {
+          setTurnstileToken(token);
+        },
+        "error-callback": () => {
+          setError("Failed to load security challenge. Please refresh the page.");
+        },
+      });
+      (window as any).turnstile.isInitialized = true;
+    }
+  }, [turnstileReady]);
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     setLoading(true);
     setError("");
-    const res = await signIn("credentials", { email, password, redirect: false });
-    if (res?.error) {
-      setError("Invalid email or password");
+
+    if (!turnstileToken) {
+      setError("Please complete the security verification");
       setLoading(false);
-    } else {
-      router.push("/dashboard");
+      return;
+    }
+
+    try {
+      const verifyRes = await fetch("/api/auth/verify-turnstile", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ token: turnstileToken }),
+      });
+
+      if (!verifyRes.ok) {
+        setError("Security verification failed. Please try again.");
+        (window as any).turnstile?.reset();
+        setTurnstileToken(null);
+        setLoading(false);
+        return;
+      }
+
+      const res = await signIn("credentials", { email, password, redirect: false });
+      if (res?.error) {
+        setError("Invalid email or password");
+        (window as any).turnstile?.reset();
+        setTurnstileToken(null);
+      } else {
+        router.push("/dashboard");
+      }
+    } catch (err) {
+      setError("An error occurred. Please try again.");
+      (window as any).turnstile?.reset();
+      setTurnstileToken(null);
+    } finally {
+      setLoading(false);
     }
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-violet-50 to-pink-50 flex items-center justify-center p-4 relative overflow-hidden">
-      {SOCIAL_ICONS.map(({ Icon, color, className }) => (
+    <>
+      <Script
+        src="https://challenges.cloudflare.com/turnstile/v0/api.js"
+        async
+        defer
+        onLoad={() => setTurnstileReady(true)}
+      />
+      <div className="min-h-screen bg-gradient-to-br from-blue-50 via-violet-50 to-pink-50 flex items-center justify-center p-4 relative overflow-hidden">
+        {SOCIAL_ICONS.map(({ Icon, color, className }) => (
         <div
           key={color}
           className={`absolute ${className} w-16 h-16 rounded-2xl flex items-center justify-center`}
@@ -121,10 +189,14 @@ export default function LoginPage() {
                 </div>
               </div>
 
+              <div className="flex justify-center p-4 bg-gray-50 rounded-xl border border-gray-200">
+                <div ref={turnstileRef} id="turnstile-widget" />
+              </div>
+
               <Button
                 type="submit"
-                disabled={loading}
-                className="w-full h-11 bg-gradient-to-r from-blue-600 via-violet-600 to-pink-600 hover:opacity-90 text-white rounded-xl font-semibold text-sm transition-all shadow-lg shadow-violet-200"
+                disabled={loading || !turnstileToken}
+                className="w-full h-11 bg-gradient-to-r from-blue-600 via-violet-600 to-pink-600 hover:opacity-90 text-white rounded-xl font-semibold text-sm transition-all shadow-lg shadow-violet-200 disabled:opacity-50"
               >
                 {loading ? (
                   <span className="flex items-center justify-center gap-2">
@@ -165,5 +237,6 @@ export default function LoginPage() {
         </div>
       </div>
     </div>
+    </>
   );
 }

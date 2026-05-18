@@ -32,11 +32,7 @@ export class LinkedInPublisher implements PlatformPublisher {
         for (const mediaUrl of mediaUrls) {
           try {
             const asset = await uploadLinkedInImage(token, mediaUrl, author);
-            mediaAssets.push({
-              media: asset,
-              status: "READY",
-              title: { text: "Image" },
-            });
+            mediaAssets.push(asset);
           } catch (err) {
             return {
               success: false,
@@ -48,65 +44,79 @@ export class LinkedInPublisher implements PlatformPublisher {
 
         postData = {
           author,
+          commentary: content,
+          visibility: "PUBLIC",
+          distribution: {
+            feedDistribution: "MAIN_FEED",
+            targetEntities: [],
+            thirdPartyDistributionChannels: [],
+          },
           lifecycleState: "PUBLISHED",
-          specificContent: {
-            "com.linkedin.ugc.ShareContent": {
-              shareCommentary: {
-                text: content,
-              },
-              shareMediaCategory: "IMAGE",
-              media: mediaAssets,
-            },
-          },
-          visibility: {
-            "com.linkedin.ugc.MemberNetworkVisibility": "PUBLIC",
-          },
         };
+
+        if (mediaAssets.length === 1) {
+          (postData as any).content = {
+            media: {
+              id: mediaAssets[0],
+            },
+          };
+        } else {
+          (postData as any).content = {
+            multiImage: {
+              images: mediaAssets.map((id) => ({ id })),
+            },
+          };
+        }
       } else {
         postData = {
           author,
+          commentary: content,
+          visibility: "PUBLIC",
+          distribution: {
+            feedDistribution: "MAIN_FEED",
+            targetEntities: [],
+            thirdPartyDistributionChannels: [],
+          },
           lifecycleState: "PUBLISHED",
-          specificContent: {
-            "com.linkedin.ugc.ShareContent": {
-              shareCommentary: {
-                text: content,
-              },
-              shareMediaCategory: "NONE",
-            },
-          },
-          visibility: {
-            "com.linkedin.ugc.MemberNetworkVisibility": "PUBLIC",
-          },
         };
       }
 
       const res = await fetchWithRetry(
-        "https://api.linkedin.com/rest/ugcPosts",
+        "https://api.linkedin.com/rest/posts",
         {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
             Authorization: `Bearer ${token}`,
-            "Linkedin-Version": "202510",
+            "LinkedIn-Version": "202510",
             "X-Restli-Protocol-Version": "2.0.0",
           },
           body: JSON.stringify(postData),
         }
       );
 
-      const data = await res.json();
-
       if (!res.ok) {
+        const errorText = await res.text();
+        let errorMsg = "LinkedIn API error";
+        try {
+          const errorData = JSON.parse(errorText);
+          errorMsg = errorData.message || errorData.error || errorMsg;
+        } catch (e) {
+          errorMsg = `${res.status} ${res.statusText}: ${errorText.substring(0, 100)}`;
+        }
+        
         return {
           success: false,
-          error: data.message || "LinkedIn API error",
+          error: errorMsg,
           retryable: res.status === 429 || res.status === 503,
         };
       }
 
+      const externalId = res.headers.get("x-restli-id") || "";
+      
       return {
         success: true,
-        externalId: data.id,
+        externalId: externalId,
         platformPostId: account.id,
       };
     } catch (error) {

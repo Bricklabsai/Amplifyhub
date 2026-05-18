@@ -7,7 +7,7 @@ import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
-import { HiPlus, HiArrowPath, HiTrash, HiSparkles } from "react-icons/hi";
+import { HiPlus, HiArrowUp, HiTrash, HiSparkles } from "react-icons/hi";
 import { formatDate } from "@/lib/utils";
 
 const FREQUENCIES = [
@@ -48,6 +48,7 @@ type ScheduledCampaign = {
 type EmailTemplate = {
   id: string;
   name: string;
+  htmlContent?: string;
 };
 
 export default function ScheduledCampaignsPage() {
@@ -140,7 +141,7 @@ export default function ScheduledCampaignsPage() {
     setForm((prev) => ({
       ...prev,
       templateId,
-      htmlContent: template ? template.htmlContent : prev.htmlContent,
+      htmlContent: template?.htmlContent || prev.htmlContent,
     }));
   }
 
@@ -164,17 +165,17 @@ export default function ScheduledCampaignsPage() {
             <div className="space-y-4 py-4">
               <div>
                 <Label className="text-sm font-semibold text-gray-700 mb-2 block">Schedule Name</Label>
-                <Input value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })} className="rounded-xl h-11" placeholder="Weekly newsletter" />
+                <Input value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })} className="rounded-xl h-11 text-black" placeholder="Weekly newsletter" />
               </div>
               <div>
                 <Label className="text-sm font-semibold text-gray-700 mb-2 block">Subject</Label>
-                <Input value={form.subject} onChange={(e) => setForm({ ...form, subject: e.target.value })} className="rounded-xl h-11" placeholder="Your weekly update" />
+                <Input value={form.subject} onChange={(e) => setForm({ ...form, subject: e.target.value })} className="rounded-xl h-11 text-black" placeholder="Your weekly update" />
               </div>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
                 <div>
                   <Label className="text-sm font-semibold text-gray-700 mb-2 block">Frequency</Label>
                   <Select value={form.frequency} onValueChange={(value) => setForm({ ...form, frequency: value })}>
-                    <SelectTrigger className="rounded-xl h-11">
+                    <SelectTrigger className="rounded-xl h-11 text-black">
                       <SelectValue placeholder="Select frequency" />
                     </SelectTrigger>
                     <SelectContent>
@@ -192,16 +193,16 @@ export default function ScheduledCampaignsPage() {
                     type="datetime-local"
                     value={form.nextRunAt}
                     onChange={(e) => setForm({ ...form, nextRunAt: e.target.value })}
-                    className="rounded-xl h-11"
+                    className="rounded-xl h-11 text-black"
                   />
                 </div>
               </div>
               <div>
                 <Label className="text-sm font-semibold text-gray-700 mb-2 block">Automation Type</Label>
                 <Select value={form.sourceType} onValueChange={(value) => setForm({ ...form, sourceType: value })}>
-                  <SelectTrigger className="rounded-xl h-11">
-                    <SelectValue placeholder="Select automation type" />
-                  </SelectTrigger>
+                    <SelectTrigger className="rounded-xl h-11 text-black">
+                      <SelectValue placeholder="Select automation type" />
+                    </SelectTrigger>
                   <SelectContent>
                     {SOURCE_TYPES.map((option) => (
                       <SelectItem key={option.value} value={option.value}>
@@ -214,9 +215,9 @@ export default function ScheduledCampaignsPage() {
               <div>
                 <Label className="text-sm font-semibold text-gray-700 mb-2 block">Pick a saved template (optional)</Label>
                 <Select value={form.templateId} onValueChange={selectTemplate}>
-                  <SelectTrigger className="rounded-xl h-11">
-                    <SelectValue placeholder="Choose a template" />
-                  </SelectTrigger>
+                    <SelectTrigger className="rounded-xl h-11 text-black">
+                      <SelectValue placeholder="Choose a template" />
+                    </SelectTrigger>
                   <SelectContent>
                     <SelectItem value="none">No template</SelectItem>
                     {templates.map((template) => (
@@ -230,11 +231,11 @@ export default function ScheduledCampaignsPage() {
                 <Textarea
                   value={form.htmlContent}
                   onChange={(e) => setForm({ ...form, htmlContent: e.target.value })}
-                  className="min-h-[220px] rounded-2xl"
+                  className="min-h-[220px] rounded-2xl text-black"
                   placeholder="Enter the email body HTML or choose a template above"
                 />
                 {form.sourceType === "latest_posts" && (
-                  <p className="text-xs text-gray-500 mt-2">Use <code className="rounded bg-gray-100 px-1 py-0.5">{{latest_posts}}</code> in your content to inject the latest posts.</p>
+                  <p className="text-xs text-gray-500 mt-2">Use <code className="rounded bg-gray-100 px-1 py-0.5">{'{{latest_posts}}'}</code> in your content to inject the latest posts.</p>
                 )}
               </div>
               <Button onClick={createSchedule} disabled={creating || !form.name || !form.subject || !form.htmlContent} className="brand-gradient-bg text-white rounded-xl h-11 w-full">

@@ -104,16 +104,16 @@ export default function EmailTemplatesPage() {
             <div className="space-y-4 py-4">
               <div>
                 <Label className="text-sm font-semibold text-gray-700 mb-2 block">Template Name</Label>
-                <Input value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })} placeholder="Monthly newsletter" className="rounded-xl h-11" />
+                 <Input value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })} placeholder="Monthly newsletter" className="rounded-xl h-11 text-black" />
               </div>
               <div>
                 <Label className="text-sm font-semibold text-gray-700 mb-2 block">Description</Label>
-                <Input value={form.description} onChange={(e) => setForm({ ...form, description: e.target.value })} placeholder="A short internal description" className="rounded-xl h-11" />
+                 <Input value={form.description} onChange={(e) => setForm({ ...form, description: e.target.value })} placeholder="A short internal description" className="rounded-xl h-11 text-black" />
               </div>
               <div>
                 <Label className="text-sm font-semibold text-gray-700 mb-2 block">Category</Label>
                 <Select value={form.category} onValueChange={(value) => setForm({ ...form, category: value })}>
-                  <SelectTrigger className="rounded-xl h-11">
+                  <SelectTrigger className="rounded-xl h-11 text-black">
                     <SelectValue placeholder="Choose category" />
                   </SelectTrigger>
                   <SelectContent>
@@ -127,7 +127,7 @@ export default function EmailTemplatesPage() {
               </div>
               <div>
                 <Label className="text-sm font-semibold text-gray-700 mb-2 block">HTML Content</Label>
-                <Textarea value={form.htmlContent} onChange={(e) => setForm({ ...form, htmlContent: e.target.value })} className="min-h-[220px] rounded-2xl" placeholder="Paste or type your email HTML here" />
+                <Textarea value={form.htmlContent} onChange={(e) => setForm({ ...form, htmlContent: e.target.value })} className="min-h-[220px] rounded-2xl text-black" placeholder="Paste or type your email HTML here" />
               </div>
               <Button onClick={createTemplate} disabled={creating || !form.name || !form.htmlContent} className="brand-gradient-bg text-white rounded-xl h-11 w-full">
                 {creating ? "Saving template..." : "Save Template"}

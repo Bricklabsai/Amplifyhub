@@ -169,6 +169,21 @@ export default function Step2Design({ form, setForm }: Step2DesignProps) {
         </div>
       )}
 
+      <div className="rounded-2xl border border-violet-100 bg-violet-50 p-4 mb-4">
+        <div className="flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
+          <div>
+            <p className="text-sm font-semibold text-violet-900">Need richer AI content or a full campaign?</p>
+            <p className="text-xs text-violet-700">Open the AI Email Composer to generate content, templates, and create an audience campaign from a single workflow.</p>
+          </div>
+          <a
+            href="/email-composer"
+            className="inline-flex items-center gap-2 rounded-full border border-white bg-white/90 px-4 py-2 text-xs font-semibold text-violet-700 hover:bg-violet-100 transition"
+          >
+            <HiSparkles /> Open AI Composer
+          </a>
+        </div>
+      </div>
+
       {/* Template Gallery */}
       <div>
         <Label className="text-sm font-semibold text-gray-700 mb-3 block">Quick Starter Templates</Label>

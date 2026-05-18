@@ -126,11 +126,11 @@ export default function AudiencePage() {
             <div className="space-y-4 pt-2">
               <div>
                 <Label className="text-sm font-semibold text-gray-700 mb-2 block">Group Name</Label>
-                <Input value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })} className="rounded-xl h-11" placeholder="Newsletter Subscribers" />
+                 <Input value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })} className="rounded-xl h-11 text-black" placeholder="Newsletter Subscribers" />
               </div>
               <div>
                 <Label className="text-sm font-semibold text-gray-700 mb-2 block">Description</Label>
-                <Input value={form.description} onChange={(e) => setForm({ ...form, description: e.target.value })} className="rounded-xl h-11" placeholder="Group description..." />
+                 <Input value={form.description} onChange={(e) => setForm({ ...form, description: e.target.value })} className="rounded-xl h-11 text-black" placeholder="Group description..." />
               </div>
               <Button onClick={create} disabled={!form.name} className="w-full brand-gradient-bg text-white border-0 hover:opacity-90 rounded-xl h-11 font-semibold">
                 Create Group

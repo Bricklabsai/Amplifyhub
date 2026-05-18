@@ -172,12 +172,12 @@ export default function PostsPage() {
         <div className="flex flex-col sm:flex-row items-start sm:items-center gap-3">
           <div className="relative flex-1 max-w-xs">
             <HiSearch className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
-            <Input
-              placeholder="Search posts..."
-              value={search}
-              onChange={(e) => setSearch(e.target.value)}
-              className="pl-9 h-10 rounded-xl border-gray-200 text-sm"
-            />
+             <Input
+               placeholder="Search posts..."
+               value={search}
+               onChange={(e) => setSearch(e.target.value)}
+               className="pl-9 h-10 rounded-xl border-gray-200 text-sm text-black"
+             />
           </div>
           <div className="flex flex-wrap gap-2">
             {STATUS_FILTERS.map((s) => (
@@ -334,18 +334,19 @@ export default function PostsPage() {
                   ))}
                 </div>
                 <div className="mt-2 flex items-center gap-2">
-                  <Input
-                    placeholder="Reply through the site..."
-                    value={replyDraft[comment.id] || ""}
-                    onChange={(e) => setReplyDraft((prev) => ({ ...prev, [comment.id]: e.target.value }))}
-                  />
+                   <Input
+                     placeholder="Reply through the site..."
+                     value={replyDraft[comment.id] || ""}
+                     onChange={(e) => setReplyDraft((prev) => ({ ...prev, [comment.id]: e.target.value }))}
+                     className="text-black"
+                   />
                   {socialAccounts.length > 0 && (
                     <select
                       value={replyAccountSelection[comment.id] || ""}
                       onChange={(e) =>
                         setReplyAccountSelection((prev) => ({ ...prev, [comment.id]: e.target.value }))
                       }
-                      className="px-2 py-1 text-sm border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                      className="px-2 py-1 text-sm border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-black"
                     >
                       <option value="">Select account...</option>
                       {socialAccounts.map((acc) => (
