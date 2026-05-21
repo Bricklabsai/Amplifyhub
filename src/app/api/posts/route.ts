@@ -93,7 +93,7 @@ export async function POST(req: NextRequest) {
             socialAccountId: account.id,
             platform: account.platform,
             content,
-            status: status === "PUBLISHED" ? "PUBLISHED" : "DRAFT",
+            status: status === "PUBLISHED" ? "PUBLISHED" : (status === "SCHEDULED" ? "SCHEDULED" : "DRAFT"),
           },
         });
       }

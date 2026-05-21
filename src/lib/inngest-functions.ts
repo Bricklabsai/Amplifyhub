@@ -1,6 +1,45 @@
 import { inngest } from "@/lib/inngest";
 import { prisma } from "@/lib/prisma";
 import { sendBulkEmails } from "@/lib/email";
+import { processScheduledPosts, processScheduledEmails } from "@/lib/services/schedulerService";
+
+/**
+ * Publishes scheduled social media posts
+ * Runs every minute to check for posts that need to be published
+ */
+export const publishScheduledPosts = inngest.createFunction(
+  { 
+    id: "publish-scheduled-posts", 
+    name: "Publish Scheduled Posts",
+    triggers: [{ cron: "* * * * *" }]
+  },
+  async ({ step }) => {
+    const results = await step.run("process-posts", async () => {
+      return await processScheduledPosts();
+    });
+
+    return results;
+  }
+);
+
+/**
+ * Runs scheduled email campaigns
+ * Runs every minute to check for campaigns that need to be run
+ */
+export const runScheduledCampaigns = inngest.createFunction(
+  { 
+    id: "run-scheduled-campaigns", 
+    name: "Run Scheduled Campaigns",
+    triggers: [{ cron: "* * * * *" }]
+  },
+  async ({ step }) => {
+    const results = await step.run("process-emails", async () => {
+      return await processScheduledEmails();
+    });
+
+    return results;
+  }
+);
 
 /**
  * Sends weekly newsletter automation

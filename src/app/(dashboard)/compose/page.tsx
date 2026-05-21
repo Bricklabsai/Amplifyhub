@@ -9,8 +9,9 @@ import { HiSparkles, HiRefresh, HiSave, HiUpload, HiPaperAirplane, HiEye, HiCale
 import { FaFacebook, FaInstagram, FaLinkedin, FaTiktok, FaYoutube, FaWhatsapp } from "react-icons/fa";
 import { FaXTwitter } from "react-icons/fa6";
 import Link from "next/link";
-import { useSearchParams } from "next/navigation";
+import { useSearchParams, useRouter } from "next/navigation";
 import { Suspense } from "react";
+import { useToast } from "@/hooks/use-toast";
 import {
   Dialog,
   DialogContent,
@@ -56,11 +57,13 @@ type SocialAccount = { id: string; platform: string; accountName: string; isActi
 
 function ComposeContent() {
   const searchParams = useSearchParams();
+  const router = useRouter();
+  const { toast } = useToast();
   const initialGroupId = searchParams.get("groupId");
   const [prompt, setPrompt] = useState("");
   const [message, setMessage] = useState("");
   const [subject, setSubject] = useState("");
-  const [selectedPlatforms, setSelectedPlatforms] = useState(["FACEBOOK", "TWITTER", "INSTAGRAM", "LINKEDIN"]);
+  const [selectedPlatforms, setSelectedPlatforms] = useState<string[]>([]);
   const [tone, setTone] = useState("professional");
   const [suggestions, setSuggestions] = useState<string[]>([]);
   const [loading, setLoading] = useState(false);
@@ -87,9 +90,64 @@ function ComposeContent() {
   const [scheduling, setScheduling] = useState(false);
 
   function togglePlatform(id: string) {
-    setSelectedPlatforms((prev) =>
-      prev.includes(id) ? prev.filter((p) => p !== id) : [...prev, id]
-    );
+    setSelectedPlatforms((prev) => {
+      const isSelecting = !prev.includes(id);
+      const next = isSelecting ? [...prev, id] : prev.filter((p) => p !== id);
+      
+      // Sync with publishAccountIds
+      if (isSelecting) {
+        const accountsToSelect = socialAccounts
+          .filter(acc => acc.platform.toUpperCase() === id)
+          .map(acc => acc.id);
+        
+        setPublishAccountIds(prevIds => {
+          const nextIds = [...prevIds];
+          accountsToSelect.forEach(accountId => {
+            if (!nextIds.includes(accountId)) nextIds.push(accountId);
+          });
+          return nextIds;
+        });
+      } else {
+        const accountsToDeselect = socialAccounts
+          .filter(acc => acc.platform.toUpperCase() === id)
+          .map(acc => acc.id);
+          
+        setPublishAccountIds(prevIds => prevIds.filter(pid => !accountsToDeselect.includes(pid)));
+      }
+      
+      return next;
+    });
+  }
+
+  function toggleAccount(accountId: string) {
+    const account = socialAccounts.find(a => a.id === accountId);
+    if (!account) return;
+
+    setPublishAccountIds((prev) => {
+      const isChecking = !prev.includes(accountId);
+      const next = isChecking ? [...prev, accountId] : prev.filter((id) => id !== accountId);
+      
+      // Sync with selectedPlatforms
+      const platform = account.platform.toUpperCase();
+      if (isChecking) {
+        setSelectedPlatforms(prevPlatforms => 
+          prevPlatforms.includes(platform) ? prevPlatforms : [...prevPlatforms, platform]
+        );
+      } else {
+        // Check if any other accounts of the same platform are still selected
+        const hasOtherAccountsOfSamePlatform = socialAccounts.some(acc => 
+          acc.id !== accountId && 
+          acc.platform.toUpperCase() === platform && 
+          next.includes(acc.id)
+        );
+        
+        if (!hasOtherAccountsOfSamePlatform) {
+          setSelectedPlatforms(prevPlatforms => prevPlatforms.filter(p => p !== platform));
+        }
+      }
+      
+      return next;
+    });
   }
 
   function toggleArrayValue(value: string, setter: (cb: (prev: string[]) => string[]) => void) {
@@ -140,7 +198,16 @@ function ComposeContent() {
     const activeAccounts = (Array.isArray(data) ? data : []).filter((account: SocialAccount) => account.isActive);
     setSocialAccounts(activeAccounts);
     if (activeAccounts.length > 0) {
-      setPublishAccountIds((prev) => (prev.length > 0 ? prev : activeAccounts.map((account: SocialAccount) => account.id)));
+      setPublishAccountIds((prev) => {
+        if (prev.length > 0) return prev;
+        const initialIds = activeAccounts.map((account: SocialAccount) => account.id);
+        
+        // Also update selectedPlatforms to match initialIds
+        const initialPlatforms = Array.from(new Set(activeAccounts.map(acc => acc.platform.toUpperCase())));
+        setSelectedPlatforms(initialPlatforms);
+        
+        return initialIds;
+      });
     }
   }
 
@@ -210,7 +277,7 @@ function ComposeContent() {
     if (!message.trim()) return;
     setSaving(true);
     const mediaUrls = media.filter((m) => selectedMedia.includes(m.id)).map((m) => m.url);
-    await fetch("/api/posts", {
+    const res = await fetch("/api/posts", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ 
@@ -221,8 +288,18 @@ function ComposeContent() {
         selectedSocialAccountIds: publishAccountIds
       }),
     });
-    setSaved(true);
-    setTimeout(() => setSaved(false), 2000);
+    if (res.ok) {
+      toast({
+        title: "Saved",
+        description: "Post saved as draft",
+      });
+    } else {
+      toast({
+        title: "Error",
+        description: "Failed to save draft",
+        variant: "destructive",
+      });
+    }
     setSaving(false);
   }
 
@@ -245,7 +322,11 @@ function ComposeContent() {
     });
     const created = await createRes.json();
     if (!createRes.ok || !created?.id) {
-      setPublishResult(created?.error || "Failed to create post for publishing.");
+      toast({
+        title: "Error",
+        description: created?.error || "Failed to create post for publishing.",
+        variant: "destructive",
+      });
       setPublishing(false);
       return;
     }
@@ -261,19 +342,35 @@ function ComposeContent() {
       }),
     });
     const publishData = await publishRes.json();
-    setPublishResult(publishRes.ok ? "Post published to selected social accounts." : publishData?.error || "Publish failed.");
+    if (publishRes.ok) {
+      toast({
+        title: "Success",
+        description: "Post published to selected social accounts.",
+      });
+      router.push("/posts");
+    } else {
+      toast({
+        title: "Publish failed",
+        description: publishData?.error || "Unknown error occurred.",
+        variant: "destructive",
+      });
+    }
     setPublishing(false);
   }
 
   async function scheduleAllPosts() {
-    if (!scheduleDate || !scheduleTime) return;
+    if (!scheduleDate || !scheduleTime) {
+      toast({
+        title: "Missing info",
+        description: "Please select both date and time.",
+        variant: "destructive",
+      });
+      return;
+    }
     setScheduling(true);
     const scheduledAt = new Date(`${scheduleDate}T${scheduleTime}`);
     const mediaUrls = media.filter((m) => selectedMedia.includes(m.id)).map((m) => m.url);
     
-    // We'll create one main Post that will be picked up by the scheduler
-    // In a real scenario, you might want one per platform if they differ, 
-    // but the current /api/scheduler logic publishes to ALL active social accounts
     const content = message || prompt;
     if (!content.trim()) {
       setScheduling(false);
@@ -294,13 +391,18 @@ function ComposeContent() {
     });
 
     if (res.ok) {
-      setPublishResult(`Content successfully scheduled for ${scheduleDate} at ${scheduleTime}`);
-      setScheduleEnabled(false);
-      setScheduleDate("");
-      setScheduleTime("");
+      toast({
+        title: "Success",
+        description: `Content scheduled for ${scheduleDate} at ${scheduleTime}`,
+      });
+      router.push("/posts");
     } else {
       const data = await res.json();
-      setPublishResult(data.error || "Failed to schedule content.");
+      toast({
+        title: "Scheduling failed",
+        description: data.error || "Failed to schedule content.",
+        variant: "destructive",
+      });
     }
     setScheduling(false);
   }
@@ -350,7 +452,7 @@ function ComposeContent() {
               placeholder="Describe your content idea... e.g. 'Announce our new product launch with exciting features and a 20% launch discount'"
               value={prompt}
               onChange={(e) => setPrompt(e.target.value)}
-              className="min-h-24 rounded-xl border-gray-200 focus:border-violet-400 resize-none"
+              className="min-h-24 rounded-xl border-gray-200 focus:border-violet-400 resize-none text-foreground"
             />
           </div>
 
@@ -360,7 +462,7 @@ function ComposeContent() {
               placeholder="Write your message (or generate then refine with AI)... e.g. 'Hello {{firstName}}, check out our new arrivals!'"
               value={message}
               onChange={(e) => setMessage(e.target.value)}
-              className="min-h-28 rounded-xl border-gray-200 focus:border-violet-400 resize-none"
+              className="min-h-28 rounded-xl border-gray-200 focus:border-violet-400 resize-none text-foreground"
             />
             <p className="text-[10px] text-gray-400 mt-1">
               Available tags: {"{{firstName}}"}, {"{{lastName}}"}, {"{{name}}"}, {"{{company}}"}, {"{{email}}"}
@@ -387,7 +489,7 @@ function ComposeContent() {
             <div>
               <Label className="text-sm font-semibold text-gray-700 mb-2 block">Content Tone</Label>
               <Select value={tone} onValueChange={setTone}>
-                <SelectTrigger className="rounded-xl border-gray-200 h-11">
+                <SelectTrigger className="rounded-xl border-gray-200 h-11 text-foreground">
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent>
@@ -469,81 +571,7 @@ function ComposeContent() {
         </div>
       </div>
 
-      <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-6 space-y-4">
-        <h3 className="font-bold text-gray-900" style={{ fontFamily: "Outfit, sans-serif" }}>Recipients & Delivery</h3>
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-          <div>
-            <Label className="text-sm font-semibold text-gray-700 mb-2 block">Category Channel</Label>
-            <Select value={channel} onValueChange={(v: "EMAIL" | "WHATSAPP") => { setChannel(v); setSelectedContactIds([]); }}>
-              <SelectTrigger className="rounded-xl border-gray-200 h-11">
-                <SelectValue />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="EMAIL">Email Category</SelectItem>
-                <SelectItem value="WHATSAPP">WhatsApp Category</SelectItem>
-              </SelectContent>
-            </Select>
-          </div>
-        </div>
-
-        {channel === "EMAIL" && (
-          <div className="mt-2">
-            <Label className="text-sm font-semibold text-gray-700 mb-2 block">Email Subject</Label>
-            <Input
-              placeholder="Enter email subject..."
-              value={subject}
-              onChange={(e) => setSubject(e.target.value)}
-              className="rounded-xl border-gray-200 h-11"
-            />
-          </div>
-        )}
-
-        <div>
-          <Label className="text-sm font-semibold text-gray-700 mb-2 block">Audience Categories</Label>
-          <div className="flex flex-wrap gap-2">
-            {groups.map((group) => (
-              <button
-                key={group.id}
-                type="button"
-                onClick={() => toggleArrayValue(group.id, setSelectedGroupIds)}
-                className={`px-3 py-1.5 rounded-lg text-xs border ${
-                  selectedGroupIds.includes(group.id)
-                    ? "border-violet-500 bg-violet-50 text-violet-700"
-                    : "border-gray-200 text-gray-600"
-                }`}
-              >
-                {group.name} ({group.contactCount})
-              </button>
-            ))}
-          </div>
-        </div>
-        <div>
-          <Label className="text-sm font-semibold text-gray-700 mb-2 block">
-            {channel === "WHATSAPP" ? "Individual WhatsApp Contacts" : "Individual Email Contacts"}
-          </Label>
-          <div className="max-h-44 overflow-auto border border-gray-100 rounded-xl p-3 grid grid-cols-1 md:grid-cols-2 gap-2">
-            {(channel === "WHATSAPP" ? whatsappContacts : contacts).map((contact) => {
-              const label = `${contact.firstName || ""} ${contact.lastName || ""}`.trim() || contact.email;
-              return (
-                <label key={contact.id} className="flex items-center gap-2 text-sm text-gray-700">
-                  <input
-                    type="checkbox"
-                    checked={selectedContactIds.includes(contact.id)}
-                    onChange={() => toggleArrayValue(contact.id, setSelectedContactIds)}
-                  />
-                  <span className="truncate">{label} - {channel === "WHATSAPP" ? contact.phone : contact.email}</span>
-                </label>
-              );
-            })}
-          </div>
-        </div>
-        {sendResult && <p className="text-sm text-gray-600 mt-4">{sendResult}</p>}
-        <div className="flex gap-3 pt-4">
-          <Button onClick={sendNow} disabled={sending} className="brand-gradient-bg text-white border-0 hover:opacity-90 px-8 h-11 rounded-xl font-semibold">
-            {sending ? "Sending..." : `Send ${channel === "WHATSAPP" ? "WhatsApp" : "Email"} Message`}
-          </Button>
-        </div>
-      </div>
+      
 
       <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-6">
         <div className="flex items-center justify-between mb-4">
@@ -554,7 +582,7 @@ function ComposeContent() {
           value={message}
           onChange={(e) => setMessage(e.target.value)}
           placeholder="Finalize your generated content here before publishing..."
-          className="min-h-40 rounded-xl border-gray-200 focus:border-violet-400 shadow-inner bg-gray-50/10"
+          className="min-h-40 rounded-xl border-gray-200 focus:border-violet-400 shadow-inner bg-gray-50/10 text-black"
         />
         <p className="text-[10px] text-gray-400 mt-2">
           Tip: You can edit this text directly. All previews below will update in real-time.
@@ -603,7 +631,7 @@ function ComposeContent() {
                   <input
                     type="checkbox"
                     checked={publishAccountIds.includes(account.id)}
-                    onChange={() => toggleArrayValue(account.id, setPublishAccountIds)}
+                    onChange={() => toggleAccount(account.id)}
                   />
                   <span className="truncate text-xs font-medium">{account.accountName}</span>
                   <span className="text-[10px] text-gray-400 uppercase">{account.platform}</span>
@@ -659,7 +687,7 @@ function ComposeContent() {
                   type="date"
                   value={scheduleDate}
                   onChange={(e) => setScheduleDate(e.target.value)}
-                  className="rounded-xl h-11"
+                  className="rounded-xl h-11 text-black"
                 />
               </div>
               <div>
@@ -668,7 +696,7 @@ function ComposeContent() {
                   type="time"
                   value={scheduleTime}
                   onChange={(e) => setScheduleTime(e.target.value)}
-                  className="rounded-xl h-11"
+                  className="rounded-xl h-11 text-black"
                 />
               </div>
             </div>
@@ -684,17 +712,7 @@ function ComposeContent() {
         )}
       </div>
 
-      {saved && (
-        <div className="fixed bottom-6 right-6 bg-emerald-500 text-white px-5 py-3 rounded-xl shadow-xl text-sm font-medium flex items-center gap-2 z-50">
-          ✓ Post saved as draft
-        </div>
-      )}
-      {publishResult && (
-        <div className="fixed bottom-6 left-6 bg-violet-600 text-white px-5 py-3 rounded-xl shadow-xl text-sm font-medium z-50">
-          {publishResult}
-        </div>
-      )}
-    </div>
+      </div>
   );
 }
 

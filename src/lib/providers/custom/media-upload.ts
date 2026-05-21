@@ -161,26 +161,20 @@ export async function uploadLinkedInImage(
   imageUrl: string,
   ownerUrn: string
 ): Promise<string> {
+  // Register upload using versioned images API
   const registerRes = await fetch(
-    "https://api.linkedin.com/v2/assets?action=registerUpload",
+    "https://api.linkedin.com/rest/images?action=initializeUpload",
     {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
         Authorization: `Bearer ${accessToken}`,
+        "LinkedIn-Version": "202510",
         "X-Restli-Protocol-Version": "2.0.0",
       },
       body: JSON.stringify({
-        registerUploadRequest: {
+        initializeUploadRequest: {
           owner: ownerUrn,
-          recipes: ["urn:li:digitalmediaRecipe:feedshare-image"],
-          serviceRelationships: [
-            {
-              relationshipType: "OWNER",
-              identifier: "urn:li:userGeneratedContent",
-            },
-          ],
-          supportedUploadMechanism: ["SYNCHRONOUS_UPLOAD"],
         },
       }),
     }
@@ -188,12 +182,14 @@ export async function uploadLinkedInImage(
 
   const registerData = await registerRes.json();
   if (!registerRes.ok) {
-    throw new Error(registerData.message || "LinkedIn upload registration failed");
+    throw new Error(registerData.message || "LinkedIn image upload initialization failed");
   }
 
-  const uploadUrl = registerData.value.uploadMechanism["com.linkedin.digitalmedia.uploading.MediaUploadHttpRequest"]?.uploadUrl;
-  if (!uploadUrl) {
-    throw new Error("No upload URL from LinkedIn");
+  const uploadUrl = registerData.value.uploadUrl;
+  const imageUrn = registerData.value.image;
+  
+  if (!uploadUrl || !imageUrn) {
+    throw new Error("No upload URL or image URN from LinkedIn");
   }
 
   const { path: localPath } = await downloadMedia(imageUrl);
@@ -204,6 +200,7 @@ export async function uploadLinkedInImage(
     headers: {
       "Content-Type": "image/jpeg",
       "Content-Length": fileBuffer.length.toString(),
+      "X-Restli-Protocol-Version": "2.0.0",
     },
     body: fileBuffer,
   });
@@ -214,7 +211,7 @@ export async function uploadLinkedInImage(
     throw new Error(`LinkedIn media upload failed: ${uploadRes.statusText}`);
   }
 
-  return registerData.value.asset;
+  return imageUrn;
 }
 
 /**

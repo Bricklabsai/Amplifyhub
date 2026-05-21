@@ -24,10 +24,16 @@ export async function GET(req: NextRequest) {
     today.setHours(0, 0, 0, 0);
 
     const totalFollowers = accounts.reduce((acc, a) => acc + a.followers, 0);
-    const liveEngagement = await prisma.platformPost.aggregate({
+    const liveEngagementSnapshot = await prisma.platformPost.aggregate({
       where: { post: { userId } },
-      _sum: { likes: true, comments: true, shares: true, reach: true, impressions: true }
+      _sum: { likes: true, comments: true, shares: true, reach: true }
     });
+
+    const likesSum = liveEngagementSnapshot._sum?.likes ?? 0;
+    const commentsSum = liveEngagementSnapshot._sum?.comments ?? 0;
+    const sharesSum = liveEngagementSnapshot._sum?.shares ?? 0;
+    const reachSum = liveEngagementSnapshot._sum?.reach ?? 0;
+    const engagementRatio = totalFollowers > 0 ? ((likesSum + commentsSum) / totalFollowers) * 100 : 0;
 
     await prisma.analytics.upsert({
       where: { 
@@ -40,21 +46,19 @@ export async function GET(req: NextRequest) {
         userId,
         date: today,
         followers: totalFollowers,
-        likes: liveEngagement._sum.likes || 0,
-        comments: liveEngagement._sum.comments || 0,
-        shares: liveEngagement._sum.shares || 0,
-        reach: liveEngagement._sum.reach || 0,
-        impressions: liveEngagement._sum.impressions || 0,
-        engagement: totalFollowers > 0 ? ((liveEngagement._sum.likes || 0) + (liveEngagement._sum.comments || 0)) / totalFollowers * 100 : 0
+        likes: likesSum,
+        comments: commentsSum,
+        shares: sharesSum,
+        reach: reachSum,
+        engagement: engagementRatio,
       },
       update: {
         followers: totalFollowers,
-        likes: liveEngagement._sum.likes || 0,
-        comments: liveEngagement._sum.comments || 0,
-        shares: liveEngagement._sum.shares || 0,
-        reach: liveEngagement._sum.reach || 0,
-        impressions: liveEngagement._sum.impressions || 0,
-        engagement: totalFollowers > 0 ? ((liveEngagement._sum.likes || 0) + (liveEngagement._sum.comments || 0)) / totalFollowers * 100 : 0
+        likes: likesSum,
+        comments: commentsSum,
+        shares: sharesSum,
+        reach: reachSum,
+        engagement: engagementRatio,
       }
     });
   } catch (e) {
@@ -87,10 +91,10 @@ export async function GET(req: NextRequest) {
     analytics, 
     platforms,
     liveTotals: {
-      likes: liveEngagement._sum.likes || 0,
-      comments: liveEngagement._sum.comments || 0,
-      shares: liveEngagement._sum.shares || 0,
-      reach: liveEngagement._sum.reach || 0,
+      likes: liveEngagement._sum?.likes || 0,
+      comments: liveEngagement._sum?.comments || 0,
+      shares: liveEngagement._sum?.shares || 0,
+      reach: liveEngagement._sum?.reach || 0,
     }
   });
 }

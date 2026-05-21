@@ -15,22 +15,31 @@ type WizardFormData = {
   subject: string;
   previewText: string;
   htmlContent: string;
+  campaignId?: string;
+  templateId?: string;
 };
 
 interface EmailCampaignWizardProps {
   groups: Group[];
+  socialCampaigns?: any[];
+  templates?: any[];
   onCampaignCreated: () => void;
+  preselectedGroupId?: string;
 }
 
-export default function EmailCampaignWizard({ groups, onCampaignCreated }: EmailCampaignWizardProps) {
+export default function EmailCampaignWizard({ groups, socialCampaigns = [], templates = [], onCampaignCreated, preselectedGroupId }: EmailCampaignWizardProps) {
   const [open, setOpen] = useState(false);
   const [step, setStep] = useState(1);
-  const [selectedGroupIds, setSelectedGroupIds] = useState<string[]>([]);
+  const [selectedGroupIds, setSelectedGroupIds] = useState<string[]>(
+    preselectedGroupId ? [preselectedGroupId] : []
+  );
   const [form, setForm] = useState<WizardFormData>({
     name: "",
     subject: "",
     previewText: "",
     htmlContent: "",
+    campaignId: undefined,
+    templateId: undefined,
   });
   const [loading, setLoading] = useState(false);
 
@@ -70,8 +79,8 @@ export default function EmailCampaignWizard({ groups, onCampaignCreated }: Email
   function resetWizard() {
     setStep(1);
     setOpen(false);
-    setForm({ name: "", subject: "", previewText: "", htmlContent: "" });
-    setSelectedGroupIds([]);
+    setForm({ name: "", subject: "", previewText: "", htmlContent: "", campaignId: undefined, templateId: undefined });
+    setSelectedGroupIds(preselectedGroupId ? [preselectedGroupId] : []);
   }
 
   function handleNext() {
@@ -128,8 +137,8 @@ export default function EmailCampaignWizard({ groups, onCampaignCreated }: Email
 
         {/* Step Content */}
         <div className="min-h-96">
-          {step === 1 && <Step1Basics form={form} setForm={setForm} />}
-          {step === 2 && <Step2Design form={form} setForm={setForm} />}
+          {step === 1 && <Step1Basics form={form} setForm={setForm} socialCampaigns={socialCampaigns} />}
+          {step === 2 && <Step2Design form={form} setForm={setForm} templates={templates} />}
           {step === 3 && (
             <Step3Audience
               groups={groups}

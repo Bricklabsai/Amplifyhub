@@ -51,8 +51,26 @@ Format as JSON with keys: subject, preview, body, ctaText, ctaUrl`;
       throw new Error("No response from AI");
     }
 
-    // Parse JSON response
-    const emailContent = JSON.parse(content);
+    // Parse JSON response from AI even if it includes markdown fences
+    const stripMarkdown = (input: string) => {
+      const cleaned = input
+        .replace(/```\s*json\s*/gi, "")
+        .replace(/```/g, "")
+        .replace(/^\s*\n*/, "")
+        .replace(/\n*\s*$/, "");
+      return cleaned;
+    };
+
+    let emailContent;
+    try {
+      emailContent = JSON.parse(stripMarkdown(content));
+    } catch (firstError) {
+      const fallback = content.match(/\{[\s\S]*\}/);
+      if (!fallback) {
+        throw firstError;
+      }
+      emailContent = JSON.parse(fallback[0]);
+    }
 
     return NextResponse.json({
       subject: emailContent.subject,

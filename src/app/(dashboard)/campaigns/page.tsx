@@ -59,15 +59,15 @@ export default function CampaignsPage() {
             <div className="space-y-4 pt-2">
               <div>
                 <Label className="text-sm font-semibold text-gray-700 mb-2 block">Campaign Name</Label>
-                <Input value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })} className="rounded-xl h-11" placeholder="Q2 Growth Campaign" />
+                 <Input value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })} className="rounded-xl h-11 text-black" placeholder="Q2 Growth Campaign" />
               </div>
               <div>
                 <Label className="text-sm font-semibold text-gray-700 mb-2 block">Description</Label>
-                <Input value={form.description} onChange={(e) => setForm({ ...form, description: e.target.value })} className="rounded-xl h-11" placeholder="Campaign description..." />
+                 <Input value={form.description} onChange={(e) => setForm({ ...form, description: e.target.value })} className="rounded-xl h-11 text-black" placeholder="Campaign description..." />
               </div>
               <div>
                 <Label className="text-sm font-semibold text-gray-700 mb-2 block">Budget ($)</Label>
-                <Input type="number" value={form.budget} onChange={(e) => setForm({ ...form, budget: e.target.value })} className="rounded-xl h-11" placeholder="5000" />
+                 <Input type="number" value={form.budget} onChange={(e) => setForm({ ...form, budget: e.target.value })} className="rounded-xl h-11 text-black" placeholder="5000" />
               </div>
               <Button onClick={create} disabled={!form.name} className="w-full brand-gradient-bg text-white border-0 hover:opacity-90 rounded-xl h-11 font-semibold">
                 Create Campaign

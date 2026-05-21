@@ -60,7 +60,7 @@ export default function EmailEnhancer() {
         onChange={(e) => setEmailText(e.target.value)}
         placeholder="Paste your email content here..."
         rows={6}
-        className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:border-violet-400 resize-none"
+        className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:border-violet-400 resize-none text-black"
       />
 
       <button

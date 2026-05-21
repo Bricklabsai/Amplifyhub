@@ -1,10 +1,5 @@
-"use client";
-import AIEmailStudio from "@/components/email/AIEmailStudio";
+import { redirect } from "next/navigation";
 
 export default function EmailComposePage() {
-  return (
-    <div className="space-y-6">
-      <AIEmailStudio />
-    </div>
-  );
+  redirect("/email-hub?tab=studio");
 }

@@ -36,6 +36,9 @@ type LinkedProfile = {
   name?: string | null;
   screen_name?: string | null;
   preferred_username?: string | null;
+  picture?: string | null;
+  given_name?: string | null;
+  family_name?: string | null;
 };
 
 type OAuthAccount = {
@@ -95,6 +98,7 @@ async function syncSocialAccountFromOAuth(
       profile?.screen_name ||
       profile?.preferred_username ||
       account.providerAccountId,
+    profileImage: profile?.picture || undefined,
     accountId: account.providerAccountId,
     isActive: true,
   };
@@ -158,6 +162,25 @@ export const authOptions: NextAuthOptions = {
       LinkedInProvider({
         clientId: process.env.LINKEDIN_CLIENT_ID,
         clientSecret: process.env.LINKEDIN_CLIENT_SECRET || "",
+        issuer: "https://www.linkedin.com/oauth",
+        jwks_endpoint: "https://www.linkedin.com/oauth/openid/jwks",
+        authorization: {
+          params: {
+            scope: "openid profile email w_member_social",
+          },
+        },
+        profile(profile) {
+          const id = profile.sub ?? profile.id;
+          return {
+            id: id ?? profile.email ?? profile.name ?? `${profile.given_name ?? ""} ${profile.family_name ?? ""}`.trim() ?? "linkedin-user",
+            name:
+              profile.name ??
+              ([profile.given_name, profile.family_name].filter(Boolean).join(" ") ||
+                null),
+            email: profile.email ?? null,
+            image: profile.picture ?? null,
+          };
+        },
       })
     ] : []),
     ...(process.env.INSTAGRAM_CLIENT_ID ? [

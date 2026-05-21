@@ -97,7 +97,7 @@ export default function MediaLibraryPage() {
           value={search}
           onChange={(e) => setSearch(e.target.value)}
           placeholder="Search uploaded and AI Studio images/videos..."
-          className="max-w-md"
+           className="max-w-md text-black"
         />
       </div>
 

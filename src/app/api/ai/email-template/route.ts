@@ -53,10 +53,15 @@ Return ONLY valid HTML, no markdown or extra text.`;
       max_tokens: 2000,
     });
 
-    const htmlContent = response.choices[0]?.message?.content;
+    let htmlContent = response.choices[0]?.message?.content;
     if (!htmlContent) {
       throw new Error("No response from AI");
     }
+
+    htmlContent = htmlContent
+      .replace(/```\s*html\s*/gi, "")
+      .replace(/```/g, "")
+      .trim();
 
     return NextResponse.json({
       htmlContent,

@@ -248,6 +248,7 @@ model SocialAccount {
   userId          String
   platform        Platform
   accountName     String
+  profileImage    String?
   accountId       String?
   accessToken     String?
   refreshToken    String?
@@ -317,8 +318,9 @@ model Campaign {
   createdAt   DateTime       @default(now())
   updatedAt   DateTime       @updatedAt
 
-  user  User   @relation(fields: [userId], references: [id], onDelete: Cascade)
-  posts Post[]
+  user           User            @relation(fields: [userId], references: [id], onDelete: Cascade)
+  posts          Post[]
+  emailCampaigns EmailCampaign[]
 }
 
 model AudienceGroup {
@@ -335,15 +337,16 @@ model AudienceGroup {
 }
 
 model Contact {
-  id        String   @id @default(cuid())
-  email     String   @unique
-  firstName String?
-  lastName  String?
-  phone     String?
-  company   String?
-  tags      String[]
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  id             String   @id @default(cuid())
+  email          String   @unique
+  firstName      String?
+  lastName       String?
+  phone          String?
+  company        String?
+  tags           String[]
+  isUnsubscribed Boolean  @default(false)
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
 
   groups          ContactGroup[]
   emailRecipients EmailCampaignRecipient[]
@@ -402,6 +405,7 @@ model EmailCampaign {
   id           String              @id @default(cuid())
   userId       String
   templateId   String?
+  campaignId   String?
   name         String
   subject      String
   previewText  String?
@@ -422,6 +426,7 @@ model EmailCampaign {
 
   user       User                     @relation(fields: [userId], references: [id], onDelete: Cascade)
   template   EmailTemplate?           @relation(fields: [templateId], references: [id])
+  campaign   Campaign?                @relation(fields: [campaignId], references: [id])
   recipients EmailCampaignRecipient[]
 }
 
@@ -433,6 +438,8 @@ model EmailCampaignRecipient {
   opened     Boolean   @default(false)
   clicked    Boolean   @default(false)
   sentAt     DateTime?
+  rsvpStatus String?
+  rsvpAt     DateTime?
 
   campaign EmailCampaign @relation(fields: [campaignId], references: [id], onDelete: Cascade)
   contact  Contact       @relation(fields: [contactId], references: [id])

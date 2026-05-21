@@ -250,7 +250,7 @@ export default function AIStudioPage() {
               <div>
                 <Label className="text-sm font-semibold text-gray-700 mb-2 block">Template</Label>
                 <Select value={template} onValueChange={setTemplate}>
-                  <SelectTrigger className="rounded-xl border-gray-200 h-11">
+                  <SelectTrigger className="rounded-xl border-gray-200 h-11 text-foreground">
                     <SelectValue />
                   </SelectTrigger>
                   <SelectContent>
@@ -294,7 +294,7 @@ export default function AIStudioPage() {
               <div>
                 <Label className="text-sm font-semibold text-gray-700 mb-2 block">Image Size</Label>
                 <Select value={size} onValueChange={setSize}>
-                  <SelectTrigger className="rounded-xl border-gray-200 h-11">
+                  <SelectTrigger className="rounded-xl border-gray-200 h-11 text-foreground">
                     <SelectValue />
                   </SelectTrigger>
                   <SelectContent>
@@ -479,7 +479,7 @@ export default function AIStudioPage() {
               <div>
                 <Label className="text-sm font-semibold text-gray-700 mb-2 block">Size</Label>
                 <Select value={size} onValueChange={setSize}>
-                  <SelectTrigger className="rounded-xl border-gray-200 h-11">
+                  <SelectTrigger className="rounded-xl border-gray-200 h-11 text-black">
                     <SelectValue />
                   </SelectTrigger>
                   <SelectContent>

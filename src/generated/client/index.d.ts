@@ -3559,10 +3559,12 @@ export namespace Prisma {
 
   export type CampaignCountOutputType = {
     posts: number
+    emailCampaigns: number
   }
 
   export type CampaignCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     posts?: boolean | CampaignCountOutputTypeCountPostsArgs
+    emailCampaigns?: boolean | CampaignCountOutputTypeCountEmailCampaignsArgs
   }
 
   // Custom InputTypes
@@ -3581,6 +3583,13 @@ export namespace Prisma {
    */
   export type CampaignCountOutputTypeCountPostsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: PostWhereInput
+  }
+
+  /**
+   * CampaignCountOutputType without action
+   */
+  export type CampaignCountOutputTypeCountEmailCampaignsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: EmailCampaignWhereInput
   }
 
 
@@ -16489,6 +16498,7 @@ export namespace Prisma {
     userId: string | null
     platform: $Enums.Platform | null
     accountName: string | null
+    profileImage: string | null
     accountId: string | null
     accessToken: string | null
     refreshToken: string | null
@@ -16505,6 +16515,7 @@ export namespace Prisma {
     userId: string | null
     platform: $Enums.Platform | null
     accountName: string | null
+    profileImage: string | null
     accountId: string | null
     accessToken: string | null
     refreshToken: string | null
@@ -16521,6 +16532,7 @@ export namespace Prisma {
     userId: number
     platform: number
     accountName: number
+    profileImage: number
     accountId: number
     accessToken: number
     refreshToken: number
@@ -16547,6 +16559,7 @@ export namespace Prisma {
     userId?: true
     platform?: true
     accountName?: true
+    profileImage?: true
     accountId?: true
     accessToken?: true
     refreshToken?: true
@@ -16563,6 +16576,7 @@ export namespace Prisma {
     userId?: true
     platform?: true
     accountName?: true
+    profileImage?: true
     accountId?: true
     accessToken?: true
     refreshToken?: true
@@ -16579,6 +16593,7 @@ export namespace Prisma {
     userId?: true
     platform?: true
     accountName?: true
+    profileImage?: true
     accountId?: true
     accessToken?: true
     refreshToken?: true
@@ -16682,6 +16697,7 @@ export namespace Prisma {
     userId: string
     platform: $Enums.Platform
     accountName: string
+    profileImage: string | null
     accountId: string | null
     accessToken: string | null
     refreshToken: string | null
@@ -16717,6 +16733,7 @@ export namespace Prisma {
     userId?: boolean
     platform?: boolean
     accountName?: boolean
+    profileImage?: boolean
     accountId?: boolean
     accessToken?: boolean
     refreshToken?: boolean
@@ -16736,6 +16753,7 @@ export namespace Prisma {
     userId?: boolean
     platform?: boolean
     accountName?: boolean
+    profileImage?: boolean
     accountId?: boolean
     accessToken?: boolean
     refreshToken?: boolean
@@ -16753,6 +16771,7 @@ export namespace Prisma {
     userId?: boolean
     platform?: boolean
     accountName?: boolean
+    profileImage?: boolean
     accountId?: boolean
     accessToken?: boolean
     refreshToken?: boolean
@@ -16770,6 +16789,7 @@ export namespace Prisma {
     userId?: boolean
     platform?: boolean
     accountName?: boolean
+    profileImage?: boolean
     accountId?: boolean
     accessToken?: boolean
     refreshToken?: boolean
@@ -16781,7 +16801,7 @@ export namespace Prisma {
     updatedAt?: boolean
   }
 
-  export type SocialAccountOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "userId" | "platform" | "accountName" | "accountId" | "accessToken" | "refreshToken" | "zernioAccountId" | "expiresAt" | "isActive" | "followers" | "createdAt" | "updatedAt", ExtArgs["result"]["socialAccount"]>
+  export type SocialAccountOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "userId" | "platform" | "accountName" | "profileImage" | "accountId" | "accessToken" | "refreshToken" | "zernioAccountId" | "expiresAt" | "isActive" | "followers" | "createdAt" | "updatedAt", ExtArgs["result"]["socialAccount"]>
   export type SocialAccountInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     user?: boolean | UserDefaultArgs<ExtArgs>
     platformPosts?: boolean | SocialAccount$platformPostsArgs<ExtArgs>
@@ -16805,6 +16825,7 @@ export namespace Prisma {
       userId: string
       platform: $Enums.Platform
       accountName: string
+      profileImage: string | null
       accountId: string | null
       accessToken: string | null
       refreshToken: string | null
@@ -17243,6 +17264,7 @@ export namespace Prisma {
     readonly userId: FieldRef<"SocialAccount", 'String'>
     readonly platform: FieldRef<"SocialAccount", 'Platform'>
     readonly accountName: FieldRef<"SocialAccount", 'String'>
+    readonly profileImage: FieldRef<"SocialAccount", 'String'>
     readonly accountId: FieldRef<"SocialAccount", 'String'>
     readonly accessToken: FieldRef<"SocialAccount", 'String'>
     readonly refreshToken: FieldRef<"SocialAccount", 'String'>
@@ -20378,6 +20400,7 @@ export namespace Prisma {
     updatedAt?: boolean
     user?: boolean | UserDefaultArgs<ExtArgs>
     posts?: boolean | Campaign$postsArgs<ExtArgs>
+    emailCampaigns?: boolean | Campaign$emailCampaignsArgs<ExtArgs>
     _count?: boolean | CampaignCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["campaign"]>
 
@@ -20429,6 +20452,7 @@ export namespace Prisma {
   export type CampaignInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     user?: boolean | UserDefaultArgs<ExtArgs>
     posts?: boolean | Campaign$postsArgs<ExtArgs>
+    emailCampaigns?: boolean | Campaign$emailCampaignsArgs<ExtArgs>
     _count?: boolean | CampaignCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type CampaignIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -20443,6 +20467,7 @@ export namespace Prisma {
     objects: {
       user: Prisma.$UserPayload<ExtArgs>
       posts: Prisma.$PostPayload<ExtArgs>[]
+      emailCampaigns: Prisma.$EmailCampaignPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
@@ -20852,6 +20877,7 @@ export namespace Prisma {
     readonly [Symbol.toStringTag]: "PrismaPromise"
     user<T extends UserDefaultArgs<ExtArgs> = {}>(args?: Subset<T, UserDefaultArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
     posts<T extends Campaign$postsArgs<ExtArgs> = {}>(args?: Subset<T, Campaign$postsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PostPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    emailCampaigns<T extends Campaign$emailCampaignsArgs<ExtArgs> = {}>(args?: Subset<T, Campaign$emailCampaignsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$EmailCampaignPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -21309,6 +21335,30 @@ export namespace Prisma {
     take?: number
     skip?: number
     distinct?: PostScalarFieldEnum | PostScalarFieldEnum[]
+  }
+
+  /**
+   * Campaign.emailCampaigns
+   */
+  export type Campaign$emailCampaignsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the EmailCampaign
+     */
+    select?: EmailCampaignSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the EmailCampaign
+     */
+    omit?: EmailCampaignOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: EmailCampaignInclude<ExtArgs> | null
+    where?: EmailCampaignWhereInput
+    orderBy?: EmailCampaignOrderByWithRelationInput | EmailCampaignOrderByWithRelationInput[]
+    cursor?: EmailCampaignWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: EmailCampaignScalarFieldEnum | EmailCampaignScalarFieldEnum[]
   }
 
   /**
@@ -27072,6 +27122,7 @@ export namespace Prisma {
     id: string | null
     userId: string | null
     templateId: string | null
+    campaignId: string | null
     name: string | null
     subject: string | null
     previewText: string | null
@@ -27095,6 +27146,7 @@ export namespace Prisma {
     id: string | null
     userId: string | null
     templateId: string | null
+    campaignId: string | null
     name: string | null
     subject: string | null
     previewText: string | null
@@ -27118,6 +27170,7 @@ export namespace Prisma {
     id: number
     userId: number
     templateId: number
+    campaignId: number
     name: number
     subject: number
     previewText: number
@@ -27159,6 +27212,7 @@ export namespace Prisma {
     id?: true
     userId?: true
     templateId?: true
+    campaignId?: true
     name?: true
     subject?: true
     previewText?: true
@@ -27182,6 +27236,7 @@ export namespace Prisma {
     id?: true
     userId?: true
     templateId?: true
+    campaignId?: true
     name?: true
     subject?: true
     previewText?: true
@@ -27205,6 +27260,7 @@ export namespace Prisma {
     id?: true
     userId?: true
     templateId?: true
+    campaignId?: true
     name?: true
     subject?: true
     previewText?: true
@@ -27315,6 +27371,7 @@ export namespace Prisma {
     id: string
     userId: string
     templateId: string | null
+    campaignId: string | null
     name: string
     subject: string
     previewText: string | null
@@ -27357,6 +27414,7 @@ export namespace Prisma {
     id?: boolean
     userId?: boolean
     templateId?: boolean
+    campaignId?: boolean
     name?: boolean
     subject?: boolean
     previewText?: boolean
@@ -27376,6 +27434,7 @@ export namespace Prisma {
     updatedAt?: boolean
     user?: boolean | UserDefaultArgs<ExtArgs>
     template?: boolean | EmailCampaign$templateArgs<ExtArgs>
+    campaign?: boolean | EmailCampaign$campaignArgs<ExtArgs>
     recipients?: boolean | EmailCampaign$recipientsArgs<ExtArgs>
     _count?: boolean | EmailCampaignCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["emailCampaign"]>
@@ -27384,6 +27443,7 @@ export namespace Prisma {
     id?: boolean
     userId?: boolean
     templateId?: boolean
+    campaignId?: boolean
     name?: boolean
     subject?: boolean
     previewText?: boolean
@@ -27403,12 +27463,14 @@ export namespace Prisma {
     updatedAt?: boolean
     user?: boolean | UserDefaultArgs<ExtArgs>
     template?: boolean | EmailCampaign$templateArgs<ExtArgs>
+    campaign?: boolean | EmailCampaign$campaignArgs<ExtArgs>
   }, ExtArgs["result"]["emailCampaign"]>
 
   export type EmailCampaignSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
     userId?: boolean
     templateId?: boolean
+    campaignId?: boolean
     name?: boolean
     subject?: boolean
     previewText?: boolean
@@ -27428,12 +27490,14 @@ export namespace Prisma {
     updatedAt?: boolean
     user?: boolean | UserDefaultArgs<ExtArgs>
     template?: boolean | EmailCampaign$templateArgs<ExtArgs>
+    campaign?: boolean | EmailCampaign$campaignArgs<ExtArgs>
   }, ExtArgs["result"]["emailCampaign"]>
 
   export type EmailCampaignSelectScalar = {
     id?: boolean
     userId?: boolean
     templateId?: boolean
+    campaignId?: boolean
     name?: boolean
     subject?: boolean
     previewText?: boolean
@@ -27453,20 +27517,23 @@ export namespace Prisma {
     updatedAt?: boolean
   }
 
-  export type EmailCampaignOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "userId" | "templateId" | "name" | "subject" | "previewText" | "htmlContent" | "textContent" | "status" | "scheduledAt" | "sentAt" | "failedAt" | "openRate" | "clickRate" | "bounceRate" | "retryCount" | "maxRetries" | "errorMessage" | "createdAt" | "updatedAt", ExtArgs["result"]["emailCampaign"]>
+  export type EmailCampaignOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "userId" | "templateId" | "campaignId" | "name" | "subject" | "previewText" | "htmlContent" | "textContent" | "status" | "scheduledAt" | "sentAt" | "failedAt" | "openRate" | "clickRate" | "bounceRate" | "retryCount" | "maxRetries" | "errorMessage" | "createdAt" | "updatedAt", ExtArgs["result"]["emailCampaign"]>
   export type EmailCampaignInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     user?: boolean | UserDefaultArgs<ExtArgs>
     template?: boolean | EmailCampaign$templateArgs<ExtArgs>
+    campaign?: boolean | EmailCampaign$campaignArgs<ExtArgs>
     recipients?: boolean | EmailCampaign$recipientsArgs<ExtArgs>
     _count?: boolean | EmailCampaignCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type EmailCampaignIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     user?: boolean | UserDefaultArgs<ExtArgs>
     template?: boolean | EmailCampaign$templateArgs<ExtArgs>
+    campaign?: boolean | EmailCampaign$campaignArgs<ExtArgs>
   }
   export type EmailCampaignIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     user?: boolean | UserDefaultArgs<ExtArgs>
     template?: boolean | EmailCampaign$templateArgs<ExtArgs>
+    campaign?: boolean | EmailCampaign$campaignArgs<ExtArgs>
   }
 
   export type $EmailCampaignPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -27474,12 +27541,14 @@ export namespace Prisma {
     objects: {
       user: Prisma.$UserPayload<ExtArgs>
       template: Prisma.$EmailTemplatePayload<ExtArgs> | null
+      campaign: Prisma.$CampaignPayload<ExtArgs> | null
       recipients: Prisma.$EmailCampaignRecipientPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
       userId: string
       templateId: string | null
+      campaignId: string | null
       name: string
       subject: string
       previewText: string | null
@@ -27893,6 +27962,7 @@ export namespace Prisma {
     readonly [Symbol.toStringTag]: "PrismaPromise"
     user<T extends UserDefaultArgs<ExtArgs> = {}>(args?: Subset<T, UserDefaultArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
     template<T extends EmailCampaign$templateArgs<ExtArgs> = {}>(args?: Subset<T, EmailCampaign$templateArgs<ExtArgs>>): Prisma__EmailTemplateClient<$Result.GetResult<Prisma.$EmailTemplatePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+    campaign<T extends EmailCampaign$campaignArgs<ExtArgs> = {}>(args?: Subset<T, EmailCampaign$campaignArgs<ExtArgs>>): Prisma__CampaignClient<$Result.GetResult<Prisma.$CampaignPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     recipients<T extends EmailCampaign$recipientsArgs<ExtArgs> = {}>(args?: Subset<T, EmailCampaign$recipientsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$EmailCampaignRecipientPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
@@ -27926,6 +27996,7 @@ export namespace Prisma {
     readonly id: FieldRef<"EmailCampaign", 'String'>
     readonly userId: FieldRef<"EmailCampaign", 'String'>
     readonly templateId: FieldRef<"EmailCampaign", 'String'>
+    readonly campaignId: FieldRef<"EmailCampaign", 'String'>
     readonly name: FieldRef<"EmailCampaign", 'String'>
     readonly subject: FieldRef<"EmailCampaign", 'String'>
     readonly previewText: FieldRef<"EmailCampaign", 'String'>
@@ -28355,6 +28426,25 @@ export namespace Prisma {
      */
     include?: EmailTemplateInclude<ExtArgs> | null
     where?: EmailTemplateWhereInput
+  }
+
+  /**
+   * EmailCampaign.campaign
+   */
+  export type EmailCampaign$campaignArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Campaign
+     */
+    select?: CampaignSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Campaign
+     */
+    omit?: CampaignOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CampaignInclude<ExtArgs> | null
+    where?: CampaignWhereInput
   }
 
   /**
@@ -34214,6 +34304,7 @@ export namespace Prisma {
     userId: 'userId',
     platform: 'platform',
     accountName: 'accountName',
+    profileImage: 'profileImage',
     accountId: 'accountId',
     accessToken: 'accessToken',
     refreshToken: 'refreshToken',
@@ -34365,6 +34456,7 @@ export namespace Prisma {
     id: 'id',
     userId: 'userId',
     templateId: 'templateId',
+    campaignId: 'campaignId',
     name: 'name',
     subject: 'subject',
     previewText: 'previewText',
@@ -35546,6 +35638,7 @@ export namespace Prisma {
     userId?: StringFilter<"SocialAccount"> | string
     platform?: EnumPlatformFilter<"SocialAccount"> | $Enums.Platform
     accountName?: StringFilter<"SocialAccount"> | string
+    profileImage?: StringNullableFilter<"SocialAccount"> | string | null
     accountId?: StringNullableFilter<"SocialAccount"> | string | null
     accessToken?: StringNullableFilter<"SocialAccount"> | string | null
     refreshToken?: StringNullableFilter<"SocialAccount"> | string | null
@@ -35564,6 +35657,7 @@ export namespace Prisma {
     userId?: SortOrder
     platform?: SortOrder
     accountName?: SortOrder
+    profileImage?: SortOrderInput | SortOrder
     accountId?: SortOrderInput | SortOrder
     accessToken?: SortOrderInput | SortOrder
     refreshToken?: SortOrderInput | SortOrder
@@ -35587,6 +35681,7 @@ export namespace Prisma {
     userId?: StringFilter<"SocialAccount"> | string
     platform?: EnumPlatformFilter<"SocialAccount"> | $Enums.Platform
     accountName?: StringFilter<"SocialAccount"> | string
+    profileImage?: StringNullableFilter<"SocialAccount"> | string | null
     accountId?: StringNullableFilter<"SocialAccount"> | string | null
     accessToken?: StringNullableFilter<"SocialAccount"> | string | null
     refreshToken?: StringNullableFilter<"SocialAccount"> | string | null
@@ -35604,6 +35699,7 @@ export namespace Prisma {
     userId?: SortOrder
     platform?: SortOrder
     accountName?: SortOrder
+    profileImage?: SortOrderInput | SortOrder
     accountId?: SortOrderInput | SortOrder
     accessToken?: SortOrderInput | SortOrder
     refreshToken?: SortOrderInput | SortOrder
@@ -35628,6 +35724,7 @@ export namespace Prisma {
     userId?: StringWithAggregatesFilter<"SocialAccount"> | string
     platform?: EnumPlatformWithAggregatesFilter<"SocialAccount"> | $Enums.Platform
     accountName?: StringWithAggregatesFilter<"SocialAccount"> | string
+    profileImage?: StringNullableWithAggregatesFilter<"SocialAccount"> | string | null
     accountId?: StringNullableWithAggregatesFilter<"SocialAccount"> | string | null
     accessToken?: StringNullableWithAggregatesFilter<"SocialAccount"> | string | null
     refreshToken?: StringNullableWithAggregatesFilter<"SocialAccount"> | string | null
@@ -35862,6 +35959,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFilter<"Campaign"> | Date | string
     user?: XOR<UserScalarRelationFilter, UserWhereInput>
     posts?: PostListRelationFilter
+    emailCampaigns?: EmailCampaignListRelationFilter
   }
 
   export type CampaignOrderByWithRelationInput = {
@@ -35878,6 +35976,7 @@ export namespace Prisma {
     updatedAt?: SortOrder
     user?: UserOrderByWithRelationInput
     posts?: PostOrderByRelationAggregateInput
+    emailCampaigns?: EmailCampaignOrderByRelationAggregateInput
   }
 
   export type CampaignWhereUniqueInput = Prisma.AtLeast<{
@@ -35897,6 +35996,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFilter<"Campaign"> | Date | string
     user?: XOR<UserScalarRelationFilter, UserWhereInput>
     posts?: PostListRelationFilter
+    emailCampaigns?: EmailCampaignListRelationFilter
   }, "id">
 
   export type CampaignOrderByWithAggregationInput = {
@@ -36342,6 +36442,7 @@ export namespace Prisma {
     id?: StringFilter<"EmailCampaign"> | string
     userId?: StringFilter<"EmailCampaign"> | string
     templateId?: StringNullableFilter<"EmailCampaign"> | string | null
+    campaignId?: StringNullableFilter<"EmailCampaign"> | string | null
     name?: StringFilter<"EmailCampaign"> | string
     subject?: StringFilter<"EmailCampaign"> | string
     previewText?: StringNullableFilter<"EmailCampaign"> | string | null
@@ -36361,6 +36462,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFilter<"EmailCampaign"> | Date | string
     user?: XOR<UserScalarRelationFilter, UserWhereInput>
     template?: XOR<EmailTemplateNullableScalarRelationFilter, EmailTemplateWhereInput> | null
+    campaign?: XOR<CampaignNullableScalarRelationFilter, CampaignWhereInput> | null
     recipients?: EmailCampaignRecipientListRelationFilter
   }
 
@@ -36368,6 +36470,7 @@ export namespace Prisma {
     id?: SortOrder
     userId?: SortOrder
     templateId?: SortOrderInput | SortOrder
+    campaignId?: SortOrderInput | SortOrder
     name?: SortOrder
     subject?: SortOrder
     previewText?: SortOrderInput | SortOrder
@@ -36387,6 +36490,7 @@ export namespace Prisma {
     updatedAt?: SortOrder
     user?: UserOrderByWithRelationInput
     template?: EmailTemplateOrderByWithRelationInput
+    campaign?: CampaignOrderByWithRelationInput
     recipients?: EmailCampaignRecipientOrderByRelationAggregateInput
   }
 
@@ -36397,6 +36501,7 @@ export namespace Prisma {
     NOT?: EmailCampaignWhereInput | EmailCampaignWhereInput[]
     userId?: StringFilter<"EmailCampaign"> | string
     templateId?: StringNullableFilter<"EmailCampaign"> | string | null
+    campaignId?: StringNullableFilter<"EmailCampaign"> | string | null
     name?: StringFilter<"EmailCampaign"> | string
     subject?: StringFilter<"EmailCampaign"> | string
     previewText?: StringNullableFilter<"EmailCampaign"> | string | null
@@ -36416,6 +36521,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFilter<"EmailCampaign"> | Date | string
     user?: XOR<UserScalarRelationFilter, UserWhereInput>
     template?: XOR<EmailTemplateNullableScalarRelationFilter, EmailTemplateWhereInput> | null
+    campaign?: XOR<CampaignNullableScalarRelationFilter, CampaignWhereInput> | null
     recipients?: EmailCampaignRecipientListRelationFilter
   }, "id">
 
@@ -36423,6 +36529,7 @@ export namespace Prisma {
     id?: SortOrder
     userId?: SortOrder
     templateId?: SortOrderInput | SortOrder
+    campaignId?: SortOrderInput | SortOrder
     name?: SortOrder
     subject?: SortOrder
     previewText?: SortOrderInput | SortOrder
@@ -36454,6 +36561,7 @@ export namespace Prisma {
     id?: StringWithAggregatesFilter<"EmailCampaign"> | string
     userId?: StringWithAggregatesFilter<"EmailCampaign"> | string
     templateId?: StringNullableWithAggregatesFilter<"EmailCampaign"> | string | null
+    campaignId?: StringNullableWithAggregatesFilter<"EmailCampaign"> | string | null
     name?: StringWithAggregatesFilter<"EmailCampaign"> | string
     subject?: StringWithAggregatesFilter<"EmailCampaign"> | string
     previewText?: StringNullableWithAggregatesFilter<"EmailCampaign"> | string | null
@@ -37801,6 +37909,7 @@ export namespace Prisma {
     id?: string
     platform: $Enums.Platform
     accountName: string
+    profileImage?: string | null
     accountId?: string | null
     accessToken?: string | null
     refreshToken?: string | null
@@ -37819,6 +37928,7 @@ export namespace Prisma {
     userId: string
     platform: $Enums.Platform
     accountName: string
+    profileImage?: string | null
     accountId?: string | null
     accessToken?: string | null
     refreshToken?: string | null
@@ -37835,6 +37945,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     platform?: EnumPlatformFieldUpdateOperationsInput | $Enums.Platform
     accountName?: StringFieldUpdateOperationsInput | string
+    profileImage?: NullableStringFieldUpdateOperationsInput | string | null
     accountId?: NullableStringFieldUpdateOperationsInput | string | null
     accessToken?: NullableStringFieldUpdateOperationsInput | string | null
     refreshToken?: NullableStringFieldUpdateOperationsInput | string | null
@@ -37853,6 +37964,7 @@ export namespace Prisma {
     userId?: StringFieldUpdateOperationsInput | string
     platform?: EnumPlatformFieldUpdateOperationsInput | $Enums.Platform
     accountName?: StringFieldUpdateOperationsInput | string
+    profileImage?: NullableStringFieldUpdateOperationsInput | string | null
     accountId?: NullableStringFieldUpdateOperationsInput | string | null
     accessToken?: NullableStringFieldUpdateOperationsInput | string | null
     refreshToken?: NullableStringFieldUpdateOperationsInput | string | null
@@ -37870,6 +37982,7 @@ export namespace Prisma {
     userId: string
     platform: $Enums.Platform
     accountName: string
+    profileImage?: string | null
     accountId?: string | null
     accessToken?: string | null
     refreshToken?: string | null
@@ -37885,6 +37998,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     platform?: EnumPlatformFieldUpdateOperationsInput | $Enums.Platform
     accountName?: StringFieldUpdateOperationsInput | string
+    profileImage?: NullableStringFieldUpdateOperationsInput | string | null
     accountId?: NullableStringFieldUpdateOperationsInput | string | null
     accessToken?: NullableStringFieldUpdateOperationsInput | string | null
     refreshToken?: NullableStringFieldUpdateOperationsInput | string | null
@@ -37901,6 +38015,7 @@ export namespace Prisma {
     userId?: StringFieldUpdateOperationsInput | string
     platform?: EnumPlatformFieldUpdateOperationsInput | $Enums.Platform
     accountName?: StringFieldUpdateOperationsInput | string
+    profileImage?: NullableStringFieldUpdateOperationsInput | string | null
     accountId?: NullableStringFieldUpdateOperationsInput | string | null
     accessToken?: NullableStringFieldUpdateOperationsInput | string | null
     refreshToken?: NullableStringFieldUpdateOperationsInput | string | null
@@ -38156,6 +38271,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     user: UserCreateNestedOneWithoutCampaignsInput
     posts?: PostCreateNestedManyWithoutCampaignInput
+    emailCampaigns?: EmailCampaignCreateNestedManyWithoutCampaignInput
   }
 
   export type CampaignUncheckedCreateInput = {
@@ -38171,6 +38287,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     posts?: PostUncheckedCreateNestedManyWithoutCampaignInput
+    emailCampaigns?: EmailCampaignUncheckedCreateNestedManyWithoutCampaignInput
   }
 
   export type CampaignUpdateInput = {
@@ -38186,6 +38303,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     user?: UserUpdateOneRequiredWithoutCampaignsNestedInput
     posts?: PostUpdateManyWithoutCampaignNestedInput
+    emailCampaigns?: EmailCampaignUpdateManyWithoutCampaignNestedInput
   }
 
   export type CampaignUncheckedUpdateInput = {
@@ -38201,6 +38319,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     posts?: PostUncheckedUpdateManyWithoutCampaignNestedInput
+    emailCampaigns?: EmailCampaignUncheckedUpdateManyWithoutCampaignNestedInput
   }
 
   export type CampaignCreateManyInput = {
@@ -38711,6 +38830,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     user: UserCreateNestedOneWithoutEmailCampaignsInput
     template?: EmailTemplateCreateNestedOneWithoutCampaignsInput
+    campaign?: CampaignCreateNestedOneWithoutEmailCampaignsInput
     recipients?: EmailCampaignRecipientCreateNestedManyWithoutCampaignInput
   }
 
@@ -38718,6 +38838,7 @@ export namespace Prisma {
     id?: string
     userId: string
     templateId?: string | null
+    campaignId?: string | null
     name: string
     subject: string
     previewText?: string | null
@@ -38759,6 +38880,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     user?: UserUpdateOneRequiredWithoutEmailCampaignsNestedInput
     template?: EmailTemplateUpdateOneWithoutCampaignsNestedInput
+    campaign?: CampaignUpdateOneWithoutEmailCampaignsNestedInput
     recipients?: EmailCampaignRecipientUpdateManyWithoutCampaignNestedInput
   }
 
@@ -38766,6 +38888,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     userId?: StringFieldUpdateOperationsInput | string
     templateId?: NullableStringFieldUpdateOperationsInput | string | null
+    campaignId?: NullableStringFieldUpdateOperationsInput | string | null
     name?: StringFieldUpdateOperationsInput | string
     subject?: StringFieldUpdateOperationsInput | string
     previewText?: NullableStringFieldUpdateOperationsInput | string | null
@@ -38790,6 +38913,7 @@ export namespace Prisma {
     id?: string
     userId: string
     templateId?: string | null
+    campaignId?: string | null
     name: string
     subject: string
     previewText?: string | null
@@ -38834,6 +38958,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     userId?: StringFieldUpdateOperationsInput | string
     templateId?: NullableStringFieldUpdateOperationsInput | string | null
+    campaignId?: NullableStringFieldUpdateOperationsInput | string | null
     name?: StringFieldUpdateOperationsInput | string
     subject?: StringFieldUpdateOperationsInput | string
     previewText?: NullableStringFieldUpdateOperationsInput | string | null
@@ -40201,6 +40326,7 @@ export namespace Prisma {
     userId?: SortOrder
     platform?: SortOrder
     accountName?: SortOrder
+    profileImage?: SortOrder
     accountId?: SortOrder
     accessToken?: SortOrder
     refreshToken?: SortOrder
@@ -40221,6 +40347,7 @@ export namespace Prisma {
     userId?: SortOrder
     platform?: SortOrder
     accountName?: SortOrder
+    profileImage?: SortOrder
     accountId?: SortOrder
     accessToken?: SortOrder
     refreshToken?: SortOrder
@@ -40237,6 +40364,7 @@ export namespace Prisma {
     userId?: SortOrder
     platform?: SortOrder
     accountName?: SortOrder
+    profileImage?: SortOrder
     accountId?: SortOrder
     accessToken?: SortOrder
     refreshToken?: SortOrder
@@ -40788,6 +40916,7 @@ export namespace Prisma {
     id?: SortOrder
     userId?: SortOrder
     templateId?: SortOrder
+    campaignId?: SortOrder
     name?: SortOrder
     subject?: SortOrder
     previewText?: SortOrder
@@ -40819,6 +40948,7 @@ export namespace Prisma {
     id?: SortOrder
     userId?: SortOrder
     templateId?: SortOrder
+    campaignId?: SortOrder
     name?: SortOrder
     subject?: SortOrder
     previewText?: SortOrder
@@ -40842,6 +40972,7 @@ export namespace Prisma {
     id?: SortOrder
     userId?: SortOrder
     templateId?: SortOrder
+    campaignId?: SortOrder
     name?: SortOrder
     subject?: SortOrder
     previewText?: SortOrder
@@ -42337,11 +42468,25 @@ export namespace Prisma {
     connect?: PostWhereUniqueInput | PostWhereUniqueInput[]
   }
 
+  export type EmailCampaignCreateNestedManyWithoutCampaignInput = {
+    create?: XOR<EmailCampaignCreateWithoutCampaignInput, EmailCampaignUncheckedCreateWithoutCampaignInput> | EmailCampaignCreateWithoutCampaignInput[] | EmailCampaignUncheckedCreateWithoutCampaignInput[]
+    connectOrCreate?: EmailCampaignCreateOrConnectWithoutCampaignInput | EmailCampaignCreateOrConnectWithoutCampaignInput[]
+    createMany?: EmailCampaignCreateManyCampaignInputEnvelope
+    connect?: EmailCampaignWhereUniqueInput | EmailCampaignWhereUniqueInput[]
+  }
+
   export type PostUncheckedCreateNestedManyWithoutCampaignInput = {
     create?: XOR<PostCreateWithoutCampaignInput, PostUncheckedCreateWithoutCampaignInput> | PostCreateWithoutCampaignInput[] | PostUncheckedCreateWithoutCampaignInput[]
     connectOrCreate?: PostCreateOrConnectWithoutCampaignInput | PostCreateOrConnectWithoutCampaignInput[]
     createMany?: PostCreateManyCampaignInputEnvelope
     connect?: PostWhereUniqueInput | PostWhereUniqueInput[]
+  }
+
+  export type EmailCampaignUncheckedCreateNestedManyWithoutCampaignInput = {
+    create?: XOR<EmailCampaignCreateWithoutCampaignInput, EmailCampaignUncheckedCreateWithoutCampaignInput> | EmailCampaignCreateWithoutCampaignInput[] | EmailCampaignUncheckedCreateWithoutCampaignInput[]
+    connectOrCreate?: EmailCampaignCreateOrConnectWithoutCampaignInput | EmailCampaignCreateOrConnectWithoutCampaignInput[]
+    createMany?: EmailCampaignCreateManyCampaignInputEnvelope
+    connect?: EmailCampaignWhereUniqueInput | EmailCampaignWhereUniqueInput[]
   }
 
   export type EnumCampaignStatusFieldUpdateOperationsInput = {
@@ -42383,6 +42528,20 @@ export namespace Prisma {
     deleteMany?: PostScalarWhereInput | PostScalarWhereInput[]
   }
 
+  export type EmailCampaignUpdateManyWithoutCampaignNestedInput = {
+    create?: XOR<EmailCampaignCreateWithoutCampaignInput, EmailCampaignUncheckedCreateWithoutCampaignInput> | EmailCampaignCreateWithoutCampaignInput[] | EmailCampaignUncheckedCreateWithoutCampaignInput[]
+    connectOrCreate?: EmailCampaignCreateOrConnectWithoutCampaignInput | EmailCampaignCreateOrConnectWithoutCampaignInput[]
+    upsert?: EmailCampaignUpsertWithWhereUniqueWithoutCampaignInput | EmailCampaignUpsertWithWhereUniqueWithoutCampaignInput[]
+    createMany?: EmailCampaignCreateManyCampaignInputEnvelope
+    set?: EmailCampaignWhereUniqueInput | EmailCampaignWhereUniqueInput[]
+    disconnect?: EmailCampaignWhereUniqueInput | EmailCampaignWhereUniqueInput[]
+    delete?: EmailCampaignWhereUniqueInput | EmailCampaignWhereUniqueInput[]
+    connect?: EmailCampaignWhereUniqueInput | EmailCampaignWhereUniqueInput[]
+    update?: EmailCampaignUpdateWithWhereUniqueWithoutCampaignInput | EmailCampaignUpdateWithWhereUniqueWithoutCampaignInput[]
+    updateMany?: EmailCampaignUpdateManyWithWhereWithoutCampaignInput | EmailCampaignUpdateManyWithWhereWithoutCampaignInput[]
+    deleteMany?: EmailCampaignScalarWhereInput | EmailCampaignScalarWhereInput[]
+  }
+
   export type PostUncheckedUpdateManyWithoutCampaignNestedInput = {
     create?: XOR<PostCreateWithoutCampaignInput, PostUncheckedCreateWithoutCampaignInput> | PostCreateWithoutCampaignInput[] | PostUncheckedCreateWithoutCampaignInput[]
     connectOrCreate?: PostCreateOrConnectWithoutCampaignInput | PostCreateOrConnectWithoutCampaignInput[]
@@ -42395,6 +42554,20 @@ export namespace Prisma {
     update?: PostUpdateWithWhereUniqueWithoutCampaignInput | PostUpdateWithWhereUniqueWithoutCampaignInput[]
     updateMany?: PostUpdateManyWithWhereWithoutCampaignInput | PostUpdateManyWithWhereWithoutCampaignInput[]
     deleteMany?: PostScalarWhereInput | PostScalarWhereInput[]
+  }
+
+  export type EmailCampaignUncheckedUpdateManyWithoutCampaignNestedInput = {
+    create?: XOR<EmailCampaignCreateWithoutCampaignInput, EmailCampaignUncheckedCreateWithoutCampaignInput> | EmailCampaignCreateWithoutCampaignInput[] | EmailCampaignUncheckedCreateWithoutCampaignInput[]
+    connectOrCreate?: EmailCampaignCreateOrConnectWithoutCampaignInput | EmailCampaignCreateOrConnectWithoutCampaignInput[]
+    upsert?: EmailCampaignUpsertWithWhereUniqueWithoutCampaignInput | EmailCampaignUpsertWithWhereUniqueWithoutCampaignInput[]
+    createMany?: EmailCampaignCreateManyCampaignInputEnvelope
+    set?: EmailCampaignWhereUniqueInput | EmailCampaignWhereUniqueInput[]
+    disconnect?: EmailCampaignWhereUniqueInput | EmailCampaignWhereUniqueInput[]
+    delete?: EmailCampaignWhereUniqueInput | EmailCampaignWhereUniqueInput[]
+    connect?: EmailCampaignWhereUniqueInput | EmailCampaignWhereUniqueInput[]
+    update?: EmailCampaignUpdateWithWhereUniqueWithoutCampaignInput | EmailCampaignUpdateWithWhereUniqueWithoutCampaignInput[]
+    updateMany?: EmailCampaignUpdateManyWithWhereWithoutCampaignInput | EmailCampaignUpdateManyWithWhereWithoutCampaignInput[]
+    deleteMany?: EmailCampaignScalarWhereInput | EmailCampaignScalarWhereInput[]
   }
 
   export type AudienceGroupCreatetagsInput = {
@@ -42673,6 +42846,12 @@ export namespace Prisma {
     connect?: EmailTemplateWhereUniqueInput
   }
 
+  export type CampaignCreateNestedOneWithoutEmailCampaignsInput = {
+    create?: XOR<CampaignCreateWithoutEmailCampaignsInput, CampaignUncheckedCreateWithoutEmailCampaignsInput>
+    connectOrCreate?: CampaignCreateOrConnectWithoutEmailCampaignsInput
+    connect?: CampaignWhereUniqueInput
+  }
+
   export type EmailCampaignRecipientCreateNestedManyWithoutCampaignInput = {
     create?: XOR<EmailCampaignRecipientCreateWithoutCampaignInput, EmailCampaignRecipientUncheckedCreateWithoutCampaignInput> | EmailCampaignRecipientCreateWithoutCampaignInput[] | EmailCampaignRecipientUncheckedCreateWithoutCampaignInput[]
     connectOrCreate?: EmailCampaignRecipientCreateOrConnectWithoutCampaignInput | EmailCampaignRecipientCreateOrConnectWithoutCampaignInput[]
@@ -42707,6 +42886,16 @@ export namespace Prisma {
     delete?: EmailTemplateWhereInput | boolean
     connect?: EmailTemplateWhereUniqueInput
     update?: XOR<XOR<EmailTemplateUpdateToOneWithWhereWithoutCampaignsInput, EmailTemplateUpdateWithoutCampaignsInput>, EmailTemplateUncheckedUpdateWithoutCampaignsInput>
+  }
+
+  export type CampaignUpdateOneWithoutEmailCampaignsNestedInput = {
+    create?: XOR<CampaignCreateWithoutEmailCampaignsInput, CampaignUncheckedCreateWithoutEmailCampaignsInput>
+    connectOrCreate?: CampaignCreateOrConnectWithoutEmailCampaignsInput
+    upsert?: CampaignUpsertWithoutEmailCampaignsInput
+    disconnect?: CampaignWhereInput | boolean
+    delete?: CampaignWhereInput | boolean
+    connect?: CampaignWhereUniqueInput
+    update?: XOR<XOR<CampaignUpdateToOneWithWhereWithoutEmailCampaignsInput, CampaignUpdateWithoutEmailCampaignsInput>, CampaignUncheckedUpdateWithoutEmailCampaignsInput>
   }
 
   export type EmailCampaignRecipientUpdateManyWithoutCampaignNestedInput = {
@@ -43412,6 +43601,7 @@ export namespace Prisma {
     id?: string
     platform: $Enums.Platform
     accountName: string
+    profileImage?: string | null
     accountId?: string | null
     accessToken?: string | null
     refreshToken?: string | null
@@ -43428,6 +43618,7 @@ export namespace Prisma {
     id?: string
     platform: $Enums.Platform
     accountName: string
+    profileImage?: string | null
     accountId?: string | null
     accessToken?: string | null
     refreshToken?: string | null
@@ -43504,6 +43695,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     posts?: PostCreateNestedManyWithoutCampaignInput
+    emailCampaigns?: EmailCampaignCreateNestedManyWithoutCampaignInput
   }
 
   export type CampaignUncheckedCreateWithoutUserInput = {
@@ -43518,6 +43710,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     posts?: PostUncheckedCreateNestedManyWithoutCampaignInput
+    emailCampaigns?: EmailCampaignUncheckedCreateNestedManyWithoutCampaignInput
   }
 
   export type CampaignCreateOrConnectWithoutUserInput = {
@@ -43580,12 +43773,14 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     template?: EmailTemplateCreateNestedOneWithoutCampaignsInput
+    campaign?: CampaignCreateNestedOneWithoutEmailCampaignsInput
     recipients?: EmailCampaignRecipientCreateNestedManyWithoutCampaignInput
   }
 
   export type EmailCampaignUncheckedCreateWithoutUserInput = {
     id?: string
     templateId?: string | null
+    campaignId?: string | null
     name: string
     subject: string
     previewText?: string | null
@@ -44039,6 +44234,7 @@ export namespace Prisma {
     userId?: StringFilter<"SocialAccount"> | string
     platform?: EnumPlatformFilter<"SocialAccount"> | $Enums.Platform
     accountName?: StringFilter<"SocialAccount"> | string
+    profileImage?: StringNullableFilter<"SocialAccount"> | string | null
     accountId?: StringNullableFilter<"SocialAccount"> | string | null
     accessToken?: StringNullableFilter<"SocialAccount"> | string | null
     refreshToken?: StringNullableFilter<"SocialAccount"> | string | null
@@ -44170,6 +44366,7 @@ export namespace Prisma {
     id?: StringFilter<"EmailCampaign"> | string
     userId?: StringFilter<"EmailCampaign"> | string
     templateId?: StringNullableFilter<"EmailCampaign"> | string | null
+    campaignId?: StringNullableFilter<"EmailCampaign"> | string | null
     name?: StringFilter<"EmailCampaign"> | string
     subject?: StringFilter<"EmailCampaign"> | string
     previewText?: StringNullableFilter<"EmailCampaign"> | string | null
@@ -45947,6 +46144,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     user: UserCreateNestedOneWithoutCampaignsInput
+    emailCampaigns?: EmailCampaignCreateNestedManyWithoutCampaignInput
   }
 
   export type CampaignUncheckedCreateWithoutPostsInput = {
@@ -45961,6 +46159,7 @@ export namespace Prisma {
     platforms?: CampaignCreateplatformsInput | $Enums.Platform[]
     createdAt?: Date | string
     updatedAt?: Date | string
+    emailCampaigns?: EmailCampaignUncheckedCreateNestedManyWithoutCampaignInput
   }
 
   export type CampaignCreateOrConnectWithoutPostsInput = {
@@ -46102,6 +46301,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     user?: UserUpdateOneRequiredWithoutCampaignsNestedInput
+    emailCampaigns?: EmailCampaignUpdateManyWithoutCampaignNestedInput
   }
 
   export type CampaignUncheckedUpdateWithoutPostsInput = {
@@ -46116,6 +46316,7 @@ export namespace Prisma {
     platforms?: CampaignUpdateplatformsInput | $Enums.Platform[]
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    emailCampaigns?: EmailCampaignUncheckedUpdateManyWithoutCampaignNestedInput
   }
 
   export type PlatformPostUpsertWithWhereUniqueWithoutPostInput = {
@@ -46175,6 +46376,7 @@ export namespace Prisma {
     id?: string
     platform: $Enums.Platform
     accountName: string
+    profileImage?: string | null
     accountId?: string | null
     accessToken?: string | null
     refreshToken?: string | null
@@ -46192,6 +46394,7 @@ export namespace Prisma {
     userId: string
     platform: $Enums.Platform
     accountName: string
+    profileImage?: string | null
     accountId?: string | null
     accessToken?: string | null
     refreshToken?: string | null
@@ -46266,6 +46469,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     platform?: EnumPlatformFieldUpdateOperationsInput | $Enums.Platform
     accountName?: StringFieldUpdateOperationsInput | string
+    profileImage?: NullableStringFieldUpdateOperationsInput | string | null
     accountId?: NullableStringFieldUpdateOperationsInput | string | null
     accessToken?: NullableStringFieldUpdateOperationsInput | string | null
     refreshToken?: NullableStringFieldUpdateOperationsInput | string | null
@@ -46283,6 +46487,7 @@ export namespace Prisma {
     userId?: StringFieldUpdateOperationsInput | string
     platform?: EnumPlatformFieldUpdateOperationsInput | $Enums.Platform
     accountName?: StringFieldUpdateOperationsInput | string
+    profileImage?: NullableStringFieldUpdateOperationsInput | string | null
     accountId?: NullableStringFieldUpdateOperationsInput | string | null
     accessToken?: NullableStringFieldUpdateOperationsInput | string | null
     refreshToken?: NullableStringFieldUpdateOperationsInput | string | null
@@ -46399,6 +46604,64 @@ export namespace Prisma {
     skipDuplicates?: boolean
   }
 
+  export type EmailCampaignCreateWithoutCampaignInput = {
+    id?: string
+    name: string
+    subject: string
+    previewText?: string | null
+    htmlContent: string
+    textContent?: string | null
+    status?: $Enums.EmailCampaignStatus
+    scheduledAt?: Date | string | null
+    sentAt?: Date | string | null
+    failedAt?: Date | string | null
+    openRate?: number
+    clickRate?: number
+    bounceRate?: number
+    retryCount?: number
+    maxRetries?: number
+    errorMessage?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    user: UserCreateNestedOneWithoutEmailCampaignsInput
+    template?: EmailTemplateCreateNestedOneWithoutCampaignsInput
+    recipients?: EmailCampaignRecipientCreateNestedManyWithoutCampaignInput
+  }
+
+  export type EmailCampaignUncheckedCreateWithoutCampaignInput = {
+    id?: string
+    userId: string
+    templateId?: string | null
+    name: string
+    subject: string
+    previewText?: string | null
+    htmlContent: string
+    textContent?: string | null
+    status?: $Enums.EmailCampaignStatus
+    scheduledAt?: Date | string | null
+    sentAt?: Date | string | null
+    failedAt?: Date | string | null
+    openRate?: number
+    clickRate?: number
+    bounceRate?: number
+    retryCount?: number
+    maxRetries?: number
+    errorMessage?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    recipients?: EmailCampaignRecipientUncheckedCreateNestedManyWithoutCampaignInput
+  }
+
+  export type EmailCampaignCreateOrConnectWithoutCampaignInput = {
+    where: EmailCampaignWhereUniqueInput
+    create: XOR<EmailCampaignCreateWithoutCampaignInput, EmailCampaignUncheckedCreateWithoutCampaignInput>
+  }
+
+  export type EmailCampaignCreateManyCampaignInputEnvelope = {
+    data: EmailCampaignCreateManyCampaignInput | EmailCampaignCreateManyCampaignInput[]
+    skipDuplicates?: boolean
+  }
+
   export type UserUpsertWithoutCampaignsInput = {
     update: XOR<UserUpdateWithoutCampaignsInput, UserUncheckedUpdateWithoutCampaignsInput>
     create: XOR<UserCreateWithoutCampaignsInput, UserUncheckedCreateWithoutCampaignsInput>
@@ -46482,6 +46745,22 @@ export namespace Prisma {
   export type PostUpdateManyWithWhereWithoutCampaignInput = {
     where: PostScalarWhereInput
     data: XOR<PostUpdateManyMutationInput, PostUncheckedUpdateManyWithoutCampaignInput>
+  }
+
+  export type EmailCampaignUpsertWithWhereUniqueWithoutCampaignInput = {
+    where: EmailCampaignWhereUniqueInput
+    update: XOR<EmailCampaignUpdateWithoutCampaignInput, EmailCampaignUncheckedUpdateWithoutCampaignInput>
+    create: XOR<EmailCampaignCreateWithoutCampaignInput, EmailCampaignUncheckedCreateWithoutCampaignInput>
+  }
+
+  export type EmailCampaignUpdateWithWhereUniqueWithoutCampaignInput = {
+    where: EmailCampaignWhereUniqueInput
+    data: XOR<EmailCampaignUpdateWithoutCampaignInput, EmailCampaignUncheckedUpdateWithoutCampaignInput>
+  }
+
+  export type EmailCampaignUpdateManyWithWhereWithoutCampaignInput = {
+    where: EmailCampaignScalarWhereInput
+    data: XOR<EmailCampaignUpdateManyMutationInput, EmailCampaignUncheckedUpdateManyWithoutCampaignInput>
   }
 
   export type UserCreateWithoutAudienceGroupsInput = {
@@ -46966,12 +47245,14 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     user: UserCreateNestedOneWithoutEmailCampaignsInput
+    campaign?: CampaignCreateNestedOneWithoutEmailCampaignsInput
     recipients?: EmailCampaignRecipientCreateNestedManyWithoutCampaignInput
   }
 
   export type EmailCampaignUncheckedCreateWithoutTemplateInput = {
     id?: string
     userId: string
+    campaignId?: string | null
     name: string
     subject: string
     previewText?: string | null
@@ -47315,6 +47596,41 @@ export namespace Prisma {
     create: XOR<EmailTemplateCreateWithoutCampaignsInput, EmailTemplateUncheckedCreateWithoutCampaignsInput>
   }
 
+  export type CampaignCreateWithoutEmailCampaignsInput = {
+    id?: string
+    name: string
+    description?: string | null
+    status?: $Enums.CampaignStatus
+    startDate?: Date | string | null
+    endDate?: Date | string | null
+    budget?: number | null
+    platforms?: CampaignCreateplatformsInput | $Enums.Platform[]
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    user: UserCreateNestedOneWithoutCampaignsInput
+    posts?: PostCreateNestedManyWithoutCampaignInput
+  }
+
+  export type CampaignUncheckedCreateWithoutEmailCampaignsInput = {
+    id?: string
+    userId: string
+    name: string
+    description?: string | null
+    status?: $Enums.CampaignStatus
+    startDate?: Date | string | null
+    endDate?: Date | string | null
+    budget?: number | null
+    platforms?: CampaignCreateplatformsInput | $Enums.Platform[]
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    posts?: PostUncheckedCreateNestedManyWithoutCampaignInput
+  }
+
+  export type CampaignCreateOrConnectWithoutEmailCampaignsInput = {
+    where: CampaignWhereUniqueInput
+    create: XOR<CampaignCreateWithoutEmailCampaignsInput, CampaignUncheckedCreateWithoutEmailCampaignsInput>
+  }
+
   export type EmailCampaignRecipientCreateWithoutCampaignInput = {
     id?: string
     sent?: boolean
@@ -47455,6 +47771,47 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
+  export type CampaignUpsertWithoutEmailCampaignsInput = {
+    update: XOR<CampaignUpdateWithoutEmailCampaignsInput, CampaignUncheckedUpdateWithoutEmailCampaignsInput>
+    create: XOR<CampaignCreateWithoutEmailCampaignsInput, CampaignUncheckedCreateWithoutEmailCampaignsInput>
+    where?: CampaignWhereInput
+  }
+
+  export type CampaignUpdateToOneWithWhereWithoutEmailCampaignsInput = {
+    where?: CampaignWhereInput
+    data: XOR<CampaignUpdateWithoutEmailCampaignsInput, CampaignUncheckedUpdateWithoutEmailCampaignsInput>
+  }
+
+  export type CampaignUpdateWithoutEmailCampaignsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: EnumCampaignStatusFieldUpdateOperationsInput | $Enums.CampaignStatus
+    startDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    endDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    budget?: NullableFloatFieldUpdateOperationsInput | number | null
+    platforms?: CampaignUpdateplatformsInput | $Enums.Platform[]
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    user?: UserUpdateOneRequiredWithoutCampaignsNestedInput
+    posts?: PostUpdateManyWithoutCampaignNestedInput
+  }
+
+  export type CampaignUncheckedUpdateWithoutEmailCampaignsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    userId?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: EnumCampaignStatusFieldUpdateOperationsInput | $Enums.CampaignStatus
+    startDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    endDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    budget?: NullableFloatFieldUpdateOperationsInput | number | null
+    platforms?: CampaignUpdateplatformsInput | $Enums.Platform[]
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    posts?: PostUncheckedUpdateManyWithoutCampaignNestedInput
+  }
+
   export type EmailCampaignRecipientUpsertWithWhereUniqueWithoutCampaignInput = {
     where: EmailCampaignRecipientWhereUniqueInput
     update: XOR<EmailCampaignRecipientUpdateWithoutCampaignInput, EmailCampaignRecipientUncheckedUpdateWithoutCampaignInput>
@@ -47492,12 +47849,14 @@ export namespace Prisma {
     updatedAt?: Date | string
     user: UserCreateNestedOneWithoutEmailCampaignsInput
     template?: EmailTemplateCreateNestedOneWithoutCampaignsInput
+    campaign?: CampaignCreateNestedOneWithoutEmailCampaignsInput
   }
 
   export type EmailCampaignUncheckedCreateWithoutRecipientsInput = {
     id?: string
     userId: string
     templateId?: string | null
+    campaignId?: string | null
     name: string
     subject: string
     previewText?: string | null
@@ -47587,12 +47946,14 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     user?: UserUpdateOneRequiredWithoutEmailCampaignsNestedInput
     template?: EmailTemplateUpdateOneWithoutCampaignsNestedInput
+    campaign?: CampaignUpdateOneWithoutEmailCampaignsNestedInput
   }
 
   export type EmailCampaignUncheckedUpdateWithoutRecipientsInput = {
     id?: StringFieldUpdateOperationsInput | string
     userId?: StringFieldUpdateOperationsInput | string
     templateId?: NullableStringFieldUpdateOperationsInput | string | null
+    campaignId?: NullableStringFieldUpdateOperationsInput | string | null
     name?: StringFieldUpdateOperationsInput | string
     subject?: StringFieldUpdateOperationsInput | string
     previewText?: NullableStringFieldUpdateOperationsInput | string | null
@@ -48072,6 +48433,7 @@ export namespace Prisma {
     id?: string
     platform: $Enums.Platform
     accountName: string
+    profileImage?: string | null
     accountId?: string | null
     accessToken?: string | null
     refreshToken?: string | null
@@ -48123,6 +48485,7 @@ export namespace Prisma {
   export type EmailCampaignCreateManyUserInput = {
     id?: string
     templateId?: string | null
+    campaignId?: string | null
     name: string
     subject: string
     previewText?: string | null
@@ -48306,6 +48669,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     platform?: EnumPlatformFieldUpdateOperationsInput | $Enums.Platform
     accountName?: StringFieldUpdateOperationsInput | string
+    profileImage?: NullableStringFieldUpdateOperationsInput | string | null
     accountId?: NullableStringFieldUpdateOperationsInput | string | null
     accessToken?: NullableStringFieldUpdateOperationsInput | string | null
     refreshToken?: NullableStringFieldUpdateOperationsInput | string | null
@@ -48322,6 +48686,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     platform?: EnumPlatformFieldUpdateOperationsInput | $Enums.Platform
     accountName?: StringFieldUpdateOperationsInput | string
+    profileImage?: NullableStringFieldUpdateOperationsInput | string | null
     accountId?: NullableStringFieldUpdateOperationsInput | string | null
     accessToken?: NullableStringFieldUpdateOperationsInput | string | null
     refreshToken?: NullableStringFieldUpdateOperationsInput | string | null
@@ -48338,6 +48703,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     platform?: EnumPlatformFieldUpdateOperationsInput | $Enums.Platform
     accountName?: StringFieldUpdateOperationsInput | string
+    profileImage?: NullableStringFieldUpdateOperationsInput | string | null
     accountId?: NullableStringFieldUpdateOperationsInput | string | null
     accessToken?: NullableStringFieldUpdateOperationsInput | string | null
     refreshToken?: NullableStringFieldUpdateOperationsInput | string | null
@@ -48408,6 +48774,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     posts?: PostUpdateManyWithoutCampaignNestedInput
+    emailCampaigns?: EmailCampaignUpdateManyWithoutCampaignNestedInput
   }
 
   export type CampaignUncheckedUpdateWithoutUserInput = {
@@ -48422,6 +48789,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     posts?: PostUncheckedUpdateManyWithoutCampaignNestedInput
+    emailCampaigns?: EmailCampaignUncheckedUpdateManyWithoutCampaignNestedInput
   }
 
   export type CampaignUncheckedUpdateManyWithoutUserInput = {
@@ -48486,12 +48854,14 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     template?: EmailTemplateUpdateOneWithoutCampaignsNestedInput
+    campaign?: CampaignUpdateOneWithoutEmailCampaignsNestedInput
     recipients?: EmailCampaignRecipientUpdateManyWithoutCampaignNestedInput
   }
 
   export type EmailCampaignUncheckedUpdateWithoutUserInput = {
     id?: StringFieldUpdateOperationsInput | string
     templateId?: NullableStringFieldUpdateOperationsInput | string | null
+    campaignId?: NullableStringFieldUpdateOperationsInput | string | null
     name?: StringFieldUpdateOperationsInput | string
     subject?: StringFieldUpdateOperationsInput | string
     previewText?: NullableStringFieldUpdateOperationsInput | string | null
@@ -48515,6 +48885,7 @@ export namespace Prisma {
   export type EmailCampaignUncheckedUpdateManyWithoutUserInput = {
     id?: StringFieldUpdateOperationsInput | string
     templateId?: NullableStringFieldUpdateOperationsInput | string | null
+    campaignId?: NullableStringFieldUpdateOperationsInput | string | null
     name?: StringFieldUpdateOperationsInput | string
     subject?: StringFieldUpdateOperationsInput | string
     previewText?: NullableStringFieldUpdateOperationsInput | string | null
@@ -49102,6 +49473,29 @@ export namespace Prisma {
     updatedAt?: Date | string
   }
 
+  export type EmailCampaignCreateManyCampaignInput = {
+    id?: string
+    userId: string
+    templateId?: string | null
+    name: string
+    subject: string
+    previewText?: string | null
+    htmlContent: string
+    textContent?: string | null
+    status?: $Enums.EmailCampaignStatus
+    scheduledAt?: Date | string | null
+    sentAt?: Date | string | null
+    failedAt?: Date | string | null
+    openRate?: number
+    clickRate?: number
+    bounceRate?: number
+    retryCount?: number
+    maxRetries?: number
+    errorMessage?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
   export type PostUpdateWithoutCampaignInput = {
     id?: StringFieldUpdateOperationsInput | string
     title?: NullableStringFieldUpdateOperationsInput | string | null
@@ -49145,6 +49539,77 @@ export namespace Prisma {
     publishedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     googleCalendarEventId?: NullableStringFieldUpdateOperationsInput | string | null
     scheduleSource?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type EmailCampaignUpdateWithoutCampaignInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    subject?: StringFieldUpdateOperationsInput | string
+    previewText?: NullableStringFieldUpdateOperationsInput | string | null
+    htmlContent?: StringFieldUpdateOperationsInput | string
+    textContent?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: EnumEmailCampaignStatusFieldUpdateOperationsInput | $Enums.EmailCampaignStatus
+    scheduledAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    sentAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    failedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    openRate?: FloatFieldUpdateOperationsInput | number
+    clickRate?: FloatFieldUpdateOperationsInput | number
+    bounceRate?: FloatFieldUpdateOperationsInput | number
+    retryCount?: IntFieldUpdateOperationsInput | number
+    maxRetries?: IntFieldUpdateOperationsInput | number
+    errorMessage?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    user?: UserUpdateOneRequiredWithoutEmailCampaignsNestedInput
+    template?: EmailTemplateUpdateOneWithoutCampaignsNestedInput
+    recipients?: EmailCampaignRecipientUpdateManyWithoutCampaignNestedInput
+  }
+
+  export type EmailCampaignUncheckedUpdateWithoutCampaignInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    userId?: StringFieldUpdateOperationsInput | string
+    templateId?: NullableStringFieldUpdateOperationsInput | string | null
+    name?: StringFieldUpdateOperationsInput | string
+    subject?: StringFieldUpdateOperationsInput | string
+    previewText?: NullableStringFieldUpdateOperationsInput | string | null
+    htmlContent?: StringFieldUpdateOperationsInput | string
+    textContent?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: EnumEmailCampaignStatusFieldUpdateOperationsInput | $Enums.EmailCampaignStatus
+    scheduledAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    sentAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    failedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    openRate?: FloatFieldUpdateOperationsInput | number
+    clickRate?: FloatFieldUpdateOperationsInput | number
+    bounceRate?: FloatFieldUpdateOperationsInput | number
+    retryCount?: IntFieldUpdateOperationsInput | number
+    maxRetries?: IntFieldUpdateOperationsInput | number
+    errorMessage?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    recipients?: EmailCampaignRecipientUncheckedUpdateManyWithoutCampaignNestedInput
+  }
+
+  export type EmailCampaignUncheckedUpdateManyWithoutCampaignInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    userId?: StringFieldUpdateOperationsInput | string
+    templateId?: NullableStringFieldUpdateOperationsInput | string | null
+    name?: StringFieldUpdateOperationsInput | string
+    subject?: StringFieldUpdateOperationsInput | string
+    previewText?: NullableStringFieldUpdateOperationsInput | string | null
+    htmlContent?: StringFieldUpdateOperationsInput | string
+    textContent?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: EnumEmailCampaignStatusFieldUpdateOperationsInput | $Enums.EmailCampaignStatus
+    scheduledAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    sentAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    failedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    openRate?: FloatFieldUpdateOperationsInput | number
+    clickRate?: FloatFieldUpdateOperationsInput | number
+    bounceRate?: FloatFieldUpdateOperationsInput | number
+    retryCount?: IntFieldUpdateOperationsInput | number
+    maxRetries?: IntFieldUpdateOperationsInput | number
+    errorMessage?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -49228,6 +49693,7 @@ export namespace Prisma {
   export type EmailCampaignCreateManyTemplateInput = {
     id?: string
     userId: string
+    campaignId?: string | null
     name: string
     subject: string
     previewText?: string | null
@@ -49267,12 +49733,14 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     user?: UserUpdateOneRequiredWithoutEmailCampaignsNestedInput
+    campaign?: CampaignUpdateOneWithoutEmailCampaignsNestedInput
     recipients?: EmailCampaignRecipientUpdateManyWithoutCampaignNestedInput
   }
 
   export type EmailCampaignUncheckedUpdateWithoutTemplateInput = {
     id?: StringFieldUpdateOperationsInput | string
     userId?: StringFieldUpdateOperationsInput | string
+    campaignId?: NullableStringFieldUpdateOperationsInput | string | null
     name?: StringFieldUpdateOperationsInput | string
     subject?: StringFieldUpdateOperationsInput | string
     previewText?: NullableStringFieldUpdateOperationsInput | string | null
@@ -49296,6 +49764,7 @@ export namespace Prisma {
   export type EmailCampaignUncheckedUpdateManyWithoutTemplateInput = {
     id?: StringFieldUpdateOperationsInput | string
     userId?: StringFieldUpdateOperationsInput | string
+    campaignId?: NullableStringFieldUpdateOperationsInput | string | null
     name?: StringFieldUpdateOperationsInput | string
     subject?: StringFieldUpdateOperationsInput | string
     previewText?: NullableStringFieldUpdateOperationsInput | string | null

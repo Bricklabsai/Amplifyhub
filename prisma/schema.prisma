@@ -248,6 +248,7 @@ model SocialAccount {
   userId           String
   platform         Platform
   accountName      String
+  profileImage     String?
   accountId        String?
   accessToken      String?
   refreshToken     String?
@@ -319,6 +320,7 @@ model Campaign {
 
   user  User   @relation(fields: [userId], references: [id], onDelete: Cascade)
   posts Post[]
+  emailCampaigns EmailCampaign[]
 }
 
 model AudienceGroup {
@@ -403,6 +405,7 @@ model EmailCampaign {
   id          String              @id @default(cuid())
   userId      String
   templateId  String?
+  campaignId  String?
   name        String
   subject     String
   previewText String?
@@ -423,6 +426,7 @@ model EmailCampaign {
 
   user       User                    @relation(fields: [userId], references: [id], onDelete: Cascade)
   template   EmailTemplate?          @relation(fields: [templateId], references: [id])
+  campaign   Campaign?               @relation(fields: [campaignId], references: [id])
   recipients EmailCampaignRecipient[]
 }
 

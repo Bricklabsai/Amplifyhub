@@ -25,7 +25,7 @@ const PLATFORM_CONFIG: PlatformConfig[] = [
   { id: "FACEBOOK", label: "Facebook", Icon: FaFacebook, color: "#1877F2", bg: "#1877F215", provider: "facebook", zernioPlatform: "facebook" },
   { id: "TWITTER", label: "X (Twitter)", Icon: FaXTwitter, color: "#000000", bg: "#00000015", provider: "twitter", zernioPlatform: "twitter" },
   { id: "INSTAGRAM", label: "Instagram", Icon: FaInstagram, color: "#E1306C", bg: "#E1306C15", provider: "instagram", zernioPlatform: "instagram" },
-  { id: "LINKEDIN", label: "LinkedIn", Icon: FaLinkedin, color: "#0A66C2", bg: "#0A66C215", provider: "linkedin", zernioPlatform: "linkedin" },
+  { id: "LINKEDIN", label: "LinkedIn", Icon: FaLinkedin, color: "#0A66C2", bg: "#0A66C215", provider: "linkedin" /* zernioPlatform: "linkedin" */ },
   { id: "TIKTOK", label: "TikTok", Icon: FaTiktok, color: "#000000", bg: "#00000015", provider: "tiktok", zernioPlatform: "tiktok" },
   { id: "YOUTUBE", label: "YouTube", Icon: FaYoutube, color: "#FF0000", bg: "#FF000015", provider: "google", zernioPlatform: "youtube" },
   // WhatsApp now uses Zernio's OAuth connect flow, same as other platforms
@@ -94,7 +94,7 @@ export default function SocialAccountsPage() {
       return;
     }
     if (config.provider) {
-      signIn(config.provider, { callbackUrl: "/dashboard" });
+      signIn(config.provider, { callbackUrl: window.location.pathname + "?success=true" });
     }
   }
 
