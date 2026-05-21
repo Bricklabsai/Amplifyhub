@@ -5,12 +5,27 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
-import { HiPlus, HiUsers, HiUpload, HiDownload } from "react-icons/hi";
+import { HiPlus, HiUsers, HiUpload, HiMail } from "react-icons/hi";
 import Papa from "papaparse";
+import { formatDate } from "@/lib/utils";
+
+type EmailStats = {
+  lastSentAt: string | null;
+  avgOpenRate: number;
+  campaignCount: number;
+} | null;
+
+type Group = {
+  id: string;
+  name: string;
+  description?: string;
+  _count: { contacts: number };
+  emailStats: EmailStats;
+};
 
 export default function AudiencePage() {
   const router = useRouter();
-  const [groups, setGroups] = useState<any[]>([]);
+  const [groups, setGroups] = useState<Group[]>([]);
   const [loading, setLoading] = useState(true);
   const [open, setOpen] = useState(false);
   const [importOpen, setImportOpen] = useState(false);
@@ -36,7 +51,7 @@ export default function AudiencePage() {
       body: JSON.stringify(form),
     });
     const data = await res.json();
-    setGroups((g) => [{ ...data, _count: { contacts: 0 } }, ...g]);
+    setGroups((g) => [{ ...data, _count: { contacts: 0 }, emailStats: null }, ...g]);
     setOpen(false);
     setForm({ name: "", description: "" });
   }
@@ -71,6 +86,7 @@ export default function AudiencePage() {
   return (
     <div className="max-w-6xl space-y-6">
       <div className="flex items-center gap-3 justify-end">
+        {/* Import CSV */}
         <Dialog open={importOpen} onOpenChange={(v) => { setImportOpen(v); setImportResult(null); }}>
           <DialogTrigger asChild>
             <Button variant="outline" className="rounded-xl border-gray-200 text-sm font-medium flex items-center gap-2">
@@ -113,6 +129,7 @@ export default function AudiencePage() {
           </DialogContent>
         </Dialog>
 
+        {/* New Group */}
         <Dialog open={open} onOpenChange={setOpen}>
           <DialogTrigger asChild>
             <Button className="brand-gradient-bg text-white border-0 hover:opacity-90 rounded-xl font-semibold text-sm flex items-center gap-2">
@@ -126,11 +143,11 @@ export default function AudiencePage() {
             <div className="space-y-4 pt-2">
               <div>
                 <Label className="text-sm font-semibold text-gray-700 mb-2 block">Group Name</Label>
-                 <Input value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })} className="rounded-xl h-11 text-black" placeholder="Newsletter Subscribers" />
+                <Input value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })} className="rounded-xl h-11 text-black" placeholder="Newsletter Subscribers" />
               </div>
               <div>
                 <Label className="text-sm font-semibold text-gray-700 mb-2 block">Description</Label>
-                 <Input value={form.description} onChange={(e) => setForm({ ...form, description: e.target.value })} className="rounded-xl h-11 text-black" placeholder="Group description..." />
+                <Input value={form.description} onChange={(e) => setForm({ ...form, description: e.target.value })} className="rounded-xl h-11 text-black" placeholder="Group description..." />
               </div>
               <Button onClick={create} disabled={!form.name} className="w-full brand-gradient-bg text-white border-0 hover:opacity-90 rounded-xl h-11 font-semibold">
                 Create Group
@@ -142,7 +159,7 @@ export default function AudiencePage() {
 
       {loading ? (
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-          {[1,2,3].map((i) => <div key={i} className="bg-white rounded-2xl h-32 animate-pulse border border-gray-100" />)}
+          {[1, 2, 3].map((i) => <div key={i} className="bg-white rounded-2xl h-40 animate-pulse border border-gray-100" />)}
         </div>
       ) : groups.length === 0 ? (
         <div className="bg-white rounded-2xl border border-gray-100 py-16 text-center text-gray-400">
@@ -153,27 +170,56 @@ export default function AudiencePage() {
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
           {groups.map((g) => (
-            <div key={g.id} className="bg-white rounded-2xl border border-gray-100 shadow-sm p-5 hover:shadow-md transition-all">
+            <div key={g.id} className="bg-white rounded-2xl border border-gray-100 shadow-sm p-5 hover:shadow-md transition-all flex flex-col">
               <div className="w-10 h-10 rounded-xl bg-blue-50 flex items-center justify-center mb-4">
                 <HiUsers className="text-blue-500 text-lg" />
               </div>
               <h3 className="font-bold text-gray-900 mb-1" style={{ fontFamily: "Outfit, sans-serif" }}>{g.name}</h3>
               {g.description && <p className="text-sm text-gray-500 mb-3">{g.description}</p>}
-              <div className="flex items-baseline gap-1">
+              <div className="flex items-baseline gap-1 mb-3">
                 <span className="text-3xl font-black text-gray-900" style={{ fontFamily: "Outfit, sans-serif" }}>
                   {g._count?.contacts || 0}
                 </span>
                 <span className="text-sm text-gray-400">contacts</span>
               </div>
-              <Button
-                variant="ghost"
-                size="sm"
-                onClick={() => router.push(`/compose?groupId=${g.id}`)}
-                className="w-full mt-4 text-xs font-semibold text-violet-600 hover:text-violet-700 hover:bg-violet-50 rounded-xl flex items-center gap-2"
-              >
-                <HiPlus className="text-sm" />
-                Compose Email
-              </Button>
+
+              {/* Email stats */}
+              {g.emailStats ? (
+                <div className="bg-violet-50 rounded-xl px-3 py-2 mb-3 space-y-1">
+                  <div className="flex items-center justify-between text-xs">
+                    <span className="text-gray-500">Campaigns sent</span>
+                    <span className="font-semibold text-gray-800">{g.emailStats.campaignCount}</span>
+                  </div>
+                  {g.emailStats.avgOpenRate > 0 && (
+                    <div className="flex items-center justify-between text-xs">
+                      <span className="text-gray-500">Avg open rate</span>
+                      <span className="font-semibold text-violet-700">{(g.emailStats.avgOpenRate * 100).toFixed(1)}%</span>
+                    </div>
+                  )}
+                  {g.emailStats.lastSentAt && (
+                    <div className="flex items-center justify-between text-xs">
+                      <span className="text-gray-500">Last sent</span>
+                      <span className="text-gray-600">{formatDate(g.emailStats.lastSentAt)}</span>
+                    </div>
+                  )}
+                </div>
+              ) : (
+                <div className="bg-gray-50 rounded-xl px-3 py-2 mb-3">
+                  <p className="text-xs text-gray-400">No campaigns sent to this group yet</p>
+                </div>
+              )}
+
+              <div className="mt-auto">
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  onClick={() => router.push(`/email?tab=campaigns&groupId=${g.id}`)}
+                  className="w-full text-xs font-semibold text-violet-600 hover:text-violet-700 hover:bg-violet-50 rounded-xl flex items-center gap-2"
+                >
+                  <HiMail className="text-sm" />
+                  Send Email Campaign
+                </Button>
+              </div>
             </div>
           ))}
         </div>

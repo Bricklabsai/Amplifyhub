@@ -1,11 +1,12 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, Suspense } from "react";
 import { useSearchParams } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { HiCalendar, HiCheckCircle, HiXCircle } from "react-icons/hi";
 
-export default function RSVPPage() {
+// 1. Move all logic using useSearchParams and component state into a sub-component
+function RSVPForm() {
   const params = useSearchParams();
   const [status, setStatus] = useState<"loading" | "success" | "error">("loading");
   const [message, setMessage] = useState("Recording your RSVP...");
@@ -57,5 +58,18 @@ export default function RSVPPage() {
         </div>
       </div>
     </div>
+  );
+}
+
+// 2. The default export acts as the static shell providing the Suspense context during compilation
+export default function RSVPPage() {
+  return (
+    <Suspense fallback={
+      <div className="min-h-screen bg-slate-50 px-4 py-16 flex items-center justify-center">
+        <p className="text-sm text-gray-500">Loading your RSVP details...</p>
+      </div>
+    }>
+      <RSVPForm />
+    </Suspense>
   );
 }

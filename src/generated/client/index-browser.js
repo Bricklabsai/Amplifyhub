@@ -375,6 +375,7 @@ exports.Prisma.EmailCampaignScalarFieldEnum = {
   id: 'id',
   userId: 'userId',
   templateId: 'templateId',
+  campaignId: 'campaignId',
   name: 'name',
   subject: 'subject',
   previewText: 'previewText',

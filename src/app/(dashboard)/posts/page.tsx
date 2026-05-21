@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { HiSearch, HiPlus, HiTrash, HiEye, HiPaperAirplane } from "react-icons/hi";
-import { formatRelative } from "@/lib/utils";
+import { formatRelative, formatDateTime } from "@/lib/utils";
 import Link from "next/link";
 
 const STATUS_COLORS: Record<string, string> = {
@@ -218,7 +218,7 @@ export default function PostsPage() {
                   <div className="flex items-center gap-4 mt-2">
                     <span className="text-xs text-gray-400">{formatRelative(post.createdAt)}</span>
                     {post.scheduledAt && (
-                      <span className="text-xs text-blue-500">📅 {new Date(post.scheduledAt).toLocaleDateString()}</span>
+                      <span className="text-xs text-blue-500">📅 {formatDateTime(post.scheduledAt)}</span>
                     )}
                     {post.status === "PUBLISHED" && (
                       <button

@@ -1,11 +1,12 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, Suspense } from "react";
 import { useSearchParams } from "next/navigation";
 import { Button } from "@/components/ui/button";
-import { HiMail, HiCheckCircle, HiXCircle } from "react-icons/hi";
+import { HiCheckCircle, HiXCircle } from "react-icons/hi";
 
-export default function UnsubscribePage() {
+// 1. Move all the search params and state logic into a sub-component
+function UnsubscribeForm() {
   const params = useSearchParams();
   const [status, setStatus] = useState<"loading" | "success" | "error">("loading");
   const [message, setMessage] = useState("Processing your unsubscribe request...");
@@ -51,5 +52,18 @@ export default function UnsubscribePage() {
         </div>
       </div>
     </div>
+  );
+}
+
+// 2. The default export acts as the shell that provides the Suspense context during the build process
+export default function UnsubscribePage() {
+  return (
+    <Suspense fallback={
+      <div className="min-h-screen bg-slate-50 px-4 py-16 flex items-center justify-center">
+        <p className="text-sm text-gray-500">Loading request...</p>
+      </div>
+    }>
+      <UnsubscribeForm />
+    </Suspense>
   );
 }

@@ -294,7 +294,7 @@ export default function AIEmailStudio() {
             </div>
             <p className="text-white/80">Generate email content and templates, then send campaigns to audiences from one place.</p>
           </div>
-          <Link href="/email-campaigns" className="inline-flex items-center gap-2 rounded-2xl border border-white/30 bg-white/10 px-4 py-3 text-sm font-semibold text-white hover:bg-white/20 transition">
+          <Link href="/email-hub?tab=campaigns" className="inline-flex items-center gap-2 rounded-2xl border border-white/30 bg-white/10 px-4 py-3 text-sm font-semibold text-white hover:bg-white/20 transition">
             <HiMail /> Open Email Campaigns
           </Link>
         </div>

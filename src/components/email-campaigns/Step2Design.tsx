@@ -3,7 +3,7 @@ import { useState, useEffect } from "react";
 import { useToast } from "@/hooks/use-toast";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
-import { HiEye, HiDevicePhoneMobile, HiComputerDesktop, HiPaperAirplane } from "react-icons/hi2";
+import { HiEye, HiDevicePhoneMobile, HiComputerDesktop, HiPaperAirplane, HiSparkles } from "react-icons/hi2";
 import TipTapEditor from "./TipTapEditor";
 
 type WizardFormData = {
@@ -11,11 +11,14 @@ type WizardFormData = {
   subject: string;
   previewText: string;
   htmlContent: string;
+  campaignId?: string;
+  templateId?: string;
 };
 
 interface Step2DesignProps {
   form: WizardFormData;
   setForm: (form: WizardFormData) => void;
+  templates?: any[];
 }
 
 const EMAIL_TEMPLATES = [
@@ -72,28 +75,23 @@ const EMAIL_TEMPLATES = [
   },
 ];
 
-export default function Step2Design({ form, setForm }: Step2DesignProps) {
+export default function Step2Design({ form, setForm, templates = [] }: Step2DesignProps) {
   const [showPreview, setShowPreview] = useState(false);
   const [previewMode, setPreviewMode] = useState<"mobile" | "desktop">("desktop");
   const [testEmailSending, setTestEmailSending] = useState(false);
-  const [savedTemplates, setSavedTemplates] = useState<any[]>([]);
   const { toast } = useToast();
 
-  useEffect(() => {
-    void fetchSavedTemplates();
-  }, []);
-
-  async function fetchSavedTemplates() {
-    try {
-      const res = await fetch("/api/email-templates");
-      if (res.ok) {
-        const data = await res.json();
-        setSavedTemplates(Array.isArray(data) ? data : []);
-      }
-    } catch (error) {
-      console.error("Failed to load saved templates", error);
-    }
-  }
+  // Combine built-in templates with saved templates
+  const allTemplates = [
+    ...EMAIL_TEMPLATES,
+    ...templates.map((t: any) => ({
+      id: t.id,
+      name: t.name,
+      description: t.description || t.category,
+      content: t.htmlContent,
+      isSaved: true,
+    })),
+  ];
 
   async function applyTemplate(content: string) {
     setForm({ ...form, htmlContent: content });
@@ -148,17 +146,17 @@ export default function Step2Design({ form, setForm }: Step2DesignProps) {
   return (
     <div className="space-y-6 py-4 max-h-[70vh] overflow-y-auto">
       {/* Saved Templates */}
-      {savedTemplates.length > 0 && (
+      {allTemplates.length > 0 && (
         <div>
           <div className="flex items-center justify-between mb-3">
             <Label className="text-sm font-semibold text-gray-700">Saved Templates</Label>
             <p className="text-xs text-gray-400">Use a saved template from your library</p>
           </div>
           <div className="grid grid-cols-3 gap-3 mb-4">
-            {savedTemplates.map((template) => (
+            {allTemplates.map((template) => (
               <button
                 key={template.id}
-                onClick={() => applyTemplate(template.htmlContent)}
+                onClick={() => applyTemplate(template.content)}
                 className="border border-gray-200 rounded-lg p-3 hover:border-violet-500 hover:bg-violet-50 transition-all text-left"
               >
                 <p className="font-semibold text-sm text-gray-900">{template.name}</p>
@@ -176,7 +174,7 @@ export default function Step2Design({ form, setForm }: Step2DesignProps) {
             <p className="text-xs text-violet-700">Open the AI Email Composer to generate content, templates, and create an audience campaign from a single workflow.</p>
           </div>
           <a
-            href="/email-composer"
+            href="/email-hub?tab=studio"
             className="inline-flex items-center gap-2 rounded-full border border-white bg-white/90 px-4 py-2 text-xs font-semibold text-violet-700 hover:bg-violet-100 transition"
           >
             <HiSparkles /> Open AI Composer

@@ -1,10 +1,10 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { Suspense, useEffect, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { HiCheckCircle, HiXCircle, HiRefresh } from "react-icons/hi";
 
-export default function VerifyPage() {
+function VerifyContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const reference = searchParams.get("reference");
@@ -75,5 +75,18 @@ export default function VerifyPage() {
         </>
       )}
     </div>
+  );
+}
+
+export default function VerifyPage() {
+  return (
+    <Suspense fallback={
+      <div className="flex flex-col items-center justify-center min-h-[60vh] space-y-6">
+        <HiRefresh className="w-16 h-16 text-violet-500 animate-spin" />
+        <h2 className="text-2xl font-bold text-gray-900">Loading...</h2>
+      </div>
+    }>
+      <VerifyContent />
+    </Suspense>
   );
 }

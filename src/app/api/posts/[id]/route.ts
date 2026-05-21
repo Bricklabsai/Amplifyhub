@@ -149,7 +149,79 @@ export async function PATCH(req: NextRequest, { params }: { params: Promise<{ id
     return NextResponse.json(result);
   }
 
-  const updated = await prisma.post.update({ where: { id }, data: body });
+  // Handle scheduling and other updates
+  const { content, title, status, scheduledAt, mediaUrls, selectedSocialAccountIds } = body;
+
+  const updated = await prisma.$transaction(async (tx) => {
+    const updatedPost = await tx.post.update({
+      where: { id },
+      data: {
+        content: content !== undefined ? content : undefined,
+        title: title !== undefined ? title : undefined,
+        status: status !== undefined ? status : undefined,
+        scheduledAt: scheduledAt !== undefined ? (scheduledAt ? new Date(scheduledAt) : null) : undefined,
+        mediaUrls: mediaUrls !== undefined ? mediaUrls : undefined,
+      },
+    });
+
+    if (selectedSocialAccountIds !== undefined && Array.isArray(selectedSocialAccountIds)) {
+      // If social accounts are provided, update PlatformPost records
+      
+      // 1. Delete platform posts not in the new selection
+      await tx.platformPost.deleteMany({
+        where: {
+          postId: id,
+          socialAccountId: { notIn: selectedSocialAccountIds },
+        },
+      });
+
+      // 2. Add or update platform posts in the selection
+      for (const accountId of selectedSocialAccountIds) {
+        const account = await tx.socialAccount.findFirst({
+          where: { id: accountId, userId },
+        });
+
+        if (account) {
+          const existing = await tx.platformPost.findFirst({
+            where: { postId: id, socialAccountId: accountId },
+          });
+
+          if (existing) {
+            await tx.platformPost.update({
+              where: { id: existing.id },
+              data: {
+                status: status || updatedPost.status,
+                content: content || updatedPost.content,
+              },
+            });
+          } else {
+            await tx.platformPost.create({
+              data: {
+                postId: id,
+                socialAccountId: accountId,
+                platform: account.platform,
+                content: content || updatedPost.content,
+                status: status || updatedPost.status,
+              },
+            });
+          }
+        }
+      }
+    } else if (status !== undefined || content !== undefined) {
+      // If status or content updated but no social accounts selection provided, 
+      // update all existing PlatformPost records for this post
+      await tx.platformPost.updateMany({
+        where: { postId: id },
+        data: {
+          status: status !== undefined ? status : undefined,
+          content: content !== undefined ? content : undefined,
+        },
+      });
+    }
+
+    return updatedPost;
+  });
+
   return NextResponse.json(updated);
 }
 
