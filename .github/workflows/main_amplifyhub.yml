@@ -46,6 +46,8 @@ jobs:
           DATABASE_URL: ${{ secrets.DATABASE_URL }}
           PAYNOW_INTEGRATION_ID: ${{ secrets.PAYNOW_INTEGRATION_ID }}
           PAYNOW_INTEGRATION_KEY: ${{ secrets.PAYNOW_INTEGRATION_KEY }}
+          NEXT_PUBLIC_CLOUDFLARE_TURNSTILE_SITE_KEY: ${{ secrets.NEXT_PUBLIC_CLOUDFLARE_TURNSTILE_SITE_KEY }}
+          CLOUDFLARE_TURNSTILE_SECRET_KEY: ${{ secrets.CLOUDFLARE_TURNSTILE_SECRET_KEY }}
 
       - name: Prepare Standalone Artifact (Azure-safe)
         shell: bash
