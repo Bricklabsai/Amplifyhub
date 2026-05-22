@@ -1,73 +1,89 @@
 import { prisma } from "@/lib/prisma";
-import { publishPost } from "@/lib/services/publishPost";
-import crypto from "crypto";
+import { publishPost, serializePublishResults } from "@/lib/services/publishPost";
 
+const PROCESSING_LOCK = "processing";
+const STALE_LOCK_MS = 10 * 60 * 1000;
+
+/**
+ * Picks up posts whose scheduledAt has passed and publishes them via Zernio.
+ * Called every minute by Vercel Cron (/api/scheduler) and the dev scheduler.
+ */
 export async function processScheduledPosts() {
   const now = new Date();
-  
-  // 1. Process Scheduled Social Posts
+
+  // Recover posts stuck in "processing" after a crash or timeout
+  await prisma.post.updateMany({
+    where: {
+      status: "SCHEDULED",
+      scheduleSource: PROCESSING_LOCK,
+      updatedAt: { lt: new Date(Date.now() - STALE_LOCK_MS) },
+    },
+    data: { scheduleSource: "manual" },
+  });
+
   const scheduledPosts = await prisma.post.findMany({
-    where: { status: "SCHEDULED", scheduledAt: { lte: now } },
+    where: {
+      status: "SCHEDULED",
+      scheduledAt: { lte: now },
+      OR: [
+        { scheduleSource: null },
+        { scheduleSource: { not: PROCESSING_LOCK } },
+      ],
+    },
     include: { platformPosts: { include: { socialAccount: true } } },
+    orderBy: { scheduledAt: "asc" },
   });
 
   let published = 0;
   let failed = 0;
 
+  if (scheduledPosts.length > 0) {
+    console.log(
+      `[scheduler] ${scheduledPosts.length} due post(s) at ${now.toISOString()}`
+    );
+  }
+
   for (const post of scheduledPosts) {
+    const claimed = await prisma.post.updateMany({
+      where: {
+        id: post.id,
+        status: "SCHEDULED",
+        OR: [
+          { scheduleSource: null },
+          { scheduleSource: { not: PROCESSING_LOCK } },
+        ],
+      },
+      data: { scheduleSource: PROCESSING_LOCK },
+    });
+
+    if (claimed.count === 0) {
+      console.log(`[scheduler] Post ${post.id} already being processed, skipping`);
+      continue;
+    }
+
     try {
       let targetAccounts = [];
 
       if (post.platformPosts.length > 0) {
-        // Use pre-selected accounts (already joined with socialAccount)
         targetAccounts = post.platformPosts
-          .map(pp => pp.socialAccount)
+          .map((pp) => pp.socialAccount)
           .filter((sa): sa is NonNullable<typeof sa> => sa != null && sa.isActive);
       } else {
-        // Fallback: Get all active social accounts for this user if none were selected
         targetAccounts = await prisma.socialAccount.findMany({
           where: { userId: post.userId, isActive: true },
         });
       }
 
-      // Check for duplicate publish in last 5 minutes
-      const existingDuplicate = await prisma.platformPost.findFirst({
-        where: {
-          socialAccountId: { in: targetAccounts.map(a => a.id) },
-          status: "PUBLISHED",
-          externalId: { not: null },
-          createdAt: { gt: new Date(Date.now() - 5 * 60 * 1000) },
-        },
-      });
-
-      // Skip if likely duplicate (very similar content recently published)
-      if (existingDuplicate) {
-        await prisma.notification.create({
-          data: {
-            userId: post.userId,
-            title: "Scheduled Post Skipped (Duplicate)",
-            message: `A very similar post was published recently to one of your accounts. The scheduled post was skipped.`,
-            type: "warning",
-          },
-        });
-        await prisma.post.update({
-          where: { id: post.id },
-          data: { status: "FAILED" },
-        });
-        failed++;
-        continue;
-      }
-
       if (targetAccounts.length === 0) {
         await prisma.post.update({
           where: { id: post.id },
-          data: { status: "FAILED" },
+          data: { status: "FAILED", scheduleSource: "manual" },
         });
         await prisma.notification.create({
           data: {
             userId: post.userId,
-            title: "Post Failed",
-            message: `No active social accounts connected.`,
+            title: "Scheduled Post Failed",
+            message: "No active social accounts were connected when this post was due.",
             type: "error",
           },
         });
@@ -75,14 +91,35 @@ export async function processScheduledPosts() {
         continue;
       }
 
-      // Publish to platforms using active provider
-      const publishResults = await publishPost({ accounts: targetAccounts, content: post.content, mediaUrls: post.mediaUrls });
+      console.log(
+        `[scheduler] Publishing post ${post.id} to ${targetAccounts.length} account(s)`
+      );
 
-      // Update platform posts with results
-      let hasSuccess = false;
+      const publishResults = await publishPost({
+        accounts: targetAccounts,
+        content: post.content,
+        mediaUrls: post.mediaUrls,
+      });
+
+      const serialized = serializePublishResults(publishResults);
+      const successCount = Object.values(serialized).filter((r) => r.success).length;
+      const hasSuccess = successCount > 0;
+
+      if (!hasSuccess) {
+        const errors = Object.values(serialized)
+          .map((r) => r.error)
+          .filter(Boolean);
+        console.error(
+          `[scheduler] Post ${post.id} failed on all platforms:`,
+          errors.join("; ") || "unknown"
+        );
+      }
+
       for (const account of targetAccounts) {
         const result = publishResults.get(account.id);
-        const existing = post.platformPosts.find(pp => pp.socialAccountId === account.id);
+        const existing = post.platformPosts.find(
+          (pp) => pp.socialAccountId === account.id
+        );
 
         if (existing) {
           await prisma.platformPost.update({
@@ -106,43 +143,53 @@ export async function processScheduledPosts() {
             },
           });
         }
-
-        if (result?.success) hasSuccess = true;
       }
 
-      // Mark main post status
       await prisma.post.update({
         where: { id: post.id },
         data: {
           status: hasSuccess ? "PUBLISHED" : "FAILED",
           publishedAt: hasSuccess ? now : null,
+          scheduleSource: "manual",
         },
       });
 
-      // Create notification
+      const allFailed = successCount === 0;
+      const partial = hasSuccess && successCount < targetAccounts.length;
+
       await prisma.notification.create({
         data: {
           userId: post.userId,
-          title: hasSuccess ? "Scheduled Post Published" : "Scheduled Post Partially Published",
-          message: hasSuccess
-            ? `Your scheduled post was published successfully to ${Array.from(publishResults.values()).filter(r => r.success).length} of ${targetAccounts.length} platforms.`
-            : `Your scheduled post failed to publish to all platforms. Please check your accounts and try again.`,
-          type: hasSuccess ? "success" : "warning",
+          title: allFailed
+            ? "Scheduled Post Failed"
+            : partial
+              ? "Scheduled Post Partially Published"
+              : "Scheduled Post Published",
+          message: allFailed
+            ? `Your scheduled post could not be published. ${Object.values(serialized)
+                .map((r) => r.error)
+                .filter(Boolean)
+                .join("; ") || "Check your accounts and media, then try again."}`
+            : partial
+              ? `Published to ${successCount} of ${targetAccounts.length} accounts.`
+              : `Your scheduled post was published to ${successCount} account(s).`,
+          type: allFailed ? "error" : partial ? "warning" : "success",
         },
       });
 
-      published++;
+      if (hasSuccess) published++;
+      else failed++;
     } catch (error) {
-      console.error("Scheduler error:", error);
+      console.error(`[scheduler] Post ${post.id} error:`, error);
       await prisma.post.update({
         where: { id: post.id },
-        data: { status: "FAILED" },
+        data: { status: "FAILED", scheduleSource: "manual" },
       });
 
       await prisma.notification.create({
         data: {
           userId: post.userId,
-          title: "Post Failed",
+          title: "Scheduled Post Failed",
           message: `Your scheduled post failed to publish. Error: ${error instanceof Error ? error.message : "Unknown error"}`,
           type: "error",
         },
@@ -161,7 +208,7 @@ export async function processScheduledPosts() {
 export async function processScheduledEmails() {
   const now = new Date();
   const cronSecret = process.env.CRON_SECRET || "cron-secret-amplifyhub";
-  
+
   const scheduledEmails = await prisma.scheduledCampaign.findMany({
     where: { nextRunAt: { lte: now } },
   });
@@ -174,9 +221,9 @@ export async function processScheduledEmails() {
       await fetch(`${baseUrl}/api/scheduled-campaigns/${schedule.id}/run`, {
         method: "POST",
         headers: {
-          "Authorization": `Bearer ${cronSecret}`,
-          "Content-Type": "application/json"
-        }
+          Authorization: `Bearer ${cronSecret}`,
+          "Content-Type": "application/json",
+        },
       });
       emailsProcessed++;
     } catch (error) {

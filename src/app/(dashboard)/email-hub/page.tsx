@@ -65,8 +65,8 @@ function StatItem({
   return (
     <div className="border-b border-gray-100 pb-4 last:border-0">
       <div className="flex items-center gap-3">
-        <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-[#FFF1E8]">
-          <Icon className="text-lg text-[#FF6B4A]" />
+        <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-[#7331FF]/10">
+          <Icon className="text-lg text-[#7331FF]" />
         </div>
         <div>
           <div className="text-2xl font-black text-gray-900">{value}</div>
@@ -101,7 +101,7 @@ function AudienceListItem({ group }: { group: Group }) {
             </span>
             <span className="text-gray-500">
               Avg open rate:{" "}
-              <span className="font-medium text-[#D97706]">
+              <span className="font-medium text-[#7331FF]">
                 {(group.emailStats.avgOpenRate * 100).toFixed(1)}%
               </span>
             </span>
@@ -134,7 +134,7 @@ function AudienceListItem({ group }: { group: Group }) {
         </Button>
         <Button
           asChild
-          className="h-9 rounded-lg border-0 bg-[#FF6B4A] px-3 text-sm text-white hover:bg-[#FF5A35]"
+          className="h-9 rounded-lg border-0 brand-gradient-bg px-3 text-sm text-white hover:opacity-90"
         >
           <Link href="/audience">
             Manage
@@ -259,7 +259,7 @@ export default function EmailHubPage() {
           <div className="flex gap-3">
             <Button
               onClick={() => handleTabChange("campaigns")}
-              className="h-10 rounded-lg border-0 bg-[#FF6B4A] px-4 text-sm font-semibold text-white hover:bg-[#FF5A35]"
+              className="h-10 rounded-xl border-0 brand-gradient-bg px-4 text-sm font-semibold text-white hover:opacity-90"
             >
               <HiPlus className="mr-2 text-base" />
               New campaign
@@ -267,9 +267,9 @@ export default function EmailHubPage() {
             <Button
               variant="outline"
               onClick={() => handleTabChange("studio")}
-              className="h-10 rounded-lg border-gray-200 px-4 text-sm font-semibold text-gray-700"
+              className="h-10 rounded-xl border-gray-200 px-4 text-sm font-semibold text-gray-700 hover:border-[#7331FF]/30"
             >
-              <HiSparkles className="mr-2 text-base text-[#FF6B4A]" />
+              <HiSparkles className="mr-2 text-base text-[#7331FF]" />
               AI studio
             </Button>
           </div>
@@ -307,10 +307,10 @@ export default function EmailHubPage() {
       </div>
 
       {/* Quick Actions - Inline section */}
-      <div className="mb-8 bg-[#FFF9F4] p-4 rounded-xl">
+      <div className="mb-8 rounded-2xl border border-[#7331FF]/10 bg-gradient-to-r from-[#7331FF]/5 to-[#FFC01E]/10 p-5">
         <div className="flex flex-wrap items-center justify-between gap-4">
           <div className="flex items-center gap-2">
-            <HiSparkles className="text-xl text-[#FF6B4A]" />
+            <HiSparkles className="text-xl text-[#7331FF]" />
             <span className="font-semibold text-gray-900">Quick actions</span>
           </div>
           <div className="flex flex-wrap gap-2">
@@ -324,7 +324,7 @@ export default function EmailHubPage() {
               <Link
                 key={action.label}
                 href={action.href}
-                className="rounded-lg bg-white px-3 py-1.5 text-sm font-medium text-gray-700 transition-all hover:bg-gray-50 hover:text-[#FF6B4A]"
+                className="rounded-lg border border-transparent bg-white px-3 py-1.5 text-sm font-medium text-gray-700 transition-all hover:border-[#7331FF]/20 hover:bg-[#7331FF]/10 hover:text-[#7331FF]"
               >
                 {action.label}
               </Link>
@@ -335,12 +335,12 @@ export default function EmailHubPage() {
 
       {/* Main Tabs */}
       <Tabs value={activeTab} onValueChange={handleTabChange} className="w-full">
-        <TabsList className="mb-6 flex w-full flex-wrap gap-1 rounded-lg bg-transparent p-0">
+        <TabsList className="mb-6 flex h-auto w-full flex-wrap gap-1 rounded-xl border border-gray-200 bg-gray-100 p-1.5">
           {HUB_TABS.map((tab) => (
             <TabsTrigger
               key={tab.value}
               value={tab.value}
-              className="rounded-lg px-4 py-2 text-sm font-semibold data-[state=active]:bg-[#FF6B4A] data-[state=active]:text-white data-[state=inactive]:bg-gray-100 data-[state=inactive]:text-gray-600"
+              className="rounded-lg px-4 py-2.5 text-sm font-semibold text-gray-700 shadow-none transition-colors hover:bg-[#7331FF]/12 hover:text-[#7331FF] data-[state=active]:bg-[#7331FF] data-[state=active]:text-white data-[state=active]:shadow-md data-[state=inactive]:bg-transparent"
             >
               {tab.label}
             </TabsTrigger>
@@ -362,7 +362,7 @@ export default function EmailHubPage() {
                 <Button
                   variant="link"
                   asChild
-                  className="text-sm text-[#FF6B4A]"
+                  className="text-sm text-[#7331FF]"
                 >
                   <Link href="/audience">
                     View all
@@ -422,7 +422,7 @@ export default function EmailHubPage() {
                 </div>
               </div>
 
-              <div className="bg-[#FFF9F4] p-4 rounded-lg">
+              <div className="rounded-xl border border-[#7331FF]/10 bg-[#7331FF]/5 p-4">
                 <h2
                   className="text-lg font-bold text-gray-900"
                   style={{ fontFamily: "Outfit, sans-serif" }}
@@ -445,7 +445,7 @@ export default function EmailHubPage() {
                 <div className="mt-3 flex gap-3">
                   <Button
                     asChild
-                    className="rounded-lg bg-[#FF6B4A] text-white hover:bg-[#FF5A35]"
+                    className="rounded-lg brand-gradient-bg border-0 text-white hover:opacity-90"
                   >
                     <Link href="/email-hub?tab=campaigns">Open campaigns</Link>
                   </Button>
@@ -474,7 +474,7 @@ export default function EmailHubPage() {
                 <Button
                   variant="link"
                   onClick={() => handleTabChange("campaigns")}
-                  className="text-sm text-[#FF6B4A]"
+                  className="text-sm text-[#7331FF]"
                 >
                   View all
                   <HiChevronRight className="ml-1 text-sm" />
@@ -531,7 +531,7 @@ export default function EmailHubPage() {
                 </Button>
                 <Button
                   onClick={() => handleTabChange("campaigns")}
-                  className="rounded-lg bg-[#FF6B4A] text-white hover:bg-[#FF5A35]"
+                  className="rounded-lg brand-gradient-bg border-0 text-white hover:opacity-90"
                 >
                   Start a campaign
                 </Button>
@@ -581,14 +581,14 @@ export default function EmailHubPage() {
                   Create and send email campaigns from one place.
                 </p>
                 {selectedGroup && (
-                  <p className="mt-1 text-xs font-medium text-[#C2410C]">
+                  <p className="mt-1 text-xs font-medium text-[#7331FF]">
                     Preselected audience group: {selectedGroup.name}
                   </p>
                 )}
               </div>
               <Button
                 asChild
-                className="rounded-lg bg-[#FF6B4A] text-white hover:bg-[#FF5A35]"
+                className="rounded-lg brand-gradient-bg border-0 text-white hover:opacity-90"
               >
                 <Link href="/audience">
                   Pick audience
@@ -635,29 +635,7 @@ export default function EmailHubPage() {
         </TabsContent>
 
         <TabsContent value="studio" className="mt-0">
-          <div>
-            <div className="mb-4 flex flex-col gap-3 border-b border-gray-100 pb-2 md:flex-row md:items-center md:justify-between">
-              <div>
-                <h2
-                  className="text-lg font-bold text-gray-900"
-                  style={{ fontFamily: "Outfit, sans-serif" }}
-                >
-                  AI Studio
-                </h2>
-                <p className="text-sm text-gray-500">
-                  Write, improve, and refine email copy with AI assistance.
-                </p>
-              </div>
-              <Button
-                asChild
-                variant="outline"
-                className="rounded-lg border-gray-200"
-              >
-                <Link href="/email-composer">Open dedicated composer</Link>
-              </Button>
-            </div>
-            <AIComposerTab />
-          </div>
+          <AIComposerTab />
         </TabsContent>
       </Tabs>
     </div>

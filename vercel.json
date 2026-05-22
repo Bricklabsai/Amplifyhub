@@ -1,3 +1,9 @@
 {
-  "outputDirectory": ".next-build"
+  "outputDirectory": ".next-build",
+  "crons": [
+    {
+      "path": "/api/scheduler",
+      "schedule": "* * * * *"
+    }
+  ]
 }

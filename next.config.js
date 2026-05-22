@@ -2,6 +2,9 @@
 const nextConfig = {
   // Use different output dir ONLY for local production builds
   output: 'standalone',
+  experimental: {
+    instrumentationHook: true,
+  },
   // Enable CORS for Design Mode to load resources cross-origin (dev only)
   // Note: Do NOT set allowedDevOrigins - the default allows all origins in dev mode
   async headers() {

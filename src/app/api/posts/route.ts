@@ -64,6 +64,32 @@ export async function POST(req: NextRequest) {
   if (!content) return NextResponse.json({ error: "Content is required" }, { status: 400 });
 
   const socialAccountIds = Array.isArray(selectedSocialAccountIds) ? selectedSocialAccountIds : [];
+  const postStatus = status || "DRAFT";
+
+  if (postStatus === "SCHEDULED") {
+    if (!scheduledAt) {
+      return NextResponse.json(
+        { error: "scheduledAt is required for scheduled posts" },
+        { status: 400 }
+      );
+    }
+    const when = new Date(scheduledAt);
+    if (Number.isNaN(when.getTime())) {
+      return NextResponse.json({ error: "Invalid scheduledAt date" }, { status: 400 });
+    }
+    if (when.getTime() <= Date.now()) {
+      return NextResponse.json(
+        { error: "Schedule time must be in the future" },
+        { status: 400 }
+      );
+    }
+    if (socialAccountIds.length === 0) {
+      return NextResponse.json(
+        { error: "Select at least one social account to schedule" },
+        { status: 400 }
+      );
+    }
+  }
 
   const post = await prisma.$transaction(async (tx) => {
     const createdPost = await tx.post.create({
@@ -71,8 +97,9 @@ export async function POST(req: NextRequest) {
         userId,
         content,
         title,
-        status: status || "DRAFT",
+        status: postStatus,
         scheduledAt: scheduledAt ? new Date(scheduledAt) : null,
+        scheduleSource: postStatus === "SCHEDULED" ? "manual" : null,
         campaignId,
         mediaUrls: mediaUrls || [],
       },
@@ -93,7 +120,7 @@ export async function POST(req: NextRequest) {
             socialAccountId: account.id,
             platform: account.platform,
             content,
-            status: status === "PUBLISHED" ? "PUBLISHED" : (status === "SCHEDULED" ? "SCHEDULED" : "DRAFT"),
+            status: postStatus === "PUBLISHED" ? "PUBLISHED" : (postStatus === "SCHEDULED" ? "SCHEDULED" : "DRAFT"),
           },
         });
       }

@@ -143,9 +143,28 @@ export default function PostsPage() {
       }),
     });
     const data = await res.json();
-    setPublishResult(res.ok ? "Post published to selected social accounts." : data?.error || "Failed to publish post.");
+    const results = (data?.results ?? {}) as Record<
+      string,
+      { success?: boolean; error?: string }
+    >;
+    const failed = Object.values(results).filter((r) => r && !r.success);
+    const succeeded = Object.values(results).filter((r) => r?.success);
+
+    if (res.ok && succeeded.length > 0) {
+      setPublishResult(
+        failed.length > 0
+          ? `Published to ${succeeded.length} account(s). Failed: ${failed.map((r) => r.error).filter(Boolean).join("; ")}`
+          : "Post published to selected social accounts."
+      );
+      await fetchPosts();
+    } else {
+      setPublishResult(
+        data?.error ||
+          failed.map((r) => r.error).filter(Boolean).join("; ") ||
+          "Failed to publish post."
+      );
+    }
     setPublishingPostId("");
-    if (res.ok) await fetchPosts();
   }
 
   const filtered = search

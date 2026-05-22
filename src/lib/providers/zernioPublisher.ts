@@ -92,6 +92,61 @@ function fillResultsForAll(
   }
 }
 
+/** Platforms that require a video file (not just an image). */
+const VIDEO_REQUIRED_PLATFORMS = new Set<ZernioPlatform>(["tiktok", "youtube"]);
+
+/** Platforms that require at least one image or video (no caption-only posts). */
+const ANY_MEDIA_REQUIRED_PLATFORMS = new Set<ZernioPlatform>(["instagram"]);
+
+function hasVideoMedia(mediaUrls: string[]): boolean {
+  return mediaUrls.some(
+    (url) =>
+      /\.(mp4|mov|webm|ogg|m4v)(\?|#|$)/i.test(url) ||
+      url.toLowerCase().includes("video")
+  );
+}
+
+function hasImageOrVideoMedia(mediaUrls: string[]): boolean {
+  if (mediaUrls.length === 0) return false;
+  if (hasVideoMedia(mediaUrls)) return true;
+  return mediaUrls.some((url) =>
+    /\.(jpe?g|png|gif|webp|heic|heif|bmp)(\?|#|$)/i.test(url)
+  );
+}
+
+/**
+ * Removes targets that fail local media rules and records per-account errors
+ * so we don't waste a Zernio createPost call that will reject them anyway.
+ */
+function applyMediaRequirements(
+  targets: BatchTarget[],
+  mediaUrls: string[],
+  results: Map<string, PublishResult>
+): BatchTarget[] {
+  return targets.filter((t) => {
+    if (VIDEO_REQUIRED_PLATFORMS.has(t.zernioPlatform) && !hasVideoMedia(mediaUrls)) {
+      results.set(t.account.id, {
+        success: false,
+        error: `${t.account.platform} requires a video — attach one before publishing`,
+        retryable: false,
+      });
+      return false;
+    }
+    if (
+      ANY_MEDIA_REQUIRED_PLATFORMS.has(t.zernioPlatform) &&
+      !hasImageOrVideoMedia(mediaUrls)
+    ) {
+      results.set(t.account.id, {
+        success: false,
+        error: `${t.account.platform} requires at least one image or video`,
+        retryable: false,
+      });
+      return false;
+    }
+    return true;
+  });
+}
+
 export class ZernioPublisher implements PlatformPublisher {
   /**
    * Publish to many accounts in a single Zernio createPost call. This is
@@ -103,8 +158,20 @@ export class ZernioPublisher implements PlatformPublisher {
     content: string,
     mediaUrls: string[] = []
   ): Promise<Map<string, PublishResult>> {
-    const { targets, results } = partitionAccounts(accounts);
-    if (targets.length === 0) return results;
+    let { targets, results } = partitionAccounts(accounts);
+    targets = applyMediaRequirements(targets, mediaUrls, results);
+    if (targets.length === 0) {
+      console.warn(
+        "[ZernioPublisher] Skipping createPost — no publishable accounts:",
+        accounts.map((a) => ({
+          id: a.id,
+          platform: a.platform,
+          zernioAccountId: a.zernioAccountId ?? null,
+          preflightError: results.get(a.id)?.error,
+        }))
+      );
+      return results;
+    }
 
     let zernio;
     try {
@@ -135,6 +202,10 @@ export class ZernioPublisher implements PlatformPublisher {
     }
 
     try {
+      console.log(
+        `[ZernioPublisher] createPost → ${targets.length} platform(s):`,
+        targets.map((t) => `${t.zernioPlatform}:${t.zernioAccountId}`)
+      );
       const apiResult = await zernio.posts.createPost({
         body: {
           content,
@@ -148,11 +219,23 @@ export class ZernioPublisher implements PlatformPublisher {
       });
 
       if (apiResult.error) {
-        const errBody = apiResult.error as { error?: string };
+        const errBody = apiResult.error as { error?: string; message?: string };
         const status = apiResult.response?.status ?? 500;
+        const message =
+          errBody?.error ||
+          errBody?.message ||
+          `Zernio API error (HTTP ${status})`;
+        console.error(
+          "[ZernioPublisher] createPost API error:",
+          message,
+          "status:",
+          status,
+          "body:",
+          JSON.stringify(apiResult.error)
+        );
         fillResultsForAll(targets, results, {
           success: false,
-          error: errBody?.error || `Zernio API error (HTTP ${status})`,
+          error: message,
           retryable: status === 429 || status >= 500,
         });
         return results;
@@ -185,6 +268,13 @@ export class ZernioPublisher implements PlatformPublisher {
           continue;
         }
         if (rt.status === "failed") {
+          console.error(
+            "[ZernioPublisher] platform failed:",
+            t.zernioPlatform,
+            rt.errorMessage,
+            "category:",
+            rt.errorCategory
+          );
           results.set(t.account.id, {
             success: false,
             error: rt.errorMessage || "Publish failed on Zernio",
