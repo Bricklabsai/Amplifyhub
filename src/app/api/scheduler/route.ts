@@ -3,6 +3,7 @@ import {
   processScheduledPosts,
   processScheduledEmails,
 } from "@/lib/services/schedulerService";
+import { processEngagementAlerts } from "@/lib/services/engagementAlertService";
 
 function isAuthorized(req: NextRequest): boolean {
   const cronSecret = process.env.CRON_SECRET || "cron-secret-amplifyhub";
@@ -13,12 +14,14 @@ function isAuthorized(req: NextRequest): boolean {
 async function runScheduler() {
   const postResults = await processScheduledPosts();
   const emailResults = await processScheduledEmails();
+  const engagementResults = await processEngagementAlerts(8);
 
   return {
     processed: postResults.processed + emailResults.processed,
     social: postResults,
     emails: emailResults,
-    message: `Processed ${postResults.processed} social post(s) and ${emailResults.processed} email campaign(s).`,
+    engagement: engagementResults,
+    message: `Processed ${postResults.processed} social post(s), ${emailResults.processed} email campaign(s), checked ${engagementResults.checked} post(s) for engagement.`,
   };
 }
 

@@ -290,7 +290,12 @@ export default function SettingsPage() {
               {
                 key: "post_published" as const,
                 label: "Post published",
-                desc: "When a scheduled social post goes live",
+                desc: "When a post is published or a scheduled post goes live",
+              },
+              {
+                key: "post_engagement" as const,
+                label: "Post engagement",
+                desc: "New likes or comments on published posts",
               },
               {
                 key: "campaign_started" as const,
@@ -298,9 +303,14 @@ export default function SettingsPage() {
                 desc: "When email campaigns start or finish",
               },
               {
+                key: "billing" as const,
+                label: "Billing & payments",
+                desc: "Payment success or failure on your account",
+              },
+              {
                 key: "ai_credits_low" as const,
                 label: "AI credits low",
-                desc: "When credits fall below 10%",
+                desc: "When usage reaches 80% or your plan limit",
               },
               {
                 key: "weekly_report" as const,

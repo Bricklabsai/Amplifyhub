@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server';
 import { pollTransactionStatus } from '@/lib/paynow';
 import { prisma } from '@/lib/prisma';
+import { notifyPaymentSuccess } from '@/lib/notifications';
 
 export async function GET(req: Request) {
   try {
@@ -65,6 +66,13 @@ export async function GET(req: Request) {
             },
           });
         }
+
+        void notifyPaymentSuccess({
+          userId: transaction.userId,
+          amount: transaction.amount,
+          currency: transaction.currency,
+          reference,
+        });
 
         // Redirect to billing with success message
         return NextResponse.redirect(

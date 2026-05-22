@@ -1,4 +1,5 @@
 import { prisma } from "./prisma";
+import { notifyUsageThresholds } from "./notifications";
 
 export type Feature = "posts" | "aiText" | "aiImage";
 
@@ -90,6 +91,7 @@ async function performCheck(subscription: any, feature: Feature, userId: string)
     });
   } else if (feature === "aiText") {
     if (subscription.aiTextUsed >= plan.aiTextLimit) {
+      void notifyUsageThresholds(userId).catch(() => {});
       return { allowed: false, limit: plan.aiTextLimit, current: subscription.aiTextUsed };
     }
     await prisma.subscription.update({
@@ -98,6 +100,7 @@ async function performCheck(subscription: any, feature: Feature, userId: string)
     });
   } else if (feature === "aiImage") {
     if (subscription.aiImageUsed >= plan.aiImageLimit) {
+      void notifyUsageThresholds(userId).catch(() => {});
       return { allowed: false, limit: plan.aiImageLimit, current: subscription.aiImageUsed };
     }
     await prisma.subscription.update({
@@ -106,5 +109,9 @@ async function performCheck(subscription: any, feature: Feature, userId: string)
     });
   }
 
-  return { allowed: true };
+  const result = { allowed: true as const };
+  void notifyUsageThresholds(userId).catch((e) =>
+    console.error("[usage] notifyUsageThresholds:", e)
+  );
+  return result;
 }

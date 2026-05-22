@@ -6,6 +6,7 @@ import { readJsonStore, writeJsonStore } from "@/lib/json-store";
 import { randomUUID } from "crypto";
 import { fetchPlatformPostEngagement, fetchPlatformPostComments } from "@/lib/social";
 import { replyViaZernio } from "@/lib/zernio-engagement";
+import { notifyPostEngagement } from "@/lib/notifications";
 
 type EngagementComment = {
   id: string;
@@ -70,6 +71,9 @@ export async function GET(req: NextRequest, { params }: { params: Promise<{ id: 
     },
   });
   if (!post) return NextResponse.json({ error: "Published post not found" }, { status: 404 });
+
+  const prevTotalLikes = post.platformPosts.reduce((s, pp) => s + (pp.likes ?? 0), 0);
+  const prevTotalComments = post.platformPosts.reduce((s, pp) => s + (pp.comments ?? 0), 0);
 
   const store = await readJsonStore<PostEngagement[]>(FILE_NAME, []);
   const existing = store.find((x) => x.postId === id);
@@ -156,6 +160,16 @@ export async function GET(req: NextRequest, { params }: { params: Promise<{ id: 
     store.unshift(result);
   }
   await writeJsonStore(FILE_NAME, store);
+
+  void notifyPostEngagement({
+    userId,
+    postId: id,
+    postLabel: post.title || post.content,
+    prevLikes: prevTotalLikes,
+    prevComments: prevTotalComments,
+    newLikes: totalLikes,
+    newComments: perPostResults.reduce((s, r) => s + r.commentsCount, 0),
+  });
 
   return NextResponse.json(result);
 }

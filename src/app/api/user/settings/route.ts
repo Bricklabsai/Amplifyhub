@@ -5,8 +5,6 @@ import { prisma } from "@/lib/prisma";
 
 import { DEFAULT_NOTIFICATION_PREFS } from "@/lib/notification-prefs";
 
-export { DEFAULT_NOTIFICATION_PREFS };
-
 export async function GET() {
   const session = await getServerSession(authOptions);
   if (!session?.user) {

@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect, useRef } from "react";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import Link from "next/link";
 import { useSession, signOut } from "next-auth/react";
 import {
@@ -14,11 +14,13 @@ import {
 } from "react-icons/hi";
 import { formatRelative } from "@/lib/utils";
 import { cn } from "@/lib/utils";
+import { isNavigableNotificationLink } from "@/lib/notification-utils";
 
 const PAGE_TITLES: Record<string, string> = {
   "/dashboard": "Dashboard",
   "/compose": "Compose",
   "/posts": "Posts",
+  "/posts/messages": "Messages",
   "/social-accounts": "Social Accounts",
   "/campaigns": "Campaigns",
   "/audience": "Audience",
@@ -34,6 +36,7 @@ const PAGE_TITLES: Record<string, string> = {
 
 export default function Topbar({ onMenuClick }: { onMenuClick: () => void }) {
   const pathname = usePathname();
+  const router = useRouter();
   const { data: session } = useSession();
   const [notifs, setNotifs] = useState<any[]>([]);
   const [unread, setUnread] = useState(0);
@@ -80,6 +83,14 @@ export default function Topbar({ onMenuClick }: { onMenuClick: () => void }) {
     setUnread((u) => Math.max(0, u - 1));
   }
 
+  async function openNotification(n: { id: string; read: boolean; link?: string | null }) {
+    if (!n.read) await markRead(n.id);
+    if (isNavigableNotificationLink(n.link ?? undefined)) {
+      setNotifOpen(false);
+      router.push(n.link!);
+    }
+  }
+
   const title = PAGE_TITLES[pathname] || "AmplifyHub";
   const initial =
     session?.user?.name?.[0]?.toUpperCase() ||
@@ -110,8 +121,10 @@ export default function Topbar({ onMenuClick }: { onMenuClick: () => void }) {
           <button
             type="button"
             onClick={() => {
-              setNotifOpen(!notifOpen);
+              const opening = !notifOpen;
+              setNotifOpen(opening);
               setMenuOpen(false);
+              if (opening) void fetchNotifs();
             }}
             className="relative flex h-10 w-10 items-center justify-center rounded-xl bg-gray-50 transition-colors hover:bg-[#7331FF]/10"
             aria-label="Notifications"
@@ -147,7 +160,15 @@ export default function Topbar({ onMenuClick }: { onMenuClick: () => void }) {
                   notifs.map((n) => (
                     <div
                       key={n.id}
-                      onClick={() => !n.read && markRead(n.id)}
+                      role="button"
+                      tabIndex={0}
+                      onClick={() => void openNotification(n)}
+                      onKeyDown={(e) => {
+                        if (e.key === "Enter" || e.key === " ") {
+                          e.preventDefault();
+                          void openNotification(n);
+                        }
+                      }}
                       className={cn(
                         "flex cursor-pointer gap-3 border-b border-gray-50 px-4 py-3 transition-colors hover:bg-gray-50",
                         !n.read && "bg-[#7331FF]/5"

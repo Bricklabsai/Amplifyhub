@@ -65,19 +65,19 @@ function InviteContent() {
 
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gray-50 p-4">
-        <p className="text-gray-500">Verifying invitation...</p>
-      </div>
+      <p className="relative z-10 text-sm font-medium text-[#7331FF]">
+        Verifying invitation…
+      </p>
     );
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-50 p-4">
-      <Card className="w-full max-w-md shadow-xl border-0 rounded-2xl overflow-hidden">
+    <div className="relative z-10 w-full max-w-md">
+      <Card className="w-full overflow-hidden rounded-2xl border border-[#7331FF]/12 bg-white/95 shadow-2xl shadow-[#7331FF]/10 backdrop-blur-xl">
         <div className="h-2 brand-gradient-bg" />
         <CardHeader className="text-center pt-8">
-          <div className="mx-auto w-16 h-16 rounded-2xl bg-violet-100 flex items-center justify-center mb-4">
-            <HiUserGroup className="text-violet-600 text-3xl" />
+          <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-2xl bg-[#7331FF]/10">
+            <HiUserGroup className="text-3xl text-[#7331FF]" />
           </div>
           <CardTitle className="text-2xl font-bold text-gray-900">Team Invitation</CardTitle>
           <CardDescription>
@@ -103,8 +103,8 @@ function InviteContent() {
             <div className="space-y-4">
               <p className="text-gray-600 leading-relaxed">
                 <strong>{invite.inviterName}</strong> has invited you to join their team 
-                <span className="text-violet-700 font-semibold"> {invite.teamName}</span> as an 
-                <span className="text-violet-700 font-semibold uppercase text-xs ml-1 px-2 py-0.5 bg-violet-50 rounded"> {invite.role}</span>.
+                <span className="font-semibold text-[#7331FF]"> {invite.teamName}</span> as an 
+                <span className="ml-1 rounded bg-[#7331FF]/10 px-2 py-0.5 text-xs font-semibold uppercase text-[#7331FF]"> {invite.role}</span>.
               </p>
               {status === "authenticated" && session.user?.email?.toLowerCase() !== invite.email.toLowerCase() && (
                 <p className="text-sm text-amber-600 bg-amber-50 p-3 rounded-xl border border-amber-100">
@@ -119,7 +119,7 @@ function InviteContent() {
             <Button 
               onClick={handleJoin} 
               disabled={joining}
-              className="w-full brand-gradient-bg text-white font-bold h-12 text-lg shadow-lg hover:shadow-violet-200/50"
+              className="brand-gradient-bg h-12 w-full border-0 text-lg font-bold text-white shadow-lg shadow-[#7331FF]/20 hover:opacity-90"
             >
               {joining ? "Joining..." : status === "authenticated" ? "Accept Invitation" : "Sign Up to Join Team"}
             </Button>
@@ -129,7 +129,7 @@ function InviteContent() {
               </p>
             ) : (
               <p className="text-xs text-gray-500 text-center">
-                Already have an account? <Link href="/auth/login" className="text-violet-600 font-bold hover:underline">Log in</Link>
+                Already have an account? <Link href="/auth/login" className="font-bold text-[#7331FF] hover:underline">Log in</Link>
               </p>
             )}
           </CardFooter>
@@ -148,7 +148,7 @@ function InviteContent() {
 
 export default function InvitePage() {
   return (
-    <Suspense fallback={<div className="min-h-screen flex items-center justify-center bg-gray-50 p-4 font-outfit">Loading...</div>}>
+    <Suspense fallback={<p className="relative z-10 text-sm text-[#7331FF]">Loading…</p>}>
       <InviteContent />
     </Suspense>
   );

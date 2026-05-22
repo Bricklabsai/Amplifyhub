@@ -1,5 +1,5 @@
 "use client";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { useSearchParams } from "next/navigation";
 import { HiCheck, HiSparkles, HiCreditCard } from "react-icons/hi";
 import { useToast } from "@/hooks/use-toast";
@@ -7,39 +7,83 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { UsageStats } from "@/components/billing/UsageStats";
 
+type BillingTransaction = {
+  id: string;
+  amount: number;
+  currency: string;
+  status: string;
+  reference: string;
+  channel: string | null;
+  paidAt: string | null;
+  createdAt: string;
+};
+
+function formatTxDate(iso: string) {
+  return new Date(iso).toLocaleDateString("en-US", {
+    month: "short",
+    day: "numeric",
+    year: "numeric",
+  });
+}
+
+function statusBadge(status: string) {
+  const normalized = status.toLowerCase();
+  if (normalized === "success" || normalized === "paid") {
+    return { label: "Paid", className: "bg-emerald-100 text-emerald-700" };
+  }
+  if (normalized === "pending" || normalized === "processing") {
+    return { label: "Pending", className: "bg-amber-100 text-amber-800" };
+  }
+  if (normalized === "cancelled") {
+    return { label: "Cancelled", className: "bg-gray-100 text-gray-600" };
+  }
+  return { label: "Failed", className: "bg-red-100 text-red-700" };
+}
+
+function planLabelForAmount(amount: number, plans: { name: string; price: number }[]) {
+  const match = plans.find((p) => p.price === amount);
+  return match ? `${match.name} Plan` : "Subscription payment";
+}
+
 export default function BillingPage() {
   const searchParams = useSearchParams();
   const [plans, setPlans] = useState<any[]>([]);
   const [currentPlan, setCurrentPlan] = useState<any>(null);
+  const [transactions, setTransactions] = useState<BillingTransaction[]>([]);
   const [loading, setLoading] = useState(true);
+  const [historyLoading, setHistoryLoading] = useState(true);
   const [upgradeLoading, setUpgradeLoading] = useState<string | null>(null);
   const [successMessage, setSuccessMessage] = useState<string | null>(null);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const { toast } = useToast();
 
-  const loadBillingData = async () => {
+  const loadBillingData = useCallback(async () => {
+    setHistoryLoading(true);
     try {
-      const [plansData, billingData] = await Promise.all([
-        fetch("/api/plans").then((r) => r.json()),
-        fetch("/api/billing/info").then((r) => r.json()),
+      const [plansRes, billingRes] = await Promise.all([
+        fetch("/api/plans"),
+        fetch("/api/billing/info"),
       ]);
-      setPlans(plansData);
+      const plansData = plansRes.ok ? await plansRes.json() : [];
+      const billingData = billingRes.ok ? await billingRes.json() : {};
+      setPlans(Array.isArray(plansData) ? plansData : []);
       setCurrentPlan(billingData.subscription?.plan);
+      setTransactions(Array.isArray(billingData.transactions) ? billingData.transactions : []);
     } catch (error) {
       console.error("Failed to load billing data:", error);
     } finally {
       setLoading(false);
+      setHistoryLoading(false);
     }
-  };
+  }, []);
 
   useEffect(() => {
-    // Check for callback results
     const payment = searchParams.get("payment");
     const error = searchParams.get("error");
 
     if (payment === "success") {
       setSuccessMessage("🎉 Payment successful! Your plan has been upgraded.");
-      // Clear message after 5 seconds
+      void loadBillingData();
       const timer = setTimeout(() => setSuccessMessage(null), 5000);
       return () => clearTimeout(timer);
     }
@@ -56,11 +100,11 @@ export default function BillingPage() {
       const timer = setTimeout(() => setErrorMessage(null), 5000);
       return () => clearTimeout(timer);
     }
-  }, [searchParams]);
+  }, [searchParams, loadBillingData]);
 
   useEffect(() => {
-    loadBillingData();
-  }, []);
+    void loadBillingData();
+  }, [loadBillingData]);
 
   const handleUpgrade = async (planId: string) => {
     setUpgradeLoading(planId);
@@ -72,8 +116,9 @@ export default function BillingPage() {
       });
 
       const data = await res.json();
-      if (data.authorization_url) {
-        window.location.href = data.authorization_url;
+      const payUrl = data.authorization_url || data.redirectUrl;
+      if (payUrl) {
+        window.location.href = payUrl;
       } else if (data.success) {
         // Free plan - refresh page to show new subscription
         setSuccessMessage("✓ You've successfully upgraded to the free plan!");
@@ -219,25 +264,64 @@ export default function BillingPage() {
       </div>
 
       {/* Billing History */}
-      <div className="bg-white rounded-2xl border border-gray-100 shadow-sm">
-        <div className="px-6 py-4 border-b border-gray-100">
-          <h3 className="font-bold text-gray-900" style={{ fontFamily: "Outfit, sans-serif" }}>Billing History</h3>
+      <div className="rounded-2xl border border-gray-100 bg-white shadow-sm">
+        <div className="flex items-center justify-between border-b border-gray-100 px-6 py-4">
+          <h3 className="font-bold text-gray-900" style={{ fontFamily: "Outfit, sans-serif" }}>
+            Billing History
+          </h3>
+          <button
+            type="button"
+            onClick={() => void loadBillingData()}
+            disabled={historyLoading}
+            className="text-xs font-semibold text-[#7331FF] hover:underline disabled:opacity-50"
+          >
+            {historyLoading ? "Refreshing…" : "Refresh"}
+          </button>
         </div>
-        <div className="divide-y divide-gray-50">
-          {["Apr 2024", "Mar 2024", "Feb 2024"].map((month, i) => (
-            <div key={i} className="flex items-center justify-between p-4">
-              <div>
-                <p className="text-sm font-semibold text-gray-900">{month} — Pro Plan</p>
-                <p className="text-xs text-gray-400">Billed monthly</p>
-              </div>
-              <div className="flex items-center gap-3">
-                <span className="text-sm font-bold text-gray-900">$29.99</span>
-                <Badge className="bg-emerald-100 text-emerald-700 border-0 text-xs">Paid</Badge>
-                <button className="text-xs text-violet-600 hover:text-violet-700">Download</button>
-              </div>
-            </div>
-          ))}
-        </div>
+        {historyLoading && transactions.length === 0 ? (
+          <div className="space-y-3 p-4">
+            {[1, 2, 3].map((i) => (
+              <div key={i} className="h-14 animate-pulse rounded-xl bg-gray-50" />
+            ))}
+          </div>
+        ) : transactions.length === 0 ? (
+          <div className="px-6 py-10 text-center text-sm text-gray-500">
+            No payments yet. Upgrade to a paid plan to see your billing history here.
+          </div>
+        ) : (
+          <div className="divide-y divide-gray-50">
+            {transactions.map((tx) => {
+              const badge = statusBadge(tx.status);
+              const displayDate = formatTxDate(tx.paidAt ?? tx.createdAt);
+              const amountLabel =
+                tx.currency === "USD"
+                  ? `$${tx.amount.toFixed(2)}`
+                  : `${tx.currency} ${tx.amount.toFixed(2)}`;
+              return (
+                <div
+                  key={tx.id}
+                  className="flex flex-col gap-3 p-4 sm:flex-row sm:items-center sm:justify-between"
+                >
+                  <div className="min-w-0">
+                    <p className="text-sm font-semibold text-gray-900">
+                      {displayDate} — {planLabelForAmount(tx.amount, plans)}
+                    </p>
+                    <p className="text-xs text-gray-400">
+                      {tx.channel ? `Via ${tx.channel}` : "Paynow"}
+                      {" · "}
+                      Ref {tx.reference.slice(0, 24)}
+                      {tx.reference.length > 24 ? "…" : ""}
+                    </p>
+                  </div>
+                  <div className="flex shrink-0 items-center gap-3">
+                    <span className="text-sm font-bold text-gray-900">{amountLabel}</span>
+                    <Badge className={`border-0 text-xs ${badge.className}`}>{badge.label}</Badge>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+        )}
       </div>
     </div>
   );

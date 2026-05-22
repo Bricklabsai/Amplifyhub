@@ -12,9 +12,11 @@ export function startDevScheduler() {
   const tick = async () => {
     try {
       const { processScheduledPosts } = await import("./services/schedulerService");
+      const { processEngagementAlerts } = await import("./services/engagementAlertService");
       const result = await processScheduledPosts();
-      if (result.processed > 0) {
-        console.log("[scheduler] dev tick:", result);
+      const engagement = await processEngagementAlerts(5);
+      if (result.processed > 0 || engagement.notified > 0) {
+        console.log("[scheduler] dev tick:", { posts: result, engagement });
       }
     } catch (err) {
       console.error("[scheduler] dev tick error:", err);

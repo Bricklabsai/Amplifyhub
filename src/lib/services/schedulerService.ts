@@ -1,5 +1,6 @@
 import { prisma } from "@/lib/prisma";
 import { publishPost, serializePublishResults } from "@/lib/services/publishPost";
+import { notifyPostPublished } from "@/lib/notifications";
 
 const PROCESSING_LOCK = "processing";
 const STALE_LOCK_MS = 10 * 60 * 1000;
@@ -79,13 +80,14 @@ export async function processScheduledPosts() {
           where: { id: post.id },
           data: { status: "FAILED", scheduleSource: "manual" },
         });
-        await prisma.notification.create({
-          data: {
-            userId: post.userId,
-            title: "Scheduled Post Failed",
-            message: "No active social accounts were connected when this post was due.",
-            type: "error",
-          },
+        void notifyPostPublished({
+          userId: post.userId,
+          postId: post.id,
+          postLabel: post.title || post.content,
+          scheduled: true,
+          failed: true,
+          errorDetail:
+            "No active social accounts were connected when this post was due.",
         });
         failed++;
         continue;
@@ -157,24 +159,21 @@ export async function processScheduledPosts() {
       const allFailed = successCount === 0;
       const partial = hasSuccess && successCount < targetAccounts.length;
 
-      await prisma.notification.create({
-        data: {
-          userId: post.userId,
-          title: allFailed
-            ? "Scheduled Post Failed"
-            : partial
-              ? "Scheduled Post Partially Published"
-              : "Scheduled Post Published",
-          message: allFailed
-            ? `Your scheduled post could not be published. ${Object.values(serialized)
-                .map((r) => r.error)
-                .filter(Boolean)
-                .join("; ") || "Check your accounts and media, then try again."}`
-            : partial
-              ? `Published to ${successCount} of ${targetAccounts.length} accounts.`
-              : `Your scheduled post was published to ${successCount} account(s).`,
-          type: allFailed ? "error" : partial ? "warning" : "success",
-        },
+      void notifyPostPublished({
+        userId: post.userId,
+        postId: post.id,
+        postLabel: post.title || post.content,
+        scheduled: true,
+        failed: allFailed,
+        partial,
+        successCount,
+        totalCount: targetAccounts.length,
+        errorDetail: allFailed
+          ? Object.values(serialized)
+              .map((r) => r.error)
+              .filter(Boolean)
+              .join("; ") || undefined
+          : undefined,
       });
 
       if (hasSuccess) published++;
@@ -186,13 +185,13 @@ export async function processScheduledPosts() {
         data: { status: "FAILED", scheduleSource: "manual" },
       });
 
-      await prisma.notification.create({
-        data: {
-          userId: post.userId,
-          title: "Scheduled Post Failed",
-          message: `Your scheduled post failed to publish. Error: ${error instanceof Error ? error.message : "Unknown error"}`,
-          type: "error",
-        },
+      void notifyPostPublished({
+        userId: post.userId,
+        postId: post.id,
+        postLabel: post.title || post.content,
+        scheduled: true,
+        failed: true,
+        errorDetail: `Error: ${error instanceof Error ? error.message : "Unknown error"}`,
       });
       failed++;
     }

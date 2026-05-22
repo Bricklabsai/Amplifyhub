@@ -3,6 +3,7 @@ import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import { publishPost, serializePublishResults } from "@/lib/services/publishPost";
+import { notifyPostPublished } from "@/lib/notifications";
 import crypto from "node:crypto";
 
 type SessionUserWithId = {
@@ -174,10 +175,21 @@ export async function PATCH(req: NextRequest, { params }: { params: Promise<{ id
       return { post: updatedPost, results: serializedResults };
     });
 
+    const successCount = Object.values(serializedResults).filter((r) => r.success).length;
+    const totalCount = Object.keys(serializedResults).length;
+    const postLabel = result.post.title || result.post.content;
+
     if (allFailed) {
       const errors = Object.values(serializedResults)
         .map((r) => r.error)
         .filter(Boolean);
+      void notifyPostPublished({
+        userId,
+        postId: id,
+        postLabel,
+        failed: true,
+        errorDetail: errors[0] || "Publish failed for all selected accounts",
+      });
       return NextResponse.json(
         {
           ...result,
@@ -186,6 +198,16 @@ export async function PATCH(req: NextRequest, { params }: { params: Promise<{ id
         { status: 422 }
       );
     }
+
+    void notifyPostPublished({
+      userId,
+      postId: id,
+      postLabel,
+      partial: successCount > 0 && successCount < totalCount,
+      failed: false,
+      successCount,
+      totalCount,
+    });
 
     return NextResponse.json(result);
   }
