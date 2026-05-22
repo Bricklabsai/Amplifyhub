@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
 import { parseWebhookPayload, verifyWebhookSignature } from '@/lib/paynow';
+import { notifyPaymentFailed, notifyPaymentSuccess } from '@/lib/notifications';
 
 export async function POST(req: Request) {
   try {
@@ -87,6 +88,13 @@ async function handlePaymentUpdate(paynowData: any) {
         },
       });
     }
+
+    void notifyPaymentSuccess({
+      userId: transaction.userId,
+      amount: amount ?? transaction.amount,
+      currency: transaction.currency,
+      reference: referenceId,
+    });
   } else if (status === 'failed' || status === 'cancelled') {
     // Update transaction as failed
     await prisma.transaction.update({
@@ -111,6 +119,15 @@ async function handlePaymentUpdate(paynowData: any) {
         },
       });
     }
+
+    void notifyPaymentFailed({
+      userId: transaction.userId,
+      reference: referenceId,
+      reason:
+        status === 'cancelled'
+          ? 'Your payment was cancelled.'
+          : 'Your payment could not be completed.',
+    });
   } else if (status === 'pending' || status === 'processing') {
     // Keep transaction in pending state
     await prisma.transaction.update({

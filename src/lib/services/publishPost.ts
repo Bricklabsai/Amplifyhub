@@ -8,11 +8,22 @@ export interface PublishPostData {
   mediaUrls?: string[];
 }
 
+/** Serializes publish results for JSON API responses (Map → plain object). */
+export function serializePublishResults(
+  results: Map<string, PublishResult>
+): Record<string, PublishResult> {
+  return Object.fromEntries(results);
+}
+
 export async function publishPost(
   data: PublishPostData
 ): Promise<Map<string, PublishResult>> {
   const { accounts, content, mediaUrls = [] } = data;
   const provider = getProvider();
+  const providerType = process.env.POST_PROVIDER || "zernio";
+  console.log(
+    `[publishPost] provider=${providerType} accounts=${accounts.length} media=${mediaUrls.length}`
+  );
 
   // Aggregator providers (Zernio) accept many platforms in a single call.
   // We strongly prefer that path because firing N parallel single-account

@@ -1,25 +1,45 @@
 import { type NextRequest, NextResponse } from "next/server";
-import { processScheduledPosts, processScheduledEmails } from "@/lib/services/schedulerService";
+import {
+  processScheduledPosts,
+  processScheduledEmails,
+} from "@/lib/services/schedulerService";
+import { processEngagementAlerts } from "@/lib/services/engagementAlertService";
 
-// This endpoint can be called by a cron job (e.g., Vercel Cron) to publish scheduled posts
-export async function POST(req: NextRequest) {
-  const authHeader = req.headers.get("authorization");
+function isAuthorized(req: NextRequest): boolean {
   const cronSecret = process.env.CRON_SECRET || "cron-secret-amplifyhub";
-  if (authHeader !== `Bearer ${cronSecret}`) {
+  const authHeader = req.headers.get("authorization");
+  return authHeader === `Bearer ${cronSecret}`;
+}
+
+async function runScheduler() {
+  const postResults = await processScheduledPosts();
+  const emailResults = await processScheduledEmails();
+  const engagementResults = await processEngagementAlerts(8);
+
+  return {
+    processed: postResults.processed + emailResults.processed,
+    social: postResults,
+    emails: emailResults,
+    engagement: engagementResults,
+    message: `Processed ${postResults.processed} social post(s), ${emailResults.processed} email campaign(s), checked ${engagementResults.checked} post(s) for engagement.`,
+  };
+}
+
+/** Vercel Cron invokes this path with GET + Authorization: Bearer CRON_SECRET */
+export async function GET(req: NextRequest) {
+  if (!isAuthorized(req)) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 
-  const postResults = await processScheduledPosts();
-  const emailResults = await processScheduledEmails();
-
-  return NextResponse.json({
-    processed: postResults.processed + emailResults.processed,
-    socialPublished: postResults.published,
-    emailsProcessed: emailResults.emailsProcessed,
-    message: `Processed ${postResults.processed} social posts and ${emailResults.processed} email campaigns.`
-  });
+  const result = await runScheduler();
+  return NextResponse.json(result);
 }
 
-export async function GET() {
-  return NextResponse.json({ message: "Scheduler endpoint active", time: new Date().toISOString() });
+export async function POST(req: NextRequest) {
+  if (!isAuthorized(req)) {
+    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  }
+
+  const result = await runScheduler();
+  return NextResponse.json(result);
 }

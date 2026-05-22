@@ -1,6 +1,10 @@
 "use client";
+
 import { useState } from "react";
 import { HiSparkles, HiCheckCircle, HiX } from "react-icons/hi";
+import { Button } from "@/components/ui/button";
+import { Textarea } from "@/components/ui/textarea";
+import { Label } from "@/components/ui/label";
 
 interface EmailImprovement {
   original: string;
@@ -17,19 +21,16 @@ export default function EmailEnhancer() {
   async function enhanceEmail() {
     setLoading(true);
     setError(null);
-
     try {
       const res = await fetch("/api/ai/email-enhance", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ emailText }),
       });
-
       if (!res.ok) {
         const data = await res.json();
         throw new Error(data.error || "Failed to enhance email");
       }
-
       const data = await res.json();
       setImprovements(data.improvements);
     } catch (err) {
@@ -39,65 +40,67 @@ export default function EmailEnhancer() {
     }
   }
 
+  function applyImprovement(improved: string) {
+    setEmailText(improved);
+  }
+
   return (
-    <div className="bg-white rounded-2xl border border-gray-100 p-8 space-y-6">
-      <div>
-        <h3 className="text-xl font-bold mb-2">Email Enhancer</h3>
-        <p className="text-sm text-gray-600">
-          Paste your email content and let AI suggest improvements
-        </p>
+    <div className="rounded-2xl border border-gray-100 bg-white p-6 shadow-sm">
+      <div className="mb-4 flex items-center gap-2">
+        <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-[#7331FF]/10">
+          <HiSparkles className="text-lg text-[#7331FF]" />
+        </div>
+        <div>
+          <h3 className="font-bold text-gray-900" style={{ fontFamily: "Outfit, sans-serif" }}>
+            Polish your copy
+          </h3>
+          <p className="text-xs text-gray-500">Paste a draft and get AI suggestions</p>
+        </div>
       </div>
 
       {error && (
-        <div className="bg-red-50 border border-red-200 rounded-xl p-4 flex gap-3">
-          <HiX className="text-red-600 flex-shrink-0 text-2xl" />
-          <p className="text-red-700 text-sm">{error}</p>
+        <div className="mb-4 flex gap-2 rounded-xl border border-red-200 bg-red-50 p-3 text-sm text-red-700">
+          <HiX className="shrink-0 text-lg" />
+          {error}
         </div>
       )}
 
-      <textarea
+      <Label className="text-sm font-semibold text-gray-700">Your draft</Label>
+      <Textarea
         value={emailText}
         onChange={(e) => setEmailText(e.target.value)}
-        placeholder="Paste your email content here..."
+        placeholder="Paste subject + body or any email text…"
         rows={6}
-        className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:border-violet-400 resize-none text-black"
+        className="mt-1.5 rounded-xl border-gray-200 text-black"
       />
 
-      <button
+      <Button
         onClick={enhanceEmail}
-        disabled={!emailText || loading}
-        className="w-full bg-violet-600 hover:bg-violet-700 disabled:opacity-50 text-white font-semibold py-3 rounded-lg transition-all flex items-center justify-center gap-2"
+        disabled={!emailText.trim() || loading}
+        className="mt-4 h-10 w-full brand-gradient-bg border-0 text-white hover:opacity-90 rounded-xl font-semibold"
       >
-        <HiSparkles /> {loading ? "Analyzing..." : "Enhance Email"}
-      </button>
+        <HiSparkles className="mr-2" />
+        {loading ? "Analyzing…" : "Enhance"}
+      </Button>
 
       {improvements.length > 0 && (
-        <div className="space-y-4 pt-4 border-t border-gray-200">
-          <p className="font-semibold text-gray-900">Suggestions:</p>
+        <div className="mt-4 space-y-3 border-t border-gray-100 pt-4">
+          <p className="text-xs font-semibold uppercase tracking-wide text-gray-400">Suggestions</p>
           {improvements.map((imp, idx) => (
-            <div key={idx} className="bg-blue-50 rounded-xl p-4 border border-blue-200">
-              <div className="flex items-start gap-3 mb-2">
-                <HiCheckCircle className="text-blue-600 flex-shrink-0 text-xl mt-1" />
-                <div className="flex-1">
-                  <p className="text-xs text-blue-600 font-semibold uppercase mb-1">
-                    Suggestion: {imp.suggestion}
-                  </p>
-                  <div className="space-y-2">
-                    <div>
-                      <p className="text-xs text-gray-600 mb-1">Original:</p>
-                      <p className="text-sm italic text-gray-700">
-                        "{imp.original}"
-                      </p>
-                    </div>
-                    <div>
-                      <p className="text-xs text-gray-600 mb-1">Improved:</p>
-                      <p className="text-sm font-medium text-blue-900">
-                        "{imp.improved}"
-                      </p>
-                    </div>
-                  </div>
-                </div>
-              </div>
+            <div
+              key={idx}
+              className="rounded-xl border border-[#7331FF]/15 bg-[#7331FF]/5 p-4"
+            >
+              <p className="text-xs font-semibold text-[#7331FF]">{imp.suggestion}</p>
+              <p className="mt-2 text-sm italic text-gray-600">"{imp.original}"</p>
+              <p className="mt-1 text-sm font-medium text-gray-900">"{imp.improved}"</p>
+              <button
+                type="button"
+                onClick={() => applyImprovement(imp.improved)}
+                className="mt-2 text-xs font-semibold text-[#7331FF] hover:underline"
+              >
+                Use this version
+              </button>
             </div>
           ))}
         </div>

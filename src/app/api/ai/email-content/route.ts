@@ -10,23 +10,40 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
-    const { prompt, emailType, tone } = await request.json();
+    const { prompt, emailType, tone, mode, recipientName } = await request.json();
 
     if (!prompt) {
       return NextResponse.json({ error: "Prompt is required" }, { status: 400 });
     }
 
     const client = getAzureOpenAIClient();
+    const isClientEmail = mode === "client";
 
-    const systemPrompt = `You are an expert email copywriter. Generate professional, engaging email content.
+    const systemPrompt = isClientEmail
+      ? `You are an expert business email writer. Write a normal, direct email meant for one client or contact — not a mass marketing blast.
+
+Recipient: ${recipientName || "the client"}
+Purpose / type: ${emailType || "General"}
+Tone: ${tone || "Professional"}
+
+Rules:
+- Write like a real person emailing a client (clear, respectful, specific).
+- Use 2–4 short paragraphs in the body. Line breaks between paragraphs.
+- Subject line should feel personal and specific, not spammy.
+- Preview text: max 90 characters, complements the subject.
+- Include ctaText and ctaUrl only if a clear action is needed; otherwise use ctaText "" and ctaUrl "#".
+- Do NOT use newsletter section headers or "Dear Valued Customer" clichés.
+
+Return ONLY valid JSON with keys: subject, preview, body, ctaText, ctaUrl`
+      : `You are an expert email copywriter. Generate professional, engaging email content for a campaign.
 Email Type: ${emailType || "General"}
 Tone: ${tone || "Professional"}
 
 Include:
 - Subject line
-- Preview text (50 chars max)
+- Preview text (90 chars max)
 - Body content (2-3 paragraphs)
-- Call-to-action button text
+- Call-to-action button text and URL when appropriate
 
 Format as JSON with keys: subject, preview, body, ctaText, ctaUrl`;
 

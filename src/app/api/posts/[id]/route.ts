@@ -2,7 +2,8 @@ import { type NextRequest, NextResponse } from "next/server";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
-import { publishPost } from "@/lib/services/publishPost";
+import { publishPost, serializePublishResults } from "@/lib/services/publishPost";
+import { notifyPostPublished } from "@/lib/notifications";
 import crypto from "node:crypto";
 
 type SessionUserWithId = {
@@ -83,17 +84,45 @@ export async function PATCH(req: NextRequest, { params }: { params: Promise<{ id
     );
 
     if (accountsToPublish.length === 0) {
-       return NextResponse.json({ 
-         message: "All selected accounts already published this content.",
-         results: [] 
-       });
+      return NextResponse.json(
+        {
+          error: "All selected accounts already published this content.",
+          results: {},
+        },
+        { status: 409 }
+      );
+    }
+
+    const missingZernio = accountsToPublish.filter((a) => !a.zernioAccountId);
+    if (missingZernio.length === accountsToPublish.length) {
+      return NextResponse.json(
+        {
+          error:
+            "None of the selected accounts are linked to Zernio. Disconnect and reconnect them from Social Accounts.",
+          results: Object.fromEntries(
+            missingZernio.map((a) => [
+              a.id,
+              {
+                success: false,
+                error: "Missing Zernio account ID — reconnect this account",
+                retryable: false,
+              },
+            ])
+          ),
+        },
+        { status: 400 }
+      );
     }
 
     // Publish to remaining platforms
     const publishResults = await publishPost({ accounts: accountsToPublish, content, mediaUrls });
+    const serializedResults = serializePublishResults(publishResults);
 
     // Determine overall status
-    const anySucceeded = Array.from(publishResults.values()).some(r => r.success);
+    const anySucceeded = Object.values(serializedResults).some((r) => r.success);
+    const allFailed =
+      Object.keys(serializedResults).length > 0 &&
+      Object.values(serializedResults).every((r) => !r.success);
 
     const result = await prisma.$transaction(async (tx) => {
       // Update or create platform posts with results
@@ -143,7 +172,41 @@ export async function PATCH(req: NextRequest, { params }: { params: Promise<{ id
         },
       });
 
-      return { post: updatedPost, results: publishResults };
+      return { post: updatedPost, results: serializedResults };
+    });
+
+    const successCount = Object.values(serializedResults).filter((r) => r.success).length;
+    const totalCount = Object.keys(serializedResults).length;
+    const postLabel = result.post.title || result.post.content;
+
+    if (allFailed) {
+      const errors = Object.values(serializedResults)
+        .map((r) => r.error)
+        .filter(Boolean);
+      void notifyPostPublished({
+        userId,
+        postId: id,
+        postLabel,
+        failed: true,
+        errorDetail: errors[0] || "Publish failed for all selected accounts",
+      });
+      return NextResponse.json(
+        {
+          ...result,
+          error: errors[0] || "Publish failed for all selected accounts",
+        },
+        { status: 422 }
+      );
+    }
+
+    void notifyPostPublished({
+      userId,
+      postId: id,
+      postLabel,
+      partial: successCount > 0 && successCount < totalCount,
+      failed: false,
+      successCount,
+      totalCount,
     });
 
     return NextResponse.json(result);

@@ -7,7 +7,6 @@ import {
   fromZernioPlatform,
   getAppBaseUrl,
   getZernioClient,
-  getZernioProfileId,
 } from "@/lib/zernio";
 import { fetchZernioFollowerCounts } from "@/lib/zernio-engagement";
 
@@ -41,13 +40,14 @@ type ResolvedAccount = {
  */
 async function resolveAccountIdViaList(
   userId: string,
+  profileId: string,
   zernioPlatform: string,
   username: string | undefined
 ): Promise<string | null> {
   const zernio = getZernioClient();
   const list = await zernio.accounts.listAccounts({
     query: {
-      profileId: getZernioProfileId(),
+      profileId,
       platform: zernioPlatform,
     },
   });
@@ -108,6 +108,16 @@ export async function GET(req: NextRequest) {
     return redirect(LOGIN_REDIRECT, baseUrl);
   }
 
+  const user = await prisma.user.findUnique({
+    where: { id: userId },
+    select: { zernioProfileId: true },
+  });
+  if (!user?.zernioProfileId) {
+    console.error("[Zernio Callback] User missing zernioProfileId:", userId);
+    return redirect(FAILURE_REDIRECT, baseUrl);
+  }
+  const profileId = user.zernioProfileId;
+
   const params = req.nextUrl.searchParams;
 
   try {
@@ -144,6 +154,7 @@ export async function GET(req: NextRequest) {
       if (connectedPlatform) {
         const accountId = await resolveAccountIdViaList(
           userId,
+          profileId,
           connectedPlatform,
           params.get("username") || undefined
         );
@@ -177,7 +188,7 @@ export async function GET(req: NextRequest) {
       const zernio = getZernioClient();
       const result = await zernio.connect.handleOAuthCallback({
         path: { platform: platformParam },
-        body: { code, state, profileId: getZernioProfileId() },
+        body: { code, state, profileId },
       });
 
       if (result.error) {

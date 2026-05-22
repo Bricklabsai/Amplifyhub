@@ -3,6 +3,7 @@ import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import { sendBulkEmails } from "@/lib/email";
+import { notifyCampaignStarted } from "@/lib/notifications";
 
 function formatPosts(posts: any[]) {
   return posts
@@ -93,6 +94,15 @@ export async function POST(req: NextRequest, { params }: { params: Promise<{ id:
       lastError: result.failed > 0 ? `Failed to send to ${result.failed} recipients` : null,
     },
   });
+
+  if (result.success) {
+    void notifyCampaignStarted({
+      userId,
+      campaignId: schedule.id,
+      campaignName: schedule.subject,
+      recipientCount: recipients.length,
+    });
+  }
 
   return NextResponse.json({ success: true, result, nextRunAt });
 }

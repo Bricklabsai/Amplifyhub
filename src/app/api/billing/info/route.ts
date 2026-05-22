@@ -20,12 +20,31 @@ export async function GET() {
     const transactions = await prisma.transaction.findMany({
       where: { userId },
       orderBy: { createdAt: 'desc' },
-      take: 10,
+      take: 50,
+      select: {
+        id: true,
+        amount: true,
+        currency: true,
+        status: true,
+        reference: true,
+        channel: true,
+        paidAt: true,
+        createdAt: true,
+      },
     });
 
     return NextResponse.json({
       subscription,
-      transactions,
+      transactions: transactions.map((tx) => ({
+        id: tx.id,
+        amount: tx.amount,
+        currency: tx.currency,
+        status: tx.status,
+        reference: tx.reference,
+        channel: tx.channel,
+        paidAt: tx.paidAt?.toISOString() ?? null,
+        createdAt: tx.createdAt.toISOString(),
+      })),
     });
   } catch (error: any) {
     console.error('Billing info error:', error);

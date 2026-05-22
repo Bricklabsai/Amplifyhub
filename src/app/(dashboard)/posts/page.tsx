@@ -24,11 +24,6 @@ export default function PostsPage() {
   const [loading, setLoading] = useState(true);
   const [filter, setFilter] = useState("all");
   const [search, setSearch] = useState("");
-  const [selectedPostId, setSelectedPostId] = useState("");
-  const [engagement, setEngagement] = useState<any | null>(null);
-  const [replyDraft, setReplyDraft] = useState<Record<string, string>>({});
-  const [replyAccountSelection, setReplyAccountSelection] = useState<Record<string, string>>({});
-  const [analyzing, setAnalyzing] = useState(false);
   const { toast } = useToast();
   const [socialAccounts, setSocialAccounts] = useState<any[]>([]);
   const [selectedPublishAccounts, setSelectedPublishAccounts] = useState<string[]>([]);
@@ -66,64 +61,6 @@ export default function PostsPage() {
     setPosts((p) => p.filter((x) => x.id !== id));
   }
 
-  async function loadEngagement(postId: string) {
-    setSelectedPostId(postId);
-    const res = await fetch(`/api/posts/${postId}/engagement`);
-    const data = await res.json();
-    if (res.ok) setEngagement(data);
-  }
-
-  async function replyToComment(commentId: string) {
-    const message = replyDraft[commentId];
-    if (!message?.trim() || !selectedPostId) return;
-    
-    const selectedAccount = replyAccountSelection[commentId];
-    if (!selectedAccount) {
-      toast({
-        title: "Account required",
-        description: "Please select which account to reply from.",
-        variant: "destructive",
-      });
-      return;
-    }
-
-    const res = await fetch(`/api/posts/${selectedPostId}/engagement`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        action: "reply",
-        commentId,
-        message: message.trim(),
-        socialAccountId: selectedAccount,
-      }),
-    });
-    const data = await res.json();
-    if (res.ok) {
-      setEngagement(data);
-      setReplyDraft((prev) => ({ ...prev, [commentId]: "" }));
-      setReplyAccountSelection((prev) => ({ ...prev, [commentId]: "" }));
-    } else {
-      toast({
-        title: "Reply failed",
-        description: data.error || "Failed to post reply.",
-        variant: "destructive",
-      });
-    }
-  }
-
-  async function analyzeSentiment() {
-    if (!selectedPostId) return;
-    setAnalyzing(true);
-    const res = await fetch(`/api/posts/${selectedPostId}/engagement`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ action: "analyze" }),
-    });
-    const data = await res.json();
-    if (res.ok) setEngagement(data);
-    setAnalyzing(false);
-  }
-
   function togglePublishAccount(id: string) {
     setSelectedPublishAccounts((prev) => (prev.includes(id) ? prev.filter((x) => x !== id) : [...prev, id]));
   }
@@ -143,9 +80,28 @@ export default function PostsPage() {
       }),
     });
     const data = await res.json();
-    setPublishResult(res.ok ? "Post published to selected social accounts." : data?.error || "Failed to publish post.");
+    const results = (data?.results ?? {}) as Record<
+      string,
+      { success?: boolean; error?: string }
+    >;
+    const failed = Object.values(results).filter((r) => r && !r.success);
+    const succeeded = Object.values(results).filter((r) => r?.success);
+
+    if (res.ok && succeeded.length > 0) {
+      setPublishResult(
+        failed.length > 0
+          ? `Published to ${succeeded.length} account(s). Failed: ${failed.map((r) => r.error).filter(Boolean).join("; ")}`
+          : "Post published to selected social accounts."
+      );
+      await fetchPosts();
+    } else {
+      setPublishResult(
+        data?.error ||
+          failed.map((r) => r.error).filter(Boolean).join("; ") ||
+          "Failed to publish post."
+      );
+    }
     setPublishingPostId("");
-    if (res.ok) await fetchPosts();
   }
 
   const filtered = search
@@ -221,12 +177,12 @@ export default function PostsPage() {
                       <span className="text-xs text-blue-500">📅 {formatDateTime(post.scheduledAt)}</span>
                     )}
                     {post.status === "PUBLISHED" && (
-                      <button
-                        onClick={() => loadEngagement(post.id)}
-                        className="text-xs text-violet-600 hover:text-violet-700 font-semibold"
+                      <Link
+                        href={`/posts/messages?post=${post.id}`}
+                        className="text-xs font-semibold text-[#7331FF] hover:underline"
                       >
-                        View likes/comments
-                      </button>
+                        View engagement →
+                      </Link>
                     )}
                   </div>
                 </div>
@@ -309,62 +265,6 @@ export default function PostsPage() {
         )}
       </div>
 
-      {engagement && (
-        <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-5 space-y-4">
-          <div className="flex items-center justify-between">
-            <h3 className="font-bold text-gray-900">Published Post Engagement</h3>
-            <div className="flex items-center gap-3">
-              <span className="text-sm text-gray-600">👍 {engagement.likes} likes</span>
-              <Button size="sm" variant="outline" onClick={analyzeSentiment} disabled={analyzing}>
-                {analyzing ? "Analyzing..." : "AI Analyze Sentiment"}
-              </Button>
-            </div>
-          </div>
-          <div className="space-y-3">
-            {(engagement.comments || []).map((comment: any) => (
-              <div key={comment.id} className="border border-gray-100 rounded-xl p-3">
-                <div className="flex items-center justify-between">
-                  <p className="text-sm font-medium text-gray-800">{comment.author}</p>
-                  <span className="text-xs px-2 py-1 rounded-full bg-gray-100 text-gray-600">{comment.sentiment || "unknown"}</span>
-                </div>
-                <p className="text-sm text-gray-700 mt-1">{comment.message}</p>
-                <div className="mt-2 space-y-1">
-                  {(comment.replies || []).map((r: any) => (
-                    <p key={r.id} className="text-xs text-gray-600 bg-gray-50 rounded-md px-2 py-1">↳ {r.message}</p>
-                  ))}
-                </div>
-                <div className="mt-2 flex items-center gap-2">
-                   <Input
-                     placeholder="Reply through the site..."
-                     value={replyDraft[comment.id] || ""}
-                     onChange={(e) => setReplyDraft((prev) => ({ ...prev, [comment.id]: e.target.value }))}
-                     className="text-black"
-                   />
-                  {socialAccounts.length > 0 && (
-                    <select
-                      value={replyAccountSelection[comment.id] || ""}
-                      onChange={(e) =>
-                        setReplyAccountSelection((prev) => ({ ...prev, [comment.id]: e.target.value }))
-                      }
-                      className="px-2 py-1 text-sm border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-black"
-                    >
-                      <option value="">Select account...</option>
-                      {socialAccounts.map((acc) => (
-                        <option key={acc.id} value={acc.id}>
-                          {acc.accountName || acc.platform}
-                        </option>
-                      ))}
-                    </select>
-                  )}
-                  <Button size="sm" onClick={() => replyToComment(comment.id)}>
-                    Reply
-                  </Button>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      )}
       {publishResult && <p className="text-sm text-gray-600">{publishResult}</p>}
     </div>
   );

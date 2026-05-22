@@ -3,6 +3,7 @@ import { getServerSession } from 'next-auth';
 import { authOptions } from '@/lib/auth';
 import { prisma } from '@/lib/prisma';
 import { pollTransactionStatus } from '@/lib/paynow';
+import { notifyPaymentFailed, notifyPaymentSuccess } from '@/lib/notifications';
 
 export async function GET(req: Request) {
   try {
@@ -68,10 +69,18 @@ export async function GET(req: Request) {
           }
         });
       } else if (paynowData.status === 'failed') {
+        const wasPending = transaction.status === 'pending';
         await prisma.transaction.update({
           where: { reference },
           data: { status: 'failed' },
         });
+
+        if (wasPending) {
+          void notifyPaymentFailed({
+            userId: transaction.userId,
+            reference,
+          });
+        }
 
         return NextResponse.json({ 
           success: false, 

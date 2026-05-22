@@ -4,8 +4,9 @@ import { sendBulkEmails } from "@/lib/email";
 import { processScheduledPosts, processScheduledEmails } from "@/lib/services/schedulerService";
 
 /**
- * Publishes scheduled social media posts
- * Runs every minute to check for posts that need to be published
+ * Publishes scheduled social media posts (Inngest Cloud optional path).
+ * Production also uses Vercel Cron → GET /api/scheduler every minute.
+ * Both paths call the same processScheduledPosts() with a processing lock.
  */
 export const publishScheduledPosts = inngest.createFunction(
   { 

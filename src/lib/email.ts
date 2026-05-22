@@ -22,6 +22,10 @@ export interface SendEmailOptions {
   textContent?: string;
   campaignId?: string;
   maxRetries?: number;
+  /** Where replies go (defaults to platform FROM_EMAIL). Use the sender's real inbox. */
+  replyTo?: string;
+  /** Shown in the From name, e.g. "Jane Doe via AmplifyHub" */
+  senderName?: string;
 }
 
 /**
@@ -82,7 +86,23 @@ function personalizeContent(content: string, recipient: EmailRecipient, campaign
   return personalized;
 }
 
-export async function sendBulkEmails({ to, subject, content, textContent, campaignId, maxRetries = 3 }: SendEmailOptions) {
+export function getPlatformFromAddress(senderName?: string): string {
+  const displayName = senderName?.trim()
+    ? `${senderName.trim()} via ${FROM_NAME}`
+    : FROM_NAME;
+  return `${displayName} <${FROM_EMAIL}>`;
+}
+
+export async function sendBulkEmails({
+  to,
+  subject,
+  content,
+  textContent,
+  campaignId,
+  maxRetries = 3,
+  replyTo,
+  senderName,
+}: SendEmailOptions) {
   if (!RESEND_API_KEY) {
     console.warn("RESEND_API_KEY is not set. Emails will not be sent.");
     return { success: false, error: "Email service not configured", sent: 0, failed: to.length, total: to.length, results: [] };
@@ -112,12 +132,12 @@ export async function sendBulkEmails({ to, subject, content, textContent, campai
             Authorization: `Bearer ${RESEND_API_KEY}`,
           },
           body: JSON.stringify({
-            from: FROM_NAME ? `${FROM_NAME} <${FROM_EMAIL}>` : FROM_EMAIL,
+            from: getPlatformFromAddress(senderName),
             to: [recipient.email],
             subject: personalizedSubject,
             html: personalizedHtml,
             text: personalizedText,
-            reply_to: FROM_EMAIL,
+            reply_to: replyTo?.trim() || FROM_EMAIL,
           }),
         });
 

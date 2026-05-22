@@ -3,6 +3,7 @@ import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import { sendBulkEmails } from "@/lib/email";
+import { notifyCampaignStarted } from "@/lib/notifications";
 
 export async function POST(req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   const session = await getServerSession(authOptions);
@@ -10,6 +11,23 @@ export async function POST(req: NextRequest, { params }: { params: Promise<{ id:
   const userId = (session.user as any).id;
 
   const { id } = await params;
+  let replyTo: string | undefined;
+  let senderName: string | undefined;
+  try {
+    const body = await req.json();
+    replyTo = typeof body.replyTo === "string" ? body.replyTo.trim() : undefined;
+    senderName = typeof body.senderName === "string" ? body.senderName.trim() : undefined;
+  } catch {
+    // empty body is fine
+  }
+
+  const user = await prisma.user.findUnique({
+    where: { id: userId },
+    select: { email: true, name: true },
+  });
+  if (!replyTo) replyTo = user?.email || undefined;
+  if (!senderName) senderName = user?.name || undefined;
+
   const campaign = await prisma.emailCampaign.findFirst({ 
     where: { id, userId },
     include: {
@@ -50,7 +68,9 @@ export async function POST(req: NextRequest, { params }: { params: Promise<{ id:
       subject: campaign.subject,
       content: campaign.htmlContent,
       textContent: campaign.textContent || undefined,
-      campaignId: campaign.id
+      campaignId: campaign.id,
+      replyTo,
+      senderName,
     });
 
     if (!emailResult.success && resendApiKey) {
@@ -67,6 +87,13 @@ export async function POST(req: NextRequest, { params }: { params: Promise<{ id:
       openRate: 0, 
       clickRate: 0 
     },
+  });
+
+  void notifyCampaignStarted({
+    userId,
+    campaignId: id,
+    campaignName: campaign.name,
+    recipientCount: formattedRecipients.length,
   });
 
   return NextResponse.json({

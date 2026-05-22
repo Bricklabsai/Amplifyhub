@@ -95,6 +95,7 @@ model User {
   createdAt      DateTime  @default(now())
   updatedAt      DateTime  @updatedAt
   zernioProfileId String?   @unique
+  settings        Json?
 
   accounts       Account[]
   sessions       Session[]

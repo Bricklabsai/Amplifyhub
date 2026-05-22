@@ -342,16 +342,31 @@ function ComposeContent() {
       }),
     });
     const publishData = await publishRes.json();
-    if (publishRes.ok) {
+    const results = (publishData?.results ?? {}) as Record<
+      string,
+      { success?: boolean; error?: string }
+    >;
+    const failed = Object.values(results).filter((r) => r && !r.success);
+    const succeeded = Object.values(results).filter((r) => r?.success);
+
+    if (publishRes.ok && succeeded.length > 0) {
       toast({
-        title: "Success",
-        description: "Post published to selected social accounts.",
+        title: failed.length > 0 ? "Partially published" : "Success",
+        description:
+          failed.length > 0
+            ? `Published to ${succeeded.length} account(s). ${failed.length} failed: ${failed.map((r) => r.error).filter(Boolean).join("; ")}`
+            : "Post published to selected social accounts.",
+        variant: failed.length > 0 ? "default" : "default",
       });
       router.push("/posts");
     } else {
+      const detail =
+        publishData?.error ||
+        failed.map((r) => r.error).filter(Boolean).join("; ") ||
+        "Unknown error occurred.";
       toast({
         title: "Publish failed",
-        description: publishData?.error || "Unknown error occurred.",
+        description: detail,
         variant: "destructive",
       });
     }
@@ -367,8 +382,27 @@ function ComposeContent() {
       });
       return;
     }
+    if (publishAccountIds.length === 0) {
+      toast({
+        title: "No accounts selected",
+        description: "Select at least one social account to schedule.",
+        variant: "destructive",
+      });
+      return;
+    }
+
     setScheduling(true);
     const scheduledAt = new Date(`${scheduleDate}T${scheduleTime}`);
+    if (Number.isNaN(scheduledAt.getTime()) || scheduledAt.getTime() <= Date.now()) {
+      toast({
+        title: "Invalid schedule time",
+        description: "Choose a date and time in the future.",
+        variant: "destructive",
+      });
+      setScheduling(false);
+      return;
+    }
+
     const mediaUrls = media.filter((m) => selectedMedia.includes(m.id)).map((m) => m.url);
     
     const content = message || prompt;

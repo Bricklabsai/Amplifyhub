@@ -4,13 +4,21 @@ import EmailEnhancer from "@/components/email/EmailEnhancer";
 
 export default function AIComposerTab() {
   return (
-    <div className="grid gap-6 xl:grid-cols-[2fr_1fr]">
-      <div>
-        <AIEmailStudio />
+    <div className="space-y-6">
+      <div className="brand-gradient-bg rounded-2xl p-6 text-white md:p-8">
+        <h2
+          className="text-2xl font-black md:text-3xl"
+          style={{ fontFamily: "Outfit, sans-serif" }}
+        >
+          AI Email Studio
+        </h2>
+        <p className="mt-2 max-w-2xl text-sm text-white/85">
+          Write normal client emails or build reusable HTML templates — then send through
+          campaigns with your brand colors.
+        </p>
       </div>
-      <div>
-        <EmailEnhancer />
-      </div>
+      <AIEmailStudio />
+      <EmailEnhancer />
     </div>
   );
 }

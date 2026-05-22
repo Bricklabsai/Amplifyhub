@@ -4861,6 +4861,7 @@ export namespace Prisma {
     createdAt: number
     updatedAt: number
     zernioProfileId: number
+    settings: number
     _all: number
   }
 
@@ -4902,6 +4903,7 @@ export namespace Prisma {
     createdAt?: true
     updatedAt?: true
     zernioProfileId?: true
+    settings?: true
     _all?: true
   }
 
@@ -4988,6 +4990,7 @@ export namespace Prisma {
     createdAt: Date
     updatedAt: Date
     zernioProfileId: string | null
+    settings: JsonValue | null
     _count: UserCountAggregateOutputType | null
     _min: UserMinAggregateOutputType | null
     _max: UserMaxAggregateOutputType | null
@@ -5018,6 +5021,7 @@ export namespace Prisma {
     createdAt?: boolean
     updatedAt?: boolean
     zernioProfileId?: boolean
+    settings?: boolean
     accounts?: boolean | User$accountsArgs<ExtArgs>
     sessions?: boolean | User$sessionsArgs<ExtArgs>
     socialAccounts?: boolean | User$socialAccountsArgs<ExtArgs>
@@ -5049,6 +5053,7 @@ export namespace Prisma {
     createdAt?: boolean
     updatedAt?: boolean
     zernioProfileId?: boolean
+    settings?: boolean
   }, ExtArgs["result"]["user"]>
 
   export type UserSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
@@ -5062,6 +5067,7 @@ export namespace Prisma {
     createdAt?: boolean
     updatedAt?: boolean
     zernioProfileId?: boolean
+    settings?: boolean
   }, ExtArgs["result"]["user"]>
 
   export type UserSelectScalar = {
@@ -5075,9 +5081,10 @@ export namespace Prisma {
     createdAt?: boolean
     updatedAt?: boolean
     zernioProfileId?: boolean
+    settings?: boolean
   }
 
-  export type UserOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "email" | "emailVerified" | "image" | "password" | "role" | "createdAt" | "updatedAt" | "zernioProfileId", ExtArgs["result"]["user"]>
+  export type UserOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "email" | "emailVerified" | "image" | "password" | "role" | "createdAt" | "updatedAt" | "zernioProfileId" | "settings", ExtArgs["result"]["user"]>
   export type UserInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     accounts?: boolean | User$accountsArgs<ExtArgs>
     sessions?: boolean | User$sessionsArgs<ExtArgs>
@@ -5133,6 +5140,7 @@ export namespace Prisma {
       createdAt: Date
       updatedAt: Date
       zernioProfileId: string | null
+      settings: Prisma.JsonValue | null
     }, ExtArgs["result"]["user"]>
     composites: {}
   }
@@ -5583,6 +5591,7 @@ export namespace Prisma {
     readonly createdAt: FieldRef<"User", 'DateTime'>
     readonly updatedAt: FieldRef<"User", 'DateTime'>
     readonly zernioProfileId: FieldRef<"User", 'String'>
+    readonly settings: FieldRef<"User", 'Json'>
   }
     
 
@@ -34165,7 +34174,8 @@ export namespace Prisma {
     role: 'role',
     createdAt: 'createdAt',
     updatedAt: 'updatedAt',
-    zernioProfileId: 'zernioProfileId'
+    zernioProfileId: 'zernioProfileId',
+    settings: 'settings'
   };
 
   export type UserScalarFieldEnum = (typeof UserScalarFieldEnum)[keyof typeof UserScalarFieldEnum]
@@ -34563,12 +34573,29 @@ export namespace Prisma {
   export type SortOrder = (typeof SortOrder)[keyof typeof SortOrder]
 
 
+  export const NullableJsonNullValueInput: {
+    DbNull: typeof DbNull,
+    JsonNull: typeof JsonNull
+  };
+
+  export type NullableJsonNullValueInput = (typeof NullableJsonNullValueInput)[keyof typeof NullableJsonNullValueInput]
+
+
   export const QueryMode: {
     default: 'default',
     insensitive: 'insensitive'
   };
 
   export type QueryMode = (typeof QueryMode)[keyof typeof QueryMode]
+
+
+  export const JsonNullValueFilter: {
+    DbNull: typeof DbNull,
+    JsonNull: typeof JsonNull,
+    AnyNull: typeof AnyNull
+  };
+
+  export type JsonNullValueFilter = (typeof JsonNullValueFilter)[keyof typeof JsonNullValueFilter]
 
 
   export const NullsOrder: {
@@ -34623,6 +34650,20 @@ export namespace Prisma {
    * Reference to a field of type 'Role[]'
    */
   export type ListEnumRoleFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Role[]'>
+    
+
+
+  /**
+   * Reference to a field of type 'Json'
+   */
+  export type JsonFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Json'>
+    
+
+
+  /**
+   * Reference to a field of type 'QueryMode'
+   */
+  export type EnumQueryModeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'QueryMode'>
     
 
 
@@ -34855,6 +34896,7 @@ export namespace Prisma {
     createdAt?: DateTimeFilter<"User"> | Date | string
     updatedAt?: DateTimeFilter<"User"> | Date | string
     zernioProfileId?: StringNullableFilter<"User"> | string | null
+    settings?: JsonNullableFilter<"User">
     accounts?: AccountListRelationFilter
     sessions?: SessionListRelationFilter
     socialAccounts?: SocialAccountListRelationFilter
@@ -34885,6 +34927,7 @@ export namespace Prisma {
     createdAt?: SortOrder
     updatedAt?: SortOrder
     zernioProfileId?: SortOrderInput | SortOrder
+    settings?: SortOrderInput | SortOrder
     accounts?: AccountOrderByRelationAggregateInput
     sessions?: SessionOrderByRelationAggregateInput
     socialAccounts?: SocialAccountOrderByRelationAggregateInput
@@ -34918,6 +34961,7 @@ export namespace Prisma {
     role?: EnumRoleFilter<"User"> | $Enums.Role
     createdAt?: DateTimeFilter<"User"> | Date | string
     updatedAt?: DateTimeFilter<"User"> | Date | string
+    settings?: JsonNullableFilter<"User">
     accounts?: AccountListRelationFilter
     sessions?: SessionListRelationFilter
     socialAccounts?: SocialAccountListRelationFilter
@@ -34948,6 +34992,7 @@ export namespace Prisma {
     createdAt?: SortOrder
     updatedAt?: SortOrder
     zernioProfileId?: SortOrderInput | SortOrder
+    settings?: SortOrderInput | SortOrder
     _count?: UserCountOrderByAggregateInput
     _max?: UserMaxOrderByAggregateInput
     _min?: UserMinOrderByAggregateInput
@@ -34967,6 +35012,7 @@ export namespace Prisma {
     createdAt?: DateTimeWithAggregatesFilter<"User"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"User"> | Date | string
     zernioProfileId?: StringNullableWithAggregatesFilter<"User"> | string | null
+    settings?: JsonNullableWithAggregatesFilter<"User">
   }
 
   export type TeamWhereInput = {
@@ -37047,6 +37093,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     zernioProfileId?: string | null
+    settings?: NullableJsonNullValueInput | InputJsonValue
     accounts?: AccountCreateNestedManyWithoutUserInput
     sessions?: SessionCreateNestedManyWithoutUserInput
     socialAccounts?: SocialAccountCreateNestedManyWithoutUserInput
@@ -37077,6 +37124,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     zernioProfileId?: string | null
+    settings?: NullableJsonNullValueInput | InputJsonValue
     accounts?: AccountUncheckedCreateNestedManyWithoutUserInput
     sessions?: SessionUncheckedCreateNestedManyWithoutUserInput
     socialAccounts?: SocialAccountUncheckedCreateNestedManyWithoutUserInput
@@ -37107,6 +37155,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     zernioProfileId?: NullableStringFieldUpdateOperationsInput | string | null
+    settings?: NullableJsonNullValueInput | InputJsonValue
     accounts?: AccountUpdateManyWithoutUserNestedInput
     sessions?: SessionUpdateManyWithoutUserNestedInput
     socialAccounts?: SocialAccountUpdateManyWithoutUserNestedInput
@@ -37137,6 +37186,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     zernioProfileId?: NullableStringFieldUpdateOperationsInput | string | null
+    settings?: NullableJsonNullValueInput | InputJsonValue
     accounts?: AccountUncheckedUpdateManyWithoutUserNestedInput
     sessions?: SessionUncheckedUpdateManyWithoutUserNestedInput
     socialAccounts?: SocialAccountUncheckedUpdateManyWithoutUserNestedInput
@@ -37167,6 +37217,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     zernioProfileId?: string | null
+    settings?: NullableJsonNullValueInput | InputJsonValue
   }
 
   export type UserUpdateManyMutationInput = {
@@ -37180,6 +37231,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     zernioProfileId?: NullableStringFieldUpdateOperationsInput | string | null
+    settings?: NullableJsonNullValueInput | InputJsonValue
   }
 
   export type UserUncheckedUpdateManyInput = {
@@ -37193,6 +37245,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     zernioProfileId?: NullableStringFieldUpdateOperationsInput | string | null
+    settings?: NullableJsonNullValueInput | InputJsonValue
   }
 
   export type TeamCreateInput = {
@@ -39525,6 +39578,29 @@ export namespace Prisma {
     notIn?: $Enums.Role[] | ListEnumRoleFieldRefInput<$PrismaModel>
     not?: NestedEnumRoleFilter<$PrismaModel> | $Enums.Role
   }
+  export type JsonNullableFilter<$PrismaModel = never> =
+    | PatchUndefined<
+        Either<Required<JsonNullableFilterBase<$PrismaModel>>, Exclude<keyof Required<JsonNullableFilterBase<$PrismaModel>>, 'path'>>,
+        Required<JsonNullableFilterBase<$PrismaModel>>
+      >
+    | OptionalFlat<Omit<Required<JsonNullableFilterBase<$PrismaModel>>, 'path'>>
+
+  export type JsonNullableFilterBase<$PrismaModel = never> = {
+    equals?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
+    path?: string[]
+    mode?: QueryMode | EnumQueryModeFieldRefInput<$PrismaModel>
+    string_contains?: string | StringFieldRefInput<$PrismaModel>
+    string_starts_with?: string | StringFieldRefInput<$PrismaModel>
+    string_ends_with?: string | StringFieldRefInput<$PrismaModel>
+    array_starts_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    array_ends_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    array_contains?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    lt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    lte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    gt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    gte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    not?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
+  }
 
   export type AccountListRelationFilter = {
     every?: AccountWhereInput
@@ -39702,6 +39778,7 @@ export namespace Prisma {
     createdAt?: SortOrder
     updatedAt?: SortOrder
     zernioProfileId?: SortOrder
+    settings?: SortOrder
   }
 
   export type UserMaxOrderByAggregateInput = {
@@ -39770,6 +39847,32 @@ export namespace Prisma {
     _count?: NestedIntFilter<$PrismaModel>
     _min?: NestedEnumRoleFilter<$PrismaModel>
     _max?: NestedEnumRoleFilter<$PrismaModel>
+  }
+  export type JsonNullableWithAggregatesFilter<$PrismaModel = never> =
+    | PatchUndefined<
+        Either<Required<JsonNullableWithAggregatesFilterBase<$PrismaModel>>, Exclude<keyof Required<JsonNullableWithAggregatesFilterBase<$PrismaModel>>, 'path'>>,
+        Required<JsonNullableWithAggregatesFilterBase<$PrismaModel>>
+      >
+    | OptionalFlat<Omit<Required<JsonNullableWithAggregatesFilterBase<$PrismaModel>>, 'path'>>
+
+  export type JsonNullableWithAggregatesFilterBase<$PrismaModel = never> = {
+    equals?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
+    path?: string[]
+    mode?: QueryMode | EnumQueryModeFieldRefInput<$PrismaModel>
+    string_contains?: string | StringFieldRefInput<$PrismaModel>
+    string_starts_with?: string | StringFieldRefInput<$PrismaModel>
+    string_ends_with?: string | StringFieldRefInput<$PrismaModel>
+    array_starts_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    array_ends_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    array_contains?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    lt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    lte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    gt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    gte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    not?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedJsonNullableFilter<$PrismaModel>
+    _max?: NestedJsonNullableFilter<$PrismaModel>
   }
 
   export type TeamInviteListRelationFilter = {
@@ -43150,6 +43253,29 @@ export namespace Prisma {
     _min?: NestedEnumRoleFilter<$PrismaModel>
     _max?: NestedEnumRoleFilter<$PrismaModel>
   }
+  export type NestedJsonNullableFilter<$PrismaModel = never> =
+    | PatchUndefined<
+        Either<Required<NestedJsonNullableFilterBase<$PrismaModel>>, Exclude<keyof Required<NestedJsonNullableFilterBase<$PrismaModel>>, 'path'>>,
+        Required<NestedJsonNullableFilterBase<$PrismaModel>>
+      >
+    | OptionalFlat<Omit<Required<NestedJsonNullableFilterBase<$PrismaModel>>, 'path'>>
+
+  export type NestedJsonNullableFilterBase<$PrismaModel = never> = {
+    equals?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
+    path?: string[]
+    mode?: QueryMode | EnumQueryModeFieldRefInput<$PrismaModel>
+    string_contains?: string | StringFieldRefInput<$PrismaModel>
+    string_starts_with?: string | StringFieldRefInput<$PrismaModel>
+    string_ends_with?: string | StringFieldRefInput<$PrismaModel>
+    array_starts_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    array_ends_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    array_contains?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    lt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    lte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    gt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    gte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    not?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
+  }
 
   export type NestedEnumTeamRoleFilter<$PrismaModel = never> = {
     equals?: $Enums.TeamRole | EnumTeamRoleFieldRefInput<$PrismaModel>
@@ -43414,6 +43540,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     zernioProfileId?: string | null
+    settings?: NullableJsonNullValueInput | InputJsonValue
     accounts?: AccountCreateNestedManyWithoutUserInput
     sessions?: SessionCreateNestedManyWithoutUserInput
     socialAccounts?: SocialAccountCreateNestedManyWithoutUserInput
@@ -43443,6 +43570,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     zernioProfileId?: string | null
+    settings?: NullableJsonNullValueInput | InputJsonValue
     accounts?: AccountUncheckedCreateNestedManyWithoutUserInput
     sessions?: SessionUncheckedCreateNestedManyWithoutUserInput
     socialAccounts?: SocialAccountUncheckedCreateNestedManyWithoutUserInput
@@ -43488,6 +43616,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     zernioProfileId?: NullableStringFieldUpdateOperationsInput | string | null
+    settings?: NullableJsonNullValueInput | InputJsonValue
     accounts?: AccountUpdateManyWithoutUserNestedInput
     sessions?: SessionUpdateManyWithoutUserNestedInput
     socialAccounts?: SocialAccountUpdateManyWithoutUserNestedInput
@@ -43517,6 +43646,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     zernioProfileId?: NullableStringFieldUpdateOperationsInput | string | null
+    settings?: NullableJsonNullValueInput | InputJsonValue
     accounts?: AccountUncheckedUpdateManyWithoutUserNestedInput
     sessions?: SessionUncheckedUpdateManyWithoutUserNestedInput
     socialAccounts?: SocialAccountUncheckedUpdateManyWithoutUserNestedInput
@@ -44724,6 +44854,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     zernioProfileId?: string | null
+    settings?: NullableJsonNullValueInput | InputJsonValue
     accounts?: AccountCreateNestedManyWithoutUserInput
     sessions?: SessionCreateNestedManyWithoutUserInput
     socialAccounts?: SocialAccountCreateNestedManyWithoutUserInput
@@ -44753,6 +44884,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     zernioProfileId?: string | null
+    settings?: NullableJsonNullValueInput | InputJsonValue
     accounts?: AccountUncheckedCreateNestedManyWithoutUserInput
     sessions?: SessionUncheckedCreateNestedManyWithoutUserInput
     socialAccounts?: SocialAccountUncheckedCreateNestedManyWithoutUserInput
@@ -44852,6 +44984,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     zernioProfileId?: NullableStringFieldUpdateOperationsInput | string | null
+    settings?: NullableJsonNullValueInput | InputJsonValue
     accounts?: AccountUpdateManyWithoutUserNestedInput
     sessions?: SessionUpdateManyWithoutUserNestedInput
     socialAccounts?: SocialAccountUpdateManyWithoutUserNestedInput
@@ -44881,6 +45014,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     zernioProfileId?: NullableStringFieldUpdateOperationsInput | string | null
+    settings?: NullableJsonNullValueInput | InputJsonValue
     accounts?: AccountUncheckedUpdateManyWithoutUserNestedInput
     sessions?: SessionUncheckedUpdateManyWithoutUserNestedInput
     socialAccounts?: SocialAccountUncheckedUpdateManyWithoutUserNestedInput
@@ -44978,6 +45112,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     zernioProfileId?: string | null
+    settings?: NullableJsonNullValueInput | InputJsonValue
     accounts?: AccountCreateNestedManyWithoutUserInput
     sessions?: SessionCreateNestedManyWithoutUserInput
     socialAccounts?: SocialAccountCreateNestedManyWithoutUserInput
@@ -45007,6 +45142,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     zernioProfileId?: string | null
+    settings?: NullableJsonNullValueInput | InputJsonValue
     accounts?: AccountUncheckedCreateNestedManyWithoutUserInput
     sessions?: SessionUncheckedCreateNestedManyWithoutUserInput
     socialAccounts?: SocialAccountUncheckedCreateNestedManyWithoutUserInput
@@ -45081,6 +45217,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     zernioProfileId?: NullableStringFieldUpdateOperationsInput | string | null
+    settings?: NullableJsonNullValueInput | InputJsonValue
     accounts?: AccountUpdateManyWithoutUserNestedInput
     sessions?: SessionUpdateManyWithoutUserNestedInput
     socialAccounts?: SocialAccountUpdateManyWithoutUserNestedInput
@@ -45110,6 +45247,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     zernioProfileId?: NullableStringFieldUpdateOperationsInput | string | null
+    settings?: NullableJsonNullValueInput | InputJsonValue
     accounts?: AccountUncheckedUpdateManyWithoutUserNestedInput
     sessions?: SessionUncheckedUpdateManyWithoutUserNestedInput
     socialAccounts?: SocialAccountUncheckedUpdateManyWithoutUserNestedInput
@@ -45191,6 +45329,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     zernioProfileId?: string | null
+    settings?: NullableJsonNullValueInput | InputJsonValue
     sessions?: SessionCreateNestedManyWithoutUserInput
     socialAccounts?: SocialAccountCreateNestedManyWithoutUserInput
     posts?: PostCreateNestedManyWithoutUserInput
@@ -45220,6 +45359,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     zernioProfileId?: string | null
+    settings?: NullableJsonNullValueInput | InputJsonValue
     sessions?: SessionUncheckedCreateNestedManyWithoutUserInput
     socialAccounts?: SocialAccountUncheckedCreateNestedManyWithoutUserInput
     posts?: PostUncheckedCreateNestedManyWithoutUserInput
@@ -45265,6 +45405,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     zernioProfileId?: NullableStringFieldUpdateOperationsInput | string | null
+    settings?: NullableJsonNullValueInput | InputJsonValue
     sessions?: SessionUpdateManyWithoutUserNestedInput
     socialAccounts?: SocialAccountUpdateManyWithoutUserNestedInput
     posts?: PostUpdateManyWithoutUserNestedInput
@@ -45294,6 +45435,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     zernioProfileId?: NullableStringFieldUpdateOperationsInput | string | null
+    settings?: NullableJsonNullValueInput | InputJsonValue
     sessions?: SessionUncheckedUpdateManyWithoutUserNestedInput
     socialAccounts?: SocialAccountUncheckedUpdateManyWithoutUserNestedInput
     posts?: PostUncheckedUpdateManyWithoutUserNestedInput
@@ -45323,6 +45465,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     zernioProfileId?: string | null
+    settings?: NullableJsonNullValueInput | InputJsonValue
     accounts?: AccountCreateNestedManyWithoutUserInput
     socialAccounts?: SocialAccountCreateNestedManyWithoutUserInput
     posts?: PostCreateNestedManyWithoutUserInput
@@ -45352,6 +45495,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     zernioProfileId?: string | null
+    settings?: NullableJsonNullValueInput | InputJsonValue
     accounts?: AccountUncheckedCreateNestedManyWithoutUserInput
     socialAccounts?: SocialAccountUncheckedCreateNestedManyWithoutUserInput
     posts?: PostUncheckedCreateNestedManyWithoutUserInput
@@ -45397,6 +45541,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     zernioProfileId?: NullableStringFieldUpdateOperationsInput | string | null
+    settings?: NullableJsonNullValueInput | InputJsonValue
     accounts?: AccountUpdateManyWithoutUserNestedInput
     socialAccounts?: SocialAccountUpdateManyWithoutUserNestedInput
     posts?: PostUpdateManyWithoutUserNestedInput
@@ -45426,6 +45571,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     zernioProfileId?: NullableStringFieldUpdateOperationsInput | string | null
+    settings?: NullableJsonNullValueInput | InputJsonValue
     accounts?: AccountUncheckedUpdateManyWithoutUserNestedInput
     socialAccounts?: SocialAccountUncheckedUpdateManyWithoutUserNestedInput
     posts?: PostUncheckedUpdateManyWithoutUserNestedInput
@@ -45530,6 +45676,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     zernioProfileId?: string | null
+    settings?: NullableJsonNullValueInput | InputJsonValue
     accounts?: AccountCreateNestedManyWithoutUserInput
     sessions?: SessionCreateNestedManyWithoutUserInput
     socialAccounts?: SocialAccountCreateNestedManyWithoutUserInput
@@ -45559,6 +45706,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     zernioProfileId?: string | null
+    settings?: NullableJsonNullValueInput | InputJsonValue
     accounts?: AccountUncheckedCreateNestedManyWithoutUserInput
     sessions?: SessionUncheckedCreateNestedManyWithoutUserInput
     socialAccounts?: SocialAccountUncheckedCreateNestedManyWithoutUserInput
@@ -45639,6 +45787,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     zernioProfileId?: NullableStringFieldUpdateOperationsInput | string | null
+    settings?: NullableJsonNullValueInput | InputJsonValue
     accounts?: AccountUpdateManyWithoutUserNestedInput
     sessions?: SessionUpdateManyWithoutUserNestedInput
     socialAccounts?: SocialAccountUpdateManyWithoutUserNestedInput
@@ -45668,6 +45817,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     zernioProfileId?: NullableStringFieldUpdateOperationsInput | string | null
+    settings?: NullableJsonNullValueInput | InputJsonValue
     accounts?: AccountUncheckedUpdateManyWithoutUserNestedInput
     sessions?: SessionUncheckedUpdateManyWithoutUserNestedInput
     socialAccounts?: SocialAccountUncheckedUpdateManyWithoutUserNestedInput
@@ -45738,6 +45888,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     zernioProfileId?: string | null
+    settings?: NullableJsonNullValueInput | InputJsonValue
     accounts?: AccountCreateNestedManyWithoutUserInput
     sessions?: SessionCreateNestedManyWithoutUserInput
     socialAccounts?: SocialAccountCreateNestedManyWithoutUserInput
@@ -45767,6 +45918,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     zernioProfileId?: string | null
+    settings?: NullableJsonNullValueInput | InputJsonValue
     accounts?: AccountUncheckedCreateNestedManyWithoutUserInput
     sessions?: SessionUncheckedCreateNestedManyWithoutUserInput
     socialAccounts?: SocialAccountUncheckedCreateNestedManyWithoutUserInput
@@ -45812,6 +45964,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     zernioProfileId?: NullableStringFieldUpdateOperationsInput | string | null
+    settings?: NullableJsonNullValueInput | InputJsonValue
     accounts?: AccountUpdateManyWithoutUserNestedInput
     sessions?: SessionUpdateManyWithoutUserNestedInput
     socialAccounts?: SocialAccountUpdateManyWithoutUserNestedInput
@@ -45841,6 +45994,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     zernioProfileId?: NullableStringFieldUpdateOperationsInput | string | null
+    settings?: NullableJsonNullValueInput | InputJsonValue
     accounts?: AccountUncheckedUpdateManyWithoutUserNestedInput
     sessions?: SessionUncheckedUpdateManyWithoutUserNestedInput
     socialAccounts?: SocialAccountUncheckedUpdateManyWithoutUserNestedInput
@@ -45870,6 +46024,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     zernioProfileId?: string | null
+    settings?: NullableJsonNullValueInput | InputJsonValue
     accounts?: AccountCreateNestedManyWithoutUserInput
     sessions?: SessionCreateNestedManyWithoutUserInput
     posts?: PostCreateNestedManyWithoutUserInput
@@ -45899,6 +46054,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     zernioProfileId?: string | null
+    settings?: NullableJsonNullValueInput | InputJsonValue
     accounts?: AccountUncheckedCreateNestedManyWithoutUserInput
     sessions?: SessionUncheckedCreateNestedManyWithoutUserInput
     posts?: PostUncheckedCreateNestedManyWithoutUserInput
@@ -45986,6 +46142,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     zernioProfileId?: NullableStringFieldUpdateOperationsInput | string | null
+    settings?: NullableJsonNullValueInput | InputJsonValue
     accounts?: AccountUpdateManyWithoutUserNestedInput
     sessions?: SessionUpdateManyWithoutUserNestedInput
     posts?: PostUpdateManyWithoutUserNestedInput
@@ -46015,6 +46172,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     zernioProfileId?: NullableStringFieldUpdateOperationsInput | string | null
+    settings?: NullableJsonNullValueInput | InputJsonValue
     accounts?: AccountUncheckedUpdateManyWithoutUserNestedInput
     sessions?: SessionUncheckedUpdateManyWithoutUserNestedInput
     posts?: PostUncheckedUpdateManyWithoutUserNestedInput
@@ -46080,6 +46238,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     zernioProfileId?: string | null
+    settings?: NullableJsonNullValueInput | InputJsonValue
     accounts?: AccountCreateNestedManyWithoutUserInput
     sessions?: SessionCreateNestedManyWithoutUserInput
     socialAccounts?: SocialAccountCreateNestedManyWithoutUserInput
@@ -46109,6 +46268,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     zernioProfileId?: string | null
+    settings?: NullableJsonNullValueInput | InputJsonValue
     accounts?: AccountUncheckedCreateNestedManyWithoutUserInput
     sessions?: SessionUncheckedCreateNestedManyWithoutUserInput
     socialAccounts?: SocialAccountUncheckedCreateNestedManyWithoutUserInput
@@ -46231,6 +46391,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     zernioProfileId?: NullableStringFieldUpdateOperationsInput | string | null
+    settings?: NullableJsonNullValueInput | InputJsonValue
     accounts?: AccountUpdateManyWithoutUserNestedInput
     sessions?: SessionUpdateManyWithoutUserNestedInput
     socialAccounts?: SocialAccountUpdateManyWithoutUserNestedInput
@@ -46260,6 +46421,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     zernioProfileId?: NullableStringFieldUpdateOperationsInput | string | null
+    settings?: NullableJsonNullValueInput | InputJsonValue
     accounts?: AccountUncheckedUpdateManyWithoutUserNestedInput
     sessions?: SessionUncheckedUpdateManyWithoutUserNestedInput
     socialAccounts?: SocialAccountUncheckedUpdateManyWithoutUserNestedInput
@@ -46510,6 +46672,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     zernioProfileId?: string | null
+    settings?: NullableJsonNullValueInput | InputJsonValue
     accounts?: AccountCreateNestedManyWithoutUserInput
     sessions?: SessionCreateNestedManyWithoutUserInput
     socialAccounts?: SocialAccountCreateNestedManyWithoutUserInput
@@ -46539,6 +46702,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     zernioProfileId?: string | null
+    settings?: NullableJsonNullValueInput | InputJsonValue
     accounts?: AccountUncheckedCreateNestedManyWithoutUserInput
     sessions?: SessionUncheckedCreateNestedManyWithoutUserInput
     socialAccounts?: SocialAccountUncheckedCreateNestedManyWithoutUserInput
@@ -46684,6 +46848,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     zernioProfileId?: NullableStringFieldUpdateOperationsInput | string | null
+    settings?: NullableJsonNullValueInput | InputJsonValue
     accounts?: AccountUpdateManyWithoutUserNestedInput
     sessions?: SessionUpdateManyWithoutUserNestedInput
     socialAccounts?: SocialAccountUpdateManyWithoutUserNestedInput
@@ -46713,6 +46878,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     zernioProfileId?: NullableStringFieldUpdateOperationsInput | string | null
+    settings?: NullableJsonNullValueInput | InputJsonValue
     accounts?: AccountUncheckedUpdateManyWithoutUserNestedInput
     sessions?: SessionUncheckedUpdateManyWithoutUserNestedInput
     socialAccounts?: SocialAccountUncheckedUpdateManyWithoutUserNestedInput
@@ -46774,6 +46940,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     zernioProfileId?: string | null
+    settings?: NullableJsonNullValueInput | InputJsonValue
     accounts?: AccountCreateNestedManyWithoutUserInput
     sessions?: SessionCreateNestedManyWithoutUserInput
     socialAccounts?: SocialAccountCreateNestedManyWithoutUserInput
@@ -46803,6 +46970,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     zernioProfileId?: string | null
+    settings?: NullableJsonNullValueInput | InputJsonValue
     accounts?: AccountUncheckedCreateNestedManyWithoutUserInput
     sessions?: SessionUncheckedCreateNestedManyWithoutUserInput
     socialAccounts?: SocialAccountUncheckedCreateNestedManyWithoutUserInput
@@ -46866,6 +47034,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     zernioProfileId?: NullableStringFieldUpdateOperationsInput | string | null
+    settings?: NullableJsonNullValueInput | InputJsonValue
     accounts?: AccountUpdateManyWithoutUserNestedInput
     sessions?: SessionUpdateManyWithoutUserNestedInput
     socialAccounts?: SocialAccountUpdateManyWithoutUserNestedInput
@@ -46895,6 +47064,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     zernioProfileId?: NullableStringFieldUpdateOperationsInput | string | null
+    settings?: NullableJsonNullValueInput | InputJsonValue
     accounts?: AccountUncheckedUpdateManyWithoutUserNestedInput
     sessions?: SessionUncheckedUpdateManyWithoutUserNestedInput
     socialAccounts?: SocialAccountUncheckedUpdateManyWithoutUserNestedInput
@@ -47173,6 +47343,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     zernioProfileId?: string | null
+    settings?: NullableJsonNullValueInput | InputJsonValue
     accounts?: AccountCreateNestedManyWithoutUserInput
     sessions?: SessionCreateNestedManyWithoutUserInput
     socialAccounts?: SocialAccountCreateNestedManyWithoutUserInput
@@ -47202,6 +47373,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     zernioProfileId?: string | null
+    settings?: NullableJsonNullValueInput | InputJsonValue
     accounts?: AccountUncheckedCreateNestedManyWithoutUserInput
     sessions?: SessionUncheckedCreateNestedManyWithoutUserInput
     socialAccounts?: SocialAccountUncheckedCreateNestedManyWithoutUserInput
@@ -47305,6 +47477,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     zernioProfileId?: NullableStringFieldUpdateOperationsInput | string | null
+    settings?: NullableJsonNullValueInput | InputJsonValue
     accounts?: AccountUpdateManyWithoutUserNestedInput
     sessions?: SessionUpdateManyWithoutUserNestedInput
     socialAccounts?: SocialAccountUpdateManyWithoutUserNestedInput
@@ -47334,6 +47507,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     zernioProfileId?: NullableStringFieldUpdateOperationsInput | string | null
+    settings?: NullableJsonNullValueInput | InputJsonValue
     accounts?: AccountUncheckedUpdateManyWithoutUserNestedInput
     sessions?: SessionUncheckedUpdateManyWithoutUserNestedInput
     socialAccounts?: SocialAccountUncheckedUpdateManyWithoutUserNestedInput
@@ -47379,6 +47553,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     zernioProfileId?: string | null
+    settings?: NullableJsonNullValueInput | InputJsonValue
     accounts?: AccountCreateNestedManyWithoutUserInput
     sessions?: SessionCreateNestedManyWithoutUserInput
     socialAccounts?: SocialAccountCreateNestedManyWithoutUserInput
@@ -47408,6 +47583,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     zernioProfileId?: string | null
+    settings?: NullableJsonNullValueInput | InputJsonValue
     accounts?: AccountUncheckedCreateNestedManyWithoutUserInput
     sessions?: SessionUncheckedCreateNestedManyWithoutUserInput
     socialAccounts?: SocialAccountUncheckedCreateNestedManyWithoutUserInput
@@ -47453,6 +47629,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     zernioProfileId?: NullableStringFieldUpdateOperationsInput | string | null
+    settings?: NullableJsonNullValueInput | InputJsonValue
     accounts?: AccountUpdateManyWithoutUserNestedInput
     sessions?: SessionUpdateManyWithoutUserNestedInput
     socialAccounts?: SocialAccountUpdateManyWithoutUserNestedInput
@@ -47482,6 +47659,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     zernioProfileId?: NullableStringFieldUpdateOperationsInput | string | null
+    settings?: NullableJsonNullValueInput | InputJsonValue
     accounts?: AccountUncheckedUpdateManyWithoutUserNestedInput
     sessions?: SessionUncheckedUpdateManyWithoutUserNestedInput
     socialAccounts?: SocialAccountUncheckedUpdateManyWithoutUserNestedInput
@@ -47511,6 +47689,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     zernioProfileId?: string | null
+    settings?: NullableJsonNullValueInput | InputJsonValue
     accounts?: AccountCreateNestedManyWithoutUserInput
     sessions?: SessionCreateNestedManyWithoutUserInput
     socialAccounts?: SocialAccountCreateNestedManyWithoutUserInput
@@ -47540,6 +47719,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     zernioProfileId?: string | null
+    settings?: NullableJsonNullValueInput | InputJsonValue
     accounts?: AccountUncheckedCreateNestedManyWithoutUserInput
     sessions?: SessionUncheckedCreateNestedManyWithoutUserInput
     socialAccounts?: SocialAccountUncheckedCreateNestedManyWithoutUserInput
@@ -47685,6 +47865,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     zernioProfileId?: NullableStringFieldUpdateOperationsInput | string | null
+    settings?: NullableJsonNullValueInput | InputJsonValue
     accounts?: AccountUpdateManyWithoutUserNestedInput
     sessions?: SessionUpdateManyWithoutUserNestedInput
     socialAccounts?: SocialAccountUpdateManyWithoutUserNestedInput
@@ -47714,6 +47895,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     zernioProfileId?: NullableStringFieldUpdateOperationsInput | string | null
+    settings?: NullableJsonNullValueInput | InputJsonValue
     accounts?: AccountUncheckedUpdateManyWithoutUserNestedInput
     sessions?: SessionUncheckedUpdateManyWithoutUserNestedInput
     socialAccounts?: SocialAccountUncheckedUpdateManyWithoutUserNestedInput
@@ -48023,6 +48205,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     zernioProfileId?: string | null
+    settings?: NullableJsonNullValueInput | InputJsonValue
     accounts?: AccountCreateNestedManyWithoutUserInput
     sessions?: SessionCreateNestedManyWithoutUserInput
     socialAccounts?: SocialAccountCreateNestedManyWithoutUserInput
@@ -48052,6 +48235,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     zernioProfileId?: string | null
+    settings?: NullableJsonNullValueInput | InputJsonValue
     accounts?: AccountUncheckedCreateNestedManyWithoutUserInput
     sessions?: SessionUncheckedCreateNestedManyWithoutUserInput
     socialAccounts?: SocialAccountUncheckedCreateNestedManyWithoutUserInput
@@ -48097,6 +48281,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     zernioProfileId?: NullableStringFieldUpdateOperationsInput | string | null
+    settings?: NullableJsonNullValueInput | InputJsonValue
     accounts?: AccountUpdateManyWithoutUserNestedInput
     sessions?: SessionUpdateManyWithoutUserNestedInput
     socialAccounts?: SocialAccountUpdateManyWithoutUserNestedInput
@@ -48126,6 +48311,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     zernioProfileId?: NullableStringFieldUpdateOperationsInput | string | null
+    settings?: NullableJsonNullValueInput | InputJsonValue
     accounts?: AccountUncheckedUpdateManyWithoutUserNestedInput
     sessions?: SessionUncheckedUpdateManyWithoutUserNestedInput
     socialAccounts?: SocialAccountUncheckedUpdateManyWithoutUserNestedInput
@@ -48155,6 +48341,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     zernioProfileId?: string | null
+    settings?: NullableJsonNullValueInput | InputJsonValue
     accounts?: AccountCreateNestedManyWithoutUserInput
     sessions?: SessionCreateNestedManyWithoutUserInput
     socialAccounts?: SocialAccountCreateNestedManyWithoutUserInput
@@ -48184,6 +48371,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     zernioProfileId?: string | null
+    settings?: NullableJsonNullValueInput | InputJsonValue
     accounts?: AccountUncheckedCreateNestedManyWithoutUserInput
     sessions?: SessionUncheckedCreateNestedManyWithoutUserInput
     socialAccounts?: SocialAccountUncheckedCreateNestedManyWithoutUserInput
@@ -48229,6 +48417,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     zernioProfileId?: NullableStringFieldUpdateOperationsInput | string | null
+    settings?: NullableJsonNullValueInput | InputJsonValue
     accounts?: AccountUpdateManyWithoutUserNestedInput
     sessions?: SessionUpdateManyWithoutUserNestedInput
     socialAccounts?: SocialAccountUpdateManyWithoutUserNestedInput
@@ -48258,6 +48447,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     zernioProfileId?: NullableStringFieldUpdateOperationsInput | string | null
+    settings?: NullableJsonNullValueInput | InputJsonValue
     accounts?: AccountUncheckedUpdateManyWithoutUserNestedInput
     sessions?: SessionUncheckedUpdateManyWithoutUserNestedInput
     socialAccounts?: SocialAccountUncheckedUpdateManyWithoutUserNestedInput
@@ -48287,6 +48477,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     zernioProfileId?: string | null
+    settings?: NullableJsonNullValueInput | InputJsonValue
     accounts?: AccountCreateNestedManyWithoutUserInput
     sessions?: SessionCreateNestedManyWithoutUserInput
     socialAccounts?: SocialAccountCreateNestedManyWithoutUserInput
@@ -48316,6 +48507,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     zernioProfileId?: string | null
+    settings?: NullableJsonNullValueInput | InputJsonValue
     accounts?: AccountUncheckedCreateNestedManyWithoutUserInput
     sessions?: SessionUncheckedCreateNestedManyWithoutUserInput
     socialAccounts?: SocialAccountUncheckedCreateNestedManyWithoutUserInput
@@ -48361,6 +48553,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     zernioProfileId?: NullableStringFieldUpdateOperationsInput | string | null
+    settings?: NullableJsonNullValueInput | InputJsonValue
     accounts?: AccountUpdateManyWithoutUserNestedInput
     sessions?: SessionUpdateManyWithoutUserNestedInput
     socialAccounts?: SocialAccountUpdateManyWithoutUserNestedInput
@@ -48390,6 +48583,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     zernioProfileId?: NullableStringFieldUpdateOperationsInput | string | null
+    settings?: NullableJsonNullValueInput | InputJsonValue
     accounts?: AccountUncheckedUpdateManyWithoutUserNestedInput
     sessions?: SessionUncheckedUpdateManyWithoutUserNestedInput
     socialAccounts?: SocialAccountUncheckedUpdateManyWithoutUserNestedInput

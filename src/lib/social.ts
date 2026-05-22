@@ -351,29 +351,46 @@ export async function fetchAllPostEngagements(userId: string) {
     },
   });
 
-  const results = [];
-  for (const pp of platformPosts) {
-    if (!pp.externalId) continue;
-    const engagement = await fetchPlatformPostEngagement(pp.socialAccountId, pp.externalId);
-    if (engagement) {
-      // Persist the latest counts
+  const withExternal = platformPosts.filter((pp) => pp.externalId);
+  const settled = await Promise.allSettled(
+    withExternal.map(async (pp) => {
+      const engagement = await fetchPlatformPostEngagement(
+        pp.socialAccountId,
+        pp.externalId
+      );
+      if (!engagement) return null;
+
       await prisma.platformPost.update({
         where: { id: pp.id },
         data: {
           likes: engagement.likes ?? pp.likes,
           comments: engagement.comments ?? pp.comments,
           shares: engagement.shares ?? pp.shares,
-          reach: (engagement as any).reach ?? pp.reach,
+          reach: engagement.reach ?? pp.reach,
         },
       });
 
-      results.push({
+      return {
         platformPostId: pp.id,
         platform: pp.platform,
         socialAccountId: pp.socialAccountId,
         ...engagement,
-      });
-    }
+      };
+    })
+  );
+
+  const results: Array<{
+    platformPostId: string;
+    platform: string;
+    socialAccountId: string;
+    likes: number;
+    comments: number;
+    shares: number;
+    reach?: number;
+  }> = [];
+
+  for (const r of settled) {
+    if (r.status === "fulfilled" && r.value) results.push(r.value);
   }
   return results;
 }
