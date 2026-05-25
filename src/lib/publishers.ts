@@ -555,7 +555,9 @@ export class InstagramPublisher implements PlatformPublisher {
       if (mediaUrls.length === 0) {
         return {
           success: false,
-          error: "Instagram requires at least one image or video",
+          error:
+            "Instagram requires media. Please attach a photo or video before publishing.",
+          retryable: false,
         };
       }
 
@@ -641,11 +643,11 @@ export class TikTokPublisher implements PlatformPublisher {
         return { success: false, error: "Failed to get valid access token", retryable: true };
       }
 
-      // TikTok requires video uploads
       if (mediaUrls.length === 0) {
         return {
           success: false,
-          error: "TikTok requires a video upload",
+          error:
+            "TikTok requires media. Please attach a photo or video before publishing.",
           retryable: false,
         };
       }
@@ -657,7 +659,12 @@ export class TikTokPublisher implements PlatformPublisher {
       );
 
       if (!videoUrl) {
-         return { success: false, error: "No video found in media URLs for TikTok publish.", retryable: false };
+         return {
+           success: false,
+           error:
+             "TikTok requires a photo or video. Please attach media before publishing.",
+           retryable: false,
+         };
       }
 
       const publishId = await uploadTikTokVideo(token, videoUrl, content);
@@ -695,16 +702,14 @@ export class YouTubePublisher implements PlatformPublisher {
         return { success: false, error: "Failed to get valid access token", retryable: true };
       }
 
-      // YouTube requires video upload
       if (mediaUrls.length === 0) {
         return {
           success: false,
-          error: "YouTube requires a video upload. Text-only posts are not supported via the API.",
+          error: "YouTube requires a video. Please attach a video before publishing.",
           retryable: false,
         };
       }
 
-      // We use the first video URL
       const videoUrl = mediaUrls.find(url => 
         url.toLowerCase().endsWith(".mp4") || 
         url.toLowerCase().endsWith(".mov") || 
@@ -712,7 +717,12 @@ export class YouTubePublisher implements PlatformPublisher {
       );
 
       if (!videoUrl) {
-         return { success: false, error: "No video found in media URLs for YouTube publish.", retryable: false };
+         return {
+           success: false,
+           error:
+             "YouTube requires a video. Photos are not supported — attach a video file.",
+           retryable: false,
+         };
       }
 
       // Use content as description, title from first line of content or default

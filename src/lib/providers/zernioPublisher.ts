@@ -6,6 +6,7 @@ import {
   type ZernioPlatform,
 } from "../zernio";
 import { resolveMediaForZernio, type ZernioMediaKind } from "../zernio-media";
+import { getMediaValidationError } from "../media-requirements";
 
 /**
  * Map Zernio's `errorCategory` to a retryable boolean. We retry transient
@@ -92,28 +93,6 @@ function fillResultsForAll(
   }
 }
 
-/** Platforms that require a video file (not just an image). */
-const VIDEO_REQUIRED_PLATFORMS = new Set<ZernioPlatform>(["tiktok", "youtube"]);
-
-/** Platforms that require at least one image or video (no caption-only posts). */
-const ANY_MEDIA_REQUIRED_PLATFORMS = new Set<ZernioPlatform>(["instagram"]);
-
-function hasVideoMedia(mediaUrls: string[]): boolean {
-  return mediaUrls.some(
-    (url) =>
-      /\.(mp4|mov|webm|ogg|m4v)(\?|#|$)/i.test(url) ||
-      url.toLowerCase().includes("video")
-  );
-}
-
-function hasImageOrVideoMedia(mediaUrls: string[]): boolean {
-  if (mediaUrls.length === 0) return false;
-  if (hasVideoMedia(mediaUrls)) return true;
-  return mediaUrls.some((url) =>
-    /\.(jpe?g|png|gif|webp|heic|heif|bmp)(\?|#|$)/i.test(url)
-  );
-}
-
 /**
  * Removes targets that fail local media rules and records per-account errors
  * so we don't waste a Zernio createPost call that will reject them anyway.
@@ -124,21 +103,11 @@ function applyMediaRequirements(
   results: Map<string, PublishResult>
 ): BatchTarget[] {
   return targets.filter((t) => {
-    if (VIDEO_REQUIRED_PLATFORMS.has(t.zernioPlatform) && !hasVideoMedia(mediaUrls)) {
+    const err = getMediaValidationError(t.account.platform, mediaUrls);
+    if (err) {
       results.set(t.account.id, {
         success: false,
-        error: `${t.account.platform} requires a video — attach one before publishing`,
-        retryable: false,
-      });
-      return false;
-    }
-    if (
-      ANY_MEDIA_REQUIRED_PLATFORMS.has(t.zernioPlatform) &&
-      !hasImageOrVideoMedia(mediaUrls)
-    ) {
-      results.set(t.account.id, {
-        success: false,
-        error: `${t.account.platform} requires at least one image or video`,
+        error: err,
         retryable: false,
       });
       return false;

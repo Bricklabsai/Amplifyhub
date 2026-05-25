@@ -3,6 +3,10 @@ import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import { publishPost, serializePublishResults } from "@/lib/services/publishPost";
+import {
+  getMediaValidationError,
+  validateAccountsMedia,
+} from "@/lib/media-requirements";
 import { notifyPostPublished } from "@/lib/notifications";
 import crypto from "node:crypto";
 
@@ -90,6 +94,29 @@ export async function PATCH(req: NextRequest, { params }: { params: Promise<{ id
           results: {},
         },
         { status: 409 }
+      );
+    }
+
+    const mediaCheck = validateAccountsMedia(accountsToPublish, mediaUrls);
+    if (!mediaCheck.valid) {
+      return NextResponse.json(
+        {
+          error: mediaCheck.errors.join(" "),
+          mediaErrors: mediaCheck.errors,
+          results: Object.fromEntries(
+            accountsToPublish.map((a) => [
+              a.id,
+              {
+                success: false,
+                error:
+                  getMediaValidationError(a.platform, mediaUrls) ||
+                  mediaCheck.errors[0],
+                retryable: false,
+              },
+            ])
+          ),
+        },
+        { status: 400 }
       );
     }
 

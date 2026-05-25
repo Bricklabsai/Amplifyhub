@@ -34,25 +34,55 @@ export function getAzureOpenAIClient() {
  * Get Azure endpoint and API key for direct API calls (image generation/editing)
  */
 export function getAzureImageAPIConfig() {
-  const apiKey = process.env.AZURE_OPENAI_API_KEY;
-  const imageDeployment = process.env.AZURE_OPENAI_IMAGE_DEPLOYMENT;
+  const apiKey =
+    process.env.AZURE_OPENAI_API_KEY || process.env.AZURE_API_KEY;
+  const imageDeployment =
+    process.env.AZURE_OPENAI_IMAGE_DEPLOYMENT || "gpt-image-2";
 
   if (!apiKey) {
-    throw new Error("AZURE_OPENAI_API_KEY is not configured");
+    throw new Error(
+      "AZURE_OPENAI_API_KEY (or AZURE_API_KEY) is not configured"
+    );
   }
 
-  if (!imageDeployment) {
-    throw new Error("AZURE_OPENAI_IMAGE_DEPLOYMENT is not configured");
+  let resourceUrl = process.env.AZURE_OPENAI_RESOURCE_URL?.replace(/\/$/, "");
+
+  if (!resourceUrl && process.env.AZURE_IMAGE_URL) {
+    const parsed = new URL(process.env.AZURE_IMAGE_URL);
+    resourceUrl = `${parsed.protocol}//${parsed.host}`;
   }
 
-  // Get base URL from resource name
-  
-  const resourceUrl = process.env.AZURE_OPENAI_RESOURCE_URL 
+  if (!resourceUrl && process.env.AZURE_OPENAI_URL) {
+    const parsed = new URL(process.env.AZURE_OPENAI_URL);
+    resourceUrl = `${parsed.protocol}//${parsed.host}`;
+  }
+
+  if (!resourceUrl) {
+    throw new Error(
+      "AZURE_OPENAI_RESOURCE_URL is not configured (e.g. https://your-resource.cognitiveservices.azure.com)"
+    );
+  }
 
   return {
     apiKey,
     imageDeployment,
     resourceUrl,
-    apiVersion: "2024-02-01",
+    apiVersion: process.env.AZURE_IMAGE_API_VERSION || "2024-02-01",
   };
+}
+
+/** Append a multipart file the way Azure OpenAI image edits expects (@image, @mask). */
+export async function appendFileToMultipartForm(
+  form: FormData,
+  fieldName: string,
+  file: File
+): Promise<void> {
+  const bytes = await file.arrayBuffer();
+  const mime = file.type || "image/png";
+  const blob = new Blob([bytes], { type: mime });
+  const name =
+    file.name && /\.(png|jpe?g|webp)$/i.test(file.name)
+      ? file.name
+      : `${fieldName}.png`;
+  form.append(fieldName, blob, name);
 }

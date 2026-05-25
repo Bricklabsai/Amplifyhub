@@ -118,10 +118,10 @@ export default function AIStudioPage() {
   }
 
   async function editImage() {
-    if (!editPrompt.trim() || !editImageFile || !imageUrl) {
+    if (!editPrompt.trim() || !editImageFile) {
       toast({
         title: "Missing Information",
-        description: "Please fill in all required fields",
+        description: "Upload an image and enter a refinement prompt",
         variant: "destructive",
       });
       return;
@@ -131,10 +131,9 @@ export default function AIStudioPage() {
     try {
       const formData = new FormData();
       formData.append("prompt", editPrompt);
-      formData.append("image", editImageFile);
-      formData.append("size", size);
+      formData.append("image", editImageFile, editImageFile.name || "image.png");
       if (editMaskFile) {
-        formData.append("mask", editMaskFile);
+        formData.append("mask", editMaskFile, editMaskFile.name || "mask.png");
       }
 
       const res = await fetch("/api/ai/image/edit", {
@@ -204,15 +203,23 @@ export default function AIStudioPage() {
     setSelectedImageId(image.id);
   };
 
-  const handleQuickEdit = (imageUrl: string) => {
+  const handleQuickEdit = async (sourceUrl: string) => {
     setTabValue("edit");
-    // Create a temporary file from the data URL to use as the edit image
-    fetch(imageUrl)
-      .then(res => res.blob())
-      .then(blob => {
-        const file = new File([blob], "generated-image.png", { type: "image/png" });
-        setEditImageFile(file);
+    setImageUrl(sourceUrl);
+    try {
+      const res = await fetch(sourceUrl);
+      const blob = await res.blob();
+      const file = new File([blob], "image_to_edit.png", {
+        type: blob.type || "image/png",
       });
+      setEditImageFile(file);
+    } catch {
+      toast({
+        title: "Could not load image",
+        description: "Upload the image manually or try again.",
+        variant: "destructive",
+      });
+    }
   };
 
   return (
@@ -476,19 +483,10 @@ export default function AIStudioPage() {
                 </div>
               </div>
 
-              <div>
-                <Label className="text-sm font-semibold text-gray-700 mb-2 block">Size</Label>
-                <Select value={size} onValueChange={setSize}>
-                  <SelectTrigger className="rounded-xl border-gray-200 h-11 text-black">
-                    <SelectValue />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {SIZES.map((s) => (
-                      <SelectItem key={s.value} value={s.value}>{s.label}</SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-              </div>
+              <p className="text-xs text-gray-500">
+                Azure edits use your uploaded image dimensions. Optional mask limits changes to
+                transparent areas.
+              </p>
 
               <Button
                 onClick={editImage}

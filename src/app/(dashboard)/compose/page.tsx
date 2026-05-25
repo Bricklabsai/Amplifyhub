@@ -12,6 +12,8 @@ import Link from "next/link";
 import { useSearchParams, useRouter } from "next/navigation";
 import { Suspense } from "react";
 import { useToast } from "@/hooks/use-toast";
+import { validateAccountsMedia } from "@/lib/media-requirements";
+import type { Platform } from "@/generated/client";
 import {
   Dialog,
   DialogContent,
@@ -303,11 +305,30 @@ function ComposeContent() {
     setSaving(false);
   }
 
+  function validateSelectedAccountsMedia(mediaUrls: string[]): boolean {
+    const accounts = socialAccounts.filter((a) => publishAccountIds.includes(a.id));
+    const { valid, errors } = validateAccountsMedia(
+      accounts.map((a) => ({ platform: a.platform as Platform })),
+      mediaUrls
+    );
+    if (!valid) {
+      toast({
+        title: "Media required",
+        description: errors.join(" "),
+        variant: "destructive",
+      });
+      return false;
+    }
+    return true;
+  }
+
   async function publishToAll() {
     if (publishAccountIds.length === 0 || !message.trim()) return;
+    const mediaUrls = media.filter((m) => selectedMedia.includes(m.id)).map((m) => m.url);
+    if (!validateSelectedAccountsMedia(mediaUrls)) return;
+
     setPublishing(true);
     setPublishResult("");
-    const mediaUrls = media.filter((m) => selectedMedia.includes(m.id)).map((m) => m.url);
 
     const createRes = await fetch("/api/posts", {
       method: "POST",
@@ -361,6 +382,7 @@ function ComposeContent() {
       router.push("/posts");
     } else {
       const detail =
+        publishData?.mediaErrors?.join(" ") ||
         publishData?.error ||
         failed.map((r) => r.error).filter(Boolean).join("; ") ||
         "Unknown error occurred.";
@@ -404,9 +426,13 @@ function ComposeContent() {
     }
 
     const mediaUrls = media.filter((m) => selectedMedia.includes(m.id)).map((m) => m.url);
-    
+
     const content = message || prompt;
     if (!content.trim()) {
+      setScheduling(false);
+      return;
+    }
+    if (!validateSelectedAccountsMedia(mediaUrls)) {
       setScheduling(false);
       return;
     }
@@ -434,7 +460,8 @@ function ComposeContent() {
       const data = await res.json();
       toast({
         title: "Scheduling failed",
-        description: data.error || "Failed to schedule content.",
+        description:
+          data.mediaErrors?.join(" ") || data.error || "Failed to schedule content.",
         variant: "destructive",
       });
     }

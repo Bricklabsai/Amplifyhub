@@ -1,5 +1,6 @@
 "use client";
-import { useState, useEffect } from "react";
+import { useState, useEffect, Suspense } from "react";
+import { useSearchParams } from "next/navigation";
 import { useToast } from "@/hooks/use-toast";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -8,27 +9,50 @@ import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, D
 import { HiSearch, HiPlus, HiTrash, HiEye, HiPaperAirplane } from "react-icons/hi";
 import { formatRelative, formatDateTime } from "@/lib/utils";
 import Link from "next/link";
+import { validateAccountsMedia } from "@/lib/media-requirements";
+import type { Platform } from "@/generated/client";
 
 const STATUS_COLORS: Record<string, string> = {
   PUBLISHED: "bg-emerald-100 text-emerald-700",
   SCHEDULED: "bg-blue-100 text-blue-700",
   DRAFT: "bg-gray-100 text-gray-600",
   FAILED: "bg-red-100 text-red-700",
+  queued: "bg-amber-100 text-amber-800",
 };
 
-const STATUS_FILTERS = ["all", "PUBLISHED", "SCHEDULED", "DRAFT", "FAILED"];
+const STATUS_FILTERS = ["all", "PUBLISHED", "SCHEDULED", "DRAFT", "queued", "FAILED"];
 
-export default function PostsPage() {
+const STATUS_LABELS: Record<string, string> = {
+  all: "All",
+  PUBLISHED: "Published",
+  SCHEDULED: "Scheduled",
+  DRAFT: "Drafts",
+  queued: "Queued",
+  FAILED: "Failed",
+};
+
+function PostsPageContent() {
+  const searchParams = useSearchParams();
+  const initialStatus = searchParams.get("status") || "all";
   const [posts, setPosts] = useState<any[]>([]);
   const [total, setTotal] = useState(0);
   const [loading, setLoading] = useState(true);
-  const [filter, setFilter] = useState("all");
+  const [filter, setFilter] = useState(
+    STATUS_FILTERS.includes(initialStatus) ? initialStatus : "all"
+  );
   const [search, setSearch] = useState("");
   const { toast } = useToast();
   const [socialAccounts, setSocialAccounts] = useState<any[]>([]);
   const [selectedPublishAccounts, setSelectedPublishAccounts] = useState<string[]>([]);
   const [publishingPostId, setPublishingPostId] = useState("");
   const [publishResult, setPublishResult] = useState("");
+
+  useEffect(() => {
+    const status = searchParams.get("status");
+    if (status && STATUS_FILTERS.includes(status)) {
+      setFilter(status);
+    }
+  }, [searchParams]);
 
   useEffect(() => {
     fetchPosts();
@@ -67,6 +91,25 @@ export default function PostsPage() {
 
   async function publishPost(post: any) {
     if (!post?.id || selectedPublishAccounts.length === 0) return;
+
+    const mediaUrls = post.mediaUrls || [];
+    const accountsToPublish = socialAccounts.filter((a) =>
+      selectedPublishAccounts.includes(a.id)
+    );
+    const mediaCheck = validateAccountsMedia(
+      accountsToPublish.map((a) => ({ platform: a.platform as Platform })),
+      mediaUrls
+    );
+    if (!mediaCheck.valid) {
+      setPublishResult(mediaCheck.errors.join(" "));
+      toast({
+        title: "Media required",
+        description: mediaCheck.errors.join(" "),
+        variant: "destructive",
+      });
+      return;
+    }
+
     setPublishingPostId(post.id);
     setPublishResult("");
     const res = await fetch(`/api/posts/${post.id}`, {
@@ -146,7 +189,7 @@ export default function PostsPage() {
                     : "bg-gray-100 text-gray-600 hover:bg-gray-200"
                 }`}
               >
-                {s === "all" ? "All" : s.charAt(0) + s.slice(1).toLowerCase()}
+                {STATUS_LABELS[s] ?? s}
               </button>
             ))}
           </div>
@@ -267,5 +310,17 @@ export default function PostsPage() {
 
       {publishResult && <p className="text-sm text-gray-600">{publishResult}</p>}
     </div>
+  );
+}
+
+export default function PostsPage() {
+  return (
+    <Suspense
+      fallback={
+        <div className="py-12 text-center text-gray-400">Loading posts...</div>
+      }
+    >
+      <PostsPageContent />
+    </Suspense>
   );
 }
