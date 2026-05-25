@@ -2,7 +2,8 @@
 
 import { useState, useEffect, Suspense } from "react";
 import { useSearchParams } from "next/navigation";
-import { HiChat, HiInbox, HiRefresh } from "react-icons/hi";
+import { HiChat, HiInbox, HiRefresh, HiLockClosed } from "react-icons/hi";
+import Link from "next/link";
 import { formatRelative } from "@/lib/utils";
 import { cn } from "@/lib/utils";
 import { PostEngagementPanel } from "@/components/messages/PostEngagementPanel";
@@ -53,6 +54,13 @@ function MessagesContent() {
   const [messagesLoading, setMessagesLoading] = useState(false);
   const [dmDraft, setDmDraft] = useState("");
   const [sendingDm, setSendingDm] = useState(false);
+  const [isPaid, setIsPaid] = useState(false);
+
+  useEffect(() => {
+    fetch("/api/dashboard")
+      .then((r) => r.json())
+      .then((d) => setIsPaid(d.subscription?.isPaid ?? false));
+  }, []);
 
   useEffect(() => {
     const postParam = searchParams.get("post");
@@ -67,8 +75,8 @@ function MessagesContent() {
   }, []);
 
   useEffect(() => {
-    if (tab === "inbox") void loadInbox();
-  }, [tab]);
+    if (tab === "inbox" && isPaid) void loadInbox();
+  }, [tab, isPaid]);
 
   async function loadPublishedPosts() {
     setPostsLoading(true);
@@ -301,7 +309,17 @@ function MessagesContent() {
 
         {/* Right panel */}
         <div className="min-h-[400px]">
-          {tab === "posts" ? (
+          {tab === "posts" && !isPaid ? (
+            <div className="flex h-full flex-col items-center justify-center gap-3 p-8 text-center">
+              <HiLockClosed className="text-4xl text-gray-300" />
+              <p className="text-sm text-gray-500">
+                Upgrade to reply to comments and use sentiment analysis.
+              </p>
+              <Link href="/billing" className="text-sm font-semibold text-violet-600 hover:underline">
+                View plans →
+              </Link>
+            </div>
+          ) : tab === "posts" ? (
             selectedPostId && selectedPost ? (
               <PostEngagementPanel
                 postId={selectedPostId}
@@ -312,6 +330,16 @@ function MessagesContent() {
                 Select a published post to view engagement
               </div>
             )
+          ) : !isPaid ? (
+            <div className="flex h-full flex-col items-center justify-center gap-3 p-8 text-center">
+              <HiLockClosed className="text-4xl text-gray-300" />
+              <p className="text-sm text-gray-500">
+                Direct inbox and DM replies are available on Pro and Corporate plans.
+              </p>
+              <Link href="/billing" className="text-sm font-semibold text-violet-600 hover:underline">
+                View plans →
+              </Link>
+            </div>
           ) : selectedConvo ? (
             <div className="flex h-full min-h-[400px] flex-col">
               <div className="border-b border-gray-100 px-5 py-4">

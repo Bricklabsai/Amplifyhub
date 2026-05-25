@@ -1,125 +1,229 @@
 "use client";
+
 import { useState, useEffect } from "react";
-import { HiTrendingUp, HiCalendar, HiShare, HiUsers, HiSparkles } from "react-icons/hi";
-import { formatNumber, formatRelative } from "@/lib/utils";
-import { Badge } from "@/components/ui/badge";
 import Link from "next/link";
+import {
+  HiSparkles,
+  HiDocumentText,
+  HiClock,
+  HiPencil,
+  HiCollection,
+  HiBell,
+  HiHeart,
+  HiChat,
+  HiInbox,
+} from "react-icons/hi";
+import { DashboardStatsRow } from "@/components/dashboard/DashboardStatsRow";
+import { ActivityCard } from "@/components/dashboard/ActivityCard";
+import { ContentCalendar, type CalendarEvent } from "@/components/dashboard/ContentCalendar";
 
-function KPICard({ title, value, change, icon: Icon, color }: any) {
-  return (
-    <div className="bg-white rounded-2xl p-6 border border-gray-100 shadow-sm hover:shadow-md transition-all">
-      <div className="flex items-start justify-between mb-4">
-        <div className={`w-12 h-12 rounded-xl flex items-center justify-center`} style={{ background: `${color}15` }}>
-          <Icon style={{ color, fontSize: "1.4rem" }} />
-        </div>
-        <span className={`text-xs font-semibold px-2 py-1 rounded-full ${change >= 0 ? "bg-emerald-50 text-emerald-600" : "bg-red-50 text-red-600"}`}>
-          {change >= 0 ? "+" : ""}{change}%
-        </span>
-      </div>
-      <div className="text-3xl font-black text-gray-900 mb-1" style={{ fontFamily: "Outfit, sans-serif" }}>
-        {typeof value === "number" ? formatNumber(value) : value}
-      </div>
-      <div className="text-sm text-gray-500">{title}</div>
-    </div>
-  );
-}
-
-const STATUS_COLORS: Record<string, string> = {
-  PUBLISHED: "bg-emerald-100 text-emerald-700",
-  SCHEDULED: "bg-blue-100 text-blue-700",
-  DRAFT: "bg-gray-100 text-gray-600",
-  FAILED: "bg-red-100 text-red-700",
+type DashboardData = {
+  stats: {
+    totalFollowers: number;
+    totalPosts: number;
+    publishedCount: number;
+    scheduledPosts: number;
+    socialAccounts: number;
+  };
+  subscription: { isPaid: boolean; planName: string };
+  activities: Record<string, any>;
+  calendarEvents: CalendarEvent[];
 };
 
 export default function DashboardPage() {
-  const [data, setData] = useState<any>(null);
+  const [data, setData] = useState<DashboardData | null>(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    fetch("/api/dashboard").then((r) => r.json()).then((d) => { setData(d); setLoading(false); });
+    fetch("/api/dashboard")
+      .then((r) => r.json())
+      .then((d) => {
+        setData(d);
+        setLoading(false);
+      });
   }, []);
 
   if (loading) {
     return (
-      <div className="space-y-6">
-        <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
-          {[1,2,3,4].map((i) => <div key={i} className="bg-white rounded-2xl h-32 animate-pulse" />)}
+      <div className="max-w-7xl space-y-6">
+        <div className="grid grid-cols-2 gap-4 lg:grid-cols-4">
+          {[1, 2, 3, 4].map((i) => (
+            <div key={i} className="h-32 animate-pulse rounded-2xl bg-white" />
+          ))}
+        </div>
+        <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+          {[1, 2, 3, 4, 5, 6].map((i) => (
+            <div key={i} className="h-64 animate-pulse rounded-2xl bg-white" />
+          ))}
         </div>
       </div>
     );
   }
 
-  const { stats, recentPosts } = data || {};
+  const { stats, subscription, activities, calendarEvents } = data || {};
+  const isPaid = subscription?.isPaid ?? false;
+  const a = activities || {};
 
   return (
-    <div className="space-y-6 max-w-7xl">
-      {/* Welcome */}
-      <div className="flex items-center justify-between">
+    <div className="max-w-7xl space-y-8">
+      <div className="flex flex-wrap items-center justify-between gap-4">
         <div>
-          <h2 className="text-2xl font-bold text-gray-900" style={{ fontFamily: "Outfit, sans-serif" }}>
-            Welcome back 👋
+          <h2
+            className="text-2xl font-bold text-gray-900"
+            style={{ fontFamily: "Outfit, sans-serif" }}
+          >
+            Welcome back
           </h2>
-          <p className="text-gray-500 text-sm mt-1">Here's what's happening with your social media today.</p>
+          <p className="mt-1 text-sm text-gray-500">
+            Your content hub — manage posts, engagement, and messages in one place.
+            {!isPaid && (
+              <span className="ml-1 text-violet-600">
+                Upgrade for advanced engagement &amp; messaging.
+              </span>
+            )}
+          </p>
         </div>
         <Link href="/compose">
-          <button className="brand-gradient-bg text-white px-5 py-2.5 rounded-xl font-semibold text-sm flex items-center gap-2 shadow-md hover:opacity-90 transition-opacity">
+          <button
+            type="button"
+            className="brand-gradient-bg flex items-center gap-2 rounded-xl px-5 py-2.5 text-sm font-semibold text-white shadow-md transition-opacity hover:opacity-90"
+          >
             <HiSparkles className="text-base" />
             New Post
           </button>
         </Link>
       </div>
 
-      {/* KPI Cards */}
-      <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
-        <KPICard title="Total Followers" value={stats?.totalFollowers || 0} change={12.4} icon={HiUsers} color="#7c3aed" />
-        <KPICard title="Posts Published" value={stats?.totalPosts || 0} change={8.2} icon={HiTrendingUp} color="#2563eb" />
-        <KPICard title="Scheduled Posts" value={stats?.scheduledPosts || 0} change={-3.1} icon={HiCalendar} color="#db2777" />
-        <KPICard title="Social Accounts" value={stats?.socialAccounts || 0} change={0} icon={HiShare} color="#059669" />
-      </div>
+      <DashboardStatsRow
+        stats={{
+          totalFollowers: stats?.totalFollowers ?? 0,
+          totalPosts: stats?.publishedCount ?? 0,
+          scheduledPosts: stats?.scheduledPosts ?? 0,
+          socialAccounts: stats?.socialAccounts ?? 0,
+        }}
+      />
 
-      {/* Recent Posts */}
-      <div className="bg-white rounded-2xl border border-gray-100 shadow-sm">
-        <div className="flex items-center justify-between p-6 border-b border-gray-50">
-          <h3 className="font-bold text-gray-900" style={{ fontFamily: "Outfit, sans-serif" }}>Recent Posts</h3>
-          <Link href="/posts" className="text-sm text-violet-600 hover:text-violet-700 font-medium">View all →</Link>
-        </div>
-        <div className="divide-y divide-gray-50">
-          {recentPosts?.length === 0 && (
-            <div className="py-12 text-center text-gray-400">
-              <HiSparkles className="text-4xl mx-auto mb-3 text-gray-200" />
-              <p className="font-medium">No posts yet</p>
-              <p className="text-sm mt-1">Create your first post to get started</p>
-            </div>
-          )}
-          {recentPosts?.map((post: any) => (
-            <div key={post.id} className="flex items-start gap-4 p-4 hover:bg-gray-50/50 transition-colors">
-              <div className="flex-1 min-w-0">
-                <p className="text-sm text-gray-800 leading-relaxed line-clamp-2">{post.content}</p>
-                <p className="text-xs text-gray-400 mt-2">{formatRelative(post.createdAt)}</p>
+      <section>
+        <h3
+          className="mb-4 text-lg font-bold text-gray-900"
+          style={{ fontFamily: "Outfit, sans-serif" }}
+        >
+          Platform Activity
+        </h3>
+        <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
+          <ActivityCard
+            title="Published Posts"
+            description="Live across your connected accounts"
+            count={a.published?.count ?? 0}
+            href={a.published?.href ?? "/posts?status=PUBLISHED"}
+            icon={HiDocumentText}
+            accentColor="#059669"
+            preview={a.published?.preview}
+          />
+          <ActivityCard
+            title="Scheduled Posts"
+            description="Upcoming publishes"
+            count={a.scheduled?.count ?? 0}
+            href={a.scheduled?.href ?? "/posts?status=SCHEDULED"}
+            icon={HiClock}
+            accentColor="#2563eb"
+            preview={a.scheduled?.preview}
+          />
+          <ActivityCard
+            title="Drafts"
+            description="Work in progress"
+            count={a.drafts?.count ?? 0}
+            href={a.drafts?.href ?? "/posts?status=DRAFT"}
+            icon={HiPencil}
+            accentColor="#6b7280"
+            preview={a.drafts?.preview}
+          />
+          <ActivityCard
+            title="Queued Posts"
+            description="Due now or processing"
+            count={a.queued?.count ?? 0}
+            countLabel="in queue"
+            href={a.queued?.href ?? "/posts?status=queued"}
+            icon={HiCollection}
+            accentColor="#d97706"
+            preview={a.queued?.preview}
+          />
+          <ActivityCard
+            title="Notifications"
+            description="Alerts and updates"
+            count={a.notifications?.count ?? 0}
+            countLabel="unread"
+            href={a.notifications?.href ?? "/posts/notifications"}
+            icon={HiBell}
+            accentColor="#7c3aed"
+            preview={a.notifications?.preview?.map((n: { id: string; type: string; message?: string }) => ({
+              id: n.id,
+              content: n.message || n.type,
+            }))}
+          />
+          <ActivityCard
+            title="Engagements"
+            description="Likes, comments, and shares"
+            count={
+              (a.engagements?.likes ?? 0) +
+              (a.engagements?.comments ?? 0) +
+              (a.engagements?.shares ?? 0)
+            }
+            countLabel="total interactions"
+            href={a.engagements?.href ?? "/posts/engagements"}
+            icon={HiHeart}
+            accentColor="#db2777"
+            locked={!isPaid}
+            lockedMessage="Upgrade to view sentiment analysis, comment replies, and engagement insights."
+            premiumBadge={isPaid}
+            preview={isPaid ? a.engagements?.preview : undefined}
+          >
+            {isPaid && (
+              <div className="mb-3 flex gap-3 text-xs font-medium text-gray-500">
+                <span>{a.engagements?.likes ?? 0} likes</span>
+                <span>{a.engagements?.comments ?? 0} comments</span>
+                <span>{a.engagements?.shares ?? 0} shares</span>
               </div>
-              <Badge className={`${STATUS_COLORS[post.status]} border-0 text-xs font-medium flex-shrink-0`}>{post.status}</Badge>
-            </div>
-          ))}
+            )}
+          </ActivityCard>
+          <ActivityCard
+            title="Messages"
+            description="Direct messages from connected accounts"
+            count={isPaid ? (a.messages?.count ?? 0) : "—"}
+            countLabel={isPaid ? "unread" : undefined}
+            href={a.messages?.href ?? "/posts/messages"}
+            icon={HiChat}
+            accentColor="#0891b2"
+            locked={!isPaid}
+            lockedMessage="Pro plans unlock unified inbox, DM replies, and conversation history."
+            premiumBadge
+            preview={isPaid ? a.messages?.preview : undefined}
+          />
         </div>
-      </div>
+      </section>
 
-      {/* Quick Links */}
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-        {[
-          { href: "/compose", label: "AI Compose", emoji: "✨", desc: "Generate content" },
-          { href: "/analytics", label: "Analytics", emoji: "📊", desc: "View performance" },
-          { href: "/social-accounts", label: "Connect", emoji: "🔗", desc: "Add social account" },
-          { href: "/billing", label: "Upgrade", emoji: "⚡", desc: "Get more features" },
-        ].map(({ href, label, emoji, desc }) => (
-          <Link key={href} href={href}>
-            <div className="bg-white rounded-2xl p-5 border border-gray-100 hover:shadow-md hover:-translate-y-0.5 transition-all cursor-pointer">
-              <div className="text-2xl mb-2">{emoji}</div>
-              <div className="font-bold text-gray-900 text-sm" style={{ fontFamily: "Outfit, sans-serif" }}>{label}</div>
-              <div className="text-gray-400 text-xs mt-0.5">{desc}</div>
+      <ContentCalendar events={calendarEvents ?? []} />
+
+      {!isPaid && (
+        <div className="flex flex-wrap items-center justify-between gap-4 rounded-2xl border border-violet-100 bg-violet-50/50 px-6 py-4">
+          <div className="flex items-center gap-3">
+            <HiInbox className="text-2xl text-violet-600" />
+            <div>
+              <p className="font-semibold text-gray-900">Unlock advanced features</p>
+              <p className="text-sm text-gray-600">
+                Get engagement analytics, sentiment insights, and full messaging on Pro or
+                Corporate.
+              </p>
             </div>
+          </div>
+          <Link
+            href="/billing"
+            className="rounded-xl bg-violet-600 px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-violet-700"
+          >
+            View plans
           </Link>
-        ))}
-      </div>
+        </div>
+      )}
     </div>
   );
 }

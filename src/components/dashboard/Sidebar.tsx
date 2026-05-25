@@ -20,6 +20,8 @@ import {
   HiX,
   HiChevronDown,
   HiInbox,
+  HiHeart,
+  HiBell,
 } from "react-icons/hi";
 import { cn } from "@/lib/utils";
 
@@ -38,7 +40,9 @@ const NAV_ITEMS = [
 
 const POSTS_CHILDREN = [
   { href: "/posts", icon: HiCollection, label: "Overview" },
+  { href: "/posts/engagements", icon: HiHeart, label: "Engagements" },
   { href: "/posts/messages", icon: HiInbox, label: "Messages" },
+  { href: "/posts/notifications", icon: HiBell, label: "Notifications" },
 ];
 
 export default function Sidebar({

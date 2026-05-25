@@ -20,7 +20,9 @@ const PAGE_TITLES: Record<string, string> = {
   "/dashboard": "Dashboard",
   "/compose": "Compose",
   "/posts": "Posts",
+  "/posts/engagements": "Engagements",
   "/posts/messages": "Messages",
+  "/posts/notifications": "Notifications",
   "/social-accounts": "Social Accounts",
   "/campaigns": "Campaigns",
   "/audience": "Audience",
@@ -107,12 +109,12 @@ export default function Topbar({ onMenuClick }: { onMenuClick: () => void }) {
         >
           <HiMenu className="text-2xl" />
         </button>
-        <div>
-          <h1 className="text-lg font-bold leading-tight text-gray-900">{title}</h1>
-          <p className="text-[10px] font-medium uppercase tracking-wider text-gray-400">
-            AI Platform
-          </p>
-        </div>
+        <h1
+          className="text-xl font-bold leading-tight text-gray-900 md:text-2xl"
+          style={{ fontFamily: "Outfit, sans-serif" }}
+        >
+          {title}
+        </h1>
       </div>
 
       <div className="flex items-center gap-2">
@@ -139,17 +141,26 @@ export default function Topbar({ onMenuClick }: { onMenuClick: () => void }) {
 
           {notifOpen && (
             <div className="absolute right-0 top-12 z-50 w-80 overflow-hidden rounded-2xl border border-gray-100 bg-white shadow-2xl">
-              <div className="flex items-center justify-between border-b border-gray-100 px-4 py-3">
+              <div className="flex items-center justify-between gap-2 border-b border-gray-100 px-4 py-3">
                 <h3 className="text-sm font-bold text-gray-900">Notifications</h3>
-                {unread > 0 && (
-                  <button
-                    type="button"
-                    onClick={markAllRead}
-                    className="flex items-center gap-1 text-xs font-medium text-[#7331FF] hover:underline"
+                <div className="flex items-center gap-3">
+                  <Link
+                    href="/posts/notifications"
+                    onClick={() => setNotifOpen(false)}
+                    className="text-xs font-medium text-[#7331FF] hover:underline"
                   >
-                    <HiCheck className="text-sm" /> Mark all read
-                  </button>
-                )}
+                    View all
+                  </Link>
+                  {unread > 0 && (
+                    <button
+                      type="button"
+                      onClick={markAllRead}
+                      className="flex items-center gap-1 text-xs font-medium text-[#7331FF] hover:underline"
+                    >
+                      <HiCheck className="text-sm" /> Mark all read
+                    </button>
+                  )}
+                </div>
               </div>
               <div className="max-h-80 overflow-y-auto">
                 {notifs.length === 0 ? (

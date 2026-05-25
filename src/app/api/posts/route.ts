@@ -3,6 +3,8 @@ import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import { checkAndIncrementUsage } from "@/lib/usage";
+import { validateAccountsMedia } from "@/lib/media-requirements";
+import type { Platform } from "@/generated/client";
 
 export async function GET(req: NextRequest) {
   const session = await getServerSession(authOptions);
@@ -14,7 +16,20 @@ export async function GET(req: NextRequest) {
   const limit = Number.parseInt(searchParams.get("limit") || "20");
 
   const where: any = { userId };
-  if (status && status !== "all") where.status = status;
+  const now = new Date();
+  if (status === "queued") {
+    where.status = "SCHEDULED";
+    where.OR = [
+      { scheduleSource: "processing" },
+      { scheduledAt: { lte: now } },
+    ];
+  } else if (status && status !== "all") {
+    where.status = status;
+    if (status === "SCHEDULED") {
+      where.OR = [{ scheduledAt: { gt: now } }, { scheduledAt: null }];
+      where.NOT = { scheduleSource: "processing" };
+    }
+  }
 
   const [posts, total] = await Promise.all([
     prisma.post.findMany({
@@ -86,6 +101,21 @@ export async function POST(req: NextRequest) {
     if (socialAccountIds.length === 0) {
       return NextResponse.json(
         { error: "Select at least one social account to schedule" },
+        { status: 400 }
+      );
+    }
+
+    const scheduleAccounts = await prisma.socialAccount.findMany({
+      where: { userId, id: { in: socialAccountIds } },
+      select: { platform: true },
+    });
+    const mediaCheck = validateAccountsMedia(
+      scheduleAccounts as { platform: Platform }[],
+      Array.isArray(mediaUrls) ? mediaUrls : []
+    );
+    if (!mediaCheck.valid) {
+      return NextResponse.json(
+        { error: mediaCheck.errors.join(" "), mediaErrors: mediaCheck.errors },
         { status: 400 }
       );
     }

@@ -2,6 +2,10 @@ import type { SocialAccount } from "../../../../generated/client";
 import { uploadTikTokVideo } from "../media-upload";
 import { getValidToken } from "../utils/tokens";
 import type { PlatformPublisher, PublishResult } from "../../../publishers";
+import {
+  getMediaValidationError,
+  hasVideoMedia,
+} from "../../../media-requirements";
 
 export class TikTokPublisher implements PlatformPublisher {
   async publish(
@@ -19,22 +23,34 @@ export class TikTokPublisher implements PlatformPublisher {
         return { success: false, error: "Failed to get valid access token", retryable: true };
       }
 
-      if (mediaUrls.length === 0) {
+      const mediaError = getMediaValidationError("TIKTOK", mediaUrls);
+      if (mediaError) {
+        return { success: false, error: mediaError, retryable: false };
+      }
+
+      if (!hasVideoMedia(mediaUrls)) {
         return {
           success: false,
-          error: "TikTok requires a video upload",
+          error:
+            "TikTok photo posts are not supported by this connection yet. Please attach a video.",
           retryable: false,
         };
       }
 
-      const videoUrl = mediaUrls.find(url => 
-        url.toLowerCase().endsWith(".mp4") || 
-        url.toLowerCase().endsWith(".mov") || 
-        url.toLowerCase().includes("video")
+      const videoUrl = mediaUrls.find(
+        (url) =>
+          url.toLowerCase().endsWith(".mp4") ||
+          url.toLowerCase().endsWith(".mov") ||
+          url.toLowerCase().includes("video")
       );
 
       if (!videoUrl) {
-         return { success: false, error: "No video found in media URLs for TikTok publish.", retryable: false };
+        return {
+          success: false,
+          error:
+            "TikTok requires a photo or video. Please attach media before publishing.",
+          retryable: false,
+        };
       }
 
       const publishId = await uploadTikTokVideo(token, videoUrl, content);

@@ -22,7 +22,9 @@ export class InstagramPublisher implements PlatformPublisher {
       if (mediaUrls.length === 0) {
         return {
           success: false,
-          error: "Instagram requires at least one image or video",
+          error:
+            "Instagram requires media. Please attach a photo or video before publishing.",
+          retryable: false,
         };
       }
 
